@@ -37,7 +37,7 @@ class Ets_Pmpro_Admin_Setting
 	/**
 	 * Function Name:- ets_add_script();
 	 *
-	 * Description:- localized script and style 
+	 * Description:- localized script and style. 
 	 *
 	 * @param:- None; 
 	 *
@@ -47,13 +47,13 @@ class Ets_Pmpro_Admin_Setting
 
 		wp_register_style(
 		    'ets_pmpro_add_discord_style',
-		    ETS_PMPRO_DISCORD_URL. 'asset/css/ets-pmpro-discord-style.css'
+		    ETS_PMPRO_DISCORD_URL. 'assets/css/ets-pmpro-discord-style.css'
 		); 
 		wp_enqueue_style( 'ets_pmpro_add_discord_style');
 	  
 	    wp_register_script(
 			'ets_pmpro_add_discord_script',
-			ETS_PMPRO_DISCORD_URL . 'asset/js/ets-pmpro-add-discord-script.js',
+			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.js',
 			array('jquery')
 		);
         wp_enqueue_script( 'ets_pmpro_add_discord_script' );
@@ -66,7 +66,7 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function Name:- ets_add_new_menu()
+	 * Function Name:- ets_add_new_menu();
 	 *
 	 * Description:- add menu in admin dashboard.
 	 *
@@ -79,7 +79,7 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function Name:- ets_setting_page()
+	 * Function Name:- ets_setting_page();
 	 *
 	 * Description:- new menu Description.
 	 *
@@ -184,13 +184,13 @@ class Ets_Pmpro_Admin_Setting
 			<div class="ets-details"> 
 				<div class="ets-com-logo">
 					<div class="ets-co-logo" > 
-						<img src= <?php echo ETS_PMPRO_DISCORD_URL."asset/images/user-original.png;"?> > 
+						<img src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/user-original.png;"?> > 
 					</div>
 				</div>
 				<div class="ets-detail-dec"> 
-					<h2><?php echo __("ExpressTech Software Solution Pvt Ltd","ets_pmpro_discord"); ?>.</h2>
+					<h2><?php echo __("ExpressTech Software Solutions Pvt Ltd","ets_pmpro_discord"); ?>.</h2>
 					<a href="https://www.expresstechsoftwares.com/">
-					<?php echo __("ExpressTech Software Solution Pvt Ltd", "ets_pmpro_discord"); ?>.</a>
+					<?php echo __("ExpressTech Software Solutions Pvt Ltd", "ets_pmpro_discord"); ?>.</a>
 					<?php echo __("is the leading Enterprise Wordpress development company", "ets_pmpro_discord"); ?>.
 					<?php echo __("Contact us for any Wordpress Related development project", "ets_pmpro_discord"); ?>
 					.<br> 
@@ -262,13 +262,13 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function get_Support_Data().
+	 * Function get_Support_Data();
 	 *
 	 * Description:- send mail to submit support form.  
 	 *
-	 * @param None.
+	 * @param None;
 	 *
-	 * @return None. 
+	 * @return None; 
 	*/
 	public function get_Support_Data()
 	{
@@ -308,7 +308,7 @@ class Ets_Pmpro_Admin_Setting
 		if ($access_token) {
 			?>
 			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __("Disconnect From Discord ", "ets_pmpro_discord");?></a>
-			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."asset/images/Spin-Preloader.gif;"?> >
+			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
 		<?php
 		}
 		else {
@@ -346,7 +346,7 @@ class Ets_Pmpro_Admin_Setting
 	 *
 	 * @param $code.
 	 *
-	 * @return API respnce json. 
+	 * @return API response json. 
 	 */
 	public function create_discord_auth_token($code)
 	{
@@ -366,8 +366,8 @@ class Ets_Pmpro_Admin_Setting
 		    )    
 		);
 
-		$responce = wp_remote_post( $discord_token_api_url, $args );
-		return $responce;
+		$response = wp_remote_post( $discord_token_api_url, $args );
+		return $response;
 	}
 
 	/**
@@ -375,9 +375,9 @@ class Ets_Pmpro_Admin_Setting
 	 *
 	 * Description: get discord current user API.
 	 *
-	 * @param $access_token.
+	 * @param $access_token;
 	 *
-	 * @return user_body.
+	 * @return user_body;
 	 */
 	public function get_discord_current_user( $access_token )
 	{
@@ -388,8 +388,8 @@ class Ets_Pmpro_Admin_Setting
 	        'Authorization' => 'Bearer ' . $access_token
 	    	)
 	    );
-		$user_responce = wp_remote_get( $discord_cuser_api_url, $param );
-		$user_body = json_decode( wp_remote_retrieve_body( $user_responce ), true );
+		$user_response = wp_remote_get( $discord_cuser_api_url, $param );
+		$user_body = json_decode( wp_remote_retrieve_body( $user_response ), true );
 		return $user_body;
 	}
 
@@ -398,9 +398,9 @@ class Ets_Pmpro_Admin_Setting
 	 *
 	 * Description: add member into guild.
 	 *
-	 * @param $discord_user_id, $user_id, $access_token.
+	 * @param $discord_user_id, $user_id, $access_token;
 	 *
-	 * @return json.
+	 * @return json;
 	 */
 	public function add_discord_member_in_guild( $discord_user_id, $user_id, $access_token )
 	{
@@ -430,15 +430,15 @@ class Ets_Pmpro_Admin_Setting
 	    	)
 		);
 		update_user_meta($user_id, 'discord_role_id', $discord_role);
-		$guild_responce = wp_remote_post( $guilds_memeber_api_url, $guild_args );
-		$change_responce = $this->change_discord_role_api( $user_id, $discord_role );
-		return $guild_responce;
+		$guild_response = wp_remote_post( $guilds_memeber_api_url, $guild_args );
+		$change_response = $this->change_discord_role_api( $user_id, $discord_role );
+		return $guild_response;
 	}
 
 	/**
 	 * Function Name:- discord_api_callback();
 	 *
-	 * Description:- call discord API
+	 * Description:- call discord API.
 	 *
 	 * @param:- None; 
 	 *
@@ -462,8 +462,8 @@ class Ets_Pmpro_Admin_Setting
 		if (isset($_GET['code'])) {
 			$code = $_GET['code'];
 			$user_id = get_current_user_id();
-			$responce = $this->create_discord_auth_token( $code );
-			$res_body = json_decode( wp_remote_retrieve_body( $responce ), true );
+			$response = $this->create_discord_auth_token( $code );
+			$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
 			$discord_exist_user_id = get_user_meta($user_id, "discord_user_id", true );
 			
 			if (array_key_exists( 'access_token', $res_body )) {				
@@ -477,7 +477,7 @@ class Ets_Pmpro_Admin_Setting
 						$role_delete = $this->delete_discord_role( $user_id );
 					}
 					update_user_meta($user_id, "discord_user_id", $discord_user_id );
-					$guild_responce = $this->add_discord_member_in_guild( $discord_user_id, $user_id,$access_token );
+					$guild_response = $this->add_discord_member_in_guild( $discord_user_id, $user_id,$access_token );
 				}	
 			}
 		}
@@ -505,8 +505,8 @@ class Ets_Pmpro_Admin_Setting
 		        'Authorization' => 'Bot ' . $discord_bot_token
 		    )   
 		);
-		$guild_responce = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
-		return $guild_responce;
+		$guild_response = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
+		return $guild_response;
 	}
 	
 	/**
@@ -535,9 +535,9 @@ class Ets_Pmpro_Admin_Setting
 					    )
 					);
 
-			$responce = wp_remote_get($discord_change_role_api_url, $param);
+			$response = wp_remote_get($discord_change_role_api_url, $param);
 			update_user_meta( $user_id, 'discord_role_id', $role_id );
-			return $responce;
+			return $response;
 		}
 	}
 
@@ -548,7 +548,7 @@ class Ets_Pmpro_Admin_Setting
 	 *
 	 * @param $user_id.
 	 *
-	 * @return API responce. 
+	 * @return API response. 
 	 */
 	public function delete_discord_role( $user_id )
 	{
@@ -569,19 +569,19 @@ class Ets_Pmpro_Admin_Setting
 				    )
 				);
 			
-			$responce = wp_remote_request( $discord_delete_role_api_url, $param );
-			return $responce;
+			$response = wp_remote_request( $discord_delete_role_api_url, $param );
+			return $response;
 		}
 	}
 
 	/**
 	 * Function change_discord_role_from_pmpro(); 
 	 *
-	 * Description: Change discord role form pmpro role
+	 * Description: Change discord role form pmpro role.
 	 *
-	 * @param $level_id, $user_id, $cancel_level.
+	 * @param $level_id, $user_id, $cancel_level;
 	 *
-	 * @return API responce. 
+	 * @return API response; 
 	 */
 	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level )
 	{
@@ -605,9 +605,9 @@ class Ets_Pmpro_Admin_Setting
 	/**
 	 * Function Name:- disconnect_from_discord();
 	 *
-	 * Description:-cdisconnect from discord 
+	 * Description:-cdisconnect from discord. 
 	 *
-	 * @param:- none 
+	 * @param:- none;
 	 *
 	 * @return:- json; 
 	 */
@@ -618,7 +618,7 @@ class Ets_Pmpro_Admin_Setting
 		$role_id = '';
 		$role_id = $ets_discord_role_mapping['level_id_expired'];
 		$res = $this->delete_discord_role( $user_id );
-		$responce = $this->change_discord_role_api( $user_id, $role_id );
+		$response = $this->change_discord_role_api( $user_id, $role_id );
 		delete_user_meta( $user_id, 'discord_access_token' );
 		$event_res = array(
 			"status"  => 1,
@@ -631,7 +631,7 @@ class Ets_Pmpro_Admin_Setting
 	/**
 	 * Function Name:- pmpro_expiry_membership();
 	 *
-	 * Description:- set discord spector role on pmpro expiry 
+	 * Description:- set discord spector role on pmpro expiry. 
 	 *
 	 * @param:- $user_id, $level_id; 
 	 *
@@ -643,7 +643,7 @@ class Ets_Pmpro_Admin_Setting
 		$role_id = '';
 		$role_id = $ets_discord_role_mapping['level_id_expired'];
 		$role_delete = $this->delete_discord_role( $user_id );
-		$responce = $this->change_discord_role_api( $user_id, $role_id );
+		$response = $this->change_discord_role_api( $user_id, $role_id );
 		update_option('expire_pmpro_member_1','expire');
 	}
 }

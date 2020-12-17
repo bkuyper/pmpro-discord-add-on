@@ -23,8 +23,8 @@ jQuery(document).ready(function () {
 			beforeSend:function () {
 				jQuery('#image-loader').show();
 			},
-			success:function (responce) {
-				if (responce.status == 1) {
+			success:function (response) {
+				if (response.status == 1) {
 					location.reload();
 				}
 			},

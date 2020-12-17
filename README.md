@@ -14,7 +14,7 @@ Now you can add/remove PMPRO members directly to your discord server roles, assi
   - Add "Connect to Discord" button inside the profile of the member.
   - Auto assign the discord role to your discord members.
   - Admin assign/change/remove discord roles by removing pmpro level access.
-## installation
+## Installation
 - You can find the plugin inside the PMPRO settings Add-ons
 - Upload the `pmpro-discord-add-on` folder to the `/wp-content/plugins/` directory.
 - Activate the plugin through the 'Plugins' menu in WordPress.

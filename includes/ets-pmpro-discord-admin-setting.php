@@ -35,13 +35,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function Name:- ets_add_script();
-	 *
-	 * Description:- localized script and style. 
-	 *
-	 * @param:- None; 
-	 *
-	 * @return:- None; 
+	 * Description:- localized script and style 
+	 * @param:- None
+	 * @return:- None
 	 */
 	public function ets_add_script(){
 
@@ -66,26 +62,18 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function Name:- ets_add_new_menu();
-	 *
-	 * Description:- add menu in admin dashboard.
-	 *
-	 * @param:- None;
-	 *
-	 * @return:- Add menu in admin dashboard. 
+	 * Description:- add menu in admin dashboard
+	 * @param:- None
+	 * @return:- Add menu in admin dashboard 
 	 */
 	public function ets_add_new_menu(){
 		add_menu_page(__( 'ETS Settings', 'ets_pmpro_discord' ), __( 'ETS Settings', 'ets_pmpro_discord' ), 'manage_options', 'discord-options', array( $this, 'ets_setting_page' ), 'dashicons-admin-generic', 59);
 	}
 
 	/**
-	 * Function Name:- ets_setting_page();
-	 *
-	 * Description:- new menu Description.
-	 *
-	 * @param:- menu_id;
-	 *
-	 * @return:- Show 2 tab in the page. 
+	 * Description:- new menu Description
+	 * @param:- menu_id
+	 * @return:- Show 2 tab in the page 
 	 */
 	public function ets_setting_page(){
 		$ets_discord_client_id = isset($_POST['ets_discord_client_id']) ? sanitize_text_field(trim($_POST['ets_discord_client_id'])) : '';
@@ -262,13 +250,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function get_Support_Data();
-	 *
-	 * Description:- send mail to submit support form.  
-	 *
-	 * @param None;
-	 *
-	 * @return None; 
+	 * Description:- send mail to submit support form
+	 * @param None
+	 * @return None 
 	*/
 	public function get_Support_Data()
 	{
@@ -293,13 +277,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function Name:- add_connect_discord_button();
-	 *
-	 * Description:- Add link in pmpro profile 
-	 *
-	 * @param:- None; 
-	 *
-	 * @return:- new link; 
+	 * Description:- Add link in pmpro profile
+	 * @param:- None
+	 * @return:- new link 
 	 */
 	public function add_connect_discord_button()
 	{	
@@ -320,13 +300,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function Name:- get_current_level_id();
-	 *
 	 * Description:- get pmpro current level id
-	 *
-	 * @param:- None; 
-	 *
-	 * @return:- curr_level_id; 
+	 * @param:- None
+	 * @return:- curr_level_id
 	 */
 	public function get_current_level_id($user_id)
 	{
@@ -340,13 +316,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function create_discord_auth_token(); 
-	 *
-	 * Description: Call create auth token API.
-	 *
-	 * @param $code.
-	 *
-	 * @return API response json. 
+	 * Description: Call create auth token API
+	 * @param $code
+	 * @return API response json
 	 */
 	public function create_discord_auth_token($code)
 	{
@@ -371,13 +343,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function get_discord_current_user(); 
-	 *
-	 * Description: get discord current user API.
-	 *
-	 * @param $access_token;
-	 *
-	 * @return user_body;
+	 * Description: get discord current user API
+	 * @param $access_token
+	 * @return user_body
 	 */
 	public function get_discord_current_user( $access_token )
 	{
@@ -394,13 +362,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function add_discord_member_in_guild(); 
-	 *
-	 * Description: add member into guild.
-	 *
-	 * @param $discord_user_id, $user_id, $access_token;
-	 *
-	 * @return json;
+	 * Description: add member into guild
+	 * @param $discord_user_id, $user_id, $access_token
+	 * @return json
 	 */
 	public function add_discord_member_in_guild( $discord_user_id, $user_id, $access_token )
 	{
@@ -436,13 +400,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function Name:- discord_api_callback();
-	 *
-	 * Description:- call discord API.
-	 *
-	 * @param:- None; 
-	 *
-	 * @return:- json; 
+	 * Description:- call discord API
+	 * @param:- None
+	 * @return:- json 
 	 */
 	public function discord_api_callback()
 	{
@@ -484,13 +444,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function delete_member_from_guild(); 
-	 *
-	 * Description: add member into guild.
-	 *
-	 * @param $discord_user_id, $user_id, $access_token.
-	 *
-	 * @return json.
+	 * Description: add member into guild
+	 * @param $discord_user_id, $user_id, $access_token
+	 * @return json
 	 */
 	public function delete_member_from_guild($user_id)
 	{
@@ -510,13 +466,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 	
 	/**
-	 * Function change_discord_role_api(); 
-	 *
-	 * Description: call change discord role API.
-	 *
-	 * @param $user_id.
-	 *
-	 * @return configure SMTP. 
+	 * Description: call change discord role API
+	 * @param $user_id
+	 * @return configure SMTP
 	 */
 	public function change_discord_role_api( $user_id, $role_id )
 	{
@@ -542,13 +494,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function delete_discord_role(); 
-	 *
 	 * Description: Call detete discord role API
-	 *
-	 * @param $user_id.
-	 *
-	 * @return API response. 
+	 * @param $user_id
+	 * @return API response 
 	 */
 	public function delete_discord_role( $user_id )
 	{
@@ -575,13 +523,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function change_discord_role_from_pmpro(); 
-	 *
-	 * Description: Change discord role form pmpro role.
-	 *
-	 * @param $level_id, $user_id, $cancel_level;
-	 *
-	 * @return API response; 
+	 * Description: Change discord role form pmpro role
+	 * @param $level_id, $user_id, $cancel_level
+	 * @return API response
 	 */
 	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level )
 	{
@@ -603,13 +547,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function Name:- disconnect_from_discord();
-	 *
-	 * Description:-cdisconnect from discord. 
-	 *
-	 * @param:- none;
-	 *
-	 * @return:- json; 
+	 * Description:-cdisconnect from discord
+	 * @param:- none
+	 * @return:- json
 	 */
 	public function disconnect_from_discord()
 	{
@@ -629,13 +569,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Function Name:- pmpro_expiry_membership();
-	 *
 	 * Description:- set discord spector role on pmpro expiry. 
-	 *
-	 * @param:- $user_id, $level_id; 
-	 *
-	 * @return:- update role; 
+	 * @param:- $user_id, $level_id
+	 * @return:- update role
 	 */
 	public function pmpro_expiry_membership( $user_id, $level_id )
 	{	

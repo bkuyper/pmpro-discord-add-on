@@ -35,9 +35,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description:- localized script and style 
-	 * @param:- None
-	 * @return:- None
+	 * Description: Localized script and style 
+	 * @param None
+	 * @return None
 	 */
 	public function ets_add_script(){
 
@@ -62,18 +62,18 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description:- add menu in admin dashboard
-	 * @param:- None
-	 * @return:- Add menu in admin dashboard 
+	 * Description: Add menu in admin dashboard
+	 * @param None
+	 * @return None
 	 */
 	public function ets_add_new_menu(){
 		add_menu_page(__( 'ETS Settings', 'ets_pmpro_discord' ), __( 'ETS Settings', 'ets_pmpro_discord' ), 'manage_options', 'discord-options', array( $this, 'ets_setting_page' ), 'dashicons-admin-generic', 59);
 	}
 
 	/**
-	 * Description:- new menu Description
-	 * @param:- menu_id
-	 * @return:- Show 2 tab in the page 
+	 * Description: Define plugin settings rules
+	 * @param None
+	 * @return None 
 	 */
 	public function ets_setting_page(){
 		$ets_discord_client_id = isset($_POST['ets_discord_client_id']) ? sanitize_text_field(trim($_POST['ets_discord_client_id'])) : '';
@@ -250,7 +250,7 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description:- send mail to submit support form
+	 * Description: Send mail to support form current user
 	 * @param None
 	 * @return None 
 	*/
@@ -277,9 +277,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description:- Add link in pmpro profile
-	 * @param:- None
-	 * @return:- new link 
+	 * Description: Show status of PMPro connection with user
+	 * @param None
+	 * @return New link 
 	 */
 	public function add_connect_discord_button()
 	{	
@@ -300,9 +300,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description:- get pmpro current level id
-	 * @param:- None
-	 * @return:- curr_level_id
+	 * Description: get pmpro current level id
+	 * @param int $user_id
+	 * @return current level id
 	 */
 	public function get_current_level_id($user_id)
 	{
@@ -316,9 +316,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description: Call create auth token API
-	 * @param $code
-	 * @return API response json
+	 * Description: Create authentication token for discord API
+	 * @param string $code
+	 * @return object API response
 	 */
 	public function create_discord_auth_token($code)
 	{
@@ -343,9 +343,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description: get discord current user API
-	 * @param $access_token
-	 * @return user_body
+	 * Description: Get Discord user details from API
+	 * @param string $access_token
+	 * @return object API response
 	 */
 	public function get_discord_current_user( $access_token )
 	{
@@ -362,9 +362,11 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description: add member into guild
-	 * @param $discord_user_id, $user_id, $access_token
-	 * @return json
+	 * Description: Add new member into discord guild
+	 * @param int $discord_user_id
+	 * @param int $user_id
+	 * @param string $access_token
+	 * @return object API response
 	 */
 	public function add_discord_member_in_guild( $discord_user_id, $user_id, $access_token )
 	{
@@ -400,9 +402,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description:- call discord API
-	 * @param:- None
-	 * @return:- json 
+	 * Description: For authorization process call discord API
+	 * @param None
+	 * @return object API response 
 	 */
 	public function discord_api_callback()
 	{
@@ -444,9 +446,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description: add member into guild
-	 * @param $discord_user_id, $user_id, $access_token
-	 * @return json
+	 * Description: Delete existing user from guild
+	 * @param int $user_id
+	 * @return object API response
 	 */
 	public function delete_member_from_guild($user_id)
 	{
@@ -466,9 +468,10 @@ class Ets_Pmpro_Admin_Setting
 	}
 	
 	/**
-	 * Description: call change discord role API
-	 * @param $user_id
-	 * @return configure SMTP
+	 * Description: API call to change discord user role
+	 * @param int $user_id
+	 * @param int $role_id
+	 * @return object API response
 	 */
 	public function change_discord_role_api( $user_id, $role_id )
 	{
@@ -494,9 +497,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description: Call detete discord role API
-	 * @param $user_id
-	 * @return API response 
+	 * Description: Call API to delete existing discord user role
+	 * @param int $user_id
+	 * @return object API response 
 	 */
 	public function delete_discord_role( $user_id )
 	{
@@ -524,8 +527,10 @@ class Ets_Pmpro_Admin_Setting
 
 	/**
 	 * Description: Change discord role form pmpro role
-	 * @param $level_id, $user_id, $cancel_level
-	 * @return API response
+	 * @param int $level_id
+	 * @param int $user_id
+	 * @param int $cancel_level
+	 * @return object API response
 	 */
 	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level )
 	{
@@ -547,9 +552,9 @@ class Ets_Pmpro_Admin_Setting
 	}
 
 	/**
-	 * Description:-cdisconnect from discord
-	 * @param:- none
-	 * @return:- json
+	 * Description:disconnect user from discord
+	 * @param none
+	 * @return Object json response
 	 */
 	public function disconnect_from_discord()
 	{
@@ -562,16 +567,17 @@ class Ets_Pmpro_Admin_Setting
 		delete_user_meta( $user_id, 'discord_access_token' );
 		$event_res = array(
 			"status"  => 1,
-			"message" => "Successsfully disconnected"
+			"message" => "Successfully disconnected"
 		);
 		echo json_encode($event_res);
 		die();
 	}
 
 	/**
-	 * Description:- set discord spector role on pmpro expiry. 
-	 * @param:- $user_id, $level_id
-	 * @return:- update role
+	 * Description: set discord spectator role on pmpro expiry 
+	 * @param int $user_id
+	 * @param int $level_id
+	 * @return None
 	 */
 	public function pmpro_expiry_membership( $user_id, $level_id )
 	{	

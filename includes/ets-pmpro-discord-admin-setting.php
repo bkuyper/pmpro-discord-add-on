@@ -510,9 +510,7 @@ class Ets_Pmpro_Admin_Setting
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$discord_role_id = get_user_meta( $user_id, 'discord_role_id', true );
 		$discord_delete_role_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$discord_user_id.'/roles/'.$discord_role_id;
-    $time = time();
-    update_option("discord_url".$time,$discord_delete_role_api_url);
-
+    
 		if ( $discord_user_id ) {
 			$param = array(
 					'method'=> 'DELETE',

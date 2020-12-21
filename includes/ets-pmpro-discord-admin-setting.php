@@ -176,17 +176,18 @@ class Ets_Pmpro_Admin_Setting
 					</div>
 				</div>
 				<div class="ets-detail-dec"> 
-					<h2><?php echo __("ExpressTech Software Solutions Pvt Ltd","ets_pmpro_discord"); ?>.</h2>
+					<h2><?php echo __("ExpressTech Software Solutions Pvt. Ltd.","ets_pmpro_discord"); ?></h2>
 					<a href="https://www.expresstechsoftwares.com/">
-					<?php echo __("ExpressTech Software Solutions Pvt Ltd", "ets_pmpro_discord"); ?>.</a>
-					<?php echo __("is the leading Enterprise Wordpress development company", "ets_pmpro_discord"); ?>.
-					<?php echo __("Contact us for any Wordpress Related development project", "ets_pmpro_discord"); ?>
-					.<br> 
+					<?php echo __("ExpressTech Software Solutions Pvt. Ltd.", "ets_pmpro_discord"); ?></a>
+					<?php echo __("is the leading Enterprise Wordpress development company.", "ets_pmpro_discord"); ?>
+					<?php echo __("Contact us for any Wordpress Related development project.", "ets_pmpro_discord"); ?>
+					<br> 
 					<span><b><?php echo __("Email","ets_pmpro_discord"); ?>: </b>
 					<a href="mailto:contact@expresstechsoftwares.com">contact@expresstechsoftwares.com</a> , 
 					<a href="mailto:business@expresstechsoftwares.com">business@expresstechsoftwares.com</a>
 					</span><br>
-					<span><b><?php echo __("Skype","ets_pmpro_discord"); ?>: </b> ravi.soni971</span>
+					<span><b><?php echo __("Skype","ets_pmpro_discord"); ?>: </b>ravi.soni971</span><br>
+          <span><b><?php echo __("Phone/WhatsApp","ets_pmpro_discord"); ?>: </b>+91-9806724185</span>
 				</div>
 			</div>
 		   
@@ -232,7 +233,7 @@ class Ets_Pmpro_Admin_Setting
 									<?php echo __("Message","ets_pmpro_discord"); ?> 
 									</th>
 									<td>
-										<textarea name="ets_support_msg" required="" class="ets-regular-text"></textarea>
+										<textarea name="ets_support_msg" rows="5" cols="50" required="" class="ets-regular-text"></textarea>
 										<p class="description"><?php echo __("Write your support message","ets_pmpro_discord");?></p>
 									</td>
 								</tr>
@@ -268,9 +269,9 @@ class Ets_Pmpro_Admin_Setting
 				$content 		= "Name: " .$etsUserName."<br>";
 				$content 		.= "Contact Email: " .$etsUserEmail."<br>";
 				$content		.=  "Message: ".$message;
-			    $headers 		= array();
-			    $blockemail 	= get_bloginfo("admin_email");
-				$headers[] 		= 'From: '.get_bloginfo("name") .' <'.$blockemail.'>'."\r\n";
+			  $headers 		= array();
+			  $blogemail 	= get_bloginfo("admin_email");
+				$headers[] 		= 'From: '.get_bloginfo("name") .' <'.$blogemail.'>'."\r\n";
 				$mail = wp_mail( $to, $subject, $content, $headers );
 			} 	
 		}
@@ -330,11 +331,11 @@ class Ets_Pmpro_Admin_Setting
 		    ),
 		    'body' => array(
 	    		'client_id' => get_option('ets_discord_client_id'),
-				'client_secret' => get_option('ets_discord_client_secret'),
-				'grant_type' => 'authorization_code',
-				'code' => $code,
-				'redirect_uri' =>  get_option('ets_discord_redirect_url'),
-				'scope' => 'identify email connections'
+				  'client_secret' => get_option('ets_discord_client_secret'),
+				  'grant_type' => 'authorization_code',
+				  'code' => $code,
+				  'redirect_uri' =>  get_option('ets_discord_redirect_url'),
+				  'scope' => 'identify email connections'
 		    )    
 		);
 
@@ -479,7 +480,7 @@ class Ets_Pmpro_Admin_Setting
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_user_id = get_user_meta($user_id, 'discord_user_id', true);
 		$discord_bot_token = get_option('ets_discord_bot_token');
-		$discord_change_role_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$discord_user_id.'/roles/'.$role_id;
+    $discord_change_role_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$discord_user_id.'/roles/'.$role_id;
 		if ( $access_token && $discord_user_id ) {
 			$param = array(
 						'method'=> 'PUT',
@@ -509,6 +510,8 @@ class Ets_Pmpro_Admin_Setting
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$discord_role_id = get_user_meta( $user_id, 'discord_role_id', true );
 		$discord_delete_role_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$discord_user_id.'/roles/'.$discord_role_id;
+    $time = time();
+    update_option("discord_url".$time,$discord_delete_role_api_url);
 
 		if ( $discord_user_id ) {
 			$param = array(

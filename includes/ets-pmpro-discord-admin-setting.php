@@ -302,7 +302,7 @@ class Ets_Pmpro_Admin_Setting
 	/**
 	 * Description: get pmpro current level id
 	 * @param int $user_id
-	 * @return current level id
+	 * @return int $curr_level_id
 	 */
 	public function get_current_level_id($user_id)
 	{

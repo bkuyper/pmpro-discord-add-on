@@ -34,4 +34,17 @@ jQuery(document).ready(function () {
 
 		});
 	});
+
+	jQuery('#clrbtn').click(function(e) {
+	    e.preventDefault();
+	      jQuery('.error-log').html("Clear logs Sucesssfully !");
+	      jQuery.ajax({
+	      url: etsPmproParams.admin_ajax,
+	      type: "POST",
+	      data: 'action=ets_clear_logs&',
+	      success: function(data) {
+	        jQuery.unblockUI();
+	      }
+	    });
+  	});
 });

@@ -138,3 +138,7 @@
 .btn-disconnect{
   background-color:#FF0000;
 }
+div#ets_logs{
+  background-color: #000;
+  color:#18d26a;
+}

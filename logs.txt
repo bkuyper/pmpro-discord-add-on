@@ -1,0 +1,7 @@
+2020-12-23 06:52:50 => Clear logs Successfully
+2020-12-23 06:53:34=>File:/var/www/html/pmpro/wp-content/plugins/pmpro-discord-add-on/includes/ets-pmpro-discord-admin-setting.php::Line:459::Function:create_discord_auth_token::invalid_client
+2020-12-23 06:54:16=>File:/var/www/html/pmpro/wp-content/plugins/pmpro-discord-add-on/includes/ets-pmpro-discord-admin-setting.php::Line:459::Function:create_discord_auth_token::invalid_request
+2020-12-23 06:54:37=>File:/var/www/html/pmpro/wp-content/plugins/pmpro-discord-add-on/includes/ets-pmpro-discord-admin-setting.php::Line:475::Function:add_discord_member_in_guild::10004:Unknown Guild
+2020-12-23 06:54:38=>File:/var/www/html/pmpro/wp-content/plugins/pmpro-discord-add-on/includes/ets-pmpro-discord-admin-setting.php::Line:432::Function:change_discord_role_api::10004:Unknown Guild
+2020-12-23 06:55:35=>File:/var/www/html/pmpro/wp-content/plugins/pmpro-discord-add-on/includes/ets-pmpro-discord-admin-setting.php::Line:459::Function:create_discord_auth_token::invalid_request
+2020-12-23 06:55:52=>File:/var/www/html/pmpro/wp-content/plugins/pmpro-discord-add-on/includes/ets-pmpro-discord-admin-setting.php::Line:459::Function:create_discord_auth_token::invalid_request

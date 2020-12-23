@@ -1,7 +1,7 @@
 <div class="error-log">
 <?php
-	$filename = ETS_PMPRO_DISCORD_PATH.'logs.txt';
-	$handle = fopen($filename, "r");
+	$filename = 'logs.txt';
+	$handle = fopen(ETS_PMPRO_DISCORD_PATH.$filename, "r");
 	while(! feof($handle))
 	  {
 	  echo fgets($handle). "<br />";
@@ -11,4 +11,5 @@
 </div>
 <div class="clrbtndiv">
 	<input type="button" class="clrbtn btn btn-sm btn-danger" id="clrbtn" name="clrbtn" value="Clear Logs !">
+	<input type="button" value="Refresh" onClick="window.location.reload();">
 </div>

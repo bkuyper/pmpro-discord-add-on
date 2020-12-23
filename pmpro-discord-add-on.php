@@ -27,7 +27,7 @@ class Ets_Pmpro_Add_Discord
 	function __construct()
 	{
 		require_once ETS_PMPRO_DISCORD_PATH.'includes/ets-pmpro-discord-admin-setting.php';
-		require_once ETS_PMPRO_DISCORD_PATH.'includes/class-discord-addon-logs.php';
+		require_once ETS_PMPRO_DISCORD_PATH.'includes/classes/class-discord-addon-logs.php';
 	}
 }
 $ets_pmpro_add_discord = new Ets_Pmpro_Add_Discord();

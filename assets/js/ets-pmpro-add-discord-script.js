@@ -28,6 +28,9 @@ jQuery(document).ready(function () {
 					location.reload();
 				}
 			},
+			error: function(data) {
+				alert('Server error');
+		  	},
 			complete:function () {
 				jQuery('#image-loader').hide();
 			}
@@ -37,13 +40,17 @@ jQuery(document).ready(function () {
 
 	jQuery('#clrbtn').click(function(e) {
 	    e.preventDefault();
-	      jQuery('.error-log').html("Clear logs Sucesssfully !");
 	      jQuery.ajax({
 	      url: etsPmproParams.admin_ajax,
 	      type: "POST",
 	      data: 'action=ets_clear_logs&',
 	      success: function(data) {
-	        jQuery.unblockUI();
+	      	if (data.error) {
+	            // handle the error
+	            alert(data.error.msg);
+	        }else{
+	        	jQuery('.error-log').html("Clear logs Sucesssfully !");
+	        }
 	      }
 	    });
   	});

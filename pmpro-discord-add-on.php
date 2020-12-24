@@ -28,4 +28,4 @@ class Ets_Pmpro_Add_Discord {
 		require_once ETS_PMPRO_DISCORD_PATH.'includes/classes/class-discord-addon-logs.php';
 	}
 }
-$ets_pmpro_add_discord = new Ets_Pmpro_Add_Discord();
+new Ets_Pmpro_Add_Discord();

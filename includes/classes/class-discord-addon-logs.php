@@ -63,4 +63,4 @@ class PMPro_Discord_Logs {
 	}
 
 }
-$ets_pmpro_log_setting = new PMPro_Discord_Logs();
+new PMPro_Discord_Logs();

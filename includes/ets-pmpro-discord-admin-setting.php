@@ -616,4 +616,4 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 }
-$ets_pmpro_admin_setting = new Ets_Pmpro_Admin_Setting();
+new Ets_Pmpro_Admin_Setting();

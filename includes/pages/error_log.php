@@ -1,11 +1,10 @@
 <div class="error-log">
 <?php
-	$filename = 'logs.txt';
+	$filename = 'discord_api_logs.txt';
 	$handle = fopen(ETS_PMPRO_DISCORD_PATH.$filename, "r");
-	while(! feof($handle))
-	  {
+	while ( ! feof($handle) ) {
 	  echo fgets($handle). "<br />";
-	  }
+	 }
 	fclose($handle);
 ?>
 </div>

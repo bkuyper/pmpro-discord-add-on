@@ -2,10 +2,8 @@
 /**
  * Admin setting
  */
-class Ets_Pmpro_Admin_Setting
-{
-	function __construct()
-	{
+class Ets_Pmpro_Admin_Setting {
+	function __construct() {
 		// Add new menu option in the admin menu.
 		add_action( 'admin_menu', array( $this, 'ets_add_new_menu' ) );
 
@@ -125,32 +123,32 @@ class Ets_Pmpro_Admin_Setting
 		$ets_discord_roles = get_option( 'ets_discord_role_mapping' );
 		$ets_discord_guild_id = get_option( 'discord_guild_id' );
 		?>
-		<h1><?php echo __("Discord App Settings","ets_pmpro_discord");?></h1>
+		<h1><?php echo __( "Discord App Settings","ets_pmpro_discord" );?></h1>
 		<div class="tab ets-tabs">
-		  <button class="ets_tablinks active" onclick="openTab(event, 'ets_setting' )"><?php echo __("Discord Settings", "ets_pmpro_discord"); ?></button>
-		  <button class="ets_tablinks" onclick="openTab(event, 'ets_about_us' )"><?php echo __("Support", "ets_pmpro_discord"); ?>	
+		  <button class="ets_tablinks active" onclick="openTab(event, 'ets_setting' )"><?php echo __( "Discord Settings", "ets_pmpro_discord" ); ?></button>
+		  <button class="ets_tablinks" onclick="openTab(event, 'ets_about_us' )"><?php echo __( "Support", "ets_pmpro_discord" ); ?>	
 		  </button>
-		  <button class="ets_tablinks" onclick="openTab(event, 'ets_logs' )"><?php echo __("Logs", "ets_pmpro_discord"); ?>	
+		  <button class="ets_tablinks" onclick="openTab(event, 'ets_logs' )"><?php echo __( "Logs", "ets_pmpro_discord" ); ?>	
 		  </button>  
 		</div>
 
 		<div id="ets_setting" class="ets_tabcontent">
-			<h3><?php echo __("Discord Settings", "ets_pmpro_discord");?></h3>
+			<h3><?php echo __( "Discord Settings", "ets_pmpro_discord" );?></h3>
 			<form method="post" action="#">
 			  	<div class="ets-input-group">
-			  		<label><?php echo __("Client ID", "ets_pmpro_discord");?> :</label>
+			  		<label><?php echo __( "Client ID", "ets_pmpro_discord" );?> :</label>
 			  			<input type="text" class="ets-input" name="ets_discord_client_id" value="<?php if ( isset( $ets_discord_client_id ) )echo $ets_discord_client_id;?>" required placeholder="Discord Client ID">
 			  	</div>
 			  	<div class="ets-input-group">
-			  		<label><?php echo __( "Client Secret", "ets_pmpro_discord" );?> :</label>
+			  		<label><?php echo __(  "Client Secret", "ets_pmpro_discord" );?> :</label>
 			  			<input type="text" class="ets-input" name="ets_discord_client_secret" value="<?php if ( isset( $discord_client_secret) )echo $discord_client_secret;?>" required placeholder="Discord Client Secret">
 			  	</div>
 			  	<div class="ets-input-group">
-			  		<label><?php echo __( "Bot Token", "ets_pmpro_discord" );?> :</label>
+			  		<label><?php echo __(  "Bot Token", "ets_pmpro_discord" );?> :</label>
 			  			<input type="text" class="ets-input" name="ets_discord_bot_token" value="<?php if ( isset( $discord_bot_token ) )echo $discord_bot_token;?>" required placeholder="Discord Bot Token">
 			  	</div>
 			  	<div class="ets-input-group">
-			  		<label><?php echo __( "Redirect URL", "ets_pmpro_discord" );?> :</label>
+			  		<label><?php echo __(  "Redirect URL", "ets_pmpro_discord" );?> :</label>
 			  			<input type="text" class="ets-input" name="ets_discord_redirect_url"
 			  			placeholder="Discord Redirect Url" value="<?php if ( isset( $ets_discord_redirect_url ) )echo $ets_discord_redirect_url;?>" required>
 			  			<p class="description"><?php echo __( "Registered discord app url", "ets_pmpro_discord" );?></p>
@@ -167,7 +165,7 @@ class Ets_Pmpro_Admin_Setting
 			  	</div>
 			  	<p>
 			  		<button type="submit" name="submit" value="ets_submit" class="ets-submit">
-			  			<?php echo __("Submit", "ets_pmpro_discord");?>
+			  			<?php echo __( "Submit", "ets_pmpro_discord" );?>
 			  		</button>
 			  	</p>
 			</form>
@@ -180,18 +178,18 @@ class Ets_Pmpro_Admin_Setting
 					</div>
 				</div>
 				<div class="ets-detail-dec"> 
-					<h2><?php echo __("ExpressTech Software Solutions Pvt. Ltd.","ets_pmpro_discord"); ?></h2>
+					<h2><?php echo __( "ExpressTech Software Solutions Pvt. Ltd.","ets_pmpro_discord" ); ?></h2>
 					<a href="https://www.expresstechsoftwares.com/">
-					<?php echo __("ExpressTech Software Solutions Pvt. Ltd.", "ets_pmpro_discord"); ?></a>
-					<?php echo __("is the leading Enterprise Wordpress development company.", "ets_pmpro_discord"); ?>
-					<?php echo __("Contact us for any Wordpress Related development project.", "ets_pmpro_discord"); ?>
+					<?php echo __( "ExpressTech Software Solutions Pvt. Ltd.", "ets_pmpro_discord" ); ?></a>
+					<?php echo __( "is the leading Enterprise Wordpress development company.", "ets_pmpro_discord" ); ?>
+					<?php echo __( "Contact us for any Wordpress Related development project.", "ets_pmpro_discord" ); ?>
 					<br> 
-					<span><b><?php echo __("Email","ets_pmpro_discord"); ?>: </b>
+					<span><b><?php echo __( "Email","ets_pmpro_discord" ); ?>: </b>
 					<a href="mailto:contact@expresstechsoftwares.com">contact@expresstechsoftwares.com</a> , 
 					<a href="mailto:business@expresstechsoftwares.com">business@expresstechsoftwares.com</a>
 					</span><br>
-					<span><b><?php echo __("Skype","ets_pmpro_discord"); ?>: </b>ravi.soni971</span><br>
-          <span><b><?php echo __("Phone/WhatsApp","ets_pmpro_discord"); ?>: </b>+91-9806724185</span>
+					<span><b><?php echo __( "Skype","ets_pmpro_discord" ); ?>: </b>ravi.soni971</span><br>
+          <span><b><?php echo __( "Phone/WhatsApp","ets_pmpro_discord" ); ?>: </b>+91-9806724185</span>
 				</div>
 			</div>
 		   
@@ -202,43 +200,43 @@ class Ets_Pmpro_Admin_Setting
 							<tbody>						
 								<tr>
 									<th scope="row">
-										<?php echo __("Full Name","ets_pmpro_discord"); ?>	 
+										<?php echo __( "Full Name","ets_pmpro_discord" ); ?>	 
 									</th>
 									<td>
 										<input type="text" name="ets_user_name" placeholder="Enter Name" class="regular-text" required=""
 										value="<?php echo $currUserName;
 										 ?>">
 										<p class="description">
-											<?php echo __("Write your full name","ets_pmpro_discord");?>	
+											<?php echo __( "Write your full name","ets_pmpro_discord" );?>	
 										</p>
 									</td>
 								</tr>
 								<tr>
-									<th scope="row"><?php echo __("Contact Email","ets_pmpro_discord");?> 
+									<th scope="row"><?php echo __( "Contact Email","ets_pmpro_discord" );?> 
 									</th>
 									<td>
 										<input type="email" name="ets_user_email" placeholder=" Enter email" class="regular-text" required="" value="<?php echo get_option( 'admin_email' );
 										 ?>">
-										<p class="description"><?php echo __("Write your contact email","ets_pmpro_discord");?></p>
+										<p class="description"><?php echo __( "Write your contact email","ets_pmpro_discord" );?></p>
 									</td>
 								</tr>
 								<tr>
 									<th scope="row">
-										<?php echo __("Subject","ets_pmpro_discord"); ?> 
+										<?php echo __( "Subject","ets_pmpro_discord" ); ?> 
 									</th>
 									<td>
 										<input type="text" name="ets_support_subject" placeholder=" Enter your subject" class="regular-text" required="">
-										<p class="description"><?php echo __("Write your support subject","ets_pmpro_discord");?></p>
+										<p class="description"><?php echo __( "Write your support subject","ets_pmpro_discord" );?></p>
 								
 									</td>
 								</tr>
 								<tr>
 									<th scope="row">
-									<?php echo __("Message","ets_pmpro_discord"); ?> 
+									<?php echo __( "Message","ets_pmpro_discord" ); ?> 
 									</th>
 									<td>
 										<textarea name="ets_support_msg" rows="5" cols="50" required="" class="ets-regular-text"></textarea>
-										<p class="description"><?php echo __("Write your support message","ets_pmpro_discord");?></p>
+										<p class="description"><?php echo __( "Write your support message","ets_pmpro_discord" );?></p>
 									</td>
 								</tr>
 							</tbody>
@@ -263,8 +261,7 @@ class Ets_Pmpro_Admin_Setting
 	 * @param None
 	 * @return None 
 	*/
-	public function get_Support_Data()
-	{
+	public function get_Support_Data() {
 		if ( isset( $_POST['save'] ) ) {
 			$etsUserName 	= isset( $_POST['ets_user_name'] ) ? sanitize_text_field( trim( $_POST['ets_user_name'] ) ) : "";
 			$etsUserEmail 	= isset( $_POST['ets_user_email'] ) ? sanitize_text_field( trim( $_POST['ets_user_email'] ) ) : "";
@@ -290,19 +287,17 @@ class Ets_Pmpro_Admin_Setting
 	 * @param None
 	 * @return New link 
 	 */
-	public function add_connect_discord_button()
-	{	
+	public function add_connect_discord_button() {	
 		$user_id = get_current_user_id();
 		$access_token = get_user_meta( $user_id, "discord_access_token", true );
 		if ( $access_token ) {
 			?>
-			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __("Disconnect From Discord ", "ets_pmpro_discord");?></a>
+			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?></a>
 			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
 		<?php
-		}
-		else {
+		} else {
 		?>
-			<a href="?action=discord-login" class="btn-connect ets-btn" target="_blank"><?php echo __("Connect To Discord", "ets_pmpro_discord");?></a>
+			<a href="?action=discord-login" class="btn-connect ets-btn" target="_blank"><?php echo __( "Connect To Discord", "ets_pmpro_discord" );?></a>
 		<?php
 		}
 		
@@ -313,10 +308,8 @@ class Ets_Pmpro_Admin_Setting
 	 * @param int $user_id
 	 * @return int $curr_level_id
 	 */
-	public function get_current_level_id( $user_id )
-	{
-		if ( is_user_logged_in() && function_exists( 'pmpro_hasMembershipLevel' ) && pmpro_hasMembershipLevel() )
-		{
+	public function get_current_level_id( $user_id ) {
+		if ( is_user_logged_in() && function_exists( 'pmpro_hasMembershipLevel' ) && pmpro_hasMembershipLevel() ) {
 			global $current_user;
 			$membership_level = pmpro_getMembershipLevelForUser( $user_id );
 			$curr_level_id = $membership_level->ID;
@@ -329,8 +322,7 @@ class Ets_Pmpro_Admin_Setting
 	 * @param string $code
 	 * @return object API response
 	 */
-	public function create_discord_auth_token( $code )
-	{
+	public function create_discord_auth_token( $code ) {
 		$discord_token_api_url = ETS_DISCORD_API_URL.'oauth2/token';
 		$args = array(
 			'method'=> 'POST',
@@ -350,7 +342,7 @@ class Ets_Pmpro_Admin_Setting
 		$response = wp_remote_post( $discord_token_api_url, $args );
 
 		$responseArr = json_decode( wp_remote_retrieve_body( $response ), true );
-		if ( is_array( $responseArr ) && !empty( $responseArr ) ) {
+		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 			if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 				$Logs = new PMPro_Discord_Logs();
 				$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
@@ -364,8 +356,7 @@ class Ets_Pmpro_Admin_Setting
 	 * @param string $access_token
 	 * @return object API response
 	 */
-	public function get_discord_current_user( $access_token )
-	{
+	public function get_discord_current_user( $access_token ) {
 		$discord_cuser_api_url = ETS_DISCORD_API_URL.'users/@me';
 		$param = array(
 			'headers'      => array(
@@ -375,7 +366,7 @@ class Ets_Pmpro_Admin_Setting
 	    );
 		$user_response = wp_remote_get( $discord_cuser_api_url, $param );
 		$responseArr = json_decode( wp_remote_retrieve_body( $user_response ), true );
-		if ( is_array( $responseArr ) && !empty( $responseArr ) ) {
+		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 			if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 				$Logs = new PMPro_Discord_Logs();
 				$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
@@ -392,15 +383,13 @@ class Ets_Pmpro_Admin_Setting
 	 * @param string $access_token
 	 * @return object API response
 	 */
-	public function add_discord_member_in_guild( $discord_user_id, $user_id, $access_token )
-	{
+	public function add_discord_member_in_guild( $discord_user_id, $user_id, $access_token ) {
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$discord_role = '';
 		$curr_level_id = $this->get_current_level_id( $user_id );
-		if ( $curr_level_id )
-		{
+		if ( $curr_level_id ) {
 			$discord_role = $ets_discord_role_mapping[ 'level_id_'.$curr_level_id ];
 		}
 		$guilds_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$discord_user_id;
@@ -422,7 +411,7 @@ class Ets_Pmpro_Admin_Setting
 		update_user_meta( $user_id, 'discord_role_id', $discord_role );
 		$guild_response = wp_remote_post( $guilds_memeber_api_url, $guild_args );
 		$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
-		if ( is_array( $responseArr ) && !empty( $responseArr ) ) {
+		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 			if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 				$Logs = new PMPro_Discord_Logs();
 				$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
@@ -438,8 +427,7 @@ class Ets_Pmpro_Admin_Setting
 	 * @param None
 	 * @return object API response 
 	 */
-	public function discord_api_callback()
-	{
+	public function discord_api_callback() {
 		if ( isset( $_GET['action'] ) && $_GET['action'] == "discord-login" ) {
 			$params = array(
 			    'client_id' => get_option( 'ets_discord_client_id' ),
@@ -465,8 +453,7 @@ class Ets_Pmpro_Admin_Setting
 				$access_token = $res_body['access_token'];
 				update_user_meta( $user_id, "discord_access_token", $access_token );
 				$user_body = $this->get_discord_current_user( $access_token );
-				if ( array_key_exists('id', $user_body) )
-				{
+				if ( array_key_exists('id', $user_body) ) {
 					$discord_user_id = $user_body['id'];
 					if ( $discord_exist_user_id == $discord_user_id ) {
 						$role_delete = $this->delete_discord_role( $user_id );
@@ -483,8 +470,7 @@ class Ets_Pmpro_Admin_Setting
 	 * @param int $user_id
 	 * @return object API response
 	 */
-	public function delete_member_from_guild( $user_id )
-	{
+	public function delete_member_from_guild( $user_id ) {
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$discord_user_id = get_user_meta( $user_id , 'discord_user_id', true );
@@ -498,7 +484,7 @@ class Ets_Pmpro_Admin_Setting
 		);
 		$guild_response = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
 		$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
-		if ( is_array( $responseArr ) && !empty( $responseArr ) ) {
+		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 			if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 				$Logs = new PMPro_Discord_Logs();
 				$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
@@ -513,8 +499,7 @@ class Ets_Pmpro_Admin_Setting
 	 * @param int $role_id
 	 * @return object API response
 	 */
-	public function change_discord_role_api( $user_id, $role_id )
-	{
+	public function change_discord_role_api( $user_id, $role_id ) {
 		$access_token = get_user_meta( $user_id, "discord_access_token", true );
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_user_id = get_user_meta( $user_id, 'discord_user_id', true );
@@ -532,7 +517,7 @@ class Ets_Pmpro_Admin_Setting
 
 			$response = wp_remote_get( $discord_change_role_api_url, $param);
 			$responseArr = json_decode( wp_remote_retrieve_body( $response ), true );
-			if ( is_array( $responseArr ) && !empty( $responseArr ) ) {
+			if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 				if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 					$Logs = new PMPro_Discord_Logs();
 					$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
@@ -548,8 +533,7 @@ class Ets_Pmpro_Admin_Setting
 	 * @param int $user_id
 	 * @return object API response 
 	 */
-	public function delete_discord_role( $user_id )
-	{
+	public function delete_discord_role( $user_id ) {
 		$access_token = get_user_meta( $user_id, "discord_access_token", true );
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_user_id = get_user_meta( $user_id, 'discord_user_id', true );
@@ -579,8 +563,7 @@ class Ets_Pmpro_Admin_Setting
 	 * @param int $cancel_level
 	 * @return object API response
 	 */
-	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level )
-	{
+	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
 		$discord_user_id = get_user_meta( $user_id, 'discord_user_id',true );
 		if ( $discord_user_id ) {
 			$role_delete = $this->delete_discord_role( $user_id );
@@ -603,8 +586,7 @@ class Ets_Pmpro_Admin_Setting
 	 * @param none
 	 * @return Object json response
 	 */
-	public function disconnect_from_discord()
-	{
+	public function disconnect_from_discord() {
 		$user_id = $_POST['user_id'];
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$role_id = '';
@@ -626,8 +608,7 @@ class Ets_Pmpro_Admin_Setting
 	 * @param int $level_id
 	 * @return None
 	 */
-	public function pmpro_expiry_membership( $user_id, $level_id )
-	{	
+	public function pmpro_expiry_membership( $user_id, $level_id ) {	
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$role_id = '';
 		$role_id = $ets_discord_role_mapping['level_id_expired'];

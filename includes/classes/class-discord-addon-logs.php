@@ -9,14 +9,22 @@ class PMPro_Discord_Logs {
 	}
 
 	/**
+	 * Description: Static property to define log file name 
+	 * @param None
+	 * @return string $log_file_name
+	 */
+	public static $log_file_name = 'discord_api_logs.txt';
+
+	/**
 	 * Description: Clear previous logs history 
 	 * @param None
 	 * @return None
 	 */
 	public function clear_logs() {
 		try {
-			if( fopen(ETS_PMPRO_DISCORD_PATH."discord_api_logs.txt", "w") ) {
-				$myfile = fopen(ETS_PMPRO_DISCORD_PATH."discord_api_logs.txt", "w");
+			$log_file_name = $this::$log_file_name;
+			if( fopen(ETS_PMPRO_DISCORD_PATH.$log_file_name, "w") ) {
+				$myfile = fopen(ETS_PMPRO_DISCORD_PATH.$log_file_name, "w");
 				$txt = current_time( 'mysql' )." => Clear logs Successfully\n";
 				fwrite($myfile, $txt);
 				fclose($myfile);
@@ -42,6 +50,7 @@ class PMPro_Discord_Logs {
 	 */
 	public function write_api_response_logs( $responseArr,$backtraceArr,$error_type ) {
 		$error = current_time( 'mysql' );
+		$log_file_name = $this::$log_file_name;
 		if ( array_key_exists('code', $responseArr) ) {
 			$error .= "=>File:".$backtraceArr['file']."::Line:".$backtraceArr['line']."::Function:".$backtraceArr['function']."::".$responseArr['code'].':'.$responseArr['message'];
 		} elseif ( array_key_exists('error', $responseArr) ) {
@@ -50,7 +59,7 @@ class PMPro_Discord_Logs {
 			$error .= print_r($responseArr, true);
 		}
 			
-		file_put_contents(ETS_PMPRO_DISCORD_PATH.'discord_api_logs.txt', $error.PHP_EOL , FILE_APPEND | LOCK_EX);
+		file_put_contents(ETS_PMPRO_DISCORD_PATH.$log_file_name, $error.PHP_EOL , FILE_APPEND | LOCK_EX);
 	}
 
 }

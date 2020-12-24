@@ -30,8 +30,6 @@ class Ets_Pmpro_Admin_Setting {
 
 		//back ajax function to disconnect from discord
         add_action( 'wp_ajax_nopriv_disconnect_from_discord', array( $this, 'disconnect_from_discord' ) );
-
-        add_action( 'wp_ajax_ets_clear_logs', array( $this, 'clear_logs' ) );
 	}
 
 	/**

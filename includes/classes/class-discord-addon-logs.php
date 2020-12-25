@@ -22,9 +22,9 @@ class PMPro_Discord_Logs {
 	 */
 	public function clear_logs() {
 		try {
-			$log_file_name = $this::$log_file_name;
-			if( fopen(ETS_PMPRO_DISCORD_PATH.$log_file_name, "w") ) {
-				$myfile = fopen(ETS_PMPRO_DISCORD_PATH.$log_file_name, "w");
+			$file_name = $this::$log_file_name;
+			if( fopen(ETS_PMPRO_DISCORD_PATH.$file_name, "w") ) {
+				$myfile = fopen(ETS_PMPRO_DISCORD_PATH.$file_name, "w");
 				$txt = current_time( 'mysql' )." => Clear logs Successfully\n";
 				fwrite($myfile, $txt);
 				fclose($myfile);

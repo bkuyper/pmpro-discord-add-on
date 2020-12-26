@@ -590,7 +590,7 @@ class Ets_Pmpro_Admin_Setting {
 		$role_id = '';
 		$role_id = $ets_discord_role_mapping['level_id_expired'];
 		$res = $this->delete_discord_role( $user_id );
-		$response = $this->change_discord_role_api( $user_id.'1', $role_id );
+		$response = $this->change_discord_role_api( $user_id, $role_id );
 		delete_user_meta( $user_id, 'discord_access_token' );
 		$event_res = array(
 			"status"  => 1,

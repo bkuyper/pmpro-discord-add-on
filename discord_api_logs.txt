@@ -1,3 +1,4 @@
 2020-12-26 11:51:23 => Clear logs Successfully
 2020-12-26 11:54:44=>File:/var/www/html/pmpro/wp-content/plugins/pmpro-discord-add-on/includes/classes/class-discord-api.php::Line:189::Function:create_discord_auth_token::invalid_request
 2020-12-26 11:54:48=>File:/var/www/html/pmpro/wp-content/plugins/pmpro-discord-add-on/includes/classes/class-discord-api.php::Line:189::Function:create_discord_auth_token::invalid_request
+2020-12-26 11:59:02=>File:/var/www/html/pmpro/wp-content/plugins/pmpro-discord-add-on/includes/classes/class-discord-api.php::Line:189::Function:create_discord_auth_token::invalid_request

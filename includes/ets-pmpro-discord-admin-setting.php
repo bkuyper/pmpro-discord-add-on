@@ -49,7 +49,7 @@ class Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_add_new_menu() {
 		//Add sub-menu into PmPro main-menus list
-		add_submenu_page( 'pmpro-dashboard', __( 'Discord settings', 'paid-memberships-pro' ), __( 'Discord settings', 'paid-memberships-pro' ), 'manage_options', 'discord-options', array( $this, 'ets_setting_page' ) );
+		add_submenu_page( 'pmpro-dashboard', __( 'Discord Settings', 'paid-memberships-pro' ), __( 'Discord Settings', 'paid-memberships-pro' ), 'manage_options', 'discord-options', array( $this, 'ets_setting_page' ) );
 	}
 
 	/**
@@ -105,7 +105,7 @@ class Ets_Pmpro_Admin_Setting {
 		$ets_discord_roles = get_option( 'ets_discord_role_mapping' );
 		$ets_discord_guild_id = get_option( 'discord_guild_id' );
 		?>
-		<h1><?php echo __( "Discord App Settings","ets_pmpro_discord" );?></h1>
+		<h1><?php echo __( "PMPRO Discord Add On Settings","ets_pmpro_discord" );?></h1>
 		<div class="tab ets-tabs">
 		  <button class="ets_tablinks active" onclick="openTab(event, 'ets_setting' )"><?php echo __( "Settings", "ets_pmpro_discord" ); ?></button>
 		  <button class="ets_tablinks" onclick="openTab(event, 'ets_about_us' )"><?php echo __( "Support", "ets_pmpro_discord" ); ?>	

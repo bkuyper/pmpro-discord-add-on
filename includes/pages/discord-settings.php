@@ -1,4 +1,3 @@
-<h3><?php echo __( "Discord Settings", "ets_pmpro_discord" );?></h3>
 <form method="post" action="#">
   	<div class="ets-input-group">
   		<label><?php echo __( "Client ID", "ets_pmpro_discord" );?> :</label>

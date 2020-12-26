@@ -26,11 +26,12 @@ class PMPro_Discord_API {
 	/**
 	 * Description: Show status of PMPro connection with user
 	 * @param None
-	 * @return New link 
+	 * @return None 
 	 */
 	public function add_connect_discord_button() {	
 		$user_id = get_current_user_id();
 		$access_token = get_user_meta( $user_id, "discord_access_token", true );
+		/*var_dump($access_token);*/
 		if ( $access_token ) {
 			?>
 			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?></a>

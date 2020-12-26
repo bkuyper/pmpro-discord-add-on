@@ -12,6 +12,15 @@ function openTab(evt, tabName) {
   evt.currentTarget.className += " active";
 }
 jQuery(document).ready(function () {
+
+	jQuery('button[data-toggle="tab"]').on('click', function() {
+		localStorage.setItem('activeTab', jQuery(this).data('identity'));
+	});
+
+	var activeTab = localStorage.getItem('activeTab');
+	if(activeTab){
+		jQuery('.ets-tabs button[data-identity="' + activeTab + '"]').trigger('click');
+	}
 	jQuery('#disconnect-discord').on('click',function (e) {
 		e.preventDefault();
 		var userId = jQuery(this).data('user-id');

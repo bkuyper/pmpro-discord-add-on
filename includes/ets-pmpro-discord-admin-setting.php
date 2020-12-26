@@ -123,10 +123,10 @@ class Ets_Pmpro_Admin_Setting {
 		?>
 		<h1><?php echo __( "Discord App Settings","ets_pmpro_discord" );?></h1>
 		<div class="tab ets-tabs">
-		  <button class="ets_tablinks active" onclick="openTab(event, 'ets_setting' )"><?php echo __( "Discord Settings", "ets_pmpro_discord" ); ?></button>
-		  <button class="ets_tablinks" onclick="openTab(event, 'ets_about_us' )"><?php echo __( "Support", "ets_pmpro_discord" ); ?>	
+		  <button class="ets_tablinks active" data-identity="settings" data-toggle="tab" onclick="openTab(event, 'ets_setting' )"><?php echo __( "Discord Settings", "ets_pmpro_discord" ); ?></button>
+		  <button class="ets_tablinks" data-identity="support" data-toggle="tab" onclick="openTab(event, 'ets_about_us' )"><?php echo __( "Support", "ets_pmpro_discord" ); ?>	
 		  </button>
-		  <button class="ets_tablinks" onclick="openTab(event, 'ets_logs' )"><?php echo __( "Logs", "ets_pmpro_discord" ); ?>	
+		  <button class="ets_tablinks" data-identity="logs" data-toggle="tab" onclick="openTab(event, 'ets_logs' )"><?php echo __( "Logs", "ets_pmpro_discord" ); ?>	
 		  </button>  
 		</div>
 

@@ -20,6 +20,8 @@ jQuery(document).ready(function () {
 	var activeTab = localStorage.getItem('activeTab');
 	if(activeTab){
 		jQuery('.ets-tabs button[data-identity="' + activeTab + '"]').trigger('click');
+	}else{
+		jQuery('.ets-tabs button[data-identity="settings"]').trigger('click');;
 	}
 	jQuery('#disconnect-discord').on('click',function (e) {
 		e.preventDefault();

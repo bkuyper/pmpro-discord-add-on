@@ -5,7 +5,7 @@
 class PMPro_Discord_API {
 	function __construct() {
 		//Add new button in pmpro profile
-		add_action( 'pmpro_account_bullets_bottom', array( $this, 'add_connect_discord_button' ) );
+		add_action( 'pmpro_show_user_profile', array( $this, 'add_connect_discord_button' ) );
 
 		//Discord api callback
 		add_action( 'init', array( $this, 'discord_api_callback' ) );

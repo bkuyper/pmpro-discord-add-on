@@ -1,2 +1,3 @@
 2020-12-28 08:32:19 => Clear logs Successfully
 2020-12-28 10:06:54=>File:/var/www/html/pmpro/wp-content/plugins/pmpro-discord-add-on/includes/classes/class-discord-api.php::Line:336::Function:change_discord_role_api::10007:Unknown Member
+2020-12-29 10:04:37=>File:/var/www/html/pmpro/wp-content/plugins/pmpro-discord-add-on/includes/classes/class-discord-api.php::Line:188::Function:create_discord_auth_token::invalid_request

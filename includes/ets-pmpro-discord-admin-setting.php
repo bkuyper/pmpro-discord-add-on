@@ -156,7 +156,7 @@ class Ets_Pmpro_Admin_Setting {
 				//general admin notice
 				?>
 				<div class="notice notice-success is-dismissible support-success-msg">
-			        <p><?php echo __( 'Your request have been successfully submited!', 'ets_pmpro_discord' ); ?></p>
+			        <p><?php echo __( 'Your request have been successfully submitted!', 'ets_pmpro_discord' ); ?></p>
 			    </div>
 				<?php
 				}

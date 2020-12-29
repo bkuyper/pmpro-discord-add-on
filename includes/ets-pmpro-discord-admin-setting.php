@@ -151,8 +151,19 @@ class Ets_Pmpro_Admin_Setting {
 			  $blogemail 	= get_bloginfo("admin_email");
 				$headers[] 		= 'From: '.get_bloginfo("name") .' <'.$blogemail.'>'."\r\n";
 				$mail = wp_mail( $to, $subject, $content, $headers );
+
+				if($mail){
+				//general admin notice
+				?>
+				<div class="notice notice-success is-dismissible support-success-msg">
+			        <p><?php echo __( 'Your request have been successfully submited!', 'ets_pmpro_discord' ); ?></p>
+			    </div>
+				<?php
+				}
 			} 	
 		}
 	}
+
+	
 }
 new Ets_Pmpro_Admin_Setting();

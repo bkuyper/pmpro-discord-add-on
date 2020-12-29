@@ -142,3 +142,8 @@ div#ets_logs{
   background-color: #000;
   color:#18d26a;
 }
+.wp-core-ui .notice.is-dismissible.support-success-msg{
+  position: fixed;
+  top: 10%;
+  right: 0;
+}

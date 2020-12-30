@@ -26,9 +26,7 @@
                 </div>
                 <div class="ets-form-group">
                   <label>Message</label>
-                  <textarea name="ets_support_msg" class="form-control contact-textarea">
-                    
-                  </textarea>
+                  <textarea name="ets_support_msg" class="form-control contact-textarea"></textarea>
                 </div>
                 <div class="submit-btn d-flex align-items-center w-100 pt-3">
                   <input type="submit" name="save" id="save" class="btn btn-submit" value="Submit">                  

@@ -3,8 +3,8 @@
       <div class="ets-container">
         <div class="top-logo-title">
           <img src="https://www.expresstechsoftwares.com/wp-content/uploads/xcropped-2100-x1500-1.png.pagespeed.ic.DFnEHWLdQO.png" class="img-fluid company-logo" alt="">
-          <h1>ExpressTech Softwares Solutions Pvt Ltd</h1>
-          <p>ExpressTech Software Solution Pvt Ltd is the leading Enterprise Wordpress development company.<br>
+          <h1>ExpressTech Softwares Solutions Pvt. Ltd.</h1>
+          <p>ExpressTech Software Solution Pvt. Ltd. is the leading Enterprise Wordpress development company.<br>
           Contact us for any Wordpress Related development projects.</p>
         </div>
         <div class="form-fields-box ">
@@ -60,7 +60,7 @@
                 <div class="contact-details d-inline-block w-100">
                   <div class="top-icon-title d-flex align-items-center w-100">
                     <i class="fa fa-whatsapp title-icon" aria-hidden="true"></i>
-                    <p>Whatsapp / No...</p>
+                    <p>Whatsapp / Phone</p>
                   </div>
                   <div class="contact-body mt-3">
                     <p>+91-9806724185</p>

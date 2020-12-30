@@ -41,11 +41,7 @@ jQuery(document).ready(function () {
 			},
 			error: function(data) {
 				alert('Server error');
-		  	},
-			complete:function () {
-				jQuery('#image-loader').hide();
-			}
-
+		  	}
 		});
 	});
 

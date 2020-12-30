@@ -27,6 +27,11 @@ class Ets_Pmpro_Admin_Setting {
 		    ETS_PMPRO_DISCORD_URL. 'assets/css/ets-pmpro-discord-style.css'
 		); 
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
+
+		wp_register_style(
+		    'ets_pmpro_font_awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css'
+		); 
+		wp_enqueue_style( 'ets_pmpro_font_awesome' );
 	  
 	    wp_register_script(
 			'ets_pmpro_add_discord_script',

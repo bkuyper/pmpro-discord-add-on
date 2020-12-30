@@ -34,6 +34,13 @@ class Ets_Pmpro_Admin_Setting {
 			array( 'jquery' )
 		);
         wp_enqueue_script( 'ets_pmpro_add_discord_script' );
+
+        wp_register_script(
+			'jQuery_ui_script',
+			'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
+			array( 'jquery' )
+		);
+        wp_enqueue_script( 'jQuery_ui_script' );
 		
 	 	$script_params = array(
 			'admin_ajax' 		=> admin_url( 'admin-ajax.php' )
@@ -109,6 +116,7 @@ class Ets_Pmpro_Admin_Setting {
 		<div class="tab ets-tabs">
 
 		  <button class="ets_tablinks" data-identity="settings" data-toggle="tab" onclick="openTab(event, 'ets_setting' )"><?php echo __( "Discord Settings", "ets_pmpro_discord" ); ?></button>
+		   <button class="ets_tablinks" data-identity="level-mapping" data-toggle="tab" onclick="openTab(event, 'ets_level_mapping' )"><?php echo __( "Discord Settings", "ets_pmpro_discord" ); ?></button>
 		  <button class="ets_tablinks" data-identity="support" data-toggle="tab" onclick="openTab(event, 'ets_about_us' )"><?php echo __( "Support", "ets_pmpro_discord" ); ?>	
 		  </button>
 		  <button class="ets_tablinks" data-identity="logs" data-toggle="tab" onclick="openTab(event, 'ets_logs' )"><?php echo __( "Logs", "ets_pmpro_discord" ); ?>	
@@ -123,6 +131,9 @@ class Ets_Pmpro_Admin_Setting {
 		</div>
 		<div id="ets_logs" class="ets_tabcontent">
 			<?php include( ETS_PMPRO_DISCORD_PATH.'includes/pages/error_log.php' ); ?>
+		</div>
+		<div id="ets_level_mapping" class="ets_tabcontent">
+			<?php include( ETS_PMPRO_DISCORD_PATH.'includes/pages/discord-role-level-map.php' ); ?>
 		</div>
 
 		<?php

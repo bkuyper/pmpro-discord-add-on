@@ -45,6 +45,26 @@ jQuery(document).ready(function () {
 		});
 	});
 
+	jQuery(window).on('load',function (e) {
+		e.preventDefault();
+		jQuery.ajax({
+			type:"POST",
+			dataType:"JSON",
+			url:etsPmproParams.admin_ajax,
+            data: {'action': 'load_discord_roles'},
+			success:function (response) {
+				jQuery.each(response, function (key, val) {
+			        jQuery('.discord-roles').append('<div class="makeMeDraggable" data-role_id="'+val.id+'" >'+val.name+'</div>');
+			        jQuery('.makeMeDraggable').draggable({
+			        	 revert:  function(dropped) {
+				           var dropped = dropped;
+				           return !dropped;
+				        } 
+				    });
+			    });
+			}
+		});
+	});
 	jQuery('#clrbtn').click(function(e) {
 	    e.preventDefault();
 	      jQuery.ajax({
@@ -61,4 +81,39 @@ jQuery(document).ready(function () {
 	      }
 	    });
   	});
+
+	jQuery("#revertMapping").on('click', function(){
+  		localStorage.removeItem('mapArray','firstmap_id');
+  		location.reload();
+  	});
+  	jQuery( init );
+
+	function init() {
+	    jQuery('.makeMeDroppable').droppable( {
+	      drop: handleDropEvent
+	    } );
+	}
+
+  	function handleDropEvent( event, ui ) {
+	    var draggable = ui.draggable;
+	    var oldItems = JSON.parse(localStorage.getItem('mapArray')) || [];
+	    console.log(oldItems);
+	    if(!localStorage.getItem('firstmap_id')){
+	    	var firstmap_id = draggable.data('role_id');
+	    	localStorage.setItem('firstmap_id',firstmap_id);
+		}
+	    var newItem = '"level_id_'+jQuery(this).data( 'level_id' )+'"'+':'+'"'+draggable.data('role_id')+'"';
+	    oldItems.push(newItem);
+	   	var jsonStart = "{";
+	    jQuery.each(oldItems, function(key,val){
+	    	jsonStart = jsonStart+val+',';
+	    });
+	    var mappingjson = jsonStart+'"level_id_expired":"'+localStorage.getItem('firstmap_id')+'"}';
+	    console.log(mappingjson);
+	    jQuery("#maaping_json_val").html(mappingjson);
+	    localStorage.setItem('mapArray', JSON.stringify(oldItems));
+  	}
+
+  	
+	
 });

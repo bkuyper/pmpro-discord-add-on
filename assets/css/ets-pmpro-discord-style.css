@@ -331,3 +331,44 @@ a{
       max-width: 100%;
   }
  }
+ /*discord mapping css*/
+ * {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.ets-column {
+  float: left;
+  width: 50%;
+  padding: 10px;
+  height: 300px; /* Should be removed. Only for demonstration */
+  text-align: center;
+}
+
+/* Clear floats after the columns */
+.row-container:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+.makeMeDraggable{
+  background-color: #abb;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.makeMeDroppable{
+  background-color: #baa;
+  padding: 10px;
+  margin-bottom: 10px
+}
+div.bottom-btn{
+  margin-top: 10px;
+  text-align: center;
+}
+div.mapping-json{
+  text-align: center;
+  margin-top: 10px;
+}
+#maaping_json_val{
+  width: 50%;
+}

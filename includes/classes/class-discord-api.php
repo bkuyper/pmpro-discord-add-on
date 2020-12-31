@@ -21,6 +21,12 @@ class PMPro_Discord_API {
 
 		//back ajax function to disconnect from discord
         add_action( 'wp_ajax_nopriv_disconnect_from_discord', array( $this, 'disconnect_from_discord' ) );
+
+        //front ajax function to disconnect from discord
+		add_action( 'wp_ajax_load_discord_roles', array( $this, 'load_discord_roles' ) );
+
+		//back ajax function to disconnect from discord
+        add_action( 'wp_ajax_nopriv_load_discord_roles', array( $this, 'load_discord_roles' ) );
 	}
 	
 	/**
@@ -161,6 +167,30 @@ class PMPro_Discord_API {
 		
 		$change_response = $this->change_discord_role_api( $user_id, $discord_role );
 		return $guild_response;
+	}
+
+	/**
+	 * Description: Add new member into discord guild
+	 * @param int $discord_user_id
+	 * @param int $user_id
+	 * @param string $access_token
+	 * @return object API response
+	 */
+	public function load_discord_roles() {
+		$guild_id = get_option( 'discord_guild_id' );
+		$discord_bot_token = get_option( 'ets_discord_bot_token' );
+		$discord_user_id = get_user_meta( $user_id , 'discord_user_id', true );
+		$guilds_delete_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/roles';
+		$guild_args = array(
+			'method'  => 'GET',
+		    'headers' => array(
+		        'Content-Type'  => 'application/json',
+		        'Authorization' => 'Bot ' . $discord_bot_token
+		    )   
+		);
+		$guild_response = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
+		$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
+		return wp_send_json($responseArr);
 	}
 
 	/**

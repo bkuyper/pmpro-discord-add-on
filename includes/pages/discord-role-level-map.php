@@ -22,9 +22,16 @@ $pmpro_levels = pmpro_getAllLevels( true, true );
     </div>
   </div>
 </div>
-<div class="mapping-json">
-  <textarea id="maaping_json_val"></textarea>
-</div>
-<div class="bottom-btn">
-  <button id="revertMapping" class="button">Revert Mapping</button>
-</div>
+<form method="post" action="#">
+  <div class="mapping-json">
+    <textarea id="maaping_json_val" name="ets_discord_role_mapping"><?php if ( isset( $ets_discord_roles ) )echo stripslashes( $ets_discord_roles );?></textarea>
+  </div>
+  <div class="bottom-btn">
+    <button type="submit" name="submit" value="ets_submit" class="button">
+      <?php echo __( "Submit", "ets_pmpro_discord" );?>
+    </button>
+    <button id="revertMapping" class="button">
+      <?php echo __( "Revert Mapping", "ets_pmpro_discord" );?>
+    </button>
+  </div>
+</form>

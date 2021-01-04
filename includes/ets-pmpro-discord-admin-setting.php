@@ -121,7 +121,9 @@ class Ets_Pmpro_Admin_Setting {
 		<div class="tab ets-tabs">
 
 		  <button class="ets_tablinks" data-identity="settings" data-toggle="tab" onclick="openTab(event, 'ets_setting' )"><?php echo __( "Discord Settings", "ets_pmpro_discord" ); ?></button>
-		   <button class="ets_tablinks" data-identity="level-mapping" data-toggle="tab" onclick="openTab(event, 'ets_level_mapping' )"><?php echo __( "Discord Settings", "ets_pmpro_discord" ); ?></button>
+		  <?php if ( !empty($ets_discord_client_id) && !empty($discord_client_secret) && !empty($discord_bot_token) && !empty($ets_discord_redirect_url) && !empty($ets_discord_guild_id) ): ?>
+		   <button class="ets_tablinks" data-identity="level-mapping" data-toggle="tab" onclick="openTab(event, 'ets_level_mapping' )"><?php echo __( "Roles Mapping", "ets_pmpro_discord" ); ?></button>
+		  <?php endif; ?>
 		  <button class="ets_tablinks" data-identity="support" data-toggle="tab" onclick="openTab(event, 'ets_about_us' )"><?php echo __( "Support", "ets_pmpro_discord" ); ?>	
 		  </button>
 		  <button class="ets_tablinks" data-identity="logs" data-toggle="tab" onclick="openTab(event, 'ets_logs' )"><?php echo __( "Logs", "ets_pmpro_discord" ); ?>	

@@ -22,11 +22,6 @@
   			<input type="text" class="ets-input" name="ets_discord_guild_id"
   			placeholder="Discord Guild Id" value="<?php if ( isset( $ets_discord_guild_id ) )echo $ets_discord_guild_id;?>" required>
   	</div>
-  	<div class="ets-input-group">
-  		<label><?php echo __( "Discord Roles PMPRO-Level Mappings", "ets_pmpro_discord" );?> :</label>
-			<textarea class="ets-input" name="ets_discord_role_mapping"
-  			placeholder="Discord Roles PMPRO-Level Mappings" required><?php if ( isset( $ets_discord_roles ) )echo stripslashes( $ets_discord_roles );?></textarea>
-  	</div>
   	<p>
   		<button type="submit" name="submit" value="ets_submit" class="ets-submit">
   			<?php echo __( "Submit", "ets_pmpro_discord" );?>

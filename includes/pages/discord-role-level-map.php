@@ -6,6 +6,7 @@ $pmpro_levels = pmpro_getAllLevels( true, true );
     <h2>Discord Roles</h2>
     <hr>
     <div class="discord-roles">
+      <img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
     </div>
   </div>
   <div class="ets-column" style="background-color:#bbb;">

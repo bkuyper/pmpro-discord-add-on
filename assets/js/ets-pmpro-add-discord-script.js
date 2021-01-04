@@ -52,11 +52,15 @@ jQuery(document).ready(function () {
 			dataType:"JSON",
 			url:etsPmproParams.admin_ajax,
             data: {'action': 'load_discord_roles'},
+            beforeSend:function () {
+				jQuery('#image-loader').show();
+			},
 			success:function (response) {
+				jQuery('#image-loader').hide();
 				jQuery.each(response, function (key, val) {
 			        jQuery('.discord-roles').append('<div class="makeMeDraggable" data-role_id="'+val.id+'" >'+val.name+'</div>');
 			        jQuery('.makeMeDraggable').draggable({
-			        	 revert:  function(dropped) {
+			        	revert:  function(dropped) {
 				           var dropped = dropped;
 				           return !dropped;
 				        } 

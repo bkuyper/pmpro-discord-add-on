@@ -190,6 +190,12 @@ class PMPro_Discord_API {
 		);
 		$guild_response = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
 		$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
+		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
+			if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
+				$Logs = new PMPro_Discord_Logs();
+				$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
+			}
+		}
 		return wp_send_json($responseArr);
 	}
 

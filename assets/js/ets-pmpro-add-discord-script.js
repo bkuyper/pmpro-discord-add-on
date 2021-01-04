@@ -59,12 +59,7 @@ jQuery(document).ready(function () {
 				jQuery('#image-loader').hide();
 				jQuery.each(response, function (key, val) {
 			        jQuery('.discord-roles').append('<div class="makeMeDraggable" data-role_id="'+val.id+'" >'+val.name+'</div>');
-			        jQuery('.makeMeDraggable').draggable({
-			        	revert:  function(dropped) {
-				           var dropped = dropped;
-				           return !dropped;
-				        } 
-				    });
+			        makeDrag(jQuery('.makeMeDraggable'));
 			    });
 			}
 		});
@@ -88,7 +83,7 @@ jQuery(document).ready(function () {
 
 	jQuery("#revertMapping").on('click', function(){
   		localStorage.removeItem('mapArray','firstmap_id');
-  		location.reload();
+  		location.reload(true);
   	});
   	jQuery( init );
 
@@ -97,11 +92,15 @@ jQuery(document).ready(function () {
 	      drop: handleDropEvent
 	    } );
 	}
-
+	function makeDrag(el) {
+	  // Pass me an object, and I will make it draggable
+	  el.draggable({
+	    revert: "invalid"
+	  });
+	}
   	function handleDropEvent( event, ui ) {
 	    var draggable = ui.draggable;
 	    var oldItems = JSON.parse(localStorage.getItem('mapArray')) || [];
-	    console.log(oldItems);
 	    if(!localStorage.getItem('firstmap_id')){
 	    	var firstmap_id = draggable.data('role_id');
 	    	localStorage.setItem('firstmap_id',firstmap_id);

@@ -5,14 +5,14 @@ $pmpro_levels = pmpro_getAllLevels( true, true );
   <p>Drag and Drop the Discord Roles over to the PMPRO Levels</p>
 </div>
 <div class="row-container">
-  <div class="ets-column" style="background-color:#aaa;">
+  <div class="ets-column">
     <h2>Discord Roles</h2>
     <hr>
     <div class="discord-roles">
       <img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
     </div>
   </div>
-  <div class="ets-column" style="background-color:#bbb;">
+  <div class="ets-column">
     <h2>PMPRO Levels</h2>
     <hr>
     <div class="pmpro-levels">
@@ -20,7 +20,7 @@ $pmpro_levels = pmpro_getAllLevels( true, true );
       foreach ($pmpro_levels as $key => $value) {
         if($value->allow_signups != 0 ):
         ?>
-        <div class="makeMeDroppable" data-level_id="<?php echo $value->id; ?>" ><?php echo $value->name; ?></div>
+          <div class="makeMeDroppable" data-level_id="<?php echo $value->id; ?>" ><?php echo $value->name; ?></div>
         <?php
         endif;
       }

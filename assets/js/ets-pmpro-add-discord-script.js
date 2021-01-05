@@ -89,7 +89,7 @@ jQuery(document).ready(function () {
 
 	function init() {
 	    jQuery('.makeMeDroppable').droppable( {
-	      drop: handleDropEvent
+	      drop: handleDropEvent  
 	    } );
 	}
 	function makeDrag(el) {
@@ -112,9 +112,13 @@ jQuery(document).ready(function () {
 	    	jsonStart = jsonStart+val+',';
 	    });
 	    var mappingjson = jsonStart+'"level_id_expired":"'+localStorage.getItem('firstmap_id')+'"}';
-	    console.log(mappingjson);
 	    jQuery("#maaping_json_val").html(mappingjson);
+	    jQuery(this).append(ui.draggable);
 	    localStorage.setItem('mapArray', JSON.stringify(oldItems));
+	    jQuery(this).css({'display': 'inline-block'});
+	    draggable.css({'width':'50%', 'position':'inherit', 'display': 'inline-block', 'margin-left':'20px'});
+	    jQuery(this).droppable("destroy");
+	    draggable.draggable("destroy");
   	}
 
   	

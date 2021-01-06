@@ -5,7 +5,7 @@ $pmpro_levels = pmpro_getAllLevels( true, true );
   <p>Drag and Drop the Discord Roles over to the PMPRO Levels</p>
 </div>
 <div class="row-container">
-  <div class="ets-column">
+  <div class="ets-column discord-roles-col">
     <h2>Discord Roles</h2>
     <hr>
     <div class="discord-roles">

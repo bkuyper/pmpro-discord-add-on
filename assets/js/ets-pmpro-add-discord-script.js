@@ -100,25 +100,50 @@ jQuery(document).ready(function () {
 	}
   	function handleDropEvent( event, ui ) {
 	    var draggable = ui.draggable;
-	    var oldItems = JSON.parse(localStorage.getItem('mapArray')) || [];
-	    if(!localStorage.getItem('firstmap_id')){
-	    	var firstmap_id = draggable.data('role_id');
-	    	localStorage.setItem('firstmap_id',firstmap_id);
+	   	var newItem = [];
+	    if(jQuery(this).data( 'role_id') != draggable.data('role_id')){
+		    var oldItems = JSON.parse(localStorage.getItem('mapArray')) || [];
+		    if(!localStorage.getItem('firstmap_id')){
+		    	var firstmap_id = draggable.data('role_id');
+		    	localStorage.setItem('firstmap_id',firstmap_id);
+			}
+			jQuery(this).data( 'role_id',draggable.data('role_id'));
+		    /*var newItem = '"level_id_'+jQuery(this).data( 'level_id' )+'"'+':'+'"'+draggable.data('role_id')+'"';*/
+		    jQuery.each(oldItems, function(key,val){
+		    	if(val){
+			    	var arrayofval = val.split(',');
+
+				    if(arrayofval[0] == 'role_id_'+jQuery(this).data( 'level_id' ) || arrayofval[1] == draggable.data('role_id')){
+				    	delete oldItems[key];
+				    }
+				}
+		    });
+
+		    /*newItem['role_id_'+jQuery(this).data( 'level_id' )] = draggable.data('role_id');*/
+		    var newkey = 'role_id_'+jQuery(this).data( 'level_id' );
+		    oldItems.push(newkey+','+draggable.data('role_id'));
+		    /*console.log(oldItems);*/
+		   	var jsonStart = "{";
+		    jQuery.each(oldItems, function(key,val){
+		    	if(val){
+			    	var arrayofval = val.split(',');
+
+				    if(arrayofval[0] != 'role_id_'+jQuery(this).data( 'level_id' ) || arrayofval[1] != draggable.data('role_id')){
+				    	jsonStart = jsonStart+'"'+arrayofval[0]+'":'+'"'+arrayofval[1]+'",';
+				    	localStorage.setItem('mapArray', JSON.stringify(oldItems));
+				    }
+				}
+		    });
+
+		    var mappingjson = jsonStart+'"level_id_expired":"'+localStorage.getItem('firstmap_id')+'"}';
+		    jQuery("#maaping_json_val").html(mappingjson);
+		    /*jQuery(this).append(ui.draggable);*/
+		    
+		    jQuery(this).css({'display': 'inline-block'});
+		    draggable.css({'width':'50%','display': 'inline-block', 'margin-left':'20px'});
+		    /*jQuery(this).droppable("destroy");
+		    draggable.draggable("destroy");*/
 		}
-	    var newItem = '"level_id_'+jQuery(this).data( 'level_id' )+'"'+':'+'"'+draggable.data('role_id')+'"';
-	    oldItems.push(newItem);
-	   	var jsonStart = "{";
-	    jQuery.each(oldItems, function(key,val){
-	    	jsonStart = jsonStart+val+',';
-	    });
-	    var mappingjson = jsonStart+'"level_id_expired":"'+localStorage.getItem('firstmap_id')+'"}';
-	    jQuery("#maaping_json_val").html(mappingjson);
-	    jQuery(this).append(ui.draggable);
-	    localStorage.setItem('mapArray', JSON.stringify(oldItems));
-	    jQuery(this).css({'display': 'inline-block'});
-	    draggable.css({'width':'50%', 'position':'inherit', 'display': 'inline-block', 'margin-left':'20px'});
-	    jQuery(this).droppable("destroy");
-	    draggable.draggable("destroy");
   	}
 
   	

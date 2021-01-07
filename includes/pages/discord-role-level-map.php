@@ -20,7 +20,7 @@ $pmpro_levels = pmpro_getAllLevels( true, true );
       foreach ($pmpro_levels as $key => $value) {
         if($value->allow_signups != 0 ):
         ?>
-          <div class="makeMeDroppable" data-level_id="<?php echo $value->id; ?>" ><?php echo $value->name; ?></div>
+          <div class="makeMeDroppable" data-level_id="<?php echo $value->id; ?>" ><span><?php echo $value->name; ?></span></div>
         <?php
         endif;
       }

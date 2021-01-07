@@ -345,6 +345,9 @@ a{
   text-align: center;
   min-height: 300px;
 }
+.discord-roles-col{
+  border: 1px dashed #000;
+}
 
 /* Clear floats after the columns */
 .row-container:after {
@@ -360,9 +363,13 @@ a{
 }
 .makeMeDroppable{
   background-color: #baa;
-  padding: 10px;
   margin-bottom: 10px;
   width:100%;
+  display: flex;
+}
+.makeMeDroppable span{
+  width: 100%;
+  padding: 10px;
 }
 div.bottom-btn{
   margin-top: 10px;

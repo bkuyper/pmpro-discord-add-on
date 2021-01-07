@@ -91,12 +91,43 @@ jQuery(document).ready(function () {
 	    jQuery('.makeMeDroppable').droppable( {
 	      drop: handleDropEvent  
 	    } );
+	    jQuery('.discord-roles-col').droppable( {
+	      drop: handlePreviousDropEvent  
+	    } );
 	}
 	function makeDrag(el) {
 	  // Pass me an object, and I will make it draggable
 	  el.draggable({
 	    revert: "invalid"
 	  });
+	}
+	function handlePreviousDropEvent( event, ui ) {
+		var draggable = ui.draggable;
+		jQuery(this).append(draggable);
+		var oldItems = JSON.parse(localStorage.getItem('mapArray')) || [];
+		jQuery.each(oldItems, function(key,val){
+	    	if(val){
+		    	var arrayofval = val.split(',');
+
+			    if(arrayofval[1] == draggable.data('role_id')){
+			    	delete oldItems[key];
+			    }
+			}
+	    });
+		var jsonStart = "{";
+	    jQuery.each(oldItems, function(key,val){
+	    	if(val){
+		    	var arrayofval = val.split(',');
+
+			    if(arrayofval[0] != 'role_id_'+jQuery(this).data( 'level_id' ) || arrayofval[1] != draggable.data('role_id')){
+			    	jsonStart = jsonStart+'"'+arrayofval[0]+'":'+'"'+arrayofval[1]+'",';
+			    	localStorage.setItem('mapArray', JSON.stringify(oldItems));
+			    }
+			}
+	    });
+	    var mappingjson = jsonStart+'"level_id_expired":"'+localStorage.getItem('firstmap_id')+'"}';
+		    jQuery("#maaping_json_val").html(mappingjson);
+		draggable.css({'width':'100%','left': '0','top':'0','margin-bottom':'10px'});
 	}
   	function handleDropEvent( event, ui ) {
 	    var draggable = ui.draggable;
@@ -137,13 +168,15 @@ jQuery(document).ready(function () {
 
 		    var mappingjson = jsonStart+'"level_id_expired":"'+localStorage.getItem('firstmap_id')+'"}';
 		    jQuery("#maaping_json_val").html(mappingjson);
-		    /*jQuery(this).append(ui.draggable);*/
 		    
-		    jQuery(this).css({'display': 'inline-block'});
-		    draggable.css({'width':'50%','display': 'inline-block', 'margin-left':'20px'});
+		    
+		    
 		    /*jQuery(this).droppable("destroy");
 		    draggable.draggable("destroy");*/
 		}
+		jQuery(this).append(ui.draggable);
+		jQuery(this).find('span').css({'order':'2'});
+	    draggable.css({'width':'100%','left': '0','top':'0','margin-bottom':'0px','order':'1'});
   	}
 
   	

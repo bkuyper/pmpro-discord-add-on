@@ -196,6 +196,7 @@ class PMPro_Discord_API {
 				$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
 			}
 		}
+		$responseArr['previous_mapping'] = get_option( 'ets_discord_role_mapping' );
 		return wp_send_json($responseArr);
 	}
 

@@ -360,6 +360,7 @@ a{
   padding: 10px;
   margin-bottom: 10px;
   width:100%;
+  cursor: all-scroll;
 }
 .makeMeDroppable{
   background-color: #baa;

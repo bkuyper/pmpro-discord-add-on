@@ -53,7 +53,6 @@ jQuery(document).ready(function () {
 			jQuery('#image-loader').show();
 		},
 		success:function (response) {
-			jQuery('#image-loader').hide();
 			jQuery.each(response, function (key, val) {
 				if(key != 'previous_mapping'){
 			        jQuery('.discord-roles').append('<div class="makeMeDraggable" data-role_id="'+val.id+'" >'+val.name+'</div>');
@@ -71,6 +70,9 @@ jQuery(document).ready(function () {
 				   jQuery('*[data-role_id="'+val+'"]').css({'width':'100%','left': '0','top':'0','margin-bottom':'0px','order':'1'}).attr( 'data-level_id' ,arrayofkey[1]);
 				}
 		    });
+		},
+		complete: function(){
+			jQuery('#image-loader').hide();
 		}
 	});
 

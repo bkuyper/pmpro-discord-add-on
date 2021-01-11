@@ -37,11 +37,20 @@ class PMPro_Discord_API {
 	public function add_connect_discord_button() {	
 		$user_id = get_current_user_id();
 		$access_token = get_user_meta( $user_id, "discord_access_token", true );
-		if ( $access_token ) {
+		$curr_level_id = $this->get_current_level_id( $user_id );
+		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+		if ( $access_token && array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
 			?>
 			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?></a>
 			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
 		<?php
+		} else if ( !array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
+		?>
+		<div class="isa_error">
+		   <i class="fa fa-times-circle"></i>
+		   There is no discord role assigned for your level.
+		</div>
+		<?php	
 		} else {
 		?>
 			<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( "Connect To Discord", "ets_pmpro_discord" );?></a>

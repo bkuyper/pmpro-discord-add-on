@@ -387,3 +387,12 @@ div.mapping-json{
   background-color: rgba(51, 170, 51, .1);
   margin-bottom: 10px;
 }
+.isa_error {
+    color: #D8000C;
+    background-color: #FFD2D2;
+}
+.isa_info i, .isa_success i, .isa_warning i, .isa_error i {
+    margin:10px 22px;
+    font-size:2em;
+    vertical-align:middle;
+}

@@ -102,10 +102,11 @@ jQuery(document).ready(function () {
 
 	function init() {
 	    jQuery('.makeMeDroppable').droppable( {
-	      drop: handleDropEvent  
+	      drop: handleDropEvent
 	    } );
 	    jQuery('.discord-roles-col').droppable( {
-	      drop: handlePreviousDropEvent  
+	      drop: handlePreviousDropEvent,
+	      hoverClass: 'hoverActive',  
 	    } );
 	}
 	function makeDrag(el) {

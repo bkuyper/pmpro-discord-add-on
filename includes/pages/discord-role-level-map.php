@@ -2,18 +2,18 @@
 $pmpro_levels = pmpro_getAllLevels( true, true );
 ?>
 <div class="notice notice-warning ets-notice">
-  <p>Drag and Drop the Discord Roles over to the PMPRO Levels</p>
+  <p><?php echo __( "Drag and Drop the Discord Roles over to the PMPRO Levels", "ets_pmpro_discord" );?></p>
 </div>
 <div class="row-container">
   <div class="ets-column discord-roles-col">
-    <h2>Discord Roles</h2>
+    <h2><?php echo __( "Discord Roles", "ets_pmpro_discord" );?></h2>
     <hr>
     <div class="discord-roles">
       <img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
     </div>
   </div>
   <div class="ets-column">
-    <h2>PMPRO Levels</h2>
+    <h2><?php echo __( "PMPRO Levels", "ets_pmpro_discord" );?></h2>
     <hr>
     <div class="pmpro-levels">
     <?php 

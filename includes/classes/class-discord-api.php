@@ -48,7 +48,7 @@ class PMPro_Discord_API {
 		?>
 		<div class="isa_error">
 		   <i class="fa fa-times-circle"></i>
-		   There is no discord role assigned for your level.
+		   <?php echo __( "There is no discord role assigned for your level.", "ets_pmpro_discord" );?>
 		</div>
 		<?php	
 		} else {

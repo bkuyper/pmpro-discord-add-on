@@ -346,9 +346,12 @@ a{
   min-height: 300px;
 }
 .discord-roles-col{
-  border: 1px dashed #000;
+  border:2px dashed transparent;
+  transition:ease 0.3s;
 }
-
+.hoverActive{
+border:2px dashed #444;
+}
 /* Clear floats after the columns */
 .row-container:after {
   content: "";

@@ -39,18 +39,39 @@ class PMPro_Discord_API {
 		$access_token = get_user_meta( $user_id, "discord_access_token", true );
 		$curr_level_id = $this->get_current_level_id( $user_id );
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+		if(pmpro_hasMembershipLevel()){
+			$current_user_level = pmpro_getMembershipLevelForUser($user_id);
+			$currentdate = strtotime(date('now'));
+			if($currentdate > $current_user_level->enddate && $current_user_level->enddate != NULL){
+				$level_expiration_status = 'expired';
+			}else {
+				$level_expiration_status = 'active';
+			}
+		}
+		/*var_dump(date_i18n( get_option( 'date_format' ), $level->enddate ));*/
+		/*$expiration_text = date_i18n( get_option( 'date_format' ), $level->enddate );*/
+		?>
+		<label><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
+		<?php
 		if ( $access_token && array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
 			?>
 			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?></a>
 			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
 		<?php
-		} else if ( !array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
+		} else if ( !array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) && pmpro_hasMembershipLevel() && $level_expiration_status == 'active' ) {
 		?>
 		<div class="isa_error">
 		   <i class="fa fa-times-circle"></i>
 		   <?php echo __( "There is no discord role assigned for your level.", "ets_pmpro_discord" );?>
 		</div>
 		<?php	
+		} else if ( !pmpro_hasMembershipLevel() || $level_expiration_status == 'expired' ) {
+		?>
+		<div class="isa_info">
+		    <i class="fa fa-info-circle"></i>
+		    <?php echo __( "Buy any membership level.", "ets_pmpro_discord" );?>
+		</div>
+		<?php
 		} else {
 		?>
 			<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( "Connect To Discord", "ets_pmpro_discord" );?></a>

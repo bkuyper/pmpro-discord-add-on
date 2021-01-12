@@ -82,11 +82,13 @@ class Ets_Pmpro_Admin_Setting {
 
 		$ets_discord_roles = isset( $_POST['ets_discord_role_mapping'] ) ? sanitize_textarea_field( trim( $_POST['ets_discord_role_mapping'] ) ) : '';
 		
-		if ( $ets_discord_client_id )
+		if ( $ets_discord_client_id ){
 			update_option( 'ets_discord_client_id',$ets_discord_client_id );
+		}
 		
-		if ( $discord_client_secret)
+		if ( $discord_client_secret){
 			update_option( 'ets_discord_client_secret', $discord_client_secret);
+		}
 		
 		if ( $discord_bot_token ) {
 			update_option( 'ets_discord_bot_token', $discord_bot_token );
@@ -102,9 +104,22 @@ class Ets_Pmpro_Admin_Setting {
 
 		if ( $ets_discord_roles ) {
 			$ets_discord_roles = stripslashes( $ets_discord_roles );
-			update_option( 'ets_discord_role_mapping',$ets_discord_roles );
+			$save_mapping_status = update_option( 'ets_discord_role_mapping',$ets_discord_roles );
+			if ($save_mapping_status || isset( $_POST['ets_discord_role_mapping'] )) {
+			?>
+			<div class="notice notice-success is-dismissible support-success-msg">
+		        <p><?php echo __( 'Your mappings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
+		    </div>
+		    <?php
+			}
 		}
-
+		if ( isset($_POST['submit']) && !isset( $_POST['ets_discord_role_mapping'] ) ) {
+ 		?>
+	 		<div class="notice notice-success is-dismissible support-success-msg">
+		        <p><?php echo __( 'Your settings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
+		    </div>
+		<?php
+		}
 		$currUserName = "";
 		$currentUser = wp_get_current_user();
 		if ( $currentUser ) {

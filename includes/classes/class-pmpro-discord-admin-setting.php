@@ -81,6 +81,16 @@ class Ets_Pmpro_Admin_Setting {
 		$ets_discord_guild_id = isset( $_POST['ets_discord_guild_id'] ) ? sanitize_text_field( trim( $_POST['ets_discord_guild_id'] ) ) : '';
 
 		$ets_discord_roles = isset( $_POST['ets_discord_role_mapping'] ) ? sanitize_textarea_field( trim( $_POST['ets_discord_role_mapping'] ) ) : '';
+
+		$ets_discord_default_role_id = isset( $_POST['defaultRole'] ) ? sanitize_textarea_field( trim( $_POST['defaultRole'] ) ) : '';
+
+		$upon_expiry = isset( $_POST['upon_expiry'] ) ? sanitize_textarea_field( trim( $_POST['upon_expiry'] ) ) : '';
+
+		$upon_cancel = isset( $_POST['upon_cancel'] ) ? sanitize_textarea_field( trim( $_POST['upon_cancel'] ) ) : '';
+
+		if ( $ets_discord_default_role_id ){
+			update_option( 'ets_discord_default_role_id',$ets_discord_default_role_id );
+		}
 		
 		if ( $ets_discord_client_id ){
 			update_option( 'ets_discord_client_id',$ets_discord_client_id );
@@ -101,6 +111,15 @@ class Ets_Pmpro_Admin_Setting {
 		if ( $ets_discord_guild_id ) {
 			update_option( 'discord_guild_id', $ets_discord_guild_id );
 		}
+
+		if ( $upon_expiry ) {
+			update_option( 'upon_expiry', $upon_expiry );
+		}
+
+		if ( $upon_cancel ) {
+			update_option( 'upon_cancel', $upon_cancel );
+		}
+
 
 		if ( $ets_discord_roles ) {
 			$ets_discord_roles = stripslashes( $ets_discord_roles );
@@ -137,7 +156,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		  <button class="ets_tablinks" data-identity="settings" data-toggle="tab" onclick="openTab(event, 'ets_setting' )"><?php echo __( "Discord Settings", "ets_pmpro_discord" ); ?></button>
 		  <?php if ( !empty($ets_discord_client_id) && !empty($discord_client_secret) && !empty($discord_bot_token) && !empty($ets_discord_redirect_url) && !empty($ets_discord_guild_id) ): ?>
-		   <button class="ets_tablinks" data-identity="level-mapping" data-toggle="tab" onclick="openTab(event, 'ets_level_mapping' )"><?php echo __( "Roles Mapping", "ets_pmpro_discord" ); ?></button>
+		   <button class="ets_tablinks" data-identity="level-mapping" data-toggle="tab" onclick="openTab(event, 'ets_level_mapping' )"><?php echo __( "Role Settings", "ets_pmpro_discord" ); ?></button>
 		  <?php endif; ?>
 		  <button class="ets_tablinks" data-identity="logs" data-toggle="tab" onclick="openTab(event, 'ets_logs' )"><?php echo __( "Logs", "ets_pmpro_discord" ); ?>	
 		  </button>

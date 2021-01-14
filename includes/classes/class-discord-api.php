@@ -292,6 +292,9 @@ class PMPro_Discord_API {
 		);
 		$guild_response = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
 		$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
+		delete_user_meta($user_id,'discord_user_id');
+		delete_user_meta($user_id,'discord_access_token');
+		delete_user_meta($user_id,'discord_role_id');
 		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 			if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 				$Logs = new PMPro_Discord_Logs();
@@ -376,16 +379,24 @@ class PMPro_Discord_API {
 		if ( $discord_user_id ) {
 			$role_delete = $this->delete_discord_role( $user_id );
 			$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+			$discord_default_role = get_option( 'ets_discord_default_role_id' );
+			$upon_cancel = get_option( 'upon_cancel' );
 			$role_id = '';
 			$curr_level_id = $this->get_current_level_id( $user_id );
 			if ( $level_id )
 			{
 				$role_id = $ets_discord_role_mapping['level_id_'.$level_id];
 			}
-			if ( $cancel_level ) {
-				$role_id = $ets_discord_role_mapping['level_id_expired'];
+			if ( $cancel_level && $discord_default_role && $upon_cancel == 'default') {
+
+				$role_id = $discord_default_role;
 			}
-			$role_change = $this->change_discord_role_api( $user_id, $role_id );
+
+			if ($upon_cancel == 'kick') {
+				$response = $this->delete_member_from_guild( $user_id );
+			} else if ($upon_cancel == 'default') {
+				$role_change = $this->change_discord_role_api( $user_id, $role_id );
+			}
 		}
 	}
 
@@ -398,7 +409,7 @@ class PMPro_Discord_API {
 		$user_id = $_POST['user_id'];
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$role_id = '';
-		$role_id = $ets_discord_role_mapping['level_id_expired'];
+		$role_id = get_option('ets_discord_default_role_id');
 		$res = $this->delete_discord_role( $user_id );
 		$response = $this->change_discord_role_api( $user_id, $role_id );
 		delete_user_meta( $user_id, 'discord_access_token' );
@@ -419,9 +430,14 @@ class PMPro_Discord_API {
 	public function pmpro_expiry_membership( $user_id, $level_id ) {	
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$role_id = '';
-		$role_id = $ets_discord_role_mapping['level_id_expired'];
-		$role_delete = $this->delete_discord_role( $user_id );
-		$response = $this->change_discord_role_api( $user_id, $role_id );
+		$role_id = get_option('ets_discord_default_role_id');
+		$upon_expiry = get_option( 'upon_expiry' );
+		if ($upon_expiry == 'kick') {
+			$response = $this->delete_member_from_guild( $user_id );
+		} else if ($upon_expiry == 'default') {
+			$role_delete = $this->delete_discord_role( $user_id );
+			$response = $this->change_discord_role_api( $user_id, $role_id );
+		}
 		update_option( 'expire_pmpro_member_1','expire' );
 	}
 	

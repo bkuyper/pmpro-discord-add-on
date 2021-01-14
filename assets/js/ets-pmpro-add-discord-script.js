@@ -56,19 +56,18 @@ jQuery(document).ready(function () {
 			jQuery.each(response, function (key, val) {
 				if(key != 'previous_mapping'){
 			        jQuery('.discord-roles').append('<div class="makeMeDraggable" data-role_id="'+val.id+'" >'+val.name+'</div>');
+		        	jQuery('#defaultRole').append('<option value="'+val.id+'" >'+val.name+'</option>');
 			        makeDrag(jQuery('.makeMeDraggable'));
 			    }
 		    });
+		    var defaultRole = jQuery('#selected_default_role').val();
+		    jQuery('#defaultRole option[value='+defaultRole+']').attr('selected','selected');
 		    var mapjson = localStorage.getItem('mappingjson') || response.previous_mapping;
 			jQuery("#maaping_json_val").html(mapjson);
 			jQuery.each(JSON.parse(mapjson), function(key,val){
-		    	if(key != 'level_id_expired'){
-			    	/*console.log(key+' '+val+'\n');*/
 			    	var arrayofkey = key.split('id_');
-			    	console.log('data-level_id="'+arrayofkey[1]+'"\n');
 				   jQuery('*[data-level_id="'+arrayofkey[1]+'"]').append(jQuery('*[data-role_id="'+val+'"]')).attr( 'data-drop-role_id', val).find('span').css({'order':'2'});
 				   jQuery('*[data-role_id="'+val+'"]').css({'width':'100%','left': '0','top':'0','margin-bottom':'0px','order':'1'}).attr( 'data-level_id' ,arrayofkey[1]);
-				}
 		    });
 		},
 		complete: function(){
@@ -94,7 +93,7 @@ jQuery(document).ready(function () {
   	});
 
 	jQuery("#revertMapping").on('click', function(){
-  		localStorage.removeItem('mapArray','firstmap_id','mappingjson');
+  		localStorage.removeItem('mapArray','mappingjson');
   		location.reload(true);
   	});
 
@@ -138,7 +137,11 @@ jQuery(document).ready(function () {
 			}
 	    });
 	    localStorage.setItem('mapArray', JSON.stringify(oldItems));
-	    var mappingjson = jsonStart+'"level_id_expired":"'+localStorage.getItem('firstmap_id')+'"}';
+	    var lastChar = jsonStart.slice(-1);
+	  	if (lastChar == ',') {
+  			jsonStart = jsonStart.slice(0, -1);
+	  	}
+	    var mappingjson = jsonStart+'}';
 		jQuery("#maaping_json_val").html(mappingjson);
 		localStorage.setItem('mappingjson', mappingjson);
 		draggable.css({'width':'100%','left': '0','top':'0','margin-bottom':'10px'});
@@ -149,10 +152,6 @@ jQuery(document).ready(function () {
 	   	jQuery('*[data-drop-role_id="'+draggable.data('role_id')+'"]').attr('data-drop-role_id', '');
 	    if(jQuery(this).data( 'drop-role_id') != draggable.data('role_id')){
 		    var oldItems = JSON.parse(localStorage.getItem('mapArray')) || [];
-		    if(!localStorage.getItem('firstmap_id')){
-		    	var firstmap_id = draggable.data('role_id');
-		    	localStorage.setItem('firstmap_id',firstmap_id);
-			}
 			jQuery(this).attr( 'data-drop-role_id', draggable.data('role_id'));
 			draggable.attr( 'data-level_id' ,jQuery(this).data('level_id'));
 		    jQuery.each(oldItems, function(key,val){
@@ -175,7 +174,11 @@ jQuery(document).ready(function () {
 				}
 		    });
 		    localStorage.setItem('mapArray', JSON.stringify(oldItems));
-		    var mappingjson = jsonStart+'"level_id_expired":"'+localStorage.getItem('firstmap_id')+'"}';
+		    var lastChar = jsonStart.slice(-1);
+		  	if (lastChar == ',') {
+	  			jsonStart = jsonStart.slice(0, -1);
+		  	}
+		    var mappingjson = jsonStart+'}';
 		    localStorage.setItem('mappingjson', mappingjson);
 		    jQuery("#maaping_json_val").html(mappingjson);
 		}

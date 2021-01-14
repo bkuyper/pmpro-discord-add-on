@@ -48,8 +48,6 @@ class PMPro_Discord_API {
 				$level_expiration_status = 'active';
 			}
 		}
-		/*var_dump(date_i18n( get_option( 'date_format' ), $level->enddate ));*/
-		/*$expiration_text = date_i18n( get_option( 'date_format' ), $level->enddate );*/
 		?>
 		<label><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
 		<?php

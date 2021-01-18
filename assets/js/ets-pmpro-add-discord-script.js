@@ -61,7 +61,9 @@ jQuery(document).ready(function () {
 			    }
 		    });
 		    var defaultRole = jQuery('#selected_default_role').val();
-		    jQuery('#defaultRole option[value='+defaultRole+']').attr('selected','selected');
+		    if(defaultRole){
+		    	jQuery('#defaultRole option[value='+defaultRole+']').attr('selected','selected');
+		    }
 		    var mapjson = localStorage.getItem('mappingjson') || response.previous_mapping;
 			jQuery("#maaping_json_val").html(mapjson);
 			jQuery.each(JSON.parse(mapjson), function(key,val){
@@ -93,7 +95,8 @@ jQuery(document).ready(function () {
   	});
 
 	jQuery("#revertMapping").on('click', function(){
-  		localStorage.removeItem('mapArray','mappingjson');
+  		localStorage.removeItem('mapArray');
+  		localStorage.removeItem('mappingjson');
   		location.reload(true);
   	});
 

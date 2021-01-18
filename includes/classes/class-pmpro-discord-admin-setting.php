@@ -124,13 +124,25 @@ class Ets_Pmpro_Admin_Setting {
 		if ( $ets_discord_roles ) {
 			$ets_discord_roles = stripslashes( $ets_discord_roles );
 			$save_mapping_status = update_option( 'ets_discord_role_mapping',$ets_discord_roles );
-			if ($save_mapping_status || isset( $_POST['ets_discord_role_mapping'] )) {
+			if ( ($save_mapping_status || isset( $_POST['ets_discord_role_mapping'] ) ) && !isset( $_POST['flush'] )) {
 			?>
 			<div class="notice notice-success is-dismissible support-success-msg">
 		        <p><?php echo __( 'Your mappings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
 		    </div>
 		    <?php
 			}
+		}
+
+		if ( isset( $_POST['flush'] ) ) {
+			delete_option('ets_discord_role_mapping');
+			delete_option('ets_discord_default_role_id');
+			delete_option('upon_expiry');
+			delete_option('upon_cancel');
+		?>
+		<div class="notice notice-success is-dismissible support-success-msg">
+	        <p><?php echo __( 'Your settings flushed successfully.', 'ets_pmpro_discord' ); ?></p>
+	    </div>
+		<?php	
 		}
 		if ( isset($_POST['submit']) && !isset( $_POST['ets_discord_role_mapping'] ) ) {
  		?>

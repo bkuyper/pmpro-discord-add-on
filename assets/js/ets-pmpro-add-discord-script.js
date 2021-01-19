@@ -54,7 +54,14 @@ jQuery(document).ready(function () {
 		},
 		success:function (response) {
 			jQuery.each(response, function (key, val) {
-				if(key != 'previous_mapping'){
+				var isbot = false;
+				if(val.hasOwnProperty('tags')){
+					if(val.tags.hasOwnProperty('bot_id')){
+						isbot = true;
+					}
+				}
+				
+				if(key != 'previous_mapping' && isbot == false && val.name != '@everyone'){
 			        jQuery('.discord-roles').append('<div class="makeMeDraggable" data-role_id="'+val.id+'" >'+val.name+'</div>');
 		        	jQuery('#defaultRole').append('<option value="'+val.id+'" >'+val.name+'</option>');
 			        makeDrag(jQuery('.makeMeDraggable'));

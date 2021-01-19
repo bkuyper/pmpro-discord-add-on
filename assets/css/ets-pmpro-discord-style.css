@@ -385,6 +385,7 @@ div.mapping-json{
 }
 #maaping_json_val{
   width: 50%;
+  display: none;
 }
 .notice.ets-notice{
   background-color: rgba(51, 170, 51, .1);

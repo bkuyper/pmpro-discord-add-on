@@ -74,7 +74,7 @@ $upon_cancel_s = get_option( 'upon_cancel' );
   </div>
   <div class="bottom-btn">
     <button type="submit" name="submit" value="ets_submit" class="button">
-      <?php echo __( "Submit", "ets_pmpro_discord" );?>
+      <?php echo __( "Save Settings", "ets_pmpro_discord" );?>
     </button>
     <button id="revertMapping" name="flush" class="button">
       <?php echo __( "Flush Settings", "ets_pmpro_discord" );?>

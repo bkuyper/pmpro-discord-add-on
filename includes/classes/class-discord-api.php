@@ -38,16 +38,17 @@ class PMPro_Discord_API {
 		$user_id = get_current_user_id();
 		$access_token = get_user_meta( $user_id, "discord_access_token", true );
 		$curr_level_id = $this->get_current_level_id( $user_id );
+		$default_role = get_option('ets_discord_default_role_id');
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		?>
 		<label><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
 		<?php
-		if ( $access_token && array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
+		if ( $access_token && (array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) || $default_role) ) {
 			?>
 			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?></a>
 			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
 		<?php
-		} else if ( !array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) && pmpro_hasMembershipLevel()) {
+		} else if ( !$default_role && !array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) && pmpro_hasMembershipLevel()) {
 		?>
 		<div class="isa_error">
 		   <i class="fa fa-times-circle"></i>
@@ -152,11 +153,14 @@ class PMPro_Discord_API {
 	public function add_discord_member_in_guild( $discord_user_id, $user_id, $access_token ) {
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
+		$default_role = get_option('ets_discord_default_role_id');
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$discord_role = '';
 		$curr_level_id = $this->get_current_level_id( $user_id );
-		if ( $curr_level_id ) {
+		if (array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
 			$discord_role = $ets_discord_role_mapping[ 'level_id_'.$curr_level_id ];
+		}else if ( $discord_role = '' && $default_role ) {
+			$discord_role = $default_role;
 		}
 		$guilds_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$discord_user_id;
 		$guild_args = array(
@@ -183,8 +187,12 @@ class PMPro_Discord_API {
 				$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
 			}
 		}
-		
-		$change_response = $this->change_discord_role_api( $user_id, $discord_role );
+		if( $discord_role ) {
+			$change_response = $this->change_discord_role_api( $user_id, $discord_role );
+		}
+		if ( $default_role ) {
+			$assigned_default_role = $this->change_discord_role_api( $user_id, $default_role );
+		}
 		return $guild_response;
 	}
 
@@ -301,9 +309,11 @@ class PMPro_Discord_API {
 	 */
 	public function change_discord_role_api( $user_id, $role_id ) {
 		$access_token = get_user_meta( $user_id, "discord_access_token", true );
+		$previous_role = get_user_meta( $user_id, "discord_role_id", true );
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_user_id = get_user_meta( $user_id, 'discord_user_id', true );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
+		$default_role = get_option('ets_discord_default_role_id');
     	$discord_change_role_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$discord_user_id.'/roles/'.$role_id;
 		if ( $access_token && $discord_user_id ) {
 			$param = array(
@@ -323,7 +333,9 @@ class PMPro_Discord_API {
 					$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
 				}
 			}
-			update_user_meta( $user_id, 'discord_role_id', $role_id );
+			if( ($default_role != $role_id && $role_id != $previous_role) || empty($previous_role) ){
+				update_user_meta( $user_id, 'discord_role_id', $role_id );
+			}
 			return $response;
 		}
 	}

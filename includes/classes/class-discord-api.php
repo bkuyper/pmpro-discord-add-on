@@ -408,12 +408,7 @@ class PMPro_Discord_API {
 	 */
 	public function disconnect_from_discord() {
 		$user_id = $_POST['user_id'];
-		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
-		$role_id = '';
-		$role_id = get_option('ets_discord_default_role_id');
-		$res = $this->delete_discord_role( $user_id );
-		$response = $this->change_discord_role_api( $user_id, $role_id );
-		delete_user_meta( $user_id, 'discord_access_token' );
+		$response = $this->delete_member_from_guild( $user_id );
 		$event_res = array(
 			"status"  => 1,
 			"message" => "Successfully disconnected"

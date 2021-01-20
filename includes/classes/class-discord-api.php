@@ -54,6 +54,10 @@ class PMPro_Discord_API {
 		   <i class="fa fa-times-circle"></i>
 		   <?php echo __( "There is no discord role assigned for your level.", "ets_pmpro_discord" );?>
 		</div>
+		<?php if($access_token){ ?>
+			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?></a>
+			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
+		<?php } ?>
 		<?php	
 		} else if ( !pmpro_hasMembershipLevel()) {
 		?>
@@ -61,6 +65,10 @@ class PMPro_Discord_API {
 		    <i class="fa fa-info-circle"></i>
 		    <?php echo __( "Buy any membership level.", "ets_pmpro_discord" );?>
 		</div>
+		<?php if($access_token){ ?>
+			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?></a>
+			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
+		<?php } ?>
 		<?php
 		} else {
 		?>

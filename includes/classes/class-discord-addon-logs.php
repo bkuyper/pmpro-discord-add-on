@@ -23,6 +23,7 @@ class PMPro_Discord_Logs {
 	public function clear_logs() {
 		if(!is_user_logged_in()){
 			wp_send_json_error( 'Unauthorized user', 404 );
+			exit();
 		}
 		try {
 			$file_name = $this::$log_file_name;
@@ -54,6 +55,7 @@ class PMPro_Discord_Logs {
 	public function write_api_response_logs( $responseArr,$backtraceArr,$error_type ) {
 		if(!is_user_logged_in()){
 			wp_send_json_error( 'Unauthorized user', 404 );
+			exit();
 		}
 		$error = current_time( 'mysql' );
 		$log_file_name = $this::$log_file_name;

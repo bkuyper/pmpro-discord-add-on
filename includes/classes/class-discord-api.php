@@ -265,43 +265,41 @@ class PMPro_Discord_API {
 	 * @return object API response 
 	 */
 	public function discord_api_callback() {
-		if(!is_user_logged_in()){
-			wp_send_json_error( 'Unauthorized user', 404 );
-			exit();
-		}
-		if ( isset( $_GET['action'] ) && $_GET['action'] == "discord-login" ) {
-			$params = array(
-			    'client_id' => get_option( 'ets_discord_client_id' ),
-			    'redirect_uri' => get_option( 'ets_discord_redirect_url' ),
-			    'response_type' => 'code',
-			    'scope' => 'identify email connections guilds guilds.join messages.read'
-			  );
-			$discord_authorise_api_url = ETS_DISCORD_API_URL."oauth2/authorize?".http_build_query( $params );
+		if(is_user_logged_in()){
+			if ( isset( $_GET['action'] ) && $_GET['action'] == "discord-login" ) {
+				$params = array(
+				    'client_id' => get_option( 'ets_discord_client_id' ),
+				    'redirect_uri' => get_option( 'ets_discord_redirect_url' ),
+				    'response_type' => 'code',
+				    'scope' => 'identify email connections guilds guilds.join messages.read'
+				  );
+				$discord_authorise_api_url = ETS_DISCORD_API_URL."oauth2/authorize?".http_build_query( $params );
 
-			header( 'Location: '.$discord_authorise_api_url );
-			die();
-		}
+				header( 'Location: '.$discord_authorise_api_url );
+				die();
+			}
 
-		if ( isset( $_GET['code'] ) ) {
-			$code = $_GET['code'];
-			$user_id = get_current_user_id();
-			$response = $this->create_discord_auth_token( $code );
-			$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
-			
-			$discord_exist_user_id = get_user_meta( $user_id, "discord_user_id", true );
-			
-			if ( array_key_exists('access_token', $res_body) ) {				
-				$access_token = $res_body['access_token'];
-				update_user_meta( $user_id, "discord_access_token", $access_token );
-				$user_body = $this->get_discord_current_user( $access_token );
-				if ( array_key_exists('id', $user_body) ) {
-					$discord_user_id = $user_body['id'];
-					if ( $discord_exist_user_id == $discord_user_id ) {
-						$role_delete = $this->delete_discord_role( $user_id );
-					}
-					update_user_meta( $user_id, "discord_user_id", $discord_user_id );
-					$guild_response = $this->add_discord_member_in_guild( $discord_user_id, $user_id,$access_token );
-				}	
+			if ( isset( $_GET['code'] ) ) {
+				$code = $_GET['code'];
+				$user_id = get_current_user_id();
+				$response = $this->create_discord_auth_token( $code );
+				$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
+				
+				$discord_exist_user_id = get_user_meta( $user_id, "discord_user_id", true );
+				
+				if ( array_key_exists('access_token', $res_body) ) {				
+					$access_token = $res_body['access_token'];
+					update_user_meta( $user_id, "discord_access_token", $access_token );
+					$user_body = $this->get_discord_current_user( $access_token );
+					if ( array_key_exists('id', $user_body) ) {
+						$discord_user_id = $user_body['id'];
+						if ( $discord_exist_user_id == $discord_user_id ) {
+							$role_delete = $this->delete_discord_role( $user_id );
+						}
+						update_user_meta( $user_id, "discord_user_id", $discord_user_id );
+						$guild_response = $this->add_discord_member_in_guild( $discord_user_id, $user_id,$access_token );
+					}	
+				}
 			}
 		}
 	}

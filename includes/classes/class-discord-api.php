@@ -34,7 +34,10 @@ class PMPro_Discord_API {
 	 * @param None
 	 * @return None 
 	 */
-	public function add_connect_discord_button() {	
+	public function add_connect_discord_button() {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}	
 		$user_id = get_current_user_id();
 		$access_token = get_user_meta( $user_id, "discord_access_token", true );
 		$curr_level_id = $this->get_current_level_id( $user_id );
@@ -84,6 +87,9 @@ class PMPro_Discord_API {
 	 * @return int $curr_level_id
 	 */
 	public function get_current_level_id( $user_id ) {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		if ( is_user_logged_in() && function_exists( 'pmpro_hasMembershipLevel' ) && pmpro_hasMembershipLevel() ) {
 			global $current_user;
 			$membership_level = pmpro_getMembershipLevelForUser( $user_id );
@@ -98,6 +104,9 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function create_discord_auth_token( $code ) {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		$discord_token_api_url = ETS_DISCORD_API_URL.'oauth2/token';
 		$args = array(
 			'method'=> 'POST',
@@ -132,6 +141,9 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function get_discord_current_user( $access_token ) {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		$discord_cuser_api_url = ETS_DISCORD_API_URL.'users/@me';
 		$param = array(
 			'headers'      => array(
@@ -159,6 +171,9 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function add_discord_member_in_guild( $discord_user_id, $user_id, $access_token ) {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$default_role = get_option('ets_discord_default_role_id');
@@ -212,6 +227,9 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function load_discord_roles() {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$discord_user_id = get_user_meta( $user_id , 'discord_user_id', true );
@@ -241,6 +259,9 @@ class PMPro_Discord_API {
 	 * @return object API response 
 	 */
 	public function discord_api_callback() {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		if ( isset( $_GET['action'] ) && $_GET['action'] == "discord-login" ) {
 			$params = array(
 			    'client_id' => get_option( 'ets_discord_client_id' ),
@@ -284,6 +305,9 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function delete_member_from_guild( $user_id ) {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$discord_user_id = get_user_meta( $user_id , 'discord_user_id', true );
@@ -316,6 +340,9 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function change_discord_role_api( $user_id, $role_id ) {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		$access_token = get_user_meta( $user_id, "discord_access_token", true );
 		$previous_role = get_user_meta( $user_id, "discord_role_id", true );
 		$guild_id = get_option( 'discord_guild_id' );
@@ -354,6 +381,9 @@ class PMPro_Discord_API {
 	 * @return object API response 
 	 */
 	public function delete_discord_role( $user_id ) {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		$access_token = get_user_meta( $user_id, "discord_access_token", true );
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_user_id = get_user_meta( $user_id, 'discord_user_id', true );
@@ -384,6 +414,9 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		$discord_user_id = get_user_meta( $user_id, 'discord_user_id',true );
 		if ( $discord_user_id ) {
 			$role_delete = $this->delete_discord_role( $user_id );
@@ -415,6 +448,9 @@ class PMPro_Discord_API {
 	 * @return Object json response
 	 */
 	public function disconnect_from_discord() {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		$user_id = $_POST['user_id'];
 		$response = $this->delete_member_from_guild( $user_id );
 		$event_res = array(
@@ -431,7 +467,10 @@ class PMPro_Discord_API {
 	 * @param int $level_id
 	 * @return None
 	 */
-	public function pmpro_expiry_membership( $user_id, $level_id ) {	
+	public function pmpro_expiry_membership( $user_id, $level_id ) {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}	
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$role_id = '';
 		$role_id = get_option('ets_discord_default_role_id');

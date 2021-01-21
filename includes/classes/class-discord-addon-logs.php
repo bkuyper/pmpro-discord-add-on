@@ -21,6 +21,9 @@ class PMPro_Discord_Logs {
 	 * @return None
 	 */
 	public function clear_logs() {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		try {
 			$file_name = $this::$log_file_name;
 			if( fopen(ETS_PMPRO_DISCORD_PATH.$file_name, "w") ) {
@@ -49,6 +52,9 @@ class PMPro_Discord_Logs {
 	 * @return None
 	 */
 	public function write_api_response_logs( $responseArr,$backtraceArr,$error_type ) {
+		if(!is_user_logged_in()){
+			wp_send_json_error( 'Unauthorizes user', 404 );
+		}
 		$error = current_time( 'mysql' );
 		$log_file_name = $this::$log_file_name;
 		if ( array_key_exists('code', $responseArr) ) {

@@ -35,7 +35,7 @@ class PMPro_Discord_API {
 	 * @return None 
 	 */
 	public function add_connect_discord_button() {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}	
@@ -88,7 +88,7 @@ class PMPro_Discord_API {
 	 * @return int $curr_level_id
 	 */
 	public function get_current_level_id( $user_id ) {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
@@ -106,7 +106,7 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function create_discord_auth_token( $code ) {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
@@ -144,7 +144,7 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function get_discord_current_user( $access_token ) {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
@@ -175,7 +175,7 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function add_discord_member_in_guild( $discord_user_id, $user_id, $access_token ) {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
@@ -232,7 +232,7 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function load_discord_roles() {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
@@ -265,7 +265,7 @@ class PMPro_Discord_API {
 	 * @return object API response 
 	 */
 	public function discord_api_callback() {
-		if(is_user_logged_in()){
+		if( is_user_logged_in() ) {
 			if ( isset( $_GET['action'] ) && $_GET['action'] == "discord-login" ) {
 				$params = array(
 				    'client_id' => get_option( 'ets_discord_client_id' ),
@@ -310,7 +310,7 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function delete_member_from_guild( $user_id ) {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
@@ -346,7 +346,7 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function change_discord_role_api( $user_id, $role_id ) {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
@@ -388,7 +388,7 @@ class PMPro_Discord_API {
 	 * @return object API response 
 	 */
 	public function delete_discord_role( $user_id ) {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
@@ -422,7 +422,7 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
@@ -457,7 +457,7 @@ class PMPro_Discord_API {
 	 * @return Object json response
 	 */
 	public function disconnect_from_discord() {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
@@ -478,7 +478,7 @@ class PMPro_Discord_API {
 	 * @return None
 	 */
 	public function pmpro_expiry_membership( $user_id, $level_id ) {
-		if(!is_user_logged_in()){
+		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}	

@@ -69,7 +69,7 @@ jQuery(document).ready(function () {
 		    });
 		    var defaultRole = jQuery('#selected_default_role').val();
 		    if(defaultRole){
-		    	jQuery('#defaultRole option[value='+defaultRole+']').attr('selected','selected');
+		    	jQuery('#defaultRole option[value='+defaultRole+']').prop('selected', true);
 		    }
 		    var mapjson = localStorage.getItem('mappingjson') || response.previous_mapping;
 			jQuery("#maaping_json_val").html(mapjson);

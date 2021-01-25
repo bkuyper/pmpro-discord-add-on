@@ -238,7 +238,6 @@ class PMPro_Discord_API {
 		}
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
-		$discord_user_id = get_user_meta( $user_id , 'discord_user_id', true );
 		$guilds_delete_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/roles';
 		$guild_args = array(
 			'method'  => 'GET',

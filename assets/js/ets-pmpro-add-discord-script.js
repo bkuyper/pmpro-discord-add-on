@@ -71,7 +71,13 @@ jQuery(document).ready(function () {
 		    if(defaultRole){
 		    	jQuery('#defaultRole option[value='+defaultRole+']').attr('selected','selected');
 		    }
-		    var mapjson = localStorage.getItem('mappingjson') || response.previous_mapping;
+		    if(response.previous_mapping){
+		    	var mapjson = response.previous_mapping;
+		    }else{
+		    	var mapjson = localStorage.getItem('mappingjson');
+		    }
+		    
+		    
 			jQuery("#maaping_json_val").html(mapjson);
 			jQuery.each(JSON.parse(mapjson), function(key,val){
 			    	var arrayofkey = key.split('id_');
@@ -179,7 +185,7 @@ jQuery(document).ready(function () {
 		    jQuery.each(oldItems, function(key,val){
 		    	if(val){
 			    	var arrayofval = val.split(',');
-				    if(arrayofval[0] != 'level_id_'+jQuery(this).data( 'level_id' ) || arrayofval[1] != draggable.data('role_id')){
+				    if(arrayofval[0] == 'level_id_'+jQuery(this).data( 'level_id' ) || arrayofval[1] != draggable.data('role_id') && arrayofval[0] != 'level_id_'+jQuery(this).data( 'level_id' ) || arrayofval[1] == draggable.data('role_id')){
 				    	jsonStart = jsonStart+'"'+arrayofval[0]+'":'+'"'+arrayofval[1]+'",';
 				    }
 				}

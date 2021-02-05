@@ -53,7 +53,6 @@ jQuery(document).ready(function () {
 			jQuery('#image-loader').show();
 		},
 		success:function (response) {
-			console.log(response);
 			if(response.hasOwnProperty('code') && response.code == 5001 && response.message == 'Missing Access'){
 				jQuery(".btn-connect-to-bot").show();
 			}else{

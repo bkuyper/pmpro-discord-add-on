@@ -114,16 +114,16 @@
 .ets-btn.btn-connect-to-bot{
   font-weight:normal;
   display: none;
+  text-transform: none;
 }
 .ets-btn.not-active {
   pointer-events: none;
   cursor: default;
   text-decoration: none;
-  color: black;
-  background-color:#FF0000;
+  background-color:#00FF00;
 }
 .btn-connect, .btn-connect-to-bot{
-  background-color: #0b8e36;
+  background-color: #FF0000;
 }
 .btn-disconnect{
   background-color:#FF0000;

@@ -59,7 +59,7 @@ jQuery(document).ready(function () {
 					if(val.hasOwnProperty('permissions_new') && val.permissions_new == etsPmproParams.permissions_const){
 						jQuery("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');
 					}else{
-						jQuery("#connect-discord-bot").show();
+						jQuery(".btn-connect-to-bot").show();
 					}
 					
 					if(val.tags.hasOwnProperty('bot_id')){

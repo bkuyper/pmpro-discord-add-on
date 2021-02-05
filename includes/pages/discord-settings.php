@@ -27,7 +27,7 @@
   			<?php echo __( "Submit", "ets_pmpro_discord" );?>
   		</button>
   		<?php if(get_option('ets_discord_client_id')): ?>
-  			<a href="?action=discord-connectToBot" class="ets-btn btn-connect-to-bot" id="connect-discord-bot" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Connect to BOT", "ets_pmpro_discord" );?> <i class='fab fa-discord'></i></a>
+  			<a href="?action=discord-connectToBot" class="ets-btn btn-connect-to-bot" id="connect-discord-bot" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Connect Bot", "ets_pmpro_discord" );?> <i class='fab fa-discord'></i></a>
   		<?php endif; ?>
   	</p>
 </form>

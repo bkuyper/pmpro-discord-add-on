@@ -111,12 +111,24 @@
   opacity: 1;
   text-transform: uppercase;
 }
-.btn-connect{
+.ets-btn.btn-connect-to-bot{
+  font-weight:normal;
+  display: none;
+}
+.ets-btn.not-active {
+  pointer-events: none;
+  cursor: default;
+  text-decoration: none;
+  color: black;
+  background-color:#FF0000;
+}
+.btn-connect, .btn-connect-to-bot{
   background-color: #0b8e36;
 }
 .btn-disconnect{
   background-color:#FF0000;
 }
+
 div#ets_logs{
   background-color: #000;
   color:#18d26a;

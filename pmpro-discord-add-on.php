@@ -19,6 +19,8 @@ define('ETS_PMPRO_DISCORD_PATH', plugin_dir_path(__FILE__));
 //discord API url
 define('ETS_DISCORD_API_URL', 'https://discordapp.com/api/v6/');
 
+//discord Bot Permissions
+define('ETS_DISCORD_BOT_PERMISSIONS', 1007414455);
 /**
  * Class to connect discord app
  */

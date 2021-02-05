@@ -56,11 +56,16 @@ jQuery(document).ready(function () {
 			jQuery.each(response, function (key, val) {
 				var isbot = false;
 				if(val.hasOwnProperty('tags')){
+					if(val.hasOwnProperty('permissions_new') && val.permissions_new == etsPmproParams.permissions_const){
+						jQuery("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');
+					}else{
+						jQuery("#connect-discord-bot").show();
+					}
+					
 					if(val.tags.hasOwnProperty('bot_id')){
 						isbot = true;
 					}
 				}
-				
 				if(key != 'previous_mapping' && isbot == false && val.name != '@everyone'){
 			        jQuery('.discord-roles').append('<div class="makeMeDraggable" data-role_id="'+val.id+'" >'+val.name+'</div>');
 		        	jQuery('#defaultRole').append('<option value="'+val.id+'" >'+val.name+'</option>');

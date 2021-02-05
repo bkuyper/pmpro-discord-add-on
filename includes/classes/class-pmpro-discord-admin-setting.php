@@ -41,6 +41,13 @@ class Ets_Pmpro_Admin_Setting {
         wp_enqueue_script( 'ets_pmpro_add_discord_script' );
 
         wp_register_script(
+			'ets_fab_icon_script',
+			'https://kit.fontawesome.com/a076d05399.js',
+			array( 'jquery' )
+		);
+        wp_enqueue_script( 'ets_fab_icon_script' );
+
+        wp_register_script(
 			'jQuery_ui_script',
 			'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
 			array( 'jquery' )
@@ -48,7 +55,8 @@ class Ets_Pmpro_Admin_Setting {
         wp_enqueue_script( 'jQuery_ui_script' );
 		
 	 	$script_params = array(
-			'admin_ajax' 		=> admin_url( 'admin-ajax.php' )
+			'admin_ajax' 		=> admin_url( 'admin-ajax.php' ),
+			'permissions_const' => ETS_DISCORD_BOT_PERMISSIONS
 		);  
 
 	  	wp_localize_script( 'ets_pmpro_add_discord_script', 'etsPmproParams', $script_params ); 

@@ -278,6 +278,18 @@ class PMPro_Discord_API {
 				die();
 			}
 
+			if ( isset( $_GET['action'] ) && $_GET['action'] == "discord-connectToBot" ) {
+				$params = array(
+				    'client_id' => get_option( 'ets_discord_client_id' ),
+				    'permissions' => ETS_DISCORD_BOT_PERMISSIONS,
+				    'scope' => 'bot',
+				    'guild_id' => get_option( 'discord_guild_id' ),
+				  );
+				$discord_authorise_api_url = ETS_DISCORD_API_URL."oauth2/authorize?".http_build_query( $params );
+
+				header( 'Location: '.$discord_authorise_api_url );
+				die();
+			}
 			if ( isset( $_GET['code'] ) ) {
 				$code = $_GET['code'];
 				$user_id = get_current_user_id();

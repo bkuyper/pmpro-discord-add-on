@@ -121,8 +121,12 @@
   cursor: default;
   text-decoration: none;
   background-color:#00FF00;
+  color: #000;
 }
-.btn-connect, .btn-connect-to-bot{
+.btn-connect{
+  background-color: #00FF00;
+} 
+.btn-connect-to-bot{
   background-color: #FF0000;
 }
 .btn-disconnect{

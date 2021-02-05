@@ -53,14 +53,14 @@ jQuery(document).ready(function () {
 			jQuery('#image-loader').show();
 		},
 		success:function (response) {
+			console.log(response);
+			if(response.hasOwnProperty('code') && response.code == 5001 && response.message == 'Missing Access'){
+				jQuery(".btn-connect-to-bot").show();
+			}else{
+				jQuery("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');
+			}
 			jQuery.each(response, function (key, val) {
 				var isbot = false;
-					if(val.hasOwnProperty('permissions_new') && val.permissions_new == etsPmproParams.permissions_const){
-						jQuery("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');
-					}else{
-						jQuery(".btn-connect-to-bot").show();
-					}
-				
 				if(val.hasOwnProperty('tags')){	
 					if(val.tags.hasOwnProperty('bot_id')){
 						isbot = true;

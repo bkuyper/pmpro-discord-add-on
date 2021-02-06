@@ -54,8 +54,10 @@ jQuery(document).ready(function () {
 		},
 		success:function (response) {
 			console.log(response);
-			if(response.hasOwnProperty('code') && response.code == 5001 && response.message == 'Missing Access' || response.message == '401: Unauthorized'){
+			if(response.hasOwnProperty('code') && response.code == 5001 && response.message == 'Missing Access'){
 				jQuery(".btn-connect-to-bot").show();
+			}else if(response.message == '401: Unauthorized'){
+				jQuery("#connect-discord-bot").show().html("Error: Please check all details are correct").addClass('error-bk');
 			}else{
 				jQuery("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');
 			}

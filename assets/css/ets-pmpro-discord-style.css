@@ -123,6 +123,12 @@
   background-color:#00FF00;
   color: #000;
 }
+.ets-btn.error-bk {
+  pointer-events: none;
+  cursor: default;
+  text-decoration: none;
+  background-color:#FF0000;
+}
 .btn-connect{
   background-color: #00FF00;
 } 

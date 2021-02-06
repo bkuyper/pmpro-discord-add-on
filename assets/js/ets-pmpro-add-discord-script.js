@@ -53,7 +53,8 @@ jQuery(document).ready(function () {
 			jQuery('#image-loader').show();
 		},
 		success:function (response) {
-			if(response.hasOwnProperty('code') && response.code == 5001 && response.message == 'Missing Access'){
+			console.log(response);
+			if(response.hasOwnProperty('code') && response.code == 5001 && response.message == 'Missing Access' || response.message == '401: Unauthorized'){
 				jQuery(".btn-connect-to-bot").show();
 			}else{
 				jQuery("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');

@@ -40,7 +40,7 @@ class PMPro_Discord_API {
 			exit();
 		}	
 		$user_id = get_current_user_id();
-		$access_token = get_user_meta( $user_id, "discord_access_token", true );
+		$access_token = get_user_meta( $user_id, "ets_discord_access_token", true );
 		$curr_level_id = $this->get_current_level_id( $user_id );
 		$default_role = get_option('ets_discord_default_role_id');
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
@@ -49,7 +49,7 @@ class PMPro_Discord_API {
 		<?php
 		if ( $access_token && (array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) || $default_role) ) {
 			?>
-			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?></a>
+			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
 			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
 		<?php
 		} else if ( !$default_role && !array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) && pmpro_hasMembershipLevel()) {
@@ -59,7 +59,7 @@ class PMPro_Discord_API {
 		   <?php echo __( "There is no discord role assigned for your level.", "ets_pmpro_discord" );?>
 		</div>
 		<?php if($access_token){ ?>
-			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?></a>
+			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
 			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
 		<?php } ?>
 		<?php	
@@ -70,13 +70,13 @@ class PMPro_Discord_API {
 		    <?php echo __( "Buy any membership level.", "ets_pmpro_discord" );?>
 		</div>
 		<?php if($access_token){ ?>
-			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?></a>
+			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
 			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
 		<?php } ?>
 		<?php
 		} else {
 		?>
-			<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( "Connect To Discord", "ets_pmpro_discord" );?></a>
+			<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( "Connect To Discord", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
 		<?php
 		}
 		
@@ -169,12 +169,12 @@ class PMPro_Discord_API {
 
 	/**
 	 * Description: Add new member into discord guild
-	 * @param int $discord_user_id
+	 * @param int $ets_discord_user_id
 	 * @param int $user_id
 	 * @param string $access_token
 	 * @return object API response
 	 */
-	public function add_discord_member_in_guild( $discord_user_id, $user_id, $access_token ) {
+	public function add_discord_member_in_guild( $ets_discord_user_id, $user_id, $access_token ) {
 		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
@@ -190,7 +190,7 @@ class PMPro_Discord_API {
 		}else if ( $discord_role = '' && $default_role ) {
 			$discord_role = $default_role;
 		}
-		$guilds_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$discord_user_id;
+		$guilds_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$ets_discord_user_id;
 		$guild_args = array(
 			'method'  => 'PUT',
 		    'headers' => array(
@@ -206,7 +206,7 @@ class PMPro_Discord_API {
 				)
 	    	)
 		);
-		update_user_meta( $user_id, 'discord_role_id', $discord_role );
+		update_user_meta( $user_id, 'ets_discord_role_id', $discord_role );
 		$guild_response = wp_remote_post( $guilds_memeber_api_url, $guild_args );
 		$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
@@ -226,7 +226,7 @@ class PMPro_Discord_API {
 
 	/**
 	 * Description: Add new member into discord guild
-	 * @param int $discord_user_id
+	 * @param int $ets_discord_user_id
 	 * @param int $user_id
 	 * @param string $access_token
 	 * @return object API response
@@ -296,19 +296,19 @@ class PMPro_Discord_API {
 				$response = $this->create_discord_auth_token( $code );
 				$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
 				
-				$discord_exist_user_id = get_user_meta( $user_id, "discord_user_id", true );
+				$discord_exist_user_id = get_user_meta( $user_id, "ets_discord_user_id", true );
 				
 				if ( array_key_exists('access_token', $res_body) ) {				
 					$access_token = $res_body['access_token'];
-					update_user_meta( $user_id, "discord_access_token", $access_token );
+					update_user_meta( $user_id, "ets_discord_access_token", $access_token );
 					$user_body = $this->get_discord_current_user( $access_token );
 					if ( array_key_exists('id', $user_body) ) {
-						$discord_user_id = $user_body['id'];
-						if ( $discord_exist_user_id == $discord_user_id ) {
+						$ets_discord_user_id = $user_body['id'];
+						if ( $discord_exist_user_id == $ets_discord_user_id ) {
 							$role_delete = $this->delete_discord_role( $user_id );
 						}
-						update_user_meta( $user_id, "discord_user_id", $discord_user_id );
-						$guild_response = $this->add_discord_member_in_guild( $discord_user_id, $user_id,$access_token );
+						update_user_meta( $user_id, "ets_discord_user_id", $ets_discord_user_id );
+						$guild_response = $this->add_discord_member_in_guild( $ets_discord_user_id, $user_id,$access_token );
 					}	
 				}
 			}
@@ -327,8 +327,8 @@ class PMPro_Discord_API {
 		}
 		$guild_id = get_option( 'discord_guild_id' );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
-		$discord_user_id = get_user_meta( $user_id , 'discord_user_id', true );
-		$guilds_delete_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$discord_user_id;
+		$ets_discord_user_id = get_user_meta( $user_id , 'ets_discord_user_id', true );
+		$guilds_delete_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$ets_discord_user_id;
 		$guild_args = array(
 			'method'  => 'DELETE',
 		    'headers' => array(
@@ -338,9 +338,9 @@ class PMPro_Discord_API {
 		);
 		$guild_response = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
 		$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
-		delete_user_meta($user_id,'discord_user_id');
-		delete_user_meta($user_id,'discord_access_token');
-		delete_user_meta($user_id,'discord_role_id');
+		delete_user_meta($user_id,'ets_discord_user_id');
+		delete_user_meta($user_id,'ets_discord_access_token');
+		delete_user_meta($user_id,'ets_discord_role_id');
 		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 			if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 				$Logs = new PMPro_Discord_Logs();
@@ -361,14 +361,14 @@ class PMPro_Discord_API {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
-		$access_token = get_user_meta( $user_id, "discord_access_token", true );
-		$previous_role = get_user_meta( $user_id, "discord_role_id", true );
+		$access_token = get_user_meta( $user_id, "ets_discord_access_token", true );
+		$previous_role = get_user_meta( $user_id, "ets_discord_role_id", true );
 		$guild_id = get_option( 'discord_guild_id' );
-		$discord_user_id = get_user_meta( $user_id, 'discord_user_id', true );
+		$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id', true );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$default_role = get_option('ets_discord_default_role_id');
-    	$discord_change_role_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$discord_user_id.'/roles/'.$role_id;
-		if ( $access_token && $discord_user_id ) {
+    	$discord_change_role_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$ets_discord_user_id.'/roles/'.$role_id;
+		if ( $access_token && $ets_discord_user_id ) {
 			$param = array(
 						'method'=> 'PUT',
 					    'headers' => array(
@@ -387,7 +387,7 @@ class PMPro_Discord_API {
 				}
 			}
 			if( ($default_role != $role_id && $role_id != $previous_role) || empty($previous_role) ){
-				update_user_meta( $user_id, 'discord_role_id', $role_id );
+				update_user_meta( $user_id, 'ets_discord_role_id', $role_id );
 			}
 			return $response;
 		}
@@ -403,14 +403,14 @@ class PMPro_Discord_API {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
-		$access_token = get_user_meta( $user_id, "discord_access_token", true );
+		$access_token = get_user_meta( $user_id, "ets_discord_access_token", true );
 		$guild_id = get_option( 'discord_guild_id' );
-		$discord_user_id = get_user_meta( $user_id, 'discord_user_id', true );
+		$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id', true );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
-		$discord_role_id = get_user_meta( $user_id, 'discord_role_id', true );
-		$discord_delete_role_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$discord_user_id.'/roles/'.$discord_role_id;
+		$ets_discord_role_id = get_user_meta( $user_id, 'ets_discord_role_id', true );
+		$discord_delete_role_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$ets_discord_user_id.'/roles/'.$ets_discord_role_id;
     
-		if ( $discord_user_id ) {
+		if ( $ets_discord_user_id ) {
 			$param = array(
 					'method'=> 'DELETE',
 				    'headers' => array(
@@ -437,8 +437,8 @@ class PMPro_Discord_API {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
-		$discord_user_id = get_user_meta( $user_id, 'discord_user_id',true );
-		if ( $discord_user_id ) {
+		$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id',true );
+		if ( $ets_discord_user_id ) {
 			$role_delete = $this->delete_discord_role( $user_id );
 			$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 			$discord_default_role = get_option( 'ets_discord_default_role_id' );

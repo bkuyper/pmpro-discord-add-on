@@ -179,7 +179,7 @@ class PMPro_Discord_API {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
-		$guild_id = get_option( 'discord_guild_id' );
+		$guild_id = get_option( 'ets_discord_guild_id' );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$default_role = get_option('ets_discord_default_role_id');
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
@@ -236,7 +236,7 @@ class PMPro_Discord_API {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
-		$guild_id = get_option( 'discord_guild_id' );
+		$guild_id = get_option( 'ets_discord_guild_id' );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$guilds_delete_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/roles';
 		$guild_args = array(
@@ -283,7 +283,7 @@ class PMPro_Discord_API {
 				    'client_id' => get_option( 'ets_discord_client_id' ),
 				    'permissions' => ETS_DISCORD_BOT_PERMISSIONS,
 				    'scope' => 'bot',
-				    'guild_id' => get_option( 'discord_guild_id' ),
+				    'guild_id' => get_option( 'ets_discord_guild_id' ),
 				  );
 				$discord_authorise_api_url = ETS_DISCORD_API_URL."oauth2/authorize?".http_build_query( $params );
 
@@ -325,7 +325,7 @@ class PMPro_Discord_API {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
-		$guild_id = get_option( 'discord_guild_id' );
+		$guild_id = get_option( 'ets_discord_guild_id' );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$ets_discord_user_id = get_user_meta( $user_id , 'ets_discord_user_id', true );
 		$guilds_delete_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$ets_discord_user_id;
@@ -363,7 +363,7 @@ class PMPro_Discord_API {
 		}
 		$access_token = get_user_meta( $user_id, "ets_discord_access_token", true );
 		$previous_role = get_user_meta( $user_id, "ets_discord_role_id", true );
-		$guild_id = get_option( 'discord_guild_id' );
+		$guild_id = get_option( 'ets_discord_guild_id' );
 		$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id', true );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$default_role = get_option('ets_discord_default_role_id');
@@ -404,7 +404,7 @@ class PMPro_Discord_API {
 			exit();
 		}
 		$access_token = get_user_meta( $user_id, "ets_discord_access_token", true );
-		$guild_id = get_option( 'discord_guild_id' );
+		$guild_id = get_option( 'ets_discord_guild_id' );
 		$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id', true );
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$ets_discord_role_id = get_user_meta( $user_id, 'ets_discord_role_id', true );

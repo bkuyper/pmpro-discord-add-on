@@ -442,7 +442,7 @@ class PMPro_Discord_API {
 			$role_delete = $this->delete_discord_role( $user_id );
 			$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 			$discord_default_role = get_option( 'ets_discord_default_role_id' );
-			$upon_cancel = get_option( 'upon_cancel' );
+			$upon_cancel = get_option( 'ets_upon_cancel' );
 			$role_id = '';
 			$curr_level_id = $this->get_current_level_id( $user_id );
 			if ( $level_id )
@@ -496,7 +496,7 @@ class PMPro_Discord_API {
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$role_id = '';
 		$role_id = get_option('ets_discord_default_role_id');
-		$upon_expiry = get_option( 'upon_expiry' );
+		$upon_expiry = get_option( 'ets_upon_expiry' );
 		if ($upon_expiry == 'kick') {
 			$response = $this->delete_member_from_guild( $user_id );
 		} else if ($upon_expiry == 'default') {

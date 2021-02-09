@@ -117,15 +117,15 @@ class Ets_Pmpro_Admin_Setting {
 		}
 
 		if ( $ets_discord_guild_id ) {
-			update_option( 'discord_guild_id', $ets_discord_guild_id );
+			update_option( 'ets_discord_guild_id', $ets_discord_guild_id );
 		}
 
 		if ( $upon_expiry ) {
-			update_option( 'upon_expiry', $upon_expiry );
+			update_option( 'ets_upon_expiry', $upon_expiry );
 		}
 
 		if ( $upon_cancel ) {
-			update_option( 'upon_cancel', $upon_cancel );
+			update_option( 'ets_upon_cancel', $upon_cancel );
 		}
 
 
@@ -144,8 +144,8 @@ class Ets_Pmpro_Admin_Setting {
 		if ( isset( $_POST['flush'] ) ) {
 			delete_option('ets_discord_role_mapping');
 			delete_option('ets_discord_default_role_id');
-			delete_option('upon_expiry');
-			delete_option('upon_cancel');
+			delete_option('ets_upon_expiry');
+			delete_option('ets_upon_cancel');
 		?>
 		<div class="notice notice-success is-dismissible support-success-msg">
 	        <p><?php echo __( 'Your settings flushed successfully.', 'ets_pmpro_discord' ); ?></p>
@@ -169,7 +169,7 @@ class Ets_Pmpro_Admin_Setting {
 		$discord_bot_token = get_option( 'ets_discord_bot_token' );
 		$ets_discord_redirect_url = get_option( 'ets_discord_redirect_url' );
 		$ets_discord_roles = get_option( 'ets_discord_role_mapping' );
-		$ets_discord_guild_id = get_option( 'discord_guild_id' );
+		$ets_discord_guild_id = get_option( 'ets_discord_guild_id' );
 		?>
 		<h1><?php echo __( "PMPRO Discord Add On Settings","ets_pmpro_discord" );?></h1>
 		<div class="tab ets-tabs">

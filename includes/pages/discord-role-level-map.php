@@ -3,8 +3,8 @@ $user_id = get_current_user_id();
 $pmpro_levels = pmpro_getAllLevels( true, true );
 $membership_level = pmpro_getMembershipLevelForUser( $user_id );
 $default_role = get_option( 'ets_discord_default_role_id' );
-$upon_expiry_s = get_option( 'upon_expiry' );
-$upon_cancel_s = get_option( 'upon_cancel' );
+$upon_expiry_s = get_option( 'ets_upon_expiry' );
+$upon_cancel_s = get_option( 'ets_upon_cancel' );
 ?>
 <div class="notice notice-warning ets-notice">
   <p><?php echo __( "Drag and Drop the Discord Roles over to the PMPRO Levels", "ets_pmpro_discord" );?></p>

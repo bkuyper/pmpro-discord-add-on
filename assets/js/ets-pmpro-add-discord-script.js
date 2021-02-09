@@ -103,6 +103,9 @@ jQuery(document).ready(function () {
 	      url: etsPmproParams.admin_ajax,
 	      type: "POST",
 	      data: 'action=ets_clear_logs&',
+	      beforeSend:function () {
+				jQuery('#image-loader').show();
+		   },
 	      success: function(data) {
 	      	if (data.error) {
 	            // handle the error
@@ -110,7 +113,10 @@ jQuery(document).ready(function () {
 	        }else{
 	        	jQuery('.error-log').html("Clear logs Sucesssfully !");
 	        }
-	      }
+	      },
+	      complete: function(){
+			jQuery('#image-loader').hide();
+		  }
 	    });
   	});
 

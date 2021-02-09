@@ -8,6 +8,7 @@
 	fclose($handle);
 ?>
 </div>
+<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
 <div class="clrbtndiv">
 	<input type="button" class="clrbtn btn btn-sm btn-danger" id="clrbtn" name="clrbtn" value="Clear Logs !">
 	<input type="button" value="Refresh" onClick="window.location.reload();">

@@ -135,7 +135,7 @@
 }
 .clrbtndiv{
     max-width: 230px;
-    display: block ruby;
+    display: flex;
 }
 .wp-core-ui .notice.is-dismissible.support-success-msg{
   position: fixed;

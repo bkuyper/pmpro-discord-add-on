@@ -29,7 +29,7 @@ class Ets_Pmpro_Admin_Setting {
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
 
 		wp_register_style(
-		    'ets_pmpro_font_awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css'
+		    'ets_pmpro_font_awesome', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css'
 		); 
 		wp_enqueue_style( 'ets_pmpro_font_awesome' );
 	  
@@ -42,7 +42,7 @@ class Ets_Pmpro_Admin_Setting {
 
         wp_register_script(
 			'ets_fab_icon_script',
-			'https://kit.fontawesome.com/a076d05399.js',
+			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js',
 			array( 'jquery' )
 		);
         wp_enqueue_script( 'ets_fab_icon_script' );

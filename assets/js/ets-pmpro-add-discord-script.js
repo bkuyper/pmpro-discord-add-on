@@ -127,7 +127,7 @@ jQuery(document).ready(function () {
   		location.reload(true);
   	});
 
-  	jQuery( init );
+  	jQuery(init);
 
 	function init() {
 	    jQuery('.makeMeDroppable').droppable( {

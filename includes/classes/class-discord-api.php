@@ -50,7 +50,7 @@ class PMPro_Discord_API {
 		if ( $access_token && (array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) || $default_role) ) {
 			?>
 			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
-			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
+			<span class="ets-spinner"></span>
 		<?php
 		} else if ( !$default_role && !array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) && pmpro_hasMembershipLevel()) {
 		?>
@@ -60,7 +60,7 @@ class PMPro_Discord_API {
 		</div>
 		<?php if($access_token){ ?>
 			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
-			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
+			<span class="ets-spinner"></span>
 		<?php } ?>
 		<?php	
 		} else if ( !pmpro_hasMembershipLevel()) {
@@ -71,7 +71,7 @@ class PMPro_Discord_API {
 		</div>
 		<?php if($access_token){ ?>
 			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
-			<img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
+			<span class="ets-spinner"></span>
 		<?php } ?>
 		<?php
 		} else {
@@ -503,7 +503,6 @@ class PMPro_Discord_API {
 			$role_delete = $this->delete_discord_role( $user_id );
 			$response = $this->change_discord_role_api( $user_id, $role_id );
 		}
-		update_option( 'expire_pmpro_member_1','expire' );
 	}
 	
 

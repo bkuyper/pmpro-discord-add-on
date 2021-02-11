@@ -14,7 +14,7 @@ $upon_cancel_s = get_option( 'ets_upon_cancel' );
     <h2><?php echo __( "Discord Roles", "ets_pmpro_discord" );?></h2>
     <hr>
     <div class="discord-roles">
-      <img id="image-loader" src= <?php echo ETS_PMPRO_DISCORD_URL."assets/images/Spin-Preloader.gif;"?> >
+      <span class="spinner"></span>
     </div>
   </div>
   <div class="ets-column">

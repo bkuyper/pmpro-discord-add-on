@@ -31,7 +31,7 @@ jQuery(document).ready(function () {
 			url:etsPmproParams.admin_ajax,
             data: {'action': 'disconnect_from_discord','user_id':userId},
 			beforeSend:function () {
-				jQuery('#image-loader').show();
+				jQuery(".ets-spinner").addClass("ets-is-active");
 			},
 			success:function (response) {
 				if (response.status == 1) {
@@ -50,7 +50,8 @@ jQuery(document).ready(function () {
 		url:etsPmproParams.admin_ajax,
         data: {'action': 'load_discord_roles'},
         beforeSend:function () {
-			jQuery('#image-loader').show();
+			jQuery(".spinner").addClass("is-active");
+
 		},
 		success:function (response) {
 			if(response.hasOwnProperty('code') && response.code == 50001 && response.message == 'Missing Access'){
@@ -93,7 +94,7 @@ jQuery(document).ready(function () {
 		    });
 		},
 		complete: function(){
-			jQuery('#image-loader').hide();
+			jQuery(".discord-roles .spinner").removeClass("is-active").css({"float":"right"});
 		}
 	});
 
@@ -104,7 +105,7 @@ jQuery(document).ready(function () {
 	      type: "POST",
 	      data: 'action=ets_clear_logs&',
 	      beforeSend:function () {
-				jQuery('#image-loader').show();
+				jQuery(".spinner").addClass("is-active").show();
 		   },
 	      success: function(data) {
 	      	if (data.error) {
@@ -115,7 +116,7 @@ jQuery(document).ready(function () {
 	        }
 	      },
 	      complete: function(){
-			jQuery('#image-loader').hide();
+			jQuery(".spinner").removeClass("is-active").hide();
 		  }
 	    });
   	});

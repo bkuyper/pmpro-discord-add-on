@@ -91,11 +91,6 @@
 .ets-input-group #ets_renewal_mail_body_ifr{
    height: 250px !important;
 }
-#image-loader{
-  height: 50px;
-  height: 50px;
-  display: none;
-}
 .ets-btn{
   padding: 10px 20px;
   color: #fff;
@@ -138,10 +133,9 @@
 .btn-disconnect{
   background-color:#FF0000;
 }
-
-div#ets_logs{
-  background-color: #000;
-  color:#18d26a;
+.clrbtndiv{
+    max-width: 230px;
+    display: block ruby;
 }
 .wp-core-ui .notice.is-dismissible.support-success-msg{
   position: fixed;
@@ -370,6 +364,26 @@ a{
 .discord-roles-col{
   border:2px dashed transparent;
   transition:ease 0.3s;
+}
+.ets-spinner{
+  background: url(../images/spinner.gif) no-repeat;
+  background-size: auto;
+  background-size: 20px 20px;
+  display: inline-block;
+  visibility: hidden;
+  vertical-align: middle;
+  opacity: 0.7;
+  filter: alpha(opacity=70);
+  width: 20px;
+  height: 20px;
+  margin: 4px 10px 0;
+
+}
+.ets-is-active{
+  visibility: visible;
+}
+.discord-roles .spinner{
+  float: none;
 }
 .hoverActive{
 border:2px dashed #444;

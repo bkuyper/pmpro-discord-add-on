@@ -76,7 +76,7 @@ class PMPro_Discord_API {
 		<?php
 		} else {
 		?>
-			<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( "Connect To Discord", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
+			<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( "Connect To Discord", "ets_pmpro_discord" );?> <i class='fab fa-discord'></i></a>
 		<?php
 		}
 		

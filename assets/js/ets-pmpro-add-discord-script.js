@@ -1,40 +1,28 @@
-function openTab(evt, tabName) {
-  var i, ets_tabcontent, ets_tablinks;
-  ets_tabcontent = document.getElementsByClassName("ets_tabcontent");
-  for (i = 0; i < ets_tabcontent.length; i++) {
-    ets_tabcontent[i].style.display = "none";
-  }
-  ets_tablinks = document.getElementsByClassName("ets_tablinks");
-  for (i = 0; i < ets_tablinks.length; i++) {
-    ets_tablinks[i].className = ets_tablinks[i].className.replace(" active", "");
-  }
-  document.getElementById(tabName).style.display = "block";
-  evt.currentTarget.className += " active";
-}
-jQuery(document).ready(function () {
-	jQuery('button[data-toggle="tab"]').on('click', function() {
-		localStorage.setItem('activeTab', jQuery(this).data('identity'));
+jQuery( document ).ready( function( $ ) {
+	
+	$('button[data-toggle="tab"]').on('click', function() {
+		localStorage.setItem('activeTab', $(this).data('identity'));
 	});
 
 	var activeTab = localStorage.getItem('activeTab');
-	if(activeTab){
-		jQuery('.ets-tabs button[data-identity="' + activeTab + '"]').trigger('click');
-	}else{
-		jQuery('.ets-tabs button[data-identity="settings"]').trigger('click');;
+	if ( activeTab ) {
+		$('.ets-tabs button[data-identity="' + activeTab + '"]').trigger('click');
+	} else {
+		$('.ets-tabs button[data-identity="settings"]').trigger('click');;
 	}
-	jQuery('#disconnect-discord').on('click',function (e) {
+	$('#disconnect-discord').on('click',function (e) {
 		e.preventDefault();
-		var userId = jQuery(this).data('user-id');
-		jQuery.ajax({
+		var userId = $(this).data('user-id');
+		$.ajax({
 			type:"POST",
 			dataType:"JSON",
 			url:etsPmproParams.admin_ajax,
             data: {'action': 'disconnect_from_discord','user_id':userId},
 			beforeSend:function () {
-				jQuery(".ets-spinner").addClass("ets-is-active");
+				$(".ets-spinner").addClass("ets-is-active");
 			},
 			success:function (response) {
-				if (response.status == 1) {
+				if ( response.status == 1 ) {
 					location.reload();
 				}
 			},
@@ -44,177 +32,201 @@ jQuery(document).ready(function () {
 		});
 	});
 
-	jQuery.ajax({
+	$.ajax({
 		type:"POST",
 		dataType:"JSON",
 		url:etsPmproParams.admin_ajax,
         data: {'action': 'load_discord_roles'},
         beforeSend:function () {
-			jQuery(".spinner").addClass("is-active");
+			$(".spinner").addClass("is-active");
 
 		},
 		success:function (response) {
-			if(response.hasOwnProperty('code') && response.code == 50001 && response.message == 'Missing Access'){
-				console.log("okkokko");
-				jQuery(".btn-connect-to-bot").show();
-			}else if(response.message == '401: Unauthorized' || response.hasOwnProperty('code')){
-				jQuery("#connect-discord-bot").show().html("Error: Please check all details are correct").addClass('error-bk');
-			}else{
-				jQuery("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');
+			if ( response.hasOwnProperty('code') && response.code == 50001 && response.message == 'Missing Access' ) {
+				$(".btn-connect-to-bot").show();
+			} else if ( response.message == '401: Unauthorized' || response.hasOwnProperty('code') ) {
+				$("#connect-discord-bot").show().html("Error: Please check all details are correct").addClass('error-bk');
+			} else {
+				$("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');
 			}
-			jQuery.each(response, function (key, val) {
+			$.each(response, function (key, val) {
 				var isbot = false;
-				if(val.hasOwnProperty('tags')){	
-					if(val.tags.hasOwnProperty('bot_id')){
+				if ( val.hasOwnProperty('tags') ) {	
+					if ( val.tags.hasOwnProperty('bot_id') ) {
 						isbot = true;
 					}
 				}
-				if(key != 'previous_mapping' && isbot == false && val.name != '@everyone'){
-			        jQuery('.discord-roles').append('<div class="makeMeDraggable" data-role_id="'+val.id+'" >'+val.name+'</div>');
-		        	jQuery('#defaultRole').append('<option value="'+val.id+'" >'+val.name+'</option>');
-			        makeDrag(jQuery('.makeMeDraggable'));
+
+				if ( key != 'previous_mapping' && isbot == false && val.name != '@everyone' ) {
+			        $('.discord-roles').append('<div class="makeMeDraggable" data-role_id="'+val.id+'" >'+val.name+'</div>');
+		        	$('#defaultRole').append('<option value="'+val.id+'" >'+val.name+'</option>');
+			        makeDrag($('.makeMeDraggable'));
 			    }
 		    });
-		    var defaultRole = jQuery('#selected_default_role').val();
-		    if(defaultRole){
-		    	jQuery('#defaultRole option[value='+defaultRole+']').prop('selected', true);
+		    var defaultRole = $('#selected_default_role').val();
+		    if ( defaultRole ) {
+		    	$('#defaultRole option[value='+defaultRole+']').prop('selected', true);
 		    }
-		    if(response.previous_mapping){
+
+		    if ( response.previous_mapping ) {
 		    	var mapjson = response.previous_mapping;
-		    }else{
+		    } else {
 		    	var mapjson = localStorage.getItem('mappingjson');
 		    }
 		    
-		    
-			jQuery("#maaping_json_val").html(mapjson);
-			jQuery.each(JSON.parse(mapjson), function(key,val){
-			    	var arrayofkey = key.split('id_');
-				   jQuery('*[data-level_id="'+arrayofkey[1]+'"]').append(jQuery('*[data-role_id="'+val+'"]')).attr( 'data-drop-role_id', val).find('span').css({'order':'2'});
-				   jQuery('*[data-role_id="'+val+'"]').css({'width':'100%','left': '0','top':'0','margin-bottom':'0px','order':'1'}).attr( 'data-level_id' ,arrayofkey[1]);
+			$("#maaping_json_val").html(mapjson);
+			$.each(JSON.parse(mapjson), function(key,val){
+    			var arrayofkey = key.split('id_');
+		   		$('*[data-level_id="'+arrayofkey[1]+'"]').append($('*[data-role_id="'+val+'"]')).attr( 'data-drop-role_id', val).find('span').css({'order':'2'});
+			   	$('*[data-role_id="'+val+'"]').css({'width':'100%','left': '0','top':'0','margin-bottom':'0px','order':'1'}).attr( 'data-level_id' ,arrayofkey[1]);
 		    });
 		},
 		complete: function(){
-			jQuery(".discord-roles .spinner").removeClass("is-active").css({"float":"right"});
+			$(".discord-roles .spinner").removeClass("is-active").css({"float":"right"});
 		}
 	});
 
-	jQuery('#clrbtn').click(function(e) {
-	    e.preventDefault();
-	      jQuery.ajax({
-	      url: etsPmproParams.admin_ajax,
-	      type: "POST",
-	      data: 'action=ets_clear_logs&',
-	      beforeSend:function () {
-				jQuery(".spinner").addClass("is-active").show();
-		   },
-	      success: function(data) {
-	      	if (data.error) {
-	            // handle the error
-	            alert(data.error.msg);
-	        }else{
-	        	jQuery('.error-log').html("Clear logs Sucesssfully !");
-	        }
-	      },
-	      complete: function(){
-			jQuery(".spinner").removeClass("is-active").hide();
-		  }
+	$('#clrbtn').click(function(e) {
+		e.preventDefault();
+  		$.ajax({
+	      	url: etsPmproParams.admin_ajax,
+	      	type: "POST",
+	      	data: 'action=ets_clear_logs&',
+      		beforeSend:function () {
+				$(".spinner").addClass("is-active").show();
+	   		},
+	      	success: function(data) {
+	      		if ( data.error ) {
+		            // handle the error
+	            	alert(data.error.msg);
+	        	} else {
+	        		$('.error-log').html("Clear logs Sucesssfully !");
+		        }
+	 	 	},
+	  		complete: function(){
+				$(".spinner").removeClass("is-active").hide();
+	  		}
 	    });
   	});
 
-	jQuery("#revertMapping").on('click', function(){
+	$("#revertMapping").on('click', function(){
   		localStorage.removeItem('mapArray');
   		localStorage.removeItem('mappingjson');
   		location.reload(true);
   	});
 
-  	jQuery(init);
-
 	function init() {
-	    jQuery('.makeMeDroppable').droppable( {
-	      drop: handleDropEvent,
-	      hoverClass: 'hoverActive',
+	    $('.makeMeDroppable').droppable( {
+      		drop: handleDropEvent,
+      		hoverClass: 'hoverActive',
 	    } );
-	    jQuery('.discord-roles-col').droppable( {
-	      drop: handlePreviousDropEvent,
-	      hoverClass: 'hoverActive',  
+	    $('.discord-roles-col').droppable( {
+      		drop: handlePreviousDropEvent,
+      		hoverClass: 'hoverActive',  
 	    } );
 	}
+
+	$( init );
+
 	function makeDrag(el) {
-	  // Pass me an object, and I will make it draggable
-	  el.draggable({
-	    revert: "invalid"
-	  });
+  		// Pass me an object, and I will make it draggable
+  		el.draggable({
+    		revert: "invalid"
+  		});
 	}
+
 	function handlePreviousDropEvent( event, ui ) {
 		var draggable = ui.draggable;
-		jQuery(this).append(draggable);
-		jQuery('*[data-drop-role_id="'+draggable.data('role_id')+'"]').attr('data-drop-role_id', '');
+		$(this).append(draggable);
+		$('*[data-drop-role_id="'+draggable.data('role_id')+'"]').attr('data-drop-role_id', '');
 		var oldItems = JSON.parse(localStorage.getItem('mapArray')) || [];
-		jQuery.each(oldItems, function(key,val){
-	    	if(val){
+		$.each(oldItems, function(key,val){
+	    	if ( val ) {
 		    	var arrayofval = val.split(',');
-			    if(arrayofval[0] == 'level_id_'+draggable.data( 'level_id' ) || arrayofval[1] == draggable.data('role_id')){
+			    if ( arrayofval[0] == 'level_id_'+draggable.data( 'level_id' ) || arrayofval[1] == draggable.data('role_id') ) {
 			    	delete oldItems[key];
 			    }
 			}
 	    });
 		var jsonStart = "{";
-	    jQuery.each(oldItems, function(key,val){
-	    	if(val){
+	    $.each(oldItems, function(key,val){
+	    	if ( val ) {
 		    	var arrayofval = val.split(',');
-			    if(arrayofval[0] != 'level_id_'+draggable.data( 'level_id' ) || arrayofval[1] != draggable.data('role_id')){
+			    if( arrayofval[0] != 'level_id_'+draggable.data( 'level_id' ) || arrayofval[1] != draggable.data('role_id') ) {
 			    	jsonStart = jsonStart+'"'+arrayofval[0]+'":'+'"'+arrayofval[1]+'",';
 			    }
 			}
 	    });
 	    localStorage.setItem('mapArray', JSON.stringify(oldItems));
 	    var lastChar = jsonStart.slice(-1);
-	  	if (lastChar == ',') {
+	  	if ( lastChar == ',' ) {
   			jsonStart = jsonStart.slice(0, -1);
 	  	}
+
 	    var mappingjson = jsonStart+'}';
-		jQuery("#maaping_json_val").html(mappingjson);
+		$("#maaping_json_val").html(mappingjson);
 		localStorage.setItem('mappingjson', mappingjson);
 		draggable.css({'width':'100%','left': '0','top':'0','margin-bottom':'10px'});
 	}
+
   	function handleDropEvent( event, ui ) {
 	    var draggable = ui.draggable;
 	   	var newItem = [];
-	   	jQuery('*[data-drop-role_id="'+draggable.data('role_id')+'"]').attr('data-drop-role_id', '');
-	    if(jQuery(this).data( 'drop-role_id') != draggable.data('role_id')){
+	   	$('*[data-drop-role_id="'+draggable.data('role_id')+'"]').attr('data-drop-role_id', '');
+	    if ( $(this).data( 'drop-role_id') != draggable.data('role_id') ) {
 		    var oldItems = JSON.parse(localStorage.getItem('mapArray')) || [];
-			jQuery(this).attr( 'data-drop-role_id', draggable.data('role_id'));
-			draggable.attr( 'data-level_id' ,jQuery(this).data('level_id'));
-		    jQuery.each(oldItems, function(key,val){
-		    	if(val){
+			$(this).attr( 'data-drop-role_id', draggable.data('role_id'));
+			draggable.attr( 'data-level_id' ,$(this).data('level_id'));
+
+		    $.each(oldItems, function(key,val){
+		    	if ( val ) {
 			    	var arrayofval = val.split(',');
-				    if(arrayofval[0] == 'level_id_'+jQuery(this).data( 'level_id' ) || arrayofval[1] == draggable.data('role_id')){
+				    if( arrayofval[0] == 'level_id_'+$(this).data( 'level_id' ) || arrayofval[1] == draggable.data('role_id') ) {
 				    	delete oldItems[key];
 				    }
 				}
 		    });
-		    var newkey = 'level_id_'+jQuery(this).data( 'level_id' );
+
+		    var newkey = 'level_id_'+$(this).data( 'level_id' );
 		    oldItems.push(newkey+','+draggable.data('role_id'));
 		   	var jsonStart = "{";
-		    jQuery.each(oldItems, function(key,val){
-		    	if(val){
+		    $.each(oldItems, function(key,val){
+		    	if ( val ) {
 			    	var arrayofval = val.split(',');
-				    if(arrayofval[0] == 'level_id_'+jQuery(this).data( 'level_id' ) || arrayofval[1] != draggable.data('role_id') && arrayofval[0] != 'level_id_'+jQuery(this).data( 'level_id' ) || arrayofval[1] == draggable.data('role_id')){
+				    if ( arrayofval[0] == 'level_id_'+$(this).data( 'level_id' ) || arrayofval[1] != draggable.data('role_id') && arrayofval[0] != 'level_id_'+$(this).data( 'level_id' ) || arrayofval[1] == draggable.data('role_id') ) {
 				    	jsonStart = jsonStart+'"'+arrayofval[0]+'":'+'"'+arrayofval[1]+'",';
 				    }
 				}
 		    });
+
 		    localStorage.setItem('mapArray', JSON.stringify(oldItems));
 		    var lastChar = jsonStart.slice(-1);
-		  	if (lastChar == ',') {
+		  	if ( lastChar == ',' ) {
 	  			jsonStart = jsonStart.slice(0, -1);
 		  	}
+
 		    var mappingjson = jsonStart+'}';
 		    localStorage.setItem('mappingjson', mappingjson);
-		    jQuery("#maaping_json_val").html(mappingjson);
+		    $("#maaping_json_val").html(mappingjson);
 		}
-		jQuery(this).append(ui.draggable);
-		jQuery(this).find('span').css({'order':'2'});
+
+		$(this).append(ui.draggable);
+		$(this).find('span').css({'order':'2'});
 	    draggable.css({'width':'100%','left': '0','top':'0','margin-bottom':'0px','order':'1'});
   	}
 });
+
+/*js to create tabs*/
+function openTab(evt, tabName) {
+ 	var i, ets_tabcontent, ets_tablinks;
+ 	ets_tabcontent = document.getElementsByClassName("ets_tabcontent");
+ 	for ( i = 0; i < ets_tabcontent.length; i++ ) {
+   		ets_tabcontent[i].style.display = "none";
+ 	}
+	ets_tablinks = document.getElementsByClassName("ets_tablinks");
+	for ( i = 0; i < ets_tablinks.length; i++ ) {
+  		ets_tablinks[i].className = ets_tablinks[i].className.replace(" active", "");
+	}
+	document.getElementById(tabName).style.display = "block";
+	evt.currentTarget.className += " active";
+}

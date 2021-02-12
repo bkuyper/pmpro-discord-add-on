@@ -1,15 +1,30 @@
 jQuery( document ).ready( function( $ ) {
-	
-	$('button[data-toggle="tab"]').on('click', function() {
+	/*create tabs*/
+	$('.ets_tablinks').on('click',function() {
+	 	var i, ets_tabcontent, ets_tablinks;
+	 	ets_tabcontent = jQuery('.ets_tabcontent');
+	 	for ( i = 0; i < ets_tabcontent.length; i++ ) {
+	   		jQuery(ets_tabcontent[i]).css({"display":"none"});
+	 	}
+		ets_tablinks = jQuery('.ets_tablinks');
+		for ( i = 0; i < ets_tablinks.length; i++ ) {
+			jQuery(ets_tablinks[i]).removeClass("active");
+		}
+		jQuery(this).addClass('active');
+		var event = jQuery(this).data('event');
+		jQuery('#'+event).css({"display":"block"});
 		localStorage.setItem('activeTab', $(this).data('identity'));
 	});
 
+	/*check previous active tab*/
 	var activeTab = localStorage.getItem('activeTab');
 	if ( activeTab ) {
 		$('.ets-tabs button[data-identity="' + activeTab + '"]').trigger('click');
 	} else {
 		$('.ets-tabs button[data-identity="settings"]').trigger('click');;
 	}
+
+	/*Call-back on disconnect from discord*/
 	$('#disconnect-discord').on('click',function (e) {
 		e.preventDefault();
 		var userId = $(this).data('user-id');
@@ -32,6 +47,7 @@ jQuery( document ).ready( function( $ ) {
 		});
 	});
 
+	/*Load all roles from discord server*/
 	$.ajax({
 		type:"POST",
 		dataType:"JSON",
@@ -86,6 +102,7 @@ jQuery( document ).ready( function( $ ) {
 		}
 	});
 
+	/*Clear log log call-back*/
 	$('#clrbtn').click(function(e) {
 		e.preventDefault();
   		$.ajax({
@@ -109,12 +126,14 @@ jQuery( document ).ready( function( $ ) {
 	    });
   	});
 
+	/*Flush settings from local storage*/
 	$("#revertMapping").on('click', function(){
   		localStorage.removeItem('mapArray');
   		localStorage.removeItem('mappingjson');
   		location.reload(true);
   	});
 
+	/*Create droppable element*/
 	function init() {
 	    $('.makeMeDroppable').droppable( {
       		drop: handleDropEvent,
@@ -128,6 +147,7 @@ jQuery( document ).ready( function( $ ) {
 
 	$( init );
 
+	/*Create draggable element*/
 	function makeDrag(el) {
   		// Pass me an object, and I will make it draggable
   		el.draggable({
@@ -135,6 +155,7 @@ jQuery( document ).ready( function( $ ) {
   		});
 	}
 
+	/*Handel droppable event for saved mapping*/
 	function handlePreviousDropEvent( event, ui ) {
 		var draggable = ui.draggable;
 		$(this).append(draggable);
@@ -169,6 +190,7 @@ jQuery( document ).ready( function( $ ) {
 		draggable.css({'width':'100%','left': '0','top':'0','margin-bottom':'10px'});
 	}
 
+	/*Handel droppable area for current mapping*/
   	function handleDropEvent( event, ui ) {
 	    var draggable = ui.draggable;
 	   	var newItem = [];
@@ -216,17 +238,4 @@ jQuery( document ).ready( function( $ ) {
   	}
 });
 
-/*js to create tabs*/
-function openTab(evt, tabName) {
- 	var i, ets_tabcontent, ets_tablinks;
- 	ets_tabcontent = document.getElementsByClassName("ets_tabcontent");
- 	for ( i = 0; i < ets_tabcontent.length; i++ ) {
-   		ets_tabcontent[i].style.display = "none";
- 	}
-	ets_tablinks = document.getElementsByClassName("ets_tablinks");
-	for ( i = 0; i < ets_tablinks.length; i++ ) {
-  		ets_tablinks[i].className = ets_tablinks[i].className.replace(" active", "");
-	}
-	document.getElementById(tabName).style.display = "block";
-	evt.currentTarget.className += " active";
-}
+

@@ -1,15 +1,15 @@
 jQuery( document ).ready( function( $ ) {
 	/*create tabs*/
 	$('.ets_tablinks').on('click',function() {
-	 	jQuery('.ets_tabcontent').each(function(){
+	 	$('.ets_tabcontent').each(function(){
 	    	$(this).css({"display":"none"});
 	  	});
-		jQuery('.ets_tablinks').each(function(){
+		$('.ets_tablinks').each(function(){
 	    	$(this).removeClass("active");;
 	  	});
-		jQuery(this).addClass('active');
-		var event = jQuery(this).data('event');
-		jQuery('#'+event).css({"display":"block"});
+		$(this).addClass('active');
+		var event = $(this).data('event');
+		$('#'+event).css({"display":"block"});
 		localStorage.setItem('activeTab', $(this).data('identity'));
 	});
 

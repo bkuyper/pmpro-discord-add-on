@@ -7,7 +7,10 @@ $upon_expiry_s = get_option( 'ets_upon_expiry' );
 $upon_cancel_s = get_option( 'ets_upon_cancel' );
 ?>
 <div class="notice notice-warning ets-notice">
-  <p><?php echo __( "Drag and Drop the Discord Roles over to the PMPRO Levels", "ets_pmpro_discord" );?></p>
+  <p><i class='fas fa-info'></i> <?php echo __( "Drag and Drop the Discord Roles over to the PMPRO Levels", "ets_pmpro_discord" );?></p>
+</div>
+<div class="notice notice-warning ets-notice">
+  <p><i class='fas fa-info'></i> <?php echo __( "Note: Inactive levels will not display", "ets_pmpro_discord" );?></p>
 </div>
 <div class="row-container">
   <div class="ets-column discord-roles-col">

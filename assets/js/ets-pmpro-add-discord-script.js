@@ -1,15 +1,12 @@
 jQuery( document ).ready( function( $ ) {
 	/*create tabs*/
 	$('.ets_tablinks').on('click',function() {
-	 	var i, ets_tabcontent, ets_tablinks;
-	 	ets_tabcontent = jQuery('.ets_tabcontent');
-	 	for ( i = 0; i < ets_tabcontent.length; i++ ) {
-	   		jQuery(ets_tabcontent[i]).css({"display":"none"});
-	 	}
-		ets_tablinks = jQuery('.ets_tablinks');
-		for ( i = 0; i < ets_tablinks.length; i++ ) {
-			jQuery(ets_tablinks[i]).removeClass("active");
-		}
+	 	jQuery('.ets_tabcontent').each(function(){
+	    	$(this).css({"display":"none"});
+	  	});
+		jQuery('.ets_tablinks').each(function(){
+	    	$(this).removeClass("active");;
+	  	});
 		jQuery(this).addClass('active');
 		var event = jQuery(this).data('event');
 		jQuery('#'+event).css({"display":"block"});

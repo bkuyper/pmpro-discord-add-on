@@ -38,7 +38,7 @@
               <div class="right-side-box">
                 <div class="contact-details d-inline-block w-100 mb-4">
                   <div class="top-icon-title d-flex align-items-center w-100">
-                    <i class="fa fa-envelope-o title-icon" aria-hidden="true"></i>
+                    <i class="fas fa-envelope title-icon fa-lg fa-inverse" style="margin-right: 5px" aria-hidden="true"></i>
                     <p><?php echo __( "Email", "ets_pmpro_discord" );?></p>
                   </div>
                   <div class="contact-body mt-3">
@@ -48,7 +48,7 @@
                 </div>
                 <div class="contact-details d-inline-block w-100 mb-4">
                   <div class="top-icon-title d-flex align-items-center w-100">
-                    <i class="fa fa-skype title-icon" aria-hidden="true"></i>
+                    <i class="fab fa-skype title-icon fa-lg fa-inverse" style="margin-right: 5px" aria-hidden="true"></i>
                     <p><?php echo __( "Skype", "ets_pmpro_discord" );?></p>
                   </div>
                   <div class="contact-body mt-3">
@@ -57,7 +57,7 @@
                 </div>
                 <div class="contact-details d-inline-block w-100">
                   <div class="top-icon-title d-flex align-items-center w-100">
-                    <i class="fa fa-whatsapp title-icon" aria-hidden="true"></i>
+                    <i class="fab fa-whatsapp title-icon fa-lg fa-inverse" style="margin-right: 5px" aria-hidden="true"></i>
                     <p><?php echo __( "Whatsapp / Phone", "ets_pmpro_discord" );?></p>
                   </div>
                   <div class="contact-body mt-3">

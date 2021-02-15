@@ -76,10 +76,10 @@ $upon_cancel_s = get_option( 'ets_upon_cancel' );
     <textarea id="maaping_json_val" name="ets_discord_role_mapping"><?php if ( isset( $ets_discord_roles ) )echo stripslashes( $ets_discord_roles );?></textarea>
   </div>
   <div class="bottom-btn">
-    <button type="submit" name="submit" value="ets_submit" class="button">
+    <button type="submit" name="submit" value="ets_submit" class="ets-submit ets-bg-green">
       <?php echo __( "Save Settings", "ets_pmpro_discord" );?>
     </button>
-    <button id="revertMapping" name="flush" class="button">
+    <button id="revertMapping" name="flush" class="ets-submit ets-bg-red">
       <?php echo __( "Flush Settings", "ets_pmpro_discord" );?>
     </button>
   </div>

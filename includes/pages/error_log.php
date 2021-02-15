@@ -10,10 +10,10 @@
 </div>
 <div class="clrbtndiv">
 	<div class="form-group">
-		<input type="button" class="clrbtn btn btn-sm btn-danger" id="clrbtn" name="clrbtn" value="Clear Logs !">
+		<input type="button" class="clrbtn ets-submit ets-bg-red" id="clrbtn" name="clrbtn" value="Clear Logs !">
 		<span class="spinner" style="display: none;"></span>
 	</div>
 	<div class="form-group">
-		<input type="button" value="Refresh" onClick="window.location.reload();">
+		<input type="button" class="ets-submit ets-bg-green" value="Refresh" onClick="window.location.reload();">
 	</div>
 </div>

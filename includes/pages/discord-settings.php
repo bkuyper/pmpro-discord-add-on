@@ -23,8 +23,8 @@
   			placeholder="Discord Guild Id" value="<?php if ( isset( $ets_discord_guild_id ) )echo $ets_discord_guild_id;?>" required>
   	</div>
   	<p>
-  		<button type="submit" name="submit" value="ets_submit" class="ets-submit">
-  			<?php echo __( "Submit", "ets_pmpro_discord" );?>
+  		<button type="submit" name="submit" value="ets_submit" class="ets-submit ets-bg-green">
+  			<?php echo __( "Save Settings", "ets_pmpro_discord" );?>
   		</button>
   		<?php if(get_option('ets_discord_client_id')): ?>
   			<a href="?action=discord-connectToBot" class="ets-btn btn-connect-to-bot" id="connect-discord-bot"><?php echo __( "Connect your Bot", "ets_pmpro_discord" );?> <i class='fab fa-discord'></i></a>

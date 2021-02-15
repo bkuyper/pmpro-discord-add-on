@@ -137,6 +137,14 @@
     max-width: 230px;
     display: flex;
 }
+.ets-bg-red{
+  background-color: #FF0000 !important;
+  color: #000;
+}
+.ets-bg-green{
+  background-color: #00FF00 !important;
+  color: #000;
+}
 .wp-core-ui .notice.is-dismissible.support-success-msg{
   position: fixed;
   top: 10%;

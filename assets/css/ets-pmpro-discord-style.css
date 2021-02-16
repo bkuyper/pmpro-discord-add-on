@@ -116,7 +116,7 @@
   cursor: default;
   text-decoration: none;
   background-color:#77A02E;
-  color: #000;
+  color: #ffffff;
 }
 .ets-btn.error-bk {
   pointer-events: none;
@@ -145,11 +145,11 @@
 }
 .ets-bg-red{
   background-color: #FF0000 !important;
-  color: #000;
+  color: #ffffff;
 }
 .ets-bg-green{
   background-color: #77A02E !important;
-  color: #000;
+  color: #ffffff;
 }
 .wp-core-ui .notice.is-dismissible.support-success-msg{
   position: fixed;

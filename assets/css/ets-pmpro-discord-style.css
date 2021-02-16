@@ -409,14 +409,14 @@ border:2px dashed #444;
   clear: both;
 }
 .makeMeDraggable{
-  background-color: #abb;
+  background-color: #275EE8;
   padding: 10px;
   margin-bottom: 10px;
   width:100%;
   cursor: all-scroll;
 }
 .makeMeDroppable{
-  background-color: #baa;
+  background-color: #77A02E;
   margin-bottom: 10px;
   width:100%;
   display: flex;

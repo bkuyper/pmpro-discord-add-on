@@ -411,6 +411,7 @@ border:2px dashed #444;
 .makeMeDraggable{
   background-color: #275EE8;
   padding: 10px;
+  color: #fff;
   margin-bottom: 10px;
   width:100%;
   cursor: all-scroll;
@@ -418,6 +419,7 @@ border:2px dashed #444;
 .makeMeDroppable{
   background-color: #77A02E;
   margin-bottom: 10px;
+  color: #fff;
   width:100%;
   display: flex;
 }

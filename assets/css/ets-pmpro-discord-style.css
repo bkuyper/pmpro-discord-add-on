@@ -115,7 +115,7 @@
   pointer-events: none;
   cursor: default;
   text-decoration: none;
-  background-color:#00FF00;
+  background-color:#77A02E;
   color: #000;
 }
 .ets-btn.error-bk {
@@ -125,7 +125,7 @@
   background-color:#FF0000;
 }
 .btn-connect{
-  background-color: #00FF00;
+  background-color: #77A02E;
 } 
 .btn-connect-to-bot{
   background-color: #FF0000;
@@ -148,7 +148,7 @@
   color: #000;
 }
 .ets-bg-green{
-  background-color: #00FF00 !important;
+  background-color: #77A02E !important;
   color: #000;
 }
 .wp-core-ui .notice.is-dismissible.support-success-msg{

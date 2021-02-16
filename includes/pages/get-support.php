@@ -29,7 +29,7 @@
                   <textarea name="ets_support_msg" class="form-control contact-textarea" required=""></textarea>
                 </div>
                 <div class="submit-btn d-flex align-items-center w-100 pt-3">
-                  <input type="submit" name="save" id="save" class="btn btn-submit" value="Submit">                  
+                  <input type="submit" name="save" id="save" class="btn btn-submit ets-bg-green" value="Submit">                  
                   <a href="skype:ravi.soni971?chat" class="btn btn-skype ml-auto"><?php echo __( "Skype", "ets_pmpro_discord" );?></a>
                 </div>
               </div>

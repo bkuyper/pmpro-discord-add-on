@@ -137,6 +137,12 @@
     max-width: 230px;
     display: flex;
 }
+.clrbtndiv .form-group{
+  display: flex;
+}
+.clrbtndiv .form-group .spinner{
+  margin: 10px 10px 0;
+}
 .ets-bg-red{
   background-color: #FF0000 !important;
   color: #000;

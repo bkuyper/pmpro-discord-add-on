@@ -194,10 +194,10 @@ class PMPro_Discord_API {
 			}
 		}
 		if( $discord_role ) {
-			$change_response = $this->change_discord_role_api( $user_id, $discord_role );
+			$this->change_discord_role_api( $user_id, $discord_role );
 		}
 		if ( $default_role ) {
-			$assigned_default_role = $this->change_discord_role_api( $user_id, $default_role );
+			$this->change_discord_role_api( $user_id, $default_role );
 		}
 		return $guild_response;
 	}
@@ -283,10 +283,10 @@ class PMPro_Discord_API {
 					if ( array_key_exists('id', $user_body) ) {
 						$ets_discord_user_id = $user_body['id'];
 						if ( $discord_exist_user_id == $ets_discord_user_id ) {
-							$role_delete = $this->delete_discord_role( $user_id );
+							$this->delete_discord_role( $user_id );
 						}
 						update_user_meta( $user_id, "ets_discord_user_id", $ets_discord_user_id );
-						$guild_response = $this->add_discord_member_in_guild( $ets_discord_user_id, $user_id,$access_token );
+						$this->add_discord_member_in_guild( $ets_discord_user_id, $user_id,$access_token );
 					}	
 				}
 			}
@@ -433,9 +433,9 @@ class PMPro_Discord_API {
 			}
 
 			if ($allow_none_member == 'no') {
-				$response = $this->delete_member_from_guild( $user_id );
+				$this->delete_member_from_guild( $user_id );
 			} else if ($allow_none_member == 'yes') {
-				$role_change = $this->change_discord_role_api( $user_id, $role_id );
+				$this->change_discord_role_api( $user_id, $role_id );
 			}
 		}
 	}
@@ -451,7 +451,7 @@ class PMPro_Discord_API {
 			exit();
 		}
 		$user_id = $_POST['user_id'];
-		$response = $this->delete_member_from_guild( $user_id );
+		$this->delete_member_from_guild( $user_id );
 		$event_res = array(
 			"status"  => 1,
 			"message" => "Successfully disconnected"
@@ -476,10 +476,10 @@ class PMPro_Discord_API {
 		$role_id = get_option('ets_discord_default_role_id');
 		$allow_none_member = get_option( 'ets_allow_none_member' );
 		if ($allow_none_member == 'no') {
-			$response = $this->delete_member_from_guild( $user_id );
+			$this->delete_member_from_guild( $user_id );
 		} else if ($allow_none_member == 'yes') {
-			$role_delete = $this->delete_discord_role( $user_id );
-			$response = $this->change_discord_role_api( $user_id, $role_id );
+			$this->delete_discord_role( $user_id );
+			$this->change_discord_role_api( $user_id, $role_id );
 		}
 	}
 	

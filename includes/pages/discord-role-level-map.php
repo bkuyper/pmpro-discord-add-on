@@ -4,7 +4,7 @@ $pmpro_levels = pmpro_getAllLevels( true, true );
 $membership_level = pmpro_getMembershipLevelForUser( $user_id );
 $default_role = get_option( 'ets_discord_default_role_id' );
 $upon_expiry_s = get_option( 'ets_upon_expiry' );
-$upon_cancel_s = get_option( 'ets_upon_cancel' );
+$allow_none_member_s = get_option( 'ets_allow_none_member' );
 ?>
 <div class="notice notice-warning ets-notice">
   <p><i class='fas fa-info'></i> <?php echo __( "Drag and Drop the Discord Roles over to the PMPRO Levels", "ets_pmpro_discord" );?></p>
@@ -44,25 +44,17 @@ $upon_cancel_s = get_option( 'ets_upon_cancel' );
         <td>
           <input type="hidden" id="selected_default_role" value="<?php echo $default_role; ?>">
           <select id="defaultRole" name="defaultRole">
+            <option value="none">-None-</option>
           </select>
           <p class="description"><?php echo __( "This Role will be assigned to all level members", "ets_pmpro_discord" );?></p>
         </td>
       </tr>
       <tr>
-        <th scope="row"><label><?php echo __( "Upon Expiry", "ets_pmpro_discord" );?></label></th>
+        <th scope="row"><label><?php echo __( "Allow none members", "ets_pmpro_discord" );?></label></th>
         <td>
           <fieldset>
-          <label><input type="radio" name="upon_expiry" value="kick" <?php if( empty($upon_expiry_s) || $upon_expiry_s == 'kick' ){ echo 'checked="checked"'; }?> > <span><?php echo __( "Kick Member", "ets_pmpro_discord" );?></span></label><br>
-          <label><input type="radio" name="upon_expiry" value="default" <?php if( $upon_expiry_s == 'default' ){ echo 'checked="checked"'; }?> > <span><?php echo __( "Assign Default Role", "ets_pmpro_discord" );?></span></label>
-          </fieldset>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row"><label><?php echo __( "Upon Cancel", "ets_pmpro_discord" );?></label></th>
-        <td>
-          <fieldset>
-          <label><input type="radio" name="upon_cancel" value="kick"  <?php if( empty($upon_cancel_s) || $upon_cancel_s == 'kick' ){ echo 'checked="checked"'; }?> > <span><?php echo __( "Kick Member", "ets_pmpro_discord" );?></span></label><br>
-          <label><input type="radio" name="upon_cancel" value="default" <?php if( $upon_cancel_s == 'default' ){ echo 'checked="checked"'; }?> > <span><?php echo __( "Assign Default Role", "ets_pmpro_discord" );?></span></label>
+          <label><input type="radio" name="allow_none_member" value="yes"  <?php if( $allow_none_member_s == 'yes' ){ echo 'checked="checked"'; }?> > <span><?php echo __( "Yes", "ets_pmpro_discord" );?></span></label><br>
+          <label><input type="radio" name="allow_none_member" value="no" <?php if( empty($allow_none_member_s) || $allow_none_member_s == 'no' ){ echo 'checked="checked"'; }?> > <span><?php echo __( "No", "ets_pmpro_discord" );?></span></label>
           </fieldset>
         </td>
       </tr>

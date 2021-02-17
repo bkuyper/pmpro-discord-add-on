@@ -94,7 +94,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		$upon_expiry = isset( $_POST['upon_expiry'] ) ? sanitize_textarea_field( trim( $_POST['upon_expiry'] ) ) : '';
 
-		$upon_cancel = isset( $_POST['upon_cancel'] ) ? sanitize_textarea_field( trim( $_POST['upon_cancel'] ) ) : '';
+		$allow_none_member = isset( $_POST['allow_none_member'] ) ? sanitize_textarea_field( trim( $_POST['allow_none_member'] ) ) : '';
 
 		if ( $ets_discord_default_role_id ){
 			update_option( 'ets_discord_default_role_id',$ets_discord_default_role_id );
@@ -124,8 +124,8 @@ class Ets_Pmpro_Admin_Setting {
 			update_option( 'ets_upon_expiry', $upon_expiry );
 		}
 
-		if ( $upon_cancel ) {
-			update_option( 'ets_upon_cancel', $upon_cancel );
+		if ( $allow_none_member ) {
+			update_option( 'ets_allow_none_member', $allow_none_member );
 		}
 
 
@@ -145,7 +145,7 @@ class Ets_Pmpro_Admin_Setting {
 			delete_option('ets_discord_role_mapping');
 			delete_option('ets_discord_default_role_id');
 			delete_option('ets_upon_expiry');
-			delete_option('ets_upon_cancel');
+			delete_option('ets_allow_none_member');
 		?>
 		<div class="notice notice-success is-dismissible support-success-msg">
 	        <p><?php echo __( 'Your settings flushed successfully.', 'ets_pmpro_discord' ); ?></p>

@@ -47,32 +47,10 @@ class PMPro_Discord_API {
 		?>
 		<label><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
 		<?php
-		if ( $access_token && (array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) || $default_role) ) {
+		if ( $access_token ) {
 			?>
 			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
 			<span class="ets-spinner"></span>
-		<?php
-		} else if ( !$default_role && !array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) && pmpro_hasMembershipLevel()) {
-		?>
-		<div class="isa_error">
-		   <i class="fa fa-times-circle"></i>
-		   <?php echo __( "There is no discord role assigned for your level.", "ets_pmpro_discord" );?>
-		</div>
-		<?php if($access_token){ ?>
-			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
-			<span class="ets-spinner"></span>
-		<?php } ?>
-		<?php	
-		} else if ( !pmpro_hasMembershipLevel()) {
-		?>
-		<div class="isa_info">
-		    <i class="fa fa-info-circle"></i>
-		    <?php echo __( "Buy any membership level.", "ets_pmpro_discord" );?>
-		</div>
-		<?php if($access_token){ ?>
-			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
-			<span class="ets-spinner"></span>
-		<?php } ?>
 		<?php
 		} else {
 		?>
@@ -442,21 +420,21 @@ class PMPro_Discord_API {
 			$role_delete = $this->delete_discord_role( $user_id );
 			$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 			$discord_default_role = get_option( 'ets_discord_default_role_id' );
-			$upon_cancel = get_option( 'ets_upon_cancel' );
+			$allow_none_member = get_option( 'ets_allow_none_member' );
 			$role_id = '';
 			$curr_level_id = $this->get_current_level_id( $user_id );
 			if ( $level_id )
 			{
 				$role_id = $ets_discord_role_mapping['level_id_'.$level_id];
 			}
-			if ( $cancel_level && $discord_default_role && $upon_cancel == 'default') {
+			if ( $cancel_level && $discord_default_role) {
 
 				$role_id = $discord_default_role;
 			}
 
-			if ($upon_cancel == 'kick') {
+			if ($allow_none_member == 'no') {
 				$response = $this->delete_member_from_guild( $user_id );
-			} else if ($upon_cancel == 'default') {
+			} else if ($allow_none_member == 'yes') {
 				$role_change = $this->change_discord_role_api( $user_id, $role_id );
 			}
 		}
@@ -496,10 +474,10 @@ class PMPro_Discord_API {
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$role_id = '';
 		$role_id = get_option('ets_discord_default_role_id');
-		$upon_expiry = get_option( 'ets_upon_expiry' );
-		if ($upon_expiry == 'kick') {
+		$allow_none_member = get_option( 'ets_allow_none_member' );
+		if ($allow_none_member == 'no') {
 			$response = $this->delete_member_from_guild( $user_id );
-		} else if ($upon_expiry == 'default') {
+		} else if ($allow_none_member == 'yes') {
 			$role_delete = $this->delete_discord_role( $user_id );
 			$response = $this->change_discord_role_api( $user_id, $role_id );
 		}

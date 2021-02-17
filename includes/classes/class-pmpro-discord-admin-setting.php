@@ -24,7 +24,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		wp_register_style(
 		    'ets_pmpro_add_discord_style',
-		    ETS_PMPRO_DISCORD_URL. 'assets/css/ets-pmpro-discord-style.css'
+		    ETS_PMPRO_DISCORD_URL. 'assets/css/ets-pmpro-discord-style.min.css'
 		); 
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
 

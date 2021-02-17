@@ -51,7 +51,7 @@ jQuery( document ).ready( function( $ ) {
 		url:etsPmproParams.admin_ajax,
         data: {'action': 'load_discord_roles'},
         beforeSend:function () {
-			$(".spinner").addClass("is-active");
+			$(".discord-roles .spinner").addClass("is-active");
 
 		},
 		success:function (response) {

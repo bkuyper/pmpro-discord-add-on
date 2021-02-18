@@ -55,6 +55,7 @@ $allow_none_member_s = get_option( 'ets_allow_none_member' );
           <fieldset>
           <label><input type="radio" name="allow_none_member" value="yes"  <?php if( $allow_none_member_s == 'yes' ){ echo 'checked="checked"'; }?> > <span><?php echo __( "Yes", "ets_pmpro_discord" );?></span></label><br>
           <label><input type="radio" name="allow_none_member" value="no" <?php if( empty($allow_none_member_s) || $allow_none_member_s == 'no' ){ echo 'checked="checked"'; }?> > <span><?php echo __( "No", "ets_pmpro_discord" );?></span></label>
+          <p class="description"><?php echo __( "This setting will apply on Cancel and Expiry of Membership" );?></p>
           </fieldset>
         </td>
       </tr>

@@ -78,6 +78,10 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return None 
 	 */
 	public function ets_setting_page() {
+		if(!current_user_can('administrator')){
+			wp_send_json_error( 'Unauthorized user', 404 );
+			exit();
+		}
 		$ets_discord_client_id = isset( $_POST['ets_discord_client_id'] ) ? sanitize_text_field( trim( $_POST['ets_discord_client_id'] ) ) : '';
 
 		$discord_client_secret = isset( $_POST['ets_discord_client_secret'] ) ? sanitize_text_field( trim( $_POST['ets_discord_client_secret'] ) ) : '';
@@ -207,6 +211,10 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return None 
 	*/
 	public function get_Support_Data() {
+		if(!current_user_can('administrator')){
+			wp_send_json_error( 'Unauthorized user', 404 );
+			exit();
+		}
 		if ( isset( $_POST['save'] ) ) {
 			$etsUserName 	= isset( $_POST['ets_user_name'] ) ? sanitize_text_field( trim( $_POST['ets_user_name'] ) ) : "";
 			$etsUserEmail 	= isset( $_POST['ets_user_email'] ) ? sanitize_text_field( trim( $_POST['ets_user_email'] ) ) : "";

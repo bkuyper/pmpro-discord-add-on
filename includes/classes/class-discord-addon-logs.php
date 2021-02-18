@@ -21,7 +21,7 @@ class PMPro_Discord_Logs {
 	 * @return None
 	 */
 	public function clear_logs() {
-		if( !is_user_logged_in() ) {
+		if( !is_user_logged_in() && !current_user_can('administrator') ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}

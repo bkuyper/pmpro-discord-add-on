@@ -25,7 +25,7 @@ $allow_none_member_s = get_option( 'ets_allow_none_member' );
     <hr>
     <div class="pmpro-levels">
     <?php 
-      foreach ($pmpro_levels as $key => $value) {
+      foreach ( $pmpro_levels as $key => $value ) {
         if($value->allow_signups != 0 ):
         ?>
           <div class="makeMeDroppable" data-level_id="<?php echo $value->id; ?>" ><span><?php echo $value->name; ?></span></div>
@@ -44,7 +44,7 @@ $allow_none_member_s = get_option( 'ets_allow_none_member' );
         <td>
           <input type="hidden" id="selected_default_role" value="<?php echo $default_role; ?>">
           <select id="defaultRole" name="defaultRole">
-            <option value="none">-None-</option>
+            <option value="none"><?php echo __( "-None-", "ets_pmpro_discord" );?></option>
           </select>
           <p class="description"><?php echo __( "This Role will be assigned to all level members", "ets_pmpro_discord" );?></p>
         </td>

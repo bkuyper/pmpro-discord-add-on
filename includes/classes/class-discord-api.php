@@ -85,7 +85,7 @@ class PMPro_Discord_API {
 			exit();
 		}
 		$refresh_token = get_user_meta( $user_id, "ets_discord_refresh_token", true );
-		if($refresh_token){
+		if ( $refresh_token ) {
 			$args = array(
 				'method'=> 'POST',
 			    'headers' => array(
@@ -100,7 +100,7 @@ class PMPro_Discord_API {
 					  'scope' => 'identify email connections'
 			    )    
 			);
-		}else{
+		} else {
 			$args = array(
 				'method'=> 'POST',
 			    'headers' => array(
@@ -116,25 +116,11 @@ class PMPro_Discord_API {
 			    )    
 			);
 		}
+
 		$discord_token_api_url = ETS_DISCORD_API_URL.'oauth2/token';
-		/*$args = array(
-			'method'=> 'POST',
-		    'headers' => array(
-		        'Content-Type' => 'application/x-www-form-urlencoded'
-		    ),
-		    'body' => array(
-	    		'client_id' => get_option( 'ets_discord_client_id' ),
-				  'client_secret' => get_option( 'ets_discord_client_secret' ),
-				  'grant_type' => 'authorization_code',
-				  'code' => $code,
-				  'redirect_uri' =>  get_option( 'ets_discord_redirect_url' ),
-				  'scope' => 'identify email connections'
-		    )    
-		);*/
-
 		$response = wp_remote_post( $discord_token_api_url, $args );
-
 		$responseArr = json_decode( wp_remote_retrieve_body( $response ), true );
+
 		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 			if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 				$Logs = new PMPro_Discord_Logs();
@@ -191,7 +177,7 @@ class PMPro_Discord_API {
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$discord_role = '';
 		$curr_level_id = $this->get_current_level_id( $user_id );
-		if (array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
+		if ( array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
 			$discord_role = $ets_discord_role_mapping[ 'level_id_'.$curr_level_id ];
 		}else if ( $discord_role = '' && $default_role ) {
 			$discord_role = $default_role;
@@ -444,14 +430,14 @@ class PMPro_Discord_API {
 			{
 				$role_id = $ets_discord_role_mapping['level_id_'.$level_id];
 			}
-			if ( $cancel_level && $discord_default_role) {
+			if ( $cancel_level && $discord_default_role ) {
 
 				$role_id = $discord_default_role;
 			}
 
-			if ($allow_none_member == 'no') {
+			if ( $allow_none_member == 'no' ) {
 				$this->delete_member_from_guild( $user_id );
-			} else if ($allow_none_member == 'yes') {
+			} else if ( $allow_none_member == 'yes' ) {
 				$this->change_discord_role_api( $user_id, $role_id );
 			}
 		}
@@ -463,7 +449,7 @@ class PMPro_Discord_API {
 	 * @return Object json response
 	 */
 	public function disconnect_from_discord() {
-		if( !is_user_logged_in() ) {
+		if ( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
@@ -492,7 +478,7 @@ class PMPro_Discord_API {
 		$curr_level_id = $this->get_current_level_id( $user_id );
 		if ($allow_none_member == 'no') {
 			$this->delete_member_from_guild( $user_id );
-		} else if ($allow_none_member == 'yes' && !empty($role_id) && array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping)) {
+		} else if ($allow_none_member == 'yes' && !empty($role_id) && array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
 			$this->delete_discord_role( $user_id );
 			$this->change_discord_role_api( $user_id, $role_id );
 		}

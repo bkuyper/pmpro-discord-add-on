@@ -78,7 +78,7 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return None 
 	 */
 	public function ets_setting_page() {
-		if(!current_user_can('administrator')){
+		if ( !current_user_can('administrator') ) {
 			wp_send_json_error( 'You do not have sufficient rights', 404 );
 			exit();
 		}
@@ -100,15 +100,15 @@ class Ets_Pmpro_Admin_Setting {
 
 		$allow_none_member = isset( $_POST['allow_none_member'] ) ? sanitize_textarea_field( trim( $_POST['allow_none_member'] ) ) : '';
 
-		if ( $ets_discord_default_role_id ){
+		if ( $ets_discord_default_role_id ) {
 			update_option( 'ets_discord_default_role_id',$ets_discord_default_role_id );
 		}
 		
-		if ( $ets_discord_client_id ){
+		if ( $ets_discord_client_id ) {
 			update_option( 'ets_discord_client_id',$ets_discord_client_id );
 		}
 		
-		if ( $discord_client_secret){
+		if ( $discord_client_secret) {
 			update_option( 'ets_discord_client_secret', $discord_client_secret);
 		}
 		
@@ -136,7 +136,7 @@ class Ets_Pmpro_Admin_Setting {
 		if ( $ets_discord_roles ) {
 			$ets_discord_roles = stripslashes( $ets_discord_roles );
 			$save_mapping_status = update_option( 'ets_discord_role_mapping',$ets_discord_roles );
-			if ( ($save_mapping_status || isset( $_POST['ets_discord_role_mapping'] ) ) && !isset( $_POST['flush'] )) {
+			if ( ($save_mapping_status || isset( $_POST['ets_discord_role_mapping'] ) ) && !isset( $_POST['flush'] ) ) {
 			?>
 			<div class="notice notice-success is-dismissible support-success-msg">
 		        <p><?php echo __( 'Your mappings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
@@ -156,7 +156,7 @@ class Ets_Pmpro_Admin_Setting {
 	    </div>
 		<?php	
 		}
-		if ( isset($_POST['submit']) && !isset( $_POST['ets_discord_role_mapping'] ) ) {
+		if ( isset( $_POST['submit'] ) && !isset( $_POST['ets_discord_role_mapping'] ) ) {
  		?>
 	 		<div class="notice notice-success is-dismissible support-success-msg">
 		        <p><?php echo __( 'Your settings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
@@ -211,7 +211,7 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return None 
 	*/
 	public function get_Support_Data() {
-		if(!current_user_can('administrator')){
+		if ( !current_user_can('administrator') ) {
 			wp_send_json_error( 'You do not have sufficient rights', 404 );
 			exit();
 		}
@@ -221,18 +221,18 @@ class Ets_Pmpro_Admin_Setting {
 			$message  		= isset( $_POST['ets_support_msg'] ) ? sanitize_text_field( trim( $_POST['ets_support_msg'] ) ) : "";
 			$sub  			= isset( $_POST['ets_support_subject'] ) ? sanitize_text_field( trim( $_POST['ets_support_subject'] ) ) : "";
 
-			if ( $etsUserName && $etsUserEmail && $message && $sub) {
+			if ( $etsUserName && $etsUserEmail && $message && $sub ) {
 				$subject 		= $sub;
 				$to 			= 'contact@expresstechsoftwares.com';
 				$content 		= "Name: " .$etsUserName."<br>";
 				$content 		.= "Contact Email: " .$etsUserEmail."<br>";
 				$content		.=  "Message: ".$message;
-			  $headers 		= array();
-			  $blogemail 	= get_bloginfo("admin_email");
+			  	$headers 		= array();
+			  	$blogemail 	= get_bloginfo("admin_email");
 				$headers[] 		= 'From: '.get_bloginfo("name") .' <'.$blogemail.'>'."\r\n";
 				$mail = wp_mail( $to, $subject, $content, $headers );
 
-				if($mail){
+				if ( $mail ) {
 				//general admin notice
 				?>
 				<div class="notice notice-success is-dismissible support-success-msg">

@@ -79,13 +79,45 @@ class PMPro_Discord_API {
 	 * @param string $code
 	 * @return object API response
 	 */
-	public function create_discord_auth_token( $code ) {
+	public function create_discord_auth_token( $code, $user_id ) {
 		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 404 );
 			exit();
 		}
+		$refresh_token = get_user_meta( $user_id, "ets_discord_refresh_token", true );
+		if($refresh_token){
+			$args = array(
+				'method'=> 'POST',
+			    'headers' => array(
+			        'Content-Type' => 'application/x-www-form-urlencoded'
+			    ),
+			    'body' => array(
+		    		'client_id' => get_option( 'ets_discord_client_id' ),
+					  'client_secret' => get_option( 'ets_discord_client_secret' ),
+					  'grant_type' => 'refresh_token',
+					  'refresh_token' => $refresh_token,
+					  'redirect_uri' =>  get_option( 'ets_discord_redirect_url' ),
+					  'scope' => 'identify email connections'
+			    )    
+			);
+		}else{
+			$args = array(
+				'method'=> 'POST',
+			    'headers' => array(
+			        'Content-Type' => 'application/x-www-form-urlencoded'
+			    ),
+			    'body' => array(
+		    		'client_id' => get_option( 'ets_discord_client_id' ),
+					  'client_secret' => get_option( 'ets_discord_client_secret' ),
+					  'grant_type' => 'authorization_code',
+					  'code' => $code,
+					  'redirect_uri' =>  get_option( 'ets_discord_redirect_url' ),
+					  'scope' => 'identify email connections'
+			    )    
+			);
+		}
 		$discord_token_api_url = ETS_DISCORD_API_URL.'oauth2/token';
-		$args = array(
+		/*$args = array(
 			'method'=> 'POST',
 		    'headers' => array(
 		        'Content-Type' => 'application/x-www-form-urlencoded'
@@ -98,7 +130,7 @@ class PMPro_Discord_API {
 				  'redirect_uri' =>  get_option( 'ets_discord_redirect_url' ),
 				  'scope' => 'identify email connections'
 		    )    
-		);
+		);*/
 
 		$response = wp_remote_post( $discord_token_api_url, $args );
 
@@ -267,7 +299,7 @@ class PMPro_Discord_API {
 			if ( isset( $_GET['code'] ) ) {
 				$code = $_GET['code'];
 				$user_id = get_current_user_id();
-				$response = $this->create_discord_auth_token( $code );
+				$response = $this->create_discord_auth_token( $code, $user_id );
 				$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
 				
 				$discord_exist_user_id = get_user_meta( $user_id, "ets_discord_user_id", true );
@@ -275,6 +307,10 @@ class PMPro_Discord_API {
 				if ( array_key_exists('access_token', $res_body) ) {				
 					$access_token = $res_body['access_token'];
 					update_user_meta( $user_id, "ets_discord_access_token", $access_token );
+					if ( array_key_exists('refresh_token', $res_body) ) {
+						$refresh_token = $res_body['refresh_token'];
+						update_user_meta( $user_id, "ets_discord_refresh_token", $refresh_token );
+					}
 					$user_body = $this->get_discord_current_user( $access_token );
 					if ( array_key_exists('id', $user_body) ) {
 						$ets_discord_user_id = $user_body['id'];
@@ -310,6 +346,7 @@ class PMPro_Discord_API {
 		$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 		delete_user_meta($user_id,'ets_discord_user_id');
 		delete_user_meta($user_id,'ets_discord_access_token');
+		delete_user_meta($user_id,'ets_discord_refresh_token');
 		delete_user_meta($user_id,'ets_discord_role_id');
 		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 			if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {

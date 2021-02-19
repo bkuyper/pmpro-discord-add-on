@@ -35,7 +35,7 @@ jQuery( document ).ready( function( $ ) {
 			},
 			success:function (response) {
 				if ( response.status == 1 ) {
-					location.reload();
+					window.location = window.location.href.split("?")[0];
 				}
 			},
 			error: function(data) {

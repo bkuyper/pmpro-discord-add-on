@@ -310,7 +310,6 @@ class PMPro_Discord_API {
 						if ( array_key_exists('expires_in', $res_body) ) {
 							$expires_in = $res_body['expires_in'];
 							$date = new DateTime();
-							$token_initiate_time = $date->getTimestamp();
 							$date->add(DateInterval::createFromDateString(''.$expires_in.' seconds')); // adds 674165 secs
 							$token_expiry_time = $date->getTimestamp();
 							update_user_meta( $user_id, "ets_discord_expires_in", $token_expiry_time );

@@ -84,6 +84,7 @@ class PMPro_Discord_API {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
+		$response = '';
 		$refresh_token = get_user_meta( $user_id, "ets_discord_refresh_token", true );
 		$token_expiry_time = get_user_meta( $user_id, "ets_discord_expires_in", true );
 		$discord_token_api_url = ETS_DISCORD_API_URL.'oauth2/token';
@@ -132,7 +133,10 @@ class PMPro_Discord_API {
 				$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
 			}
 		}
+		
 		return $response;
+
+		
 	}
 
 	/**
@@ -291,34 +295,36 @@ class PMPro_Discord_API {
 				$code = $_GET['code'];
 				$user_id = get_current_user_id();
 				$response = $this->create_discord_auth_token( $code, $user_id );
-				$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
-				
-				$discord_exist_user_id = get_user_meta( $user_id, "ets_discord_user_id", true );
-				
-				if ( array_key_exists('access_token', $res_body) ) {				
-					$access_token = $res_body['access_token'];
-					update_user_meta( $user_id, "ets_discord_access_token", $access_token );
-					if ( array_key_exists('refresh_token', $res_body) ) {
-						$refresh_token = $res_body['refresh_token'];
-						update_user_meta( $user_id, "ets_discord_refresh_token", $refresh_token );
-					}
-					if ( array_key_exists('expires_in', $res_body) ) {
-						$expires_in = $res_body['expires_in'];
-						$date = new DateTime();
-						$token_initiate_time = $date->getTimestamp();
-						$date->add(DateInterval::createFromDateString(''.$expires_in.' seconds')); // adds 674165 secs
-						$token_expiry_time = $date->getTimestamp();
-						update_user_meta( $user_id, "ets_discord_expires_in", $token_expiry_time );
-					}
-					$user_body = $this->get_discord_current_user( $access_token );
-					if ( array_key_exists('id', $user_body) ) {
-						$ets_discord_user_id = $user_body['id'];
-						if ( $discord_exist_user_id == $ets_discord_user_id ) {
-							$this->delete_discord_role( $user_id );
+				if ( !empty($response ) ) {
+					$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
+					
+					$discord_exist_user_id = get_user_meta( $user_id, "ets_discord_user_id", true );
+					
+					if ( array_key_exists('access_token', $res_body) ) {				
+						$access_token = $res_body['access_token'];
+						update_user_meta( $user_id, "ets_discord_access_token", $access_token );
+						if ( array_key_exists('refresh_token', $res_body) ) {
+							$refresh_token = $res_body['refresh_token'];
+							update_user_meta( $user_id, "ets_discord_refresh_token", $refresh_token );
 						}
-						update_user_meta( $user_id, "ets_discord_user_id", $ets_discord_user_id );
-						$this->add_discord_member_in_guild( $ets_discord_user_id, $user_id,$access_token );
-					}	
+						if ( array_key_exists('expires_in', $res_body) ) {
+							$expires_in = $res_body['expires_in'];
+							$date = new DateTime();
+							$token_initiate_time = $date->getTimestamp();
+							$date->add(DateInterval::createFromDateString(''.$expires_in.' seconds')); // adds 674165 secs
+							$token_expiry_time = $date->getTimestamp();
+							update_user_meta( $user_id, "ets_discord_expires_in", $token_expiry_time );
+						}
+						$user_body = $this->get_discord_current_user( $access_token );
+						if ( array_key_exists('id', $user_body) ) {
+							$ets_discord_user_id = $user_body['id'];
+							if ( $discord_exist_user_id == $ets_discord_user_id ) {
+								$this->delete_discord_role( $user_id );
+							}
+							update_user_meta( $user_id, "ets_discord_user_id", $ets_discord_user_id );
+							$this->add_discord_member_in_guild( $ets_discord_user_id, $user_id,$access_token );
+						}	
+					}
 				}
 			}
 		}

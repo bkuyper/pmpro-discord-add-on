@@ -36,7 +36,7 @@ class PMPro_Discord_API {
 	 */
 	public function add_connect_discord_button() {
 		if( !is_user_logged_in() ) {
-			wp_send_json_error( 'Unauthorized user', 404 );
+			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}	
 		$user_id = get_current_user_id();
@@ -81,7 +81,7 @@ class PMPro_Discord_API {
 	 */
 	public function create_discord_auth_token( $code, $user_id ) {
 		if( !is_user_logged_in() ) {
-			wp_send_json_error( 'Unauthorized user', 404 );
+			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
 		$refresh_token = get_user_meta( $user_id, "ets_discord_refresh_token", true );
@@ -137,7 +137,7 @@ class PMPro_Discord_API {
 	 */
 	public function get_discord_current_user( $access_token ) {
 		if( !is_user_logged_in() ) {
-			wp_send_json_error( 'Unauthorized user', 404 );
+			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
 		$discord_cuser_api_url = ETS_DISCORD_API_URL.'users/@me';
@@ -168,7 +168,7 @@ class PMPro_Discord_API {
 	 */
 	public function add_discord_member_in_guild( $ets_discord_user_id, $user_id, $access_token ) {
 		if( !is_user_logged_in() ) {
-			wp_send_json_error( 'Unauthorized user', 404 );
+			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
 		$guild_id = get_option( 'ets_discord_guild_id' );
@@ -225,7 +225,7 @@ class PMPro_Discord_API {
 	 */
 	public function load_discord_roles() {
 		if( !is_user_logged_in() ) {
-			wp_send_json_error( 'Unauthorized user', 404 );
+			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
 		$guild_id = get_option( 'ets_discord_guild_id' );
@@ -450,7 +450,7 @@ class PMPro_Discord_API {
 	 */
 	public function disconnect_from_discord() {
 		if ( !is_user_logged_in() ) {
-			wp_send_json_error( 'Unauthorized user', 404 );
+			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
 		$user_id = $_POST['user_id'];

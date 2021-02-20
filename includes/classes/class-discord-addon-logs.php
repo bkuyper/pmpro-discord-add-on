@@ -54,7 +54,7 @@ class PMPro_Discord_Logs {
 	 */
 	public function write_api_response_logs( $responseArr,$backtraceArr,$error_type ) {
 		if( !is_user_logged_in() ) {
-			wp_send_json_error( 'Unauthorized user', 404 );
+			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
 		$error = current_time( 'mysql' );

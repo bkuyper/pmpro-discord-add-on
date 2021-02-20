@@ -85,7 +85,7 @@ class PMPro_Discord_API {
 			exit();
 		}
 		$refresh_token = get_user_meta( $user_id, "ets_discord_refresh_token", true );
-		$token_expiry_time = get_user_meta( $user_id, "ets_discord_refresh_token", true );
+		$token_expiry_time = get_user_meta( $user_id, "ets_discord_expires_in", true );
 		$discord_token_api_url = ETS_DISCORD_API_URL.'oauth2/token';
 		if ( $refresh_token ) {
 			$date = new DateTime();

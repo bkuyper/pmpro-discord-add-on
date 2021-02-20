@@ -85,21 +85,28 @@ class PMPro_Discord_API {
 			exit();
 		}
 		$refresh_token = get_user_meta( $user_id, "ets_discord_refresh_token", true );
+		$token_expiry_time = get_user_meta( $user_id, "ets_discord_refresh_token", true );
+		$discord_token_api_url = ETS_DISCORD_API_URL.'oauth2/token';
 		if ( $refresh_token ) {
-			$args = array(
-				'method'=> 'POST',
-			    'headers' => array(
-			        'Content-Type' => 'application/x-www-form-urlencoded'
-			    ),
-			    'body' => array(
-		    		'client_id' => get_option( 'ets_discord_client_id' ),
-					  'client_secret' => get_option( 'ets_discord_client_secret' ),
-					  'grant_type' => 'refresh_token',
-					  'refresh_token' => $refresh_token,
-					  'redirect_uri' =>  get_option( 'ets_discord_redirect_url' ),
-					  'scope' => 'identify email connections'
-			    )    
-			);
+			$date = new DateTime();
+			$current_timestamp = $date->getTimestamp();
+			if( $current_timestamp > $token_expiry_time ){
+				$args = array(
+					'method'=> 'POST',
+				    'headers' => array(
+				        'Content-Type' => 'application/x-www-form-urlencoded'
+				    ),
+				    'body' => array(
+			    		'client_id' => get_option( 'ets_discord_client_id' ),
+						  'client_secret' => get_option( 'ets_discord_client_secret' ),
+						  'grant_type' => 'refresh_token',
+						  'refresh_token' => $refresh_token,
+						  'redirect_uri' =>  get_option( 'ets_discord_redirect_url' ),
+						  'scope' => 'identify email connections'
+				    )    
+				);
+				$response = wp_remote_post( $discord_token_api_url, $args );
+			}
 		} else {
 			$args = array(
 				'method'=> 'POST',
@@ -115,10 +122,8 @@ class PMPro_Discord_API {
 					  'scope' => 'identify email connections'
 			    )    
 			);
+			$response = wp_remote_post( $discord_token_api_url, $args );
 		}
-
-		$discord_token_api_url = ETS_DISCORD_API_URL.'oauth2/token';
-		$response = wp_remote_post( $discord_token_api_url, $args );
 		$responseArr = json_decode( wp_remote_retrieve_body( $response ), true );
 
 		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
@@ -296,6 +301,14 @@ class PMPro_Discord_API {
 					if ( array_key_exists('refresh_token', $res_body) ) {
 						$refresh_token = $res_body['refresh_token'];
 						update_user_meta( $user_id, "ets_discord_refresh_token", $refresh_token );
+					}
+					if ( array_key_exists('expires_in', $res_body) ) {
+						$expires_in = $res_body['expires_in'];
+						$date = new DateTime();
+						$token_initiate_time = $date->getTimestamp();
+						$date->add(DateInterval::createFromDateString(''.$expires_in.' seconds')); // adds 674165 secs
+						$token_expiry_time = $date->getTimestamp();
+						update_user_meta( $user_id, "ets_discord_expires_in", $token_expiry_time );
 					}
 					$user_body = $this->get_discord_current_user( $access_token );
 					if ( array_key_exists('id', $user_body) ) {

@@ -90,7 +90,7 @@ class PMPro_Discord_API {
 		if ( $refresh_token ) {
 			$date = new DateTime();
 			$current_timestamp = $date->getTimestamp();
-			if( $current_timestamp > $token_expiry_time ){
+			if ( $current_timestamp > $token_expiry_time ) {
 				$args = array(
 					'method'=> 'POST',
 				    'headers' => array(

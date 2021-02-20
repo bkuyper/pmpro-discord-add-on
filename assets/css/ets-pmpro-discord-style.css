@@ -404,7 +404,7 @@ a{
   float: none;
 }
 .hoverActive{
-border:2px dashed #444;
+border:2px dashed #275EE8;
 }
 /* Clear floats after the columns */
 .row-container:after {

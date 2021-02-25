@@ -512,12 +512,12 @@ class PMPro_Discord_API {
 	 */
 	function ets_cron_schedules($schedules){
 		$schedules['hour'] = array(
-	            'interval'  => 3600,
-	            'display'   => __( 'hour', 'ets_pmpro_discord' )
+	            'interval'  => ETS_CRON_TIME_1,
+	            'display'   => __( ETS_CRON_NAME_1, 'ets_pmpro_discord' )
 	    );
 	    $schedules['half_an_hour'] = array(
-	            'interval'  => 1800,
-	            'display'   => __( 'half an hour', 'ets_pmpro_discord' )
+	            'interval'  => ETS_CRON_TIME_2,
+	            'display'   => __( ETS_CRON_NAME_2, 'ets_pmpro_discord' )
 	    );
 	    return $schedules;
 	}

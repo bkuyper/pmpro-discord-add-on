@@ -27,6 +27,16 @@ class PMPro_Discord_API {
 
 		//back ajax function to disconnect from discord
         add_action( 'wp_ajax_nopriv_load_discord_roles', array( $this, 'load_discord_roles' ) );
+
+        //initiate cron event
+        add_action( 'init', array( $this, 'schedule_cron_jobs' ) );
+
+        add_filter( 'cron_schedules', array( $this, 'ets_cron_schedules' ) );
+        add_action( 'ets_cron_pmpro_expired_members', array( $this, 'ets_cron_pmpro_expired_members_hook' ) );
+        add_action( 'ets_cron_pmpro_cancelled_members', array( $this, 'ets_cron_pmpro_cancelled_members_hook' ) );
+        
+
+        /*self::schedule_cron_jobs();*/
 	}
 	
 	/**
@@ -347,6 +357,7 @@ class PMPro_Discord_API {
 		    )   
 		);
 		$guild_response = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
+		update_option( 'ets_discord_delete_member_rate_limit', $guild_response['headers']['x-ratelimit-limit'] );
 		$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 		delete_user_meta($user_id,'ets_discord_user_id');
 		delete_user_meta($user_id,'ets_discord_access_token');
@@ -386,6 +397,7 @@ class PMPro_Discord_API {
 					);
 
 			$response = wp_remote_get( $discord_change_role_api_url, $param);
+			update_option( 'ets_discord_change_role_rate_limit', $response['headers']['x-ratelimit-limit'] );
 			$responseArr = json_decode( wp_remote_retrieve_body( $response ), true );
 			if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 				if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
@@ -393,7 +405,7 @@ class PMPro_Discord_API {
 					$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
 				}
 			}
-			if( ($default_role != $role_id && $role_id != $previous_role) || empty($previous_role) ){
+			if( ($default_role != $role_id && $role_id != $previous_role) || empty($previous_role) ) {
 				update_user_meta( $user_id, 'ets_discord_role_id', $role_id );
 			}
 			return $response;
@@ -424,6 +436,7 @@ class PMPro_Discord_API {
 				);
 			
 			$response = wp_remote_request( $discord_delete_role_api_url, $param );
+			update_option( 'ets_discord_delete_role_rate_limit', $response['headers']['x-ratelimit-limit'] );
 			return $response;
 		}
 	}
@@ -436,28 +449,18 @@ class PMPro_Discord_API {
 	 * @return object API response
 	 */
 	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
-		$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id',true );
-		if ( $ets_discord_user_id ) {
-			$role_delete = $this->delete_discord_role( $user_id );
-			$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
-			$discord_default_role = get_option( 'ets_discord_default_role_id' );
-			$allow_none_member = get_option( 'ets_allow_none_member' );
-			$role_id = '';
-			$curr_level_id = $this->get_current_level_id( $user_id );
-			if ( $level_id )
-			{
-				$role_id = $ets_discord_role_mapping['level_id_'.$level_id];
-			}
-			if ( $cancel_level && $discord_default_role ) {
+		if($cancel_level){
+			$existing_members_queue = get_option('ets_queue_of_pmpro_members');
 
-				$role_id = $discord_default_role;
+			if ( $existing_members_queue ) {
+				$members_queue = unserialize($existing_members_queue);
+			} else {
+				$members_queue = [ "expired" => [], "canceled" => [] ];
 			}
 
-			if ( $allow_none_member == 'no' ) {
-				$this->delete_member_from_guild( $user_id );
-			} else if ( $allow_none_member == 'yes' ) {
-				$this->change_discord_role_api( $user_id, $role_id );
-			}
+			array_push($members_queue["canceled"], $user_id);
+			$members_queue_sr = serialize($members_queue);
+			update_option('ets_queue_of_pmpro_members', $members_queue_sr);
 		}
 	}
 
@@ -488,20 +491,152 @@ class PMPro_Discord_API {
 	 * @return None
 	 */
 	public function pmpro_expiry_membership( $user_id, $level_id ) {
-		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
-		$role_id = '';
-		$role_id = get_option('ets_discord_default_role_id');
-		$allow_none_member = get_option( 'ets_allow_none_member' );
-		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
-		$curr_level_id = $this->get_current_level_id( $user_id );
-		if ($allow_none_member == 'no') {
-			$this->delete_member_from_guild( $user_id );
-		} else if ($allow_none_member == 'yes' && !empty($role_id) && array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
-			$this->delete_discord_role( $user_id );
-			$this->change_discord_role_api( $user_id, $role_id );
+		$existing_members_queue = get_option('ets_queue_of_pmpro_members');
+
+		if ( $existing_members_queue ) {
+			$members_queue = unserialize($existing_members_queue);
+		} else {
+			$members_queue = [ "expired" => [], "canceled" => [] ];
+		}
+		
+		array_push($members_queue["expired"], $user_id);
+		$members_queue_sr = serialize($members_queue);
+		update_option('ets_queue_of_pmpro_members', $members_queue_sr);
+	}
+
+	/**
+	 * Description: time scheduler 
+	 * @param int $user_id
+	 * @param int $level_id
+	 * @return array $schedules
+	 */
+	function ets_cron_schedules($schedules){
+		$schedules['hour'] = array(
+	            'interval'  => 3600,
+	            'display'   => __( 'hour', 'ets_pmpro_discord' )
+	    );
+	    $schedules['half_an_hour'] = array(
+	            'interval'  => 1800,
+	            'display'   => __( 'half an hour', 'ets_pmpro_discord' )
+	    );
+	    return $schedules;
+	}
+
+	/**
+	 * Description: Create cron events  
+	 * @param None
+	 * @return None
+	 */
+	public static function schedule_cron_jobs() {
+		if ( ! wp_next_scheduled( 'ets_cron_pmpro_cancelled_members' ) ) {
+			wp_schedule_event( time(), 'hour', 'ets_cron_pmpro_cancelled_members' );
+		}
+		if ( ! wp_next_scheduled( 'ets_cron_pmpro_expired_members' ) ) {
+			wp_schedule_event( time(), 'half_an_hour', 'ets_cron_pmpro_expired_members' );
 		}
 	}
-	
+
+	/**
+	 * Description: callback for expired members cron events  
+	 * @param None
+	 * @return None
+	 */
+	public function ets_cron_pmpro_expired_members_hook(){
+		$ets_members_queue = unserialize(get_option('ets_queue_of_pmpro_members'));
+		foreach ($ets_members_queue['expired'] as $key => $user_id) {
+			$api_rate_limit = get_option('ets_discord_rate_limit');
+			if($api_rate_limit != 0){
+				$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+				$role_id = '';
+				$role_id = get_option('ets_discord_default_role_id');
+				$allow_none_member = get_option( 'ets_allow_none_member' );
+				$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+				$curr_level_id = $this->get_current_level_id( $user_id );
+				$ets_discord_delete_member_rate_limit = get_option('ets_discord_delete_member_rate_limit');
+				$ets_discord_delete_role_rate_limit = get_option('ets_discord_delete_role_rate_limit');
+				$ets_discord_change_role_rate_limit = get_option('ets_discord_change_role_rate_limit');
+				if ($allow_none_member == 'no') {
+					if (empty($ets_discord_delete_member_rate_limit) || $ets_discord_delete_member_rate_limit > 1) {
+						$this->delete_member_from_guild( $user_id );
+						unset($ets_members_queue['expired'][$key]);
+						$reset_queue = serialize($ets_members_queue);
+						update_option('ets_queue_of_pmpro_members', $reset_queue);
+					} else {
+						break;
+					}
+				} else if ($allow_none_member == 'yes' && !empty($role_id) && array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
+					if (empty($ets_discord_delete_role_rate_limit) || $ets_discord_delete_role_rate_limit > 1) {
+						$this->delete_discord_role( $user_id );
+						unset($ets_members_queue['expired'][$key]);
+						$reset_queue = serialize($ets_members_queue);
+						update_option('ets_queue_of_pmpro_members', $reset_queue);
+					} else {
+						break;
+					}
+					
+					if (empty($ets_discord_change_role_rate_limit) || $ets_discord_change_role_rate_limit > 1) {
+						$this->change_discord_role_api( $user_id, $role_id );
+						unset($ets_members_queue['expired'][$key]);
+						$reset_queue = serialize($ets_members_queue);
+						update_option('ets_queue_of_pmpro_members', $reset_queue);
+					} else {
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Description: callback for canceled members cron events  
+	 * @param None
+	 * @return None
+	 */
+	public function ets_cron_pmpro_cancelled_members_hook(){
+		$ets_members_queue = unserialize(get_option('ets_queue_of_pmpro_members'));
+		foreach ($ets_members_queue['canceled'] as $key => $user_id) {
+			$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id',true );
+			if ( $ets_discord_user_id ) {
+				$role_delete = $this->delete_discord_role( $user_id );
+				$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+				$discord_default_role = get_option( 'ets_discord_default_role_id' );
+				$allow_none_member = get_option( 'ets_allow_none_member' );
+				$role_id = '';
+				$curr_level_id = $this->get_current_level_id( $user_id );
+				if ( $curr_level_id )
+				{
+					$role_id = $ets_discord_role_mapping['level_id_'.$curr_level_id];
+				}
+				if ( $discord_default_role ) {
+
+					$role_id = $discord_default_role;
+				}
+
+				$ets_discord_delete_member_rate_limit = get_option('ets_discord_delete_member_rate_limit');
+				$ets_discord_change_role_rate_limit = get_option('ets_discord_change_role_rate_limit');
+
+				if ( $allow_none_member == 'no' ) {
+					if ( empty($ets_discord_delete_member_rate_limit) || $ets_discord_delete_member_rate_limit > 1) {
+						$this->delete_member_from_guild( $user_id );
+						unset($ets_members_queue['expired'][$key]);
+						$reset_queue = serialize($ets_members_queue);
+						update_option('ets_queue_of_pmpro_members', $reset_queue);
+					} else {
+						break;
+					}
+				} else if ( $allow_none_member == 'yes' ) {
+					if ( empty($ets_discord_change_role_rate_limit) || $ets_discord_change_role_rate_limit > 1) {
+						$this->change_discord_role_api( $user_id, $role_id );
+						unset($ets_members_queue['expired'][$key]);
+						$reset_queue = serialize($ets_members_queue);
+						update_option('ets_queue_of_pmpro_members', $reset_queue);
+					} else {
+						break;
+					}
+				}
+			}
+		}
+	}
 
 }
 new PMPro_Discord_API();

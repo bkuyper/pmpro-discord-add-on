@@ -34,6 +34,8 @@ class PMPro_Discord_API {
         add_filter( 'cron_schedules', array( $this, 'ets_cron_schedules' ) );
         add_action( 'ets_cron_pmpro_expired_members', array( $this, 'ets_cron_pmpro_expired_members_hook' ) );
         add_action( 'ets_cron_pmpro_cancelled_members', array( $this, 'ets_cron_pmpro_cancelled_members_hook' ) );
+        add_action( 'ets_cron_pmpro_reset_rate_limits', array( $this, 'ets_cron_pmpro_reset_rate_limits_hook' ) );
+        
         
 
         /*self::schedule_cron_jobs();*/
@@ -519,6 +521,10 @@ class PMPro_Discord_API {
 	            'interval'  => ETS_CRON_TIME_2,
 	            'display'   => __( ETS_CRON_NAME_2, 'ets_pmpro_discord' )
 	    );
+	    $schedules['every_five_minutes'] = array(
+	            'interval'  => ETS_CRON_TIME_3,
+	            'display'   => __( ETS_CRON_NAME_3, 'ets_pmpro_discord' )
+	    );
 	    return $schedules;
 	}
 
@@ -534,6 +540,9 @@ class PMPro_Discord_API {
 		if ( ! wp_next_scheduled( 'ets_cron_pmpro_expired_members' ) ) {
 			wp_schedule_event( time(), 'half_an_hour', 'ets_cron_pmpro_expired_members' );
 		}
+		if ( ! wp_next_scheduled( 'ets_cron_pmpro_reset_rate_limits' ) ) {
+			wp_schedule_event( time(), 'every_five_minutes', 'ets_cron_pmpro_reset_rate_limits' );
+		}
 	}
 
 	/**
@@ -541,7 +550,7 @@ class PMPro_Discord_API {
 	 * @param None
 	 * @return None
 	 */
-	public function ets_cron_pmpro_expired_members_hook(){
+	public function ets_cron_pmpro_expired_members_hook() {
 		$ets_members_queue = unserialize(get_option('ets_queue_of_pmpro_members'));
 		foreach ($ets_members_queue['expired'] as $key => $user_id) {
 			$api_rate_limit = get_option('ets_discord_rate_limit');
@@ -592,7 +601,7 @@ class PMPro_Discord_API {
 	 * @param None
 	 * @return None
 	 */
-	public function ets_cron_pmpro_cancelled_members_hook(){
+	public function ets_cron_pmpro_cancelled_members_hook() {
 		$ets_members_queue = unserialize(get_option('ets_queue_of_pmpro_members'));
 		foreach ($ets_members_queue['canceled'] as $key => $user_id) {
 			$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id',true );
@@ -638,5 +647,27 @@ class PMPro_Discord_API {
 		}
 	}
 
+	/**
+	 * Description: Reset rate limits  
+	 * @param None
+	 * @return None
+	 */
+	public function ets_cron_pmpro_reset_rate_limits_hook() {
+		$ets_discord_delete_member_rate_limit = get_option('ets_discord_delete_member_rate_limit');
+		$ets_discord_delete_role_rate_limit = get_option('ets_discord_delete_role_rate_limit');
+		$ets_discord_change_role_rate_limit = get_option('ets_discord_change_role_rate_limit');
+
+		if ( $ets_discord_delete_member_rate_limit <= 1 ) {
+			delete_option( 'ets_discord_delete_member_rate_limit' );
+		}
+
+		if ( $ets_discord_delete_role_rate_limit <= 1 ) {
+			delete_option( 'ets_discord_delete_role_rate_limit' );
+		}
+
+		if ( $ets_discord_change_role_rate_limit <= 1 ) {
+			delete_option( 'ets_discord_change_role_rate_limit' );
+		}
+	}
 }
 new PMPro_Discord_API();

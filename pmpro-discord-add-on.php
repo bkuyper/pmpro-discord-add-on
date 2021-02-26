@@ -25,8 +25,10 @@ define('ETS_DISCORD_BOT_PERMISSIONS', 1007414455);
 //Define Cron Time Schedulers
 define('ETS_CRON_NAME_1','Discord Cron hourly cron');
 define('ETS_CRON_NAME_2','Discord Cron half-hourly cron');
+define('ETS_CRON_NAME_3','Discord Cron five minutes cron');
 define('ETS_CRON_TIME_1',3600);
 define('ETS_CRON_TIME_2',1800);
+define('ETS_CRON_TIME_3',300);
 
 /**
  * Class to connect discord app

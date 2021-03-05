@@ -116,11 +116,11 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: Change discord role form pmpro role
+	 * Description: Save canceled member details into members queue
 	 * @param int $level_id
 	 * @param int $user_id
 	 * @param int $cancel_level
-	 * @return object API response
+	 * @return None
 	 */
 	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
 		if($cancel_level){
@@ -139,7 +139,7 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: set discord spectator role on pmpro expiry 
+	 * Description: Save expired member details into members queue 
 	 * @param int $user_id
 	 * @param int $level_id
 	 * @return None

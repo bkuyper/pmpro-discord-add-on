@@ -409,12 +409,11 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_cron_pmpro_expired_members_hook() {
 		$ets_members_queue = unserialize(get_option('ets_queue_of_pmpro_members'));
+		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+		$role_id = '';
+		$role_id = get_option('ets_discord_default_role_id');
+		$allow_none_member = get_option( 'ets_allow_none_member' );
 		foreach ($ets_members_queue['expired'] as $key => $user_id) {
-			$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
-			$role_id = '';
-			$role_id = get_option('ets_discord_default_role_id');
-			$allow_none_member = get_option( 'ets_allow_none_member' );
-			$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 			$curr_level_id = $this->get_current_level_id( $user_id );
 			$ets_discord_delete_member_rate_limit = get_option('ets_discord_delete_member_rate_limit');
 			$ets_discord_delete_role_rate_limit = get_option('ets_discord_delete_role_rate_limit');
@@ -457,13 +456,13 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_cron_pmpro_cancelled_members_hook() {
 		$ets_members_queue = unserialize(get_option('ets_queue_of_pmpro_members'));
+		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+		$discord_default_role = get_option( 'ets_discord_default_role_id' );
+		$allow_none_member = get_option( 'ets_allow_none_member' );
 		foreach ($ets_members_queue['canceled'] as $key => $user_id) {
 			$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id',true );
 			if ( $ets_discord_user_id ) {
 				$role_delete = $this->delete_discord_role( $user_id );
-				$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
-				$discord_default_role = get_option( 'ets_discord_default_role_id' );
-				$allow_none_member = get_option( 'ets_allow_none_member' );
 				$role_id = '';
 				$curr_level_id = $this->get_current_level_id( $user_id );
 				if ( $curr_level_id )

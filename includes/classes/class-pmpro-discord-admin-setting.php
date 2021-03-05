@@ -123,18 +123,24 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return None
 	 */
 	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
-		if($cancel_level){
-			$existing_members_queue = get_option('ets_queue_of_pmpro_members');
 
+		if( !empty($cancel_level) && $cancel_level != 0 ) {
+			$existing_members_queue = get_option('ets_queue_of_pmpro_members');
+			$membership_status = $this->ets_check_current_membership_status($user_id);
 			if ( $existing_members_queue ) {
 				$members_queue = unserialize($existing_members_queue);
 			} else {
 				$members_queue = [ "expired" => [], "canceled" => [] ];
 			}
-
-			array_push($members_queue["canceled"], $user_id);
-			$members_queue_sr = serialize($members_queue);
-			update_option('ets_queue_of_pmpro_members', $members_queue_sr);
+			if ( !in_array($user_id, $members_queue["canceled"]) && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ){
+				if ( in_array($user_id, $members_queue["expired"]) ) {
+					$key = array_search($user_id, $members_queue["expired"]);
+					unset($members_queue["expired"][$key]);
+				}
+				array_push($members_queue["canceled"], $user_id);
+				$members_queue_sr = serialize($members_queue);
+				update_option('ets_queue_of_pmpro_members', $members_queue_sr);
+			}	
 		}
 	}
 
@@ -146,16 +152,21 @@ class Ets_Pmpro_Admin_Setting {
 	 */
 	public function pmpro_expiry_membership( $user_id, $level_id ) {
 		$existing_members_queue = get_option('ets_queue_of_pmpro_members');
-
+		$membership_status = $this->ets_check_current_membership_status($user_id);
 		if ( $existing_members_queue ) {
 			$members_queue = unserialize($existing_members_queue);
 		} else {
 			$members_queue = [ "expired" => [], "canceled" => [] ];
 		}
-		
-		array_push($members_queue["expired"], $user_id);
-		$members_queue_sr = serialize($members_queue);
-		update_option('ets_queue_of_pmpro_members', $members_queue_sr);
+		if ( !in_array($user_id, $members_queue["expired"]) && $membership_status == 'expired') {
+			if ( in_array($user_id, $members_queue["canceled"]) ) {
+				$key = array_search($user_id, $members_queue["canceled"]);
+				unset($members_queue["canceled"][$key]);
+			}
+			array_push($members_queue["expired"], $user_id);
+			$members_queue_sr = serialize($members_queue);
+			update_option('ets_queue_of_pmpro_members', $members_queue_sr);
+		}
 	}
 
 	/**
@@ -236,6 +247,18 @@ class Ets_Pmpro_Admin_Setting {
 	public function ets_add_new_menu() {
 		//Add sub-menu into PmPro main-menus list
 		add_submenu_page( 'pmpro-dashboard', __( 'Discord Settings', 'paid-memberships-pro' ), __( 'Discord Settings', 'paid-memberships-pro' ), 'manage_options', 'discord-options', array( $this, 'ets_setting_page' ) );
+	}
+
+	/**
+	 * Description: get user membership status by id
+	 * @param int $user_id
+	 * @return string $status
+	 */
+	public function ets_check_current_membership_status($user_id) {
+		global $wpdb;
+	    $table_name = $wpdb->prefix."pmpro_memberships_users";
+	    $result = $wpdb->get_results( "SELECT `status` FROM $table_name WHERE `user_id`= $user_id ORDER BY `id` desc limit 1" );
+		return $result[0]->status; 
 	}
 
 	/**

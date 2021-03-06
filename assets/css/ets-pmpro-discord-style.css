@@ -463,4 +463,7 @@ div.mapping-json{
 select#defaultRole{
   border-radius: 0px;
 }
+[data-identity="level-mapping"] {
+  display: none;
+}
 .right-side-box .svg-inline--fa{color:#77a02e}

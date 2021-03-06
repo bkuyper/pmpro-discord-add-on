@@ -60,6 +60,7 @@ jQuery( document ).ready( function( $ ) {
 			} else if ( response.message == '401: Unauthorized' || response.hasOwnProperty('code') ) {
 				$("#connect-discord-bot").show().html("Error: Please check all details are correct").addClass('error-bk');
 			} else {
+				$('.ets-tabs button[data-identity="level-mapping"]').show();
 				$("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');
 			}
 			$.each(response, function (key, val) {

@@ -201,7 +201,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		wp_register_style(
 		    'ets_pmpro_add_discord_style',
-		    ETS_PMPRO_DISCORD_URL. 'assets/css/ets-pmpro-discord-style.min.css'
+		    ETS_PMPRO_DISCORD_URL. 'assets/css/ets-pmpro-discord-style.css'
 		); 
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
 
@@ -212,7 +212,7 @@ class Ets_Pmpro_Admin_Setting {
 	  
 	    wp_register_script(
 			'ets_pmpro_add_discord_script',
-			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.min.js',
+			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.js',
 			array( 'jquery' )
 		);
         wp_enqueue_script( 'ets_pmpro_add_discord_script' );
@@ -250,7 +250,7 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: get user membership status by id
+	 * Description: Get user membership status by user_id
 	 * @param int $user_id
 	 * @return string $status
 	 */

@@ -127,12 +127,13 @@ class Ets_Pmpro_Admin_Setting {
 		if( !empty($cancel_level) && $cancel_level != 0 ) {
 			$existing_members_queue = get_option('ets_queue_of_pmpro_members');
 			$membership_status = $this->ets_check_current_membership_status($user_id);
+			$access_token = get_user_meta( $user_id, "ets_discord_access_token", true );
 			if ( $existing_members_queue ) {
 				$members_queue = unserialize($existing_members_queue);
 			} else {
 				$members_queue = [ "expired" => [], "canceled" => [] ];
 			}
-			if ( !in_array($user_id, $members_queue["canceled"]) && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ){
+			if ( !in_array($user_id, $members_queue["canceled"]) && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ){
 				if ( in_array($user_id, $members_queue["expired"]) ) {
 					$key = array_search($user_id, $members_queue["expired"]);
 					unset($members_queue["expired"][$key]);
@@ -153,12 +154,13 @@ class Ets_Pmpro_Admin_Setting {
 	public function pmpro_expiry_membership( $user_id, $level_id ) {
 		$existing_members_queue = get_option('ets_queue_of_pmpro_members');
 		$membership_status = $this->ets_check_current_membership_status($user_id);
+		$access_token = get_user_meta( $user_id, "ets_discord_access_token", true );
 		if ( $existing_members_queue ) {
 			$members_queue = unserialize($existing_members_queue);
 		} else {
 			$members_queue = [ "expired" => [], "canceled" => [] ];
 		}
-		if ( !in_array($user_id, $members_queue["expired"]) && $membership_status == 'expired') {
+		if ( !in_array($user_id, $members_queue["expired"]) && $membership_status == 'expired' && $access_token ) {
 			if ( in_array($user_id, $members_queue["canceled"]) ) {
 				$key = array_search($user_id, $members_queue["canceled"]);
 				unset($members_queue["canceled"][$key]);

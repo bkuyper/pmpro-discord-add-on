@@ -69,6 +69,5 @@ class PMPro_Discord_Logs {
 			
 		file_put_contents(ETS_PMPRO_DISCORD_PATH.$log_file_name, $error.PHP_EOL , FILE_APPEND | LOCK_EX);
 	}
-
 }
 new PMPro_Discord_Logs();

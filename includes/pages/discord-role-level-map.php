@@ -1,10 +1,10 @@
 <?php
-$user_id = get_current_user_id();
+$user_id = sanitize_text_field( trim( get_current_user_id() ) );
 $pmpro_levels = pmpro_getAllLevels( true, true );
 $membership_level = pmpro_getMembershipLevelForUser( $user_id );
-$default_role = get_option( 'ets_discord_default_role_id' );
-$upon_expiry_s = get_option( 'ets_upon_expiry' );
-$allow_none_member_s = get_option( 'ets_allow_none_member' );
+$default_role = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
+$upon_expiry_s = sanitize_text_field( trim( get_option( 'ets_upon_expiry' ) ) );
+$allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
 ?>
 <div class="notice notice-warning ets-notice">
   <p><i class='fas fa-info'></i> <?php echo __( "Drag and Drop the Discord Roles over to the PMPRO Levels", "ets_pmpro_discord" );?></p>
@@ -61,9 +61,6 @@ $allow_none_member_s = get_option( 'ets_allow_none_member' );
       </tr>
     </tbody>
   </table>
-  
-    
-    
     <br>
   <div class="mapping-json">
     <textarea id="maaping_json_val" name="ets_discord_role_mapping"><?php if ( isset( $ets_discord_roles ) )echo stripslashes( $ets_discord_roles );?></textarea>

@@ -36,8 +36,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			exit();
 		}
 		$response = '';
-		$refresh_token = get_user_meta( $user_id, "ets_discord_refresh_token", true );
-		$token_expiry_time = get_user_meta( $user_id, "ets_discord_expires_in", true );
+		$refresh_token = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_refresh_token", true ) ) );
+		$token_expiry_time = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_expires_in", true ) ) );
 		$discord_token_api_url = ETS_DISCORD_API_URL.'oauth2/token';
 		if ( $refresh_token ) {
 			$date = new DateTime();
@@ -49,11 +49,11 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				        'Content-Type' => 'application/x-www-form-urlencoded'
 				    ),
 				    'body' => array(
-			    		'client_id' => get_option( 'ets_discord_client_id' ),
-						  'client_secret' => get_option( 'ets_discord_client_secret' ),
+			    		'client_id' => sanitize_text_field( trim( get_option( 'ets_discord_client_id' ) ) ),
+						  'client_secret' => sanitize_text_field( trim( get_option( 'ets_discord_client_secret' ) ) ),
 						  'grant_type' => 'refresh_token',
 						  'refresh_token' => $refresh_token,
-						  'redirect_uri' =>  get_option( 'ets_discord_redirect_url' ),
+						  'redirect_uri' => sanitize_text_field( trim( get_option( 'ets_discord_redirect_url' ) ) ),
 						  'scope' => 'identify email connections'
 				    )    
 				);
@@ -66,11 +66,11 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			        'Content-Type' => 'application/x-www-form-urlencoded'
 			    ),
 			    'body' => array(
-		    		'client_id' => get_option( 'ets_discord_client_id' ),
-					  'client_secret' => get_option( 'ets_discord_client_secret' ),
+		    		'client_id' => sanitize_text_field( trim( get_option( 'ets_discord_client_id' ) ) ),
+					  'client_secret' => sanitize_text_field( trim( get_option( 'ets_discord_client_secret' ) ) ),
 					  'grant_type' => 'authorization_code',
 					  'code' => $code,
-					  'redirect_uri' =>  get_option( 'ets_discord_redirect_url' ),
+					  'redirect_uri' =>  sanitize_text_field( trim( get_option( 'ets_discord_redirect_url' ) ) ),
 					  'scope' => 'identify email connections'
 			    )    
 			);
@@ -131,14 +131,14 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
-		$guild_id = get_option( 'ets_discord_guild_id' );
-		$discord_bot_token = get_option( 'ets_discord_bot_token' );
-		$default_role = get_option('ets_discord_default_role_id');
+		$guild_id = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
+		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
+		$default_role = sanitize_text_field( trim( get_option('ets_discord_default_role_id') ) );
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$discord_role = '';
-		$curr_level_id = $this->get_current_level_id( $user_id );
+		$curr_level_id = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
 		if ( array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
-			$discord_role = $ets_discord_role_mapping[ 'level_id_'.$curr_level_id ];
+			$discord_role = sanitize_text_field( trim( $ets_discord_role_mapping[ 'level_id_'.$curr_level_id ] ) );
 		}else if ( $discord_role = '' && $default_role ) {
 			$discord_role = $default_role;
 		}
@@ -188,8 +188,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
-		$guild_id = get_option( 'ets_discord_guild_id' );
-		$discord_bot_token = get_option( 'ets_discord_bot_token' );
+		$guild_id = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
+		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
 		$guilds_delete_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/roles';
 		$guild_args = array(
 			'method'  => 'GET',
@@ -219,8 +219,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		if( is_user_logged_in() ) {
 			if ( isset( $_GET['action'] ) && $_GET['action'] == "discord-login" ) {
 				$params = array(
-				    'client_id' => get_option( 'ets_discord_client_id' ),
-				    'redirect_uri' => get_option( 'ets_discord_redirect_url' ),
+				    'client_id' => sanitize_text_field( trim( get_option( 'ets_discord_client_id' ) ) ),
+				    'redirect_uri' => sanitize_text_field( trim( get_option( 'ets_discord_redirect_url' ) ) ),
 				    'response_type' => 'code',
 				    'scope' => 'identify email connections guilds guilds.join messages.read'
 				  );
@@ -232,10 +232,10 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
 			if ( isset( $_GET['action'] ) && $_GET['action'] == "discord-connectToBot" ) {
 				$params = array(
-				    'client_id' => get_option( 'ets_discord_client_id' ),
+				    'client_id' => sanitize_text_field( trim( get_option( 'ets_discord_client_id' ) ) ),
 				    'permissions' => ETS_DISCORD_BOT_PERMISSIONS,
 				    'scope' => 'bot',
-				    'guild_id' => get_option( 'ets_discord_guild_id' ),
+				    'guild_id' => sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) ),
 				  );
 				$discord_authorise_api_url = ETS_DISCORD_API_URL."oauth2/authorize?".http_build_query( $params );
 
@@ -243,19 +243,19 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				die();
 			}
 			if ( isset( $_GET['code'] ) ) {
-				$code = $_GET['code'];
+				$code = sanitize_text_field( trim( $_GET['code'] ) );
 				$user_id = get_current_user_id();
 				$response = $this->create_discord_auth_token( $code, $user_id );
 				if ( !empty($response ) ) {
 					$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
 					
-					$discord_exist_user_id = get_user_meta( $user_id, "ets_discord_user_id", true );
+					$discord_exist_user_id = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_user_id", true ) ) );
 					
 					if ( array_key_exists('access_token', $res_body) ) {				
-						$access_token = $res_body['access_token'];
+						$access_token = sanitize_text_field( trim( $res_body['access_token'] ) );
 						update_user_meta( $user_id, "ets_discord_access_token", $access_token );
 						if ( array_key_exists('refresh_token', $res_body) ) {
-							$refresh_token = $res_body['refresh_token'];
+							$refresh_token = sanitize_text_field( trim( $res_body['refresh_token'] ) );
 							update_user_meta( $user_id, "ets_discord_refresh_token", $refresh_token );
 						}
 						if ( array_key_exists('expires_in', $res_body) ) {
@@ -267,7 +267,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 						}
 						$user_body = $this->get_discord_current_user( $access_token );
 						if ( array_key_exists('id', $user_body) ) {
-							$ets_discord_user_id = $user_body['id'];
+							$ets_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
 							if ( $discord_exist_user_id == $ets_discord_user_id ) {
 								$this->delete_discord_role( $user_id );
 							}
@@ -286,9 +286,9 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @return object API response
 	 */
 	public function delete_member_from_guild( $user_id ) {
-		$guild_id = get_option( 'ets_discord_guild_id' );
-		$discord_bot_token = get_option( 'ets_discord_bot_token' );
-		$ets_discord_user_id = get_user_meta( $user_id , 'ets_discord_user_id', true );
+		$guild_id = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
+		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
+		$ets_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id , 'ets_discord_user_id', true ) ) );
 		$guilds_delete_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$ets_discord_user_id;
 		$guild_args = array(
 			'method'  => 'DELETE',
@@ -320,12 +320,12 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @return object API response
 	 */
 	public function change_discord_role_api( $user_id, $role_id ) {
-		$access_token = get_user_meta( $user_id, "ets_discord_access_token", true );
-		$previous_role = get_user_meta( $user_id, "ets_discord_role_id", true );
-		$guild_id = get_option( 'ets_discord_guild_id' );
-		$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id', true );
-		$discord_bot_token = get_option( 'ets_discord_bot_token' );
-		$default_role = get_option('ets_discord_default_role_id');
+		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_access_token", true ) ) );
+		$previous_role = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_role_id", true ) ) );
+		$guild_id = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
+		$ets_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id', true ) ) );
+		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
+		$default_role = sanitize_text_field( trim( get_option('ets_discord_default_role_id') ) );
     	$discord_change_role_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$ets_discord_user_id.'/roles/'.$role_id;
 		if ( $access_token && $ets_discord_user_id ) {
 			$param = array(
@@ -359,11 +359,11 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @return object API response 
 	 */
 	public function delete_discord_role( $user_id ) {
-		$access_token = get_user_meta( $user_id, "ets_discord_access_token", true );
-		$guild_id = get_option( 'ets_discord_guild_id' );
-		$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id', true );
-		$discord_bot_token = get_option( 'ets_discord_bot_token' );
-		$ets_discord_role_id = get_user_meta( $user_id, 'ets_discord_role_id', true );
+		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_access_token", true ) ) );
+		$guild_id = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
+		$ets_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id', true ) ) );
+		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
+		$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
 		$discord_delete_role_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/members/'.$ets_discord_user_id.'/roles/'.$ets_discord_role_id;
     
 		if ( $ets_discord_user_id ) {
@@ -392,7 +392,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
-		$user_id = $_POST['user_id'];
+		$user_id = sanitize_text_field( trim( $_POST['user_id'] ) );
 		$this->delete_member_from_guild( $user_id );
 		$event_res = array(
 			"status"  => 1,
@@ -411,14 +411,14 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$ets_members_queue = unserialize(get_option('ets_queue_of_pmpro_members'));
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$role_id = '';
-		$role_id = get_option('ets_discord_default_role_id');
-		$allow_none_member = get_option( 'ets_allow_none_member' );
+		$role_id = sanitize_text_field( trim( get_option('ets_discord_default_role_id') ) );
+		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
 		if ( $ets_members_queue ) {
 			foreach ($ets_members_queue['expired'] as $key => $user_id) {
-			$curr_level_id = $this->get_current_level_id( $user_id );
-			$ets_discord_delete_member_rate_limit = get_option('ets_discord_delete_member_rate_limit');
-			$ets_discord_delete_role_rate_limit = get_option('ets_discord_delete_role_rate_limit');
-			$ets_discord_change_role_rate_limit = get_option('ets_discord_change_role_rate_limit');
+			$curr_level_id = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
+			$ets_discord_delete_member_rate_limit = sanitize_text_field( trim( get_option('ets_discord_delete_member_rate_limit') ) );
+			$ets_discord_delete_role_rate_limit = sanitize_text_field( trim( get_option('ets_discord_delete_role_rate_limit') ) );
+			$ets_discord_change_role_rate_limit = sanitize_text_field( trim( get_option('ets_discord_change_role_rate_limit') ) );
 			if ($allow_none_member == 'no') {
 				if (empty($ets_discord_delete_member_rate_limit) || $ets_discord_delete_member_rate_limit > 1) {
 					$this->delete_member_from_guild( $user_id );
@@ -459,26 +459,26 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	public function ets_cron_pmpro_cancelled_members_hook() {
 		$ets_members_queue = unserialize(get_option('ets_queue_of_pmpro_members'));
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
-		$discord_default_role = get_option( 'ets_discord_default_role_id' );
-		$allow_none_member = get_option( 'ets_allow_none_member' );
+		$discord_default_role = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
+		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
 		if ( $ets_members_queue ) {
 			foreach ($ets_members_queue['canceled'] as $key => $user_id) {
-				$ets_discord_user_id = get_user_meta( $user_id, 'ets_discord_user_id',true );
+				$ets_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id',true ) ) );
 				if ( $ets_discord_user_id ) {
 					$role_delete = $this->delete_discord_role( $user_id );
 					$role_id = '';
-					$curr_level_id = $this->get_current_level_id( $user_id );
+					$curr_level_id = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
 					if ( $curr_level_id )
 					{
-						$role_id = $ets_discord_role_mapping['level_id_'.$curr_level_id];
+						$role_id = sanitize_text_field( trim( $ets_discord_role_mapping['level_id_'.$curr_level_id] ) );
 					}
 					if ( $discord_default_role ) {
 
 						$role_id = $discord_default_role;
 					}
 
-					$ets_discord_delete_member_rate_limit = get_option('ets_discord_delete_member_rate_limit');
-					$ets_discord_change_role_rate_limit = get_option('ets_discord_change_role_rate_limit');
+					$ets_discord_delete_member_rate_limit = sanitize_text_field( trim( get_option('ets_discord_delete_member_rate_limit') ) );
+					$ets_discord_change_role_rate_limit = sanitize_text_field( trim( get_option('ets_discord_change_role_rate_limit') ) );
 
 					if ( $allow_none_member == 'no' ) {
 						if ( empty($ets_discord_delete_member_rate_limit) || $ets_discord_delete_member_rate_limit > 1) {
@@ -503,6 +503,5 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			}
 		}
 	}
-
 }
 new PMPro_Discord_API();

@@ -2,7 +2,7 @@
 	<form accept="#" method="post">
       <div class="ets-container">
         <div class="top-logo-title">
-          <img src="https://www.expresstechsoftwares.com/wp-content/uploads/xcropped-2100-x1500-1.png.pagespeed.ic.DFnEHWLdQO.png" class="img-fluid company-logo" alt="">
+          <img src="<?php echo ETS_PMPRO_DISCORD_URL. 'assets/images/ets-logo.png'; ?>" class="img-fluid company-logo" alt="">
           <h1><?php echo __( "ExpressTech Softwares Solutions Pvt. Ltd.", "ets_pmpro_discord" );?></h1>
           <p><?php echo __( "ExpressTech Software Solution Pvt. Ltd. is the leading Enterprise Wordpress development company.", "ets_pmpro_discord" );?><br>
           <?php echo __( "Contact us for any Wordpress Related development projects.", "ets_pmpro_discord" );?></p>

@@ -73,7 +73,7 @@ $allow_none_member_s = get_option( 'ets_allow_none_member' );
       <?php echo __( "Save Settings", "ets_pmpro_discord" );?>
     </button>
     <button id="revertMapping" name="flush" class="ets-submit ets-bg-red">
-      <?php echo __( "Flush Settings", "ets_pmpro_discord" );?>
+      <?php echo __( "Flush Mappings", "ets_pmpro_discord" );?>
     </button>
   </div>
 </form>

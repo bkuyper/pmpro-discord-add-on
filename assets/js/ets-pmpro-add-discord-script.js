@@ -18,7 +18,7 @@ jQuery( document ).ready( function( $ ) {
 	if ( activeTab ) {
 		$('.ets-tabs button[data-identity="' + activeTab + '"]').trigger('click');
 	} else {
-		$('.ets-tabs button[data-identity="settings"]').trigger('click');;
+		$('.ets-tabs button[data-identity="settings"]').trigger('click');
 	}
 
 	/*Call-back on disconnect from discord*/
@@ -60,8 +60,15 @@ jQuery( document ).ready( function( $ ) {
 			} else if ( response.message == '401: Unauthorized' || response.hasOwnProperty('code') ) {
 				$("#connect-discord-bot").show().html("Error: Please check all details are correct").addClass('error-bk');
 			} else {
-				$('.ets-tabs button[data-identity="level-mapping"]').show();
+				if ( $('.ets-tabs button[data-identity="level-mapping"]').length ) {
+					$('.ets-tabs button[data-identity="level-mapping"]').show();
+				}
 				$("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');
+			}
+			
+			var activeTab = localStorage.getItem('activeTab');
+			if ( $('.ets-tabs button[data-identity="level-mapping"]').length == 0 && activeTab == 'level-mapping' ) {
+				$('.ets-tabs button[data-identity="settings"]').trigger('click');
 			}
 			$.each(response, function (key, val) {
 				var isbot = false;

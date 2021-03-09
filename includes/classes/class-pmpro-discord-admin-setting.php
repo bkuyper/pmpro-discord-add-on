@@ -86,7 +86,7 @@ class Ets_Pmpro_Admin_Setting {
 		$default_role = sanitize_text_field( trim( get_option('ets_discord_default_role_id') ) );
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		?>
-		<label><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
+		<label class="ets-connection-lbl"><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
 		<?php
 		if ( $access_token ) {
 			?>

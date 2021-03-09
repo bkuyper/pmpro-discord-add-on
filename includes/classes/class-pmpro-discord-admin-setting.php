@@ -85,7 +85,7 @@ class Ets_Pmpro_Admin_Setting {
 		$curr_level_id = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
 		$default_role = sanitize_text_field( trim( get_option('ets_discord_default_role_id') ) );
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
-		if( $this->Check_saved_settings_status() ){
+		if ( $this->Check_saved_settings_status() ) {
 		?>
 			<label class="ets-connection-lbl"><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
 		<?php
@@ -449,7 +449,7 @@ class Ets_Pmpro_Admin_Setting {
 		$ets_discord_redirect_url = get_option( 'ets_discord_redirect_url' );
 		$ets_discord_guild_id = get_option( 'ets_discord_guild_id' );
 
-		if ( $ets_discord_client_id && $ets_discord_client_secret && $ets_discord_bot_token && $ets_discord_redirect_url && $ets_discord_guild_id) {
+		if ( $ets_discord_client_id && $ets_discord_client_secret && $ets_discord_bot_token && $ets_discord_redirect_url && $ets_discord_guild_id ) {
 			$status = true;
 		}else{
 			$status = false;

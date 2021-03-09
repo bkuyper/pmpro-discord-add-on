@@ -63,11 +63,6 @@ jQuery( document ).ready( function( $ ) {
 				if ( $('.ets-tabs button[data-identity="level-mapping"]').length ) {
 					$('.ets-tabs button[data-identity="level-mapping"]').show();
 				}
-				if ($('.btn-connect').length) {
-					$('.ets-connection-lbl').show();
-					$('.btn-connect').show();
-				}
-
 				$("#connect-discord-bot").show().html("Bot Connected <i class='fab fa-discord'></i>").addClass('not-active');
 			}
 			

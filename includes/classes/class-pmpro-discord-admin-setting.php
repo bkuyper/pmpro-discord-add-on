@@ -85,18 +85,20 @@ class Ets_Pmpro_Admin_Setting {
 		$curr_level_id = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
 		$default_role = sanitize_text_field( trim( get_option('ets_discord_default_role_id') ) );
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+		if( $this->Check_saved_settings_status() ){
 		?>
-		<label class="ets-connection-lbl"><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
+			<label class="ets-connection-lbl"><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
 		<?php
-		if ( $access_token ) {
+			if ( $access_token ) {
+				?>
+				<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
+				<span class="ets-spinner"></span>
+			<?php
+			} else {
 			?>
-			<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
-			<span class="ets-spinner"></span>
-		<?php
-		} else {
-		?>
-			<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( "Connect To Discord", "ets_pmpro_discord" );?> <i class='fab fa-discord'></i></a>
-		<?php
+				<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( "Connect To Discord", "ets_pmpro_discord" );?> <i class='fab fa-discord'></i></a>
+			<?php
+			}
 		}
 		
 	}
@@ -433,6 +435,27 @@ class Ets_Pmpro_Admin_Setting {
 				}
 			} 	
 		}
+	}
+
+	/**
+	 * Description: To check settings values saved or not
+	 * @param None
+	 * @return boolean $status 
+	*/
+	public function Check_saved_settings_status() {
+		$ets_discord_client_id = get_option( 'ets_discord_client_id' );
+		$ets_discord_client_secret = get_option( 'ets_discord_client_secret' );
+		$ets_discord_bot_token = get_option( 'ets_discord_bot_token' );
+		$ets_discord_redirect_url = get_option( 'ets_discord_redirect_url' );
+		$ets_discord_guild_id = get_option( 'ets_discord_guild_id' );
+
+		if ( $ets_discord_client_id && $ets_discord_client_secret && $ets_discord_bot_token && $ets_discord_redirect_url && $ets_discord_guild_id) {
+			$status = true;
+		}else{
+			$status = false;
+		}
+
+		return $status; 	
 	}
 }
 new Ets_Pmpro_Admin_Setting();

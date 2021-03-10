@@ -125,10 +125,6 @@
 }
 .btn-connect{
   background-color: #77A02E;
-  display: none;
-}
-.ets-connection-lbl{
-  display: none;
 }
 .btn-connect-to-bot{
   background-color: #FF0000;

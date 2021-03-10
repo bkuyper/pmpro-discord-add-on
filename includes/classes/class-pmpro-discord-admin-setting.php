@@ -37,8 +37,8 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return None
 	 */
 	public static function schedule_cron_jobs() {
-		if ( ! wp_next_scheduled( 'ets_cron_pmpro_cancelled_members' ) ) {
-			wp_schedule_event( time(), 'ets_discord_time_1', 'ets_cron_pmpro_cancelled_members' );
+		if ( ! wp_next_scheduled( 'ets_cron_pmpro_canceled_members' ) ) {
+			wp_schedule_event( time(), 'ets_discord_time_1', 'ets_cron_pmpro_canceled_members' );
 		}
 		if ( ! wp_next_scheduled( 'ets_cron_pmpro_expired_members' ) ) {
 			wp_schedule_event( time(), 'ets_discord_time_2', 'ets_cron_pmpro_expired_members' );
@@ -135,7 +135,7 @@ class Ets_Pmpro_Admin_Setting {
 			} else {
 				$members_queue = [ "expired" => [], "canceled" => [] ];
 			}
-			if ( !in_array($user_id, $members_queue["canceled"]) && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ){
+			if ( !in_array($user_id, $members_queue["canceled"]) && $access_token && ( $membership_status == 'canceled' || $membership_status == 'admin_canceled' ) ){
 				if ( in_array($user_id, $members_queue["expired"]) ) {
 					$key = array_search($user_id, $members_queue["expired"]);
 					unset($members_queue["expired"][$key]);
@@ -237,7 +237,8 @@ class Ets_Pmpro_Admin_Setting {
 		
 	 	$script_params = array(
 			'admin_ajax' 		=> admin_url( 'admin-ajax.php' ),
-			'permissions_const' => ETS_DISCORD_BOT_PERMISSIONS
+			'permissions_const' => ETS_DISCORD_BOT_PERMISSIONS,
+			'is_admin' => is_admin()
 		);  
 
 	  	wp_localize_script( 'ets_pmpro_add_discord_script', 'etsPmproParams', $script_params ); 

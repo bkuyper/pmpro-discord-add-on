@@ -9,20 +9,13 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
 		//front ajax function to disconnect from discord
 		add_action( 'wp_ajax_disconnect_from_discord', array( $this, 'disconnect_from_discord' ) );
-
-		//back ajax function to disconnect from discord
-        add_action( 'wp_ajax_nopriv_disconnect_from_discord', array( $this, 'disconnect_from_discord' ) );
-
+		
         //front ajax function to disconnect from discord
 		add_action( 'wp_ajax_load_discord_roles', array( $this, 'load_discord_roles' ) );
-
-		//back ajax function to disconnect from discord
-        add_action( 'wp_ajax_nopriv_load_discord_roles', array( $this, 'load_discord_roles' ) );
-
         
         add_action( 'ets_cron_pmpro_expired_members', array( $this, 'ets_cron_pmpro_expired_members_hook' ) );
         
-        add_action( 'ets_cron_pmpro_cancelled_members', array( $this, 'ets_cron_pmpro_cancelled_members_hook' ) );
+        add_action( 'ets_cron_pmpro_canceled_members', array( $this, 'ets_cron_pmpro_canceled_members_hook' ) );
 	}
 
 	/**
@@ -184,8 +177,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @return object API response
 	 */
 	public function load_discord_roles() {
-		if( !is_user_logged_in() ) {
-			wp_send_json_error( 'Unauthorized user', 401 );
+		if ( !current_user_can('administrator') ) {
+			wp_send_json_error( 'You do not have sufficient rights', 404 );
 			exit();
 		}
 		$guild_id = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
@@ -456,7 +449,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @param None
 	 * @return None
 	 */
-	public function ets_cron_pmpro_cancelled_members_hook() {
+	public function ets_cron_pmpro_canceled_members_hook() {
 		$ets_members_queue = unserialize(get_option('ets_queue_of_pmpro_members'));
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$discord_default_role = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
@@ -483,7 +476,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					if ( $allow_none_member == 'no' ) {
 						if ( empty($ets_discord_delete_member_rate_limit) || $ets_discord_delete_member_rate_limit > 1) {
 							$this->delete_member_from_guild( $user_id );
-							unset($ets_members_queue['expired'][$key]);
+							unset($ets_members_queue['canceled'][$key]);
 							$reset_queue = serialize($ets_members_queue);
 							update_option('ets_queue_of_pmpro_members', $reset_queue);
 						} else {
@@ -492,7 +485,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					} else if ( $allow_none_member == 'yes' ) {
 						if ( empty($ets_discord_change_role_rate_limit) || $ets_discord_change_role_rate_limit > 1) {
 							$this->change_discord_role_api( $user_id, $role_id );
-							unset($ets_members_queue['expired'][$key]);
+							unset($ets_members_queue['canceled'][$key]);
 							$reset_queue = serialize($ets_members_queue);
 							update_option('ets_queue_of_pmpro_members', $reset_queue);
 						} else {

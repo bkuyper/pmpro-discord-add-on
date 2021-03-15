@@ -109,12 +109,9 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return int $curr_level_id
 	 */
 	public function get_current_level_id( $user_id ) {
-		if ( is_user_logged_in() && function_exists( 'pmpro_hasMembershipLevel' ) && pmpro_hasMembershipLevel() ) {
-			global $current_user;
 			$membership_level = pmpro_getMembershipLevelForUser( $user_id );
 			$curr_level_id = sanitize_text_field( trim( $membership_level->ID ) );
 			return $curr_level_id;
-		}
 	}
 
 	/**
@@ -138,7 +135,7 @@ class Ets_Pmpro_Admin_Setting {
 			if ( !in_array($user_id, $members_queue["canceled"]) && $access_token && ( $membership_status == 'canceled' || $membership_status == 'admin_canceled' ) ){
 				if ( in_array($user_id, $members_queue["expired"]) ) {
 					$key = array_search($user_id, $members_queue["expired"]);
-					unset($members_queue["expired"][$key]);
+					unset( $members_queue["expired"][$key] );
 				}
 				array_push($members_queue["canceled"], $user_id);
 				$members_queue_sr = serialize($members_queue);
@@ -165,7 +162,7 @@ class Ets_Pmpro_Admin_Setting {
 		if ( !in_array($user_id, $members_queue["expired"]) && $membership_status == 'expired' && $access_token ) {
 			if ( in_array($user_id, $members_queue["canceled"]) ) {
 				$key = array_search($user_id, $members_queue["canceled"]);
-				unset($members_queue["canceled"][$key]);
+				unset( $members_queue["canceled"][$key] );
 			}
 			array_push($members_queue["expired"], $user_id);
 			$members_queue_sr = serialize($members_queue);

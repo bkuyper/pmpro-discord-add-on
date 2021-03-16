@@ -15,7 +15,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
         
         add_action( 'ets_cron_pmpro_expired_members', array( $this, 'ets_cron_pmpro_expired_members_hook' ) );
         
-        add_action( 'ets_cron_pmpro_canceled_members', array( $this, 'ets_cron_pmpro_canceled_members_hook' ) );
+        add_action( 'ets_cron_pmpro_cancelled_members', array( $this, 'ets_cron_pmpro_cancelled_members_hook' ) );
 	}
 
 	/**
@@ -445,17 +445,17 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: callback for canceled members cron events  
+	 * Description: callback for cancelled members cron events  
 	 * @param None
 	 * @return None
 	 */
-	public function ets_cron_pmpro_canceled_members_hook() {
+	public function ets_cron_pmpro_cancelled_members_hook() {
 		$ets_members_queue = unserialize(get_option('ets_queue_of_pmpro_members'));
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$discord_default_role = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
 		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
 		if ( $ets_members_queue ) {
-			foreach ($ets_members_queue['canceled'] as $key => $user_id) {
+			foreach ($ets_members_queue['cancelled'] as $key => $user_id) {
 				$ets_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id',true ) ) );
 				if ( $ets_discord_user_id ) {
 					$role_delete = $this->delete_discord_role( $user_id );
@@ -476,7 +476,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					if ( $allow_none_member == 'no' ) {
 						if ( empty($ets_discord_delete_member_rate_limit) || $ets_discord_delete_member_rate_limit > 1) {
 							$this->delete_member_from_guild( $user_id );
-							unset( $ets_members_queue['canceled'][$key] );
+							unset( $ets_members_queue['cancelled'][$key] );
 							$reset_queue = serialize($ets_members_queue);
 							update_option('ets_queue_of_pmpro_members', $reset_queue);
 						} else {
@@ -485,7 +485,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					} else if ( $allow_none_member == 'yes' ) {
 						if ( empty($ets_discord_change_role_rate_limit) || $ets_discord_change_role_rate_limit > 1) {
 							$this->change_discord_role_api( $user_id, $role_id );
-							unset( $ets_members_queue['canceled'][$key] );
+							unset( $ets_members_queue['cancelled'][$key] );
 							$reset_queue = serialize($ets_members_queue);
 							update_option('ets_queue_of_pmpro_members', $reset_queue);
 						} else {

@@ -37,8 +37,8 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return None
 	 */
 	public static function schedule_cron_jobs() {
-		if ( ! wp_next_scheduled( 'ets_cron_pmpro_canceled_members' ) ) {
-			wp_schedule_event( time(), 'ets_discord_time_1', 'ets_cron_pmpro_canceled_members' );
+		if ( ! wp_next_scheduled( 'ets_cron_pmpro_cancelled_members' ) ) {
+			wp_schedule_event( time(), 'ets_discord_time_1', 'ets_cron_pmpro_cancelled_members' );
 		}
 		if ( ! wp_next_scheduled( 'ets_cron_pmpro_expired_members' ) ) {
 			wp_schedule_event( time(), 'ets_discord_time_2', 'ets_cron_pmpro_expired_members' );
@@ -115,7 +115,7 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: Save canceled member details into members queue
+	 * Description: Save cancelled member details into members queue
 	 * @param int $level_id
 	 * @param int $user_id
 	 * @param int $cancel_level
@@ -130,14 +130,14 @@ class Ets_Pmpro_Admin_Setting {
 			if ( $existing_members_queue ) {
 				$members_queue = unserialize($existing_members_queue);
 			} else {
-				$members_queue = [ "expired" => [], "canceled" => [] ];
+				$members_queue = [ "expired" => [], "cancelled" => [] ];
 			}
-			if ( !in_array($user_id, $members_queue["canceled"]) && $access_token && ( $membership_status == 'canceled' || $membership_status == 'admin_canceled' ) ){
+			if ( !in_array($user_id, $members_queue["cancelled"]) && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ){
 				if ( in_array($user_id, $members_queue["expired"]) ) {
 					$key = array_search($user_id, $members_queue["expired"]);
 					unset( $members_queue["expired"][$key] );
 				}
-				array_push($members_queue["canceled"], $user_id);
+				array_push($members_queue["cancelled"], $user_id);
 				$members_queue_sr = serialize($members_queue);
 				update_option('ets_queue_of_pmpro_members', $members_queue_sr);
 			}	
@@ -157,12 +157,12 @@ class Ets_Pmpro_Admin_Setting {
 		if ( $existing_members_queue ) {
 			$members_queue = unserialize($existing_members_queue);
 		} else {
-			$members_queue = [ "expired" => [], "canceled" => [] ];
+			$members_queue = [ "expired" => [], "cancelled" => [] ];
 		}
 		if ( !in_array($user_id, $members_queue["expired"]) && $membership_status == 'expired' && $access_token ) {
-			if ( in_array($user_id, $members_queue["canceled"]) ) {
-				$key = array_search($user_id, $members_queue["canceled"]);
-				unset( $members_queue["canceled"][$key] );
+			if ( in_array($user_id, $members_queue["cancelled"]) ) {
+				$key = array_search($user_id, $members_queue["cancelled"]);
+				unset( $members_queue["cancelled"][$key] );
 			}
 			array_push($members_queue["expired"], $user_id);
 			$members_queue_sr = serialize($members_queue);

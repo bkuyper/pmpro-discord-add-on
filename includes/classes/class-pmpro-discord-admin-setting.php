@@ -82,7 +82,6 @@ class Ets_Pmpro_Admin_Setting {
 		}	
 		$user_id = sanitize_text_field( trim( get_current_user_id() ) );
 		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_access_token", true ) ) );
-		$curr_level_id = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
 		$default_role = sanitize_text_field( trim( get_option('ets_discord_default_role_id') ) );
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		if ( $this->Check_saved_settings_status() ) {
@@ -122,16 +121,15 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return None
 	 */
 	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
-
+		$existing_members_queue = sanitize_text_field( trim( get_option('ets_queue_of_pmpro_members') ) );
+		$membership_status = sanitize_text_field( trim( $this->ets_check_current_membership_status($user_id) ) );
+		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_access_token", true ) ) );
+		if ( $existing_members_queue ) {
+			$members_queue = unserialize($existing_members_queue);
+		} else {
+			$members_queue = [ "expired" => [], "cancelled" => [] ];
+		}
 		if( !empty($cancel_level) && $cancel_level != 0 ) {
-			$existing_members_queue = sanitize_text_field( trim( get_option('ets_queue_of_pmpro_members') ) );
-			$membership_status = sanitize_text_field( trim( $this->ets_check_current_membership_status($user_id) ) );
-			$access_token = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_access_token", true ) ) );
-			if ( $existing_members_queue ) {
-				$members_queue = unserialize($existing_members_queue);
-			} else {
-				$members_queue = [ "expired" => [], "cancelled" => [] ];
-			}
 			if ( !in_array($user_id, $members_queue["cancelled"]) && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ){
 				if ( in_array($user_id, $members_queue["expired"]) ) {
 					$key = array_search($user_id, $members_queue["expired"]);
@@ -141,6 +139,15 @@ class Ets_Pmpro_Admin_Setting {
 				$members_queue_sr = serialize($members_queue);
 				update_option('ets_queue_of_pmpro_members', $members_queue_sr);
 			}	
+		}else{ 
+			if ( in_array($user_id, $members_queue["cancelled"]) ){
+				$key = array_search($user_id, $members_queue["cancelled"]);
+				unset( $members_queue["cancelled"][$key] );
+			}
+			if ( in_array($user_id, $members_queue["expired"]) ){
+				$key = array_search($user_id, $members_queue["expired"]);
+				unset( $members_queue["expired"][$key] );
+			}
 		}
 	}
 

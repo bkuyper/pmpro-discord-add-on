@@ -408,7 +408,6 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
 		if ( $ets_members_queue ) {
 			foreach ($ets_members_queue['expired'] as $key => $user_id) {
-				$curr_level_id = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
 				$ets_discord_delete_member_rate_limit = sanitize_text_field( trim( get_option('ets_discord_delete_member_rate_limit') ) );
 				$ets_discord_delete_role_rate_limit = sanitize_text_field( trim( get_option('ets_discord_delete_role_rate_limit') ) );
 				$ets_discord_change_role_rate_limit = sanitize_text_field( trim( get_option('ets_discord_change_role_rate_limit') ) );
@@ -421,7 +420,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					} else {
 						break;
 					}
-				} else if ($allow_none_member == 'yes' && !empty($role_id) && array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
+				} else if ($allow_none_member == 'yes' && !empty($role_id) ) {
 					if (empty($ets_discord_delete_role_rate_limit) || $ets_discord_delete_role_rate_limit > 1) {
 						$this->delete_discord_role( $user_id );
 						unset( $ets_members_queue['expired'][$key] );
@@ -460,11 +459,6 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				if ( $ets_discord_user_id ) {
 					$role_delete = $this->delete_discord_role( $user_id );
 					$role_id = '';
-					$curr_level_id = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
-					if ( $curr_level_id )
-					{
-						$role_id = sanitize_text_field( trim( $ets_discord_role_mapping['level_id_'.$curr_level_id] ) );
-					}
 					if ( $discord_default_role ) {
 
 						$role_id = $discord_default_role;

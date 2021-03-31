@@ -109,8 +109,13 @@ class Ets_Pmpro_Admin_Setting {
 	 */
 	public function get_current_level_id( $user_id ) {
 			$membership_level = pmpro_getMembershipLevelForUser( $user_id );
-			$curr_level_id = sanitize_text_field( trim( $membership_level->ID ) );
-			return $curr_level_id;
+			if ( $membership_level ) { 
+				$curr_level_id = sanitize_text_field( trim( $membership_level->ID ) );
+				return $curr_level_id;
+			}else{
+				return null;
+			}
+			
 	}
 
 	/**

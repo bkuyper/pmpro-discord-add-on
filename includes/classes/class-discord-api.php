@@ -240,8 +240,13 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				$user_id = get_current_user_id();
 				$response = $this->create_discord_auth_token( $code, $user_id );
 				if ( !empty($response ) ) {
-					$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
-					
+					try {
+						$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
+					} catch ( Exception $e ) {
+						$errorArr = array('error' => $e->getMessage());
+					  	$Logs = new PMPro_Discord_Logs();
+				  		$Logs->write_api_response_logs( $errorArr, debug_backtrace()[0], 'api_error' );
+					}
 					$discord_exist_user_id = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_user_id", true ) ) );
 					
 					if ( array_key_exists('access_token', $res_body) ) {				

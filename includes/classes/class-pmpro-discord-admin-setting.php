@@ -144,14 +144,18 @@ class Ets_Pmpro_Admin_Setting {
 				$members_queue_sr = serialize($members_queue);
 				update_option('ets_queue_of_pmpro_members', $members_queue_sr);
 			}	
-		}else{ 
+		} else { 
 			if ( in_array($user_id, $members_queue["cancelled"]) ){
 				$key = array_search($user_id, $members_queue["cancelled"]);
 				unset( $members_queue["cancelled"][$key] );
+				$members_queue_sr = serialize($members_queue);
+				update_option('ets_queue_of_pmpro_members', $members_queue_sr);
 			}
 			if ( in_array($user_id, $members_queue["expired"]) ){
 				$key = array_search($user_id, $members_queue["expired"]);
 				unset( $members_queue["expired"][$key] );
+				$members_queue_sr = serialize($members_queue);
+				update_option('ets_queue_of_pmpro_members', $members_queue_sr);
 			}
 		}
 	}

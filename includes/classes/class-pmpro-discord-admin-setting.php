@@ -17,11 +17,11 @@ class Ets_Pmpro_Admin_Setting {
 		add_action( 'pmpro_show_user_profile', array( $this, 'add_connect_discord_button' ) );
 
 		//initiate cron event
-        add_action( 'init', array( $this, 'schedule_cron_jobs' ) );
+    add_action( 'init', array( $this, 'schedule_cron_jobs' ) );
 
-        add_filter( 'cron_schedules', array( $this, 'ets_cron_schedules' ) );
+    add_filter( 'cron_schedules', array( $this, 'ets_cron_schedules' ) );
 
-        //change hook call on cancel and change
+    //change hook call on cancel and change
 		add_action( 'pmpro_after_change_membership_level', array( $this, 'change_discord_role_from_pmpro' ), 10, 3);
 
 		//Pmpro expiry
@@ -112,7 +112,7 @@ class Ets_Pmpro_Admin_Setting {
 			if ( $membership_level ) { 
 				$curr_level_id = sanitize_text_field( trim( $membership_level->ID ) );
 				return $curr_level_id;
-			}else{
+			} else {
 				return null;
 			}
 			

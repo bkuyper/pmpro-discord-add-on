@@ -124,6 +124,11 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
+		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) ); 
+
+		if ( !pmpro_hasMembershipLevel() && $allow_none_member == 'no' ) {
+			return;
+		}
 		$guild_id = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
 		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
 		$default_role = sanitize_text_field( trim( get_option('ets_discord_default_role_id') ) );

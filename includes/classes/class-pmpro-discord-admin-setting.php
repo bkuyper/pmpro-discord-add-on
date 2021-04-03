@@ -81,20 +81,21 @@ class Ets_Pmpro_Admin_Setting {
 			exit();
 		}	
 		$user_id = sanitize_text_field( trim( get_current_user_id() ) );
+
 		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_access_token", true ) ) );
+		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) ); 
 		$default_role = sanitize_text_field( trim( get_option('ets_discord_default_role_id') ) );
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		if ( $this->Check_saved_settings_status() ) {
-		?>
-			<label class="ets-connection-lbl"><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
-		<?php
 			if ( $access_token ) {
 				?>
+				<label class="ets-connection-lbl"><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
 				<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo $user_id; ?>"><?php echo __( "Disconnect From Discord ", "ets_pmpro_discord" );?><i class='fab fa-discord'></i></a>
 				<span class="ets-spinner"></span>
 			<?php
-			} else {
+			} else if ( pmpro_hasMembershipLevel() || $allow_none_member == 'yes' ) {
 			?>
+				<label class="ets-connection-lbl"><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
 				<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( "Connect To Discord", "ets_pmpro_discord" );?> <i class='fab fa-discord'></i></a>
 			<?php
 			}

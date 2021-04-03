@@ -341,8 +341,14 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					);
 
 			$response = wp_remote_get( $discord_change_role_api_url, $param);
-			update_option( 'ets_discord_change_role_rate_limit', $response['headers']['x-ratelimit-limit'] );
-			$responseArr = json_decode( wp_remote_retrieve_body( $response ), true );
+			try {
+				update_option( 'ets_discord_change_role_rate_limit', $response['headers']['x-ratelimit-limit'] );
+				$responseArr = json_decode( wp_remote_retrieve_body( $response ), true );
+			} catch ( Exception $e ) {
+				$errorArr = array('error' => $e->getMessage());
+			  	$Logs = new PMPro_Discord_Logs();
+		  		$Logs->write_api_response_logs( $errorArr, debug_backtrace()[0], 'api_error' );
+			}
 			if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 				if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 					$Logs = new PMPro_Discord_Logs();

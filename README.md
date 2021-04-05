@@ -8,7 +8,7 @@ License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl  
 ## Description
 This add-on enables connecting your PMPRO enabled website to your discord server.
-Now you can add/remove PMPRO members directly to your discord server roles, assign roles according to your member levels, unassign roles when they expire, change role when they change membership.
+Now you can add/remove PMPRO members directly to your discord server roles, assign roles according to your member levels, unassign roles when membership expire, change role when member change membership.
 
 ## Some features
   - Add "Connect to Discord" button inside the profile of the member.

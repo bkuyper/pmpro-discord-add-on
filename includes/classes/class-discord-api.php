@@ -264,7 +264,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 						if ( array_key_exists('expires_in', $res_body) ) {
 							$expires_in = $res_body['expires_in'];
 							$date = new DateTime();
-							$date->add(DateInterval::createFromDateString(''.$expires_in.' seconds')); // adds 674165 secs
+							$date->add(DateInterval::createFromDateString(''.$expires_in.' seconds')); 
 							$token_expiry_time = $date->getTimestamp();
 							update_user_meta( $user_id, "ets_discord_expires_in", $token_expiry_time );
 						}

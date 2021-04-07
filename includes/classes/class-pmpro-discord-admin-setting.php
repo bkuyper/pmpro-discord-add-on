@@ -128,7 +128,7 @@ class Ets_Pmpro_Admin_Setting {
 	public function ets_cron_pmpro_add_user_into_cancel_queue($level_id) {
 		global $wpdb;
 	    $table_name = $wpdb->prefix."pmpro_memberships_users";
-	    $result = $wpdb->get_results( "SELECT `user_id` FROM $table_name WHERE `membership_id` = $level_id" );
+	    $result = $wpdb->get_results( "SELECT `user_id` FROM $table_name WHERE `membership_id` = $level_id GROUP BY `user_id`" );
 	    $ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 	    update_option('ets_admin_level_deleted', true);
 		foreach ($result as $key => $ids) {
@@ -197,7 +197,7 @@ class Ets_Pmpro_Admin_Setting {
 					$members_queue_sr = serialize($members_queue);
 					update_option('ets_queue_of_pmpro_members', $members_queue_sr);
 				}
-				delete_option( 'ets_admin_level_deleted' );
+				delete_option('ets_admin_level_deleted');
 			}
 		}
 	}

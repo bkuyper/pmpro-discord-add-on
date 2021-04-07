@@ -197,7 +197,8 @@ class Ets_Pmpro_Admin_Setting {
 					$members_queue_sr = serialize($members_queue);
 					update_option('ets_queue_of_pmpro_members', $members_queue_sr);
 				}
-				delete_option('ets_admin_level_deleted');
+			} else {
+				delete_option( 'ets_admin_level_deleted' );
 			}
 		}
 	}

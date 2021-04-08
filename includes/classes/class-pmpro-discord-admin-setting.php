@@ -28,6 +28,7 @@ class Ets_Pmpro_Admin_Setting {
 		add_action( 'pmpro_membership_post_membership_expiry', array( $this, 'pmpro_expiry_membership' ), 10 ,2);
 
 		add_action( 'ets_cron_pmpro_reset_rate_limits', array( $this, 'ets_cron_pmpro_reset_rate_limits_hook' ) );
+		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_cron_pmpro_add_user_into_cancel_queue' ), 10, 8 );
 
 	}
 
@@ -120,6 +121,42 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
+	 * Description: Get user membership status by user_id
+	 * @param int $user_id
+	 * @return string $status
+	 */
+	public function ets_cron_pmpro_add_user_into_cancel_queue($level_id) {
+		global $wpdb;
+	    $table_name = $wpdb->prefix."pmpro_memberships_users";
+	    $result = $wpdb->get_results( "SELECT `user_id` FROM $table_name WHERE `membership_id` = $level_id GROUP BY `user_id`" );
+	    $ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+	    update_option('ets_admin_level_deleted', true);
+		foreach ($result as $key => $ids) {
+			$user_id = $ids->user_id;
+			$existing_members_queue = sanitize_text_field( trim( get_option('ets_queue_of_pmpro_members') ) );
+			$access_token = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_access_token", true ) ) );
+			if ( $existing_members_queue ) {
+				$members_queue = unserialize($existing_members_queue);
+			} else {
+				$members_queue = [ "expired" => [], "cancelled" => [] ];
+			}
+			if ( !in_array($user_id, $members_queue["cancelled"]) && $access_token ) {
+				array_push($members_queue["cancelled"], $user_id);
+				$members_queue_sr = serialize($members_queue);
+				$st = update_option('ets_queue_of_pmpro_members', $members_queue_sr);
+			}
+		}
+
+		if ( array_key_exists('level_id_'.$level_id, $ets_discord_role_mapping) ) {
+			$key = 'level_id_'.$level_id;
+			unset( $ets_discord_role_mapping[$key] );
+			$mapping = json_encode( $ets_discord_role_mapping );
+			update_option( 'ets_discord_role_mapping', $mapping );
+		}
+
+	}
+
+	/**
 	 * Description: Save cancelled member details into members queue
 	 * @param int $level_id
 	 * @param int $user_id
@@ -127,6 +164,8 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return None
 	 */
 	public function on_cancel_add_member_into_queue( $level_id, $user_id, $cancel_level ) {
+		$delete_level_status = get_option("ets_admin_level_deleted");
+
 		$existing_members_queue = sanitize_text_field( trim( get_option('ets_queue_of_pmpro_members') ) );
 		$membership_status = sanitize_text_field( trim( $this->ets_check_current_membership_status($user_id) ) );
 		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_access_token", true ) ) );
@@ -146,17 +185,21 @@ class Ets_Pmpro_Admin_Setting {
 				update_option('ets_queue_of_pmpro_members', $members_queue_sr);
 			}	
 		} else { 
-			if ( in_array($user_id, $members_queue["cancelled"]) ){
-				$key = array_search($user_id, $members_queue["cancelled"]);
-				unset( $members_queue["cancelled"][$key] );
-				$members_queue_sr = serialize($members_queue);
-				update_option('ets_queue_of_pmpro_members', $members_queue_sr);
-			}
-			if ( in_array($user_id, $members_queue["expired"]) ){
-				$key = array_search($user_id, $members_queue["expired"]);
-				unset( $members_queue["expired"][$key] );
-				$members_queue_sr = serialize($members_queue);
-				update_option('ets_queue_of_pmpro_members', $members_queue_sr);
+			if ( !$delete_level_status ){
+				if ( in_array($user_id, $members_queue["cancelled"]) ){
+					$key = array_search($user_id, $members_queue["cancelled"]);
+					unset( $members_queue["cancelled"][$key] );
+					$members_queue_sr = serialize($members_queue);
+					update_option('ets_queue_of_pmpro_members', $members_queue_sr);
+				}
+				if ( in_array($user_id, $members_queue["expired"]) ){
+					$key = array_search($user_id, $members_queue["expired"]);
+					unset( $members_queue["expired"][$key] );
+					$members_queue_sr = serialize($members_queue);
+					update_option('ets_queue_of_pmpro_members', $members_queue_sr);
+				}
+			} else {
+				delete_option( 'ets_admin_level_deleted' );
 			}
 		}
 	}

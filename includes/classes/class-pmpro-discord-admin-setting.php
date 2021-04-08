@@ -22,7 +22,7 @@ class Ets_Pmpro_Admin_Setting {
     add_filter( 'cron_schedules', array( $this, 'ets_cron_schedules' ) );
 
     //change hook call on cancel and change
-		add_action( 'pmpro_after_change_membership_level', array( $this, 'change_discord_role_from_pmpro' ), 10, 3);
+		add_action( 'pmpro_after_change_membership_level', array( $this, 'on_cancel_add_member_into_queue' ), 10, 3);
 
 		//Pmpro expiry
 		add_action( 'pmpro_membership_post_membership_expiry', array( $this, 'pmpro_expiry_membership' ), 10 ,2);
@@ -126,7 +126,7 @@ class Ets_Pmpro_Admin_Setting {
 	 * @param int $cancel_level
 	 * @return None
 	 */
-	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
+	public function on_cancel_add_member_into_queue( $level_id, $user_id, $cancel_level ) {
 		$existing_members_queue = sanitize_text_field( trim( get_option('ets_queue_of_pmpro_members') ) );
 		$membership_status = sanitize_text_field( trim( $this->ets_check_current_membership_status($user_id) ) );
 		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_access_token", true ) ) );

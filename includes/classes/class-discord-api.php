@@ -14,6 +14,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		add_action( 'wp_ajax_load_discord_roles', array( $this, 'load_discord_roles' ) );
         
     add_action( 'ets_cron_pmpro_expired_members', array( $this, 'ets_cron_pmpro_expired_members_hook' ) );
+
+    add_action( 'pmpro_after_change_membership_level', array( $this, 'change_discord_role_from_pmpro' ), 10, 4);
         
     add_action( 'ets_cron_pmpro_cancelled_members', array( $this, 'ets_cron_pmpro_cancelled_members_hook' ) );
 	}
@@ -339,9 +341,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					        'Content-Length' => 0
 					    )
 					);
-
-			$response = wp_remote_get( $discord_change_role_api_url, $param);
 			try {
+				$response = wp_remote_get( $discord_change_role_api_url, $param);
 				update_option( 'ets_discord_change_role_rate_limit', $response['headers']['x-ratelimit-limit'] );
 				$responseArr = json_decode( wp_remote_retrieve_body( $response ), true );
 			} catch ( Exception $e ) {
@@ -504,6 +505,29 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * Description: Change discord role form pmpro role
+	 * @param $level_id, $user_id, $cancel_level
+	 * @return API responce
+	 */
+	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level )
+	{
+		$ets_discord_user_id = get_user_meta($user_id, 'ets_discord_user_id',true);
+		if ( $ets_discord_user_id && empty($cancel_level) ) {
+			$role_delete = $this->delete_discord_role( $user_id, $ets_discord_user_id );
+			$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+			$role_id = '';
+			$curr_level_id = $this->get_current_level_id($user_id);
+			if( $level_id )
+			{
+				if(array_key_exists('level_id_'.$level_id, $ets_discord_role_mapping)){
+					$role_id = $ets_discord_role_mapping['level_id_'.$level_id];
+				}
+			}
+			$this->change_discord_role_api($user_id, $role_id);
 		}
 	}
 }

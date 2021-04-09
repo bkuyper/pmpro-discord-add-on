@@ -174,7 +174,8 @@ class Ets_Pmpro_Admin_Setting {
 		} else {
 			$members_queue = [ "expired" => [], "cancelled" => [] ];
 		}
-		if ( !empty($cancel_level) && $cancel_level != 0 ) {
+		if ( !empty($cancel_level) || $membership_status == 'admin_cancelled') {
+			
 			if ( !in_array($user_id, $members_queue["cancelled"]) && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ){
 				if ( in_array($user_id, $members_queue["expired"]) ) {
 					$key = array_search($user_id, $members_queue["expired"]);

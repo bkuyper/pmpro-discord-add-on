@@ -549,8 +549,12 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level )
 	{
 		$ets_discord_user_id = get_user_meta($user_id, 'ets_discord_user_id',true);
+		$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
+		$default_role = sanitize_text_field( trim( get_option('ets_discord_default_role_id') ) );
 		if ( $ets_discord_user_id && empty($cancel_level) ) {
-			$role_delete = $this->delete_discord_role( $user_id, $ets_discord_user_id );
+			if ( $ets_discord_role_id != $default_role ) {
+				$role_delete = $this->delete_discord_role( $user_id, $ets_discord_user_id );
+			}
 			$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 			$role_id = '';
 			$curr_level_id = $this->get_current_level_id($user_id);

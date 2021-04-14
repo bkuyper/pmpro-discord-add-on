@@ -331,6 +331,9 @@ a{
   color: #0078d7;
   border-color:  #0078d7; 
  }
+ .ets_assigned_role{
+  font-size: 10px;
+ }
  @media (max-width: 992px) and (min-width: 768px){
   .contact-details .contact-body p{
     font-size: 12px;

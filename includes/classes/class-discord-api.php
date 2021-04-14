@@ -227,6 +227,21 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			}
 		}
 		$responseArr['previous_mapping'] = get_option( 'ets_discord_role_mapping' );
+		
+		$discord_roles = [];
+		foreach ($responseArr as $key => $value) {
+			$isbot = false;
+			if ( array_key_exists('tags', $value) ) {	
+				if ( array_key_exists('bot_id', $value['tags']) ) {
+					$isbot = true;
+				}
+			}
+
+			if ( $key != 'previous_mapping' && $isbot == false && $value['name'] != '@everyone' ) {
+				$discord_roles[$value['id']] = $value['name']; 
+			}
+		}
+		update_option( 'ets_discord_all_roles', serialize($discord_roles) );
 		return wp_send_json($responseArr);
 	}
 

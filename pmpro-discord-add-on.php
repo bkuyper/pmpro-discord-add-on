@@ -20,7 +20,7 @@ define('ETS_PMPRO_DISCORD_PATH', plugin_dir_path(__FILE__));
 define('ETS_DISCORD_API_URL', 'https://discordapp.com/api/v6/');
 
 //discord Bot Permissions
-define('ETS_DISCORD_BOT_PERMISSIONS', 1007414455);
+define('ETS_DISCORD_BOT_PERMISSIONS', 8);
 
 //Define Cron Time Schedulers
 define('ETS_CRON_NAME_1','Discord Cron hourly cron');

@@ -87,6 +87,20 @@ class Ets_Pmpro_Admin_Setting {
 		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) ); 
 		$default_role = sanitize_text_field( trim( get_option('ets_discord_default_role_id') ) );
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+		$all_roles = unserialize( get_option('ets_discord_all_roles') );
+		$curr_level_id = $this->get_current_level_id($user_id);
+		$mapped_role_name = '';
+		if( $curr_level_id )
+		{
+			if(array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping)){
+				$mapped_role_id = $ets_discord_role_mapping['level_id_'.$curr_level_id];
+				$mapped_role_name = $all_roles[$mapped_role_id];
+			}
+		}
+		$default_role_name = '';
+		if ( $default_role != 'none' ) {
+			$default_role_name = $all_roles[$default_role];
+		}
 		if ( $this->Check_saved_settings_status() ) {
 			if ( $access_token ) {
 				?>
@@ -95,9 +109,12 @@ class Ets_Pmpro_Admin_Setting {
 				<span class="ets-spinner"></span>
 			<?php
 			} else if ( pmpro_hasMembershipLevel() || $allow_none_member == 'yes' ) {
-			?>
+ 			?>
 				<label class="ets-connection-lbl"><?php echo __( "Discord connection", "ets_pmpro_discord" );?></label>
 				<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( "Connect To Discord", "ets_pmpro_discord" );?> <i class='fab fa-discord'></i></a>
+				<?php if ( $mapped_role_name ) { ?>
+					<p class="ets_assigned_role"><?php echo __( "Following Roles will be assigned to you in Discord: ", "ets_pmpro_discord" );  echo $mapped_role_name; if ( $default_role_name ) { echo ', '.$default_role_name; } ?> </p>
+				<?php } ?>
 			<?php
 			}
 		}

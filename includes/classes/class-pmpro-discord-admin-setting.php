@@ -90,15 +90,15 @@ class Ets_Pmpro_Admin_Setting {
 		$all_roles = unserialize( get_option('ets_discord_all_roles') );
 		$curr_level_id = $this->get_current_level_id($user_id);
 		$mapped_role_name = '';
-		if( $curr_level_id )
+		if ( $curr_level_id )
 		{
-			if(array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping)){
+			if ( array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) && is_array($all_roles) ) {
 				$mapped_role_id = $ets_discord_role_mapping['level_id_'.$curr_level_id];
 				$mapped_role_name = $all_roles[$mapped_role_id];
 			}
 		}
 		$default_role_name = '';
-		if ( $default_role != 'none' ) {
+		if ( $default_role != 'none'  && is_array($all_roles) ) {
 			$default_role_name = $all_roles[$default_role];
 		}
 		if ( $this->Check_saved_settings_status() ) {

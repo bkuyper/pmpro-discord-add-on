@@ -231,12 +231,13 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$discord_roles = [];
 		foreach ($responseArr as $key => $value) {
 			$isbot = false;
-			if ( array_key_exists('tags', $value) ) {	
-				if ( array_key_exists('bot_id', $value['tags']) ) {
-					$isbot = true;
+			if( is_array($value) ) {
+				if ( array_key_exists('tags', $value) ) {	
+					if ( array_key_exists('bot_id', $value['tags']) ) {
+						$isbot = true;
+					}
 				}
 			}
-
 			if ( $key != 'previous_mapping' && $isbot == false && $value['name'] != '@everyone' ) {
 				$discord_roles[$value['id']] = $value['name']; 
 			}

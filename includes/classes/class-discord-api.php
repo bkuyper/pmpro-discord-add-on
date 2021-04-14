@@ -578,7 +578,9 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					$role_id = $ets_discord_role_mapping['level_id_'.$level_id];
 				}
 			}
-			$this->change_discord_role_api($user_id, $role_id);
+			if ( !empty($role_id) ) {
+				$this->change_discord_role_api($user_id, $role_id);
+			}
 		}
 	}
 }

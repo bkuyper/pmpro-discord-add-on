@@ -22,6 +22,11 @@
   			<input type="text" class="ets-input" name="ets_discord_guild_id"
   			placeholder="Discord Guild Id" value="<?php if ( isset( $ets_discord_guild_id ) )echo $ets_discord_guild_id;?>" required>
   	</div>
+    <?php if ( empty($ets_discord_client_id) || empty($discord_client_secret) || empty($discord_bot_token) || empty($ets_discord_redirect_url) || empty($ets_discord_guild_id) ) { ?>
+      <p class="ets-danger-text description">
+        <?php echo __( "Please save your form", "ets_pmpro_discord" ); ?>
+      </p>
+    <?php } ?>
   	<p>
   		<button type="submit" name="submit" value="ets_submit" class="ets-submit ets-bg-green">
   			<?php echo __( "Save Settings", "ets_pmpro_discord" );?>

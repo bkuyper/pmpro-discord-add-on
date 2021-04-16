@@ -525,10 +525,10 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$ets_members_queue = unserialize(get_option('ets_queue_of_pmpro_members'));
 		$ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
 		$discord_default_role = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
-		$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
 		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
 		if ( $ets_members_queue ) {
 			foreach ($ets_members_queue['cancelled'] as $key => $user_id) {
+				$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
 				$ets_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id',true ) ) );
 				if ( $ets_discord_user_id ) {
 					$role_delete = $this->delete_discord_role( $user_id, $ets_discord_role_id );

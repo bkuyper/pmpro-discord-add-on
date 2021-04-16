@@ -95,7 +95,9 @@ class Ets_Pmpro_Admin_Setting {
 		{
 			if ( array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) && is_array($all_roles) ) {
 				$mapped_role_id = $ets_discord_role_mapping['level_id_'.$curr_level_id];
-				$mapped_role_name = $all_roles[$mapped_role_id];
+				if ( array_key_exists($mapped_role_id, $all_roles) ) {
+					$mapped_role_name = $all_roles[$mapped_role_id];
+				}
 			}
 		}
 		$default_role_name = '';

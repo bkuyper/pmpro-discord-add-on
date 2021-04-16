@@ -204,46 +204,48 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		}
 		$guild_id = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
 		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
-		$guilds_delete_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/roles';
-		$guild_args = array(
-			'method'  => 'GET',
-		    'headers' => array(
-		        'Content-Type'  => 'application/json',
-		        'Authorization' => 'Bot ' . $discord_bot_token
-		    )   
-		);
-		try {
-			$guild_response = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
-			$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
-		} catch ( Exception $e ) {
-			$errorArr = array('error' => $e->getMessage());
-		  	$Logs = new PMPro_Discord_Logs();
-	  		$Logs->write_api_response_logs( $errorArr, debug_backtrace()[0], 'api_error' );
-		}
-		if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
-			if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
-				$Logs = new PMPro_Discord_Logs();
-				$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
+		if( $guild_id && $discord_bot_token ) {
+			$guilds_delete_memeber_api_url = ETS_DISCORD_API_URL.'guilds/'.$guild_id.'/roles';
+			$guild_args = array(
+				'method'  => 'GET',
+			    'headers' => array(
+			        'Content-Type'  => 'application/json',
+			        'Authorization' => 'Bot ' . $discord_bot_token
+			    )   
+			);
+			try {
+				$guild_response = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
+				$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
+			} catch ( Exception $e ) {
+				$errorArr = array('error' => $e->getMessage());
+			  	$Logs = new PMPro_Discord_Logs();
+		  		$Logs->write_api_response_logs( $errorArr, debug_backtrace()[0], 'api_error' );
 			}
-		}
-		$responseArr['previous_mapping'] = get_option( 'ets_discord_role_mapping' );
-		
-		$discord_roles = [];
-		foreach ($responseArr as $key => $value) {
-			$isbot = false;
-			if( is_array($value) ) {
-				if ( array_key_exists('tags', $value) ) {	
-					if ( array_key_exists('bot_id', $value['tags']) ) {
-						$isbot = true;
-					}
+			if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
+				if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
+					$Logs = new PMPro_Discord_Logs();
+					$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
 				}
 			}
-			if ( $key != 'previous_mapping' && $isbot == false && $value['name'] != '@everyone' ) {
-				$discord_roles[$value['id']] = $value['name']; 
+			$responseArr['previous_mapping'] = get_option( 'ets_discord_role_mapping' );
+			
+			$discord_roles = [];
+			foreach ($responseArr as $key => $value) {
+				$isbot = false;
+				if( is_array($value) ) {
+					if ( array_key_exists('tags', $value) ) {	
+						if ( array_key_exists('bot_id', $value['tags']) ) {
+							$isbot = true;
+						}
+					}
+				}
+				if ( $key != 'previous_mapping' && $isbot == false && $value['name'] != '@everyone' ) {
+					$discord_roles[$value['id']] = $value['name']; 
+				}
 			}
+			update_option( 'ets_discord_all_roles', serialize($discord_roles) );
+			return wp_send_json($responseArr);
 		}
-		update_option( 'ets_discord_all_roles', serialize($discord_roles) );
-		return wp_send_json($responseArr);
 	}
 
 	/**

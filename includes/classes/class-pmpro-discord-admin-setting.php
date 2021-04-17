@@ -17,11 +17,11 @@ class Ets_Pmpro_Admin_Setting {
 		add_action( 'pmpro_show_user_profile', array( $this, 'add_connect_discord_button' ) );
 
 		//initiate cron event
-    add_action( 'init', array( $this, 'schedule_cron_jobs' ) );
+    	add_action( 'init', array( $this, 'schedule_cron_jobs' ) );
 
-    add_filter( 'cron_schedules', array( $this, 'ets_cron_schedules' ) );
+    	add_filter( 'cron_schedules', array( $this, 'ets_cron_schedules' ) );
 
-    //change hook call on cancel and change
+    	//change hook call on cancel and change
 		add_action( 'pmpro_after_change_membership_level', array( $this, 'on_cancel_add_member_into_queue' ), 10, 3);
 
 		//Pmpro expiry
@@ -29,7 +29,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_action( 'ets_cron_pmpro_reset_rate_limits', array( $this, 'ets_cron_pmpro_reset_rate_limits_hook' ) );
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_cron_pmpro_add_user_into_cancel_queue' ), 10, 8 );
-		add_action( 'init', array( $this, 'set_redirect_url_on_pmpro_activation' ) );
+		add_action( 'admin_init', array( $this, 'set_redirect_url_on_pmpro_activation' ) );
 
 	}
 
@@ -101,7 +101,7 @@ class Ets_Pmpro_Admin_Setting {
 			}
 		}
 		$default_role_name = '';
-		if ( $default_role != 'none'  && is_array($all_roles) ) {
+		if ( $default_role != 'none'  && is_array($all_roles) && array_key_exists($default_role, $all_roles) ) {
 			$default_role_name = $all_roles[$default_role];
 		}
 		if ( $this->Check_saved_settings_status() ) {

@@ -22,6 +22,10 @@ define('ETS_DISCORD_API_URL', 'https://discordapp.com/api/v6/');
 //discord Bot Permissions
 define('ETS_DISCORD_BOT_PERMISSIONS', 8);
 
+//discord api call scopes
+define('ETS_DISCORD_OAUTH_SCOPES', 'identify email connections guilds guilds.join gdm.join rpc rpc.notifications.read rpc.voice.read rpc.voice.write rpc.activities.write bot webhook.incoming messages.read applications.builds.upload applications.builds.read applications.commands applications.store.update applications.entitlements activities.read activities.write relationships.read');
+
+
 //Define Cron Time Schedulers
 define('ETS_CRON_NAME_1','Discord Cron hourly cron');
 define('ETS_CRON_NAME_2','Discord Cron half-hourly cron');

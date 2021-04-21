@@ -80,16 +80,12 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
 				}
 			}
-
+			return $response;
 		} catch ( Exception $e ) {
 			$errorArr = array('error' => $e->getMessage());
 		  	$Logs = new PMPro_Discord_Logs();
 	  		$Logs->write_api_response_logs( $errorArr, debug_backtrace()[0], 'api_error' );
 		}
-
-		
-		return $response;
-
 		
 	}
 

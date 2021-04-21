@@ -50,7 +50,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 							  'grant_type' => 'refresh_token',
 							  'refresh_token' => $refresh_token,
 							  'redirect_uri' => sanitize_text_field( trim( get_option( 'ets_discord_redirect_url' ) ) ),
-							  'scope' => 'identify email connections'
+							  'scope' => ETS_DISCORD_OAUTH_SCOPES
 					    )    
 					);
 					$response = wp_remote_post( $discord_token_api_url, $args );
@@ -67,7 +67,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 						  'grant_type' => 'authorization_code',
 						  'code' => $code,
 						  'redirect_uri' =>  sanitize_text_field( trim( get_option( 'ets_discord_redirect_url' ) ) ),
-						  'scope' => 'identify email connections'
+						  'scope' => ETS_DISCORD_OAUTH_SCOPES
 				    )    
 				);
 				$response = wp_remote_post( $discord_token_api_url, $args );
@@ -313,7 +313,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 								update_user_meta( $user_id, "ets_discord_expires_in", $token_expiry_time );
 							}
 							$user_body = $this->get_discord_current_user( $access_token );
-							if ( array_key_exists('id', $user_body) ) {
+							if ( is_array($user_body) && array_key_exists('id', $user_body) ) {
 								$ets_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
 								if ( $discord_exist_user_id == $ets_discord_user_id ) {
 									$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );

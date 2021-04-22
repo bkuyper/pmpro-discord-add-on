@@ -150,6 +150,10 @@
   background-color: #77A02E !important;
   color: #ffffff;
 }
+.ets-bg-download{
+  background-color: #2CA450 !important;
+  color: #ffffff;
+}
 .wp-core-ui .notice.is-dismissible.support-success-msg{
   position: fixed;
   top: 10%;

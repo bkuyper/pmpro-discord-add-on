@@ -31,6 +31,8 @@
   		<button type="submit" name="submit" value="ets_submit" class="ets-submit ets-bg-green">
   			<?php echo __( "Save Settings", "ets_pmpro_discord" );?>
   		</button>
+      <input type="button" class="ets-submit" id="migratebtn" name="migratebtn" value="Load Migrations">
+      <span class="migrate-spinner spinner" style="display: none;"></span>
   		<?php if(get_option('ets_discord_client_id')): ?>
   			<a href="?action=discord-connectToBot" class="ets-btn btn-connect-to-bot" id="connect-discord-bot"><?php echo __( "Connect your Bot", "ets_pmpro_discord" );?> <i class='fab fa-discord'></i></a>
   		<?php endif; ?>

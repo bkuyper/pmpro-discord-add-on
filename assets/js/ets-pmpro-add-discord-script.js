@@ -111,6 +111,24 @@ jQuery( document ).ready( function( $ ) {
 		    });
 	  	});
 
+	  	$('#migratebtn').click(function(e) {
+			e.preventDefault();
+	  		$.ajax({
+		      	url: etsPmproParams.admin_ajax,
+		      	type: "POST",
+		      	data: 'action=load_migrations&',
+	      		beforeSend:function () {
+					$(".spinner").addClass("is-active").show();
+		   		},
+		      	success: function(data) {
+		      
+		 	 	},
+		  		complete: function(){
+					$(".spinner").removeClass("is-active").hide();
+		  		}
+		    });
+	  	});
+
 
 		/*Flush settings from local storage*/
 		$("#revertMapping").on('click', function(){

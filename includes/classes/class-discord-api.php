@@ -10,14 +10,14 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		//front ajax function to disconnect from discord
 		add_action( 'wp_ajax_disconnect_from_discord', array( $this, 'disconnect_from_discord' ) );
 		
-    //front ajax function to disconnect from discord
+    	//front ajax function to disconnect from discord
 		add_action( 'wp_ajax_load_discord_roles', array( $this, 'load_discord_roles' ) );
         
-    add_action( 'ets_cron_pmpro_expired_members', array( $this, 'ets_cron_pmpro_expired_members_hook' ) );
+    	add_action( 'ets_cron_pmpro_expired_members', array( $this, 'ets_cron_pmpro_expired_members_hook' ) );
 
-    add_action( 'pmpro_after_change_membership_level', array( $this, 'change_discord_role_from_pmpro' ), 10, 4);
+    	add_action( 'pmpro_after_change_membership_level', array( $this, 'change_discord_role_from_pmpro' ), 10, 4);
         
-    add_action( 'ets_cron_pmpro_cancelled_members', array( $this, 'ets_cron_pmpro_cancelled_members_hook' ) );
+    	add_action( 'ets_cron_pmpro_cancelled_members', array( $this, 'ets_cron_pmpro_cancelled_members_hook' ) );
 	}
 
 	/**

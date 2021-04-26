@@ -27,6 +27,9 @@
   color: #000000;
 }
 
+p .migrate-spinner{
+  float: inherit !important;
+}
 /* Create an active/current tablink class */
 .tab button.active {
   color: #ffffff;

@@ -7,15 +7,15 @@
   		<label><?php echo __(  "Client Secret", "ets_pmpro_discord" );?> :</label>
   			<input type="text" class="ets-input" name="ets_discord_client_secret" value="<?php if ( isset( $discord_client_secret) )echo $discord_client_secret;?>" required placeholder="Discord Client Secret">
   	</div>
+    <div class="ets-input-group">
+      <label><?php echo __(  "Redirect URL", "ets_pmpro_discord" );?> :</label>
+        <input type="text" class="ets-input" name="ets_discord_redirect_url"
+        placeholder="Discord Redirect Url" value="<?php if ( isset( $ets_discord_redirect_url ) )echo $ets_discord_redirect_url;?>" required>
+        <p class="description"><?php echo __( "Registered discord app url", "ets_pmpro_discord" );?></p>
+    </div>
   	<div class="ets-input-group">
   		<label><?php echo __(  "Bot Token", "ets_pmpro_discord" );?> :</label>
   			<input type="text" class="ets-input" name="ets_discord_bot_token" value="<?php if ( isset( $discord_bot_token ) )echo $discord_bot_token;?>" required placeholder="Discord Bot Token">
-  	</div>
-  	<div class="ets-input-group">
-  		<label><?php echo __(  "Redirect URL", "ets_pmpro_discord" );?> :</label>
-  			<input type="text" class="ets-input" name="ets_discord_redirect_url"
-  			placeholder="Discord Redirect Url" value="<?php if ( isset( $ets_discord_redirect_url ) )echo $ets_discord_redirect_url;?>" required>
-  			<p class="description"><?php echo __( "Registered discord app url", "ets_pmpro_discord" );?></p>
   	</div>
   	<div class="ets-input-group">
   		<label><?php echo __( "Guild Id", "ets_pmpro_discord" );?> :</label>

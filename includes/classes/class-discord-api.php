@@ -203,7 +203,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function load_discord_roles() {
 		if ( !current_user_can('administrator') ) {
-			wp_send_json_error( 'You do not have sufficient rights', 404 );
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
 		try {

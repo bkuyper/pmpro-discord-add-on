@@ -78,6 +78,9 @@ jQuery( document ).ready( function( $ ) {
 				$.each(JSON.parse(mapjson), function(key,val){
 	    			var arrayofkey = key.split('id_');
 			   		$('*[data-level_id="'+arrayofkey[1]+'"]').append($('*[data-role_id="'+val+'"]')).attr( 'data-drop-role_id', val).find('span').css({'order':'2'});
+			   		if(jQuery('*[data-level_id="'+arrayofkey[1]+'"]').find('.makeMeDraggable').length >= 1){
+						$('*[data-level_id="'+arrayofkey[1]+'"]').droppable("destroy");
+					}
 				   	$('*[data-role_id="'+val+'"]').css({'width':'100%','left': '0','top':'0','margin-bottom':'0px','order':'1'}).attr( 'data-level_id' ,arrayofkey[1]);
 			    });
 			},
@@ -163,7 +166,12 @@ jQuery( document ).ready( function( $ ) {
 		function handlePreviousDropEvent( event, ui ) {
 			var draggable = ui.draggable;
 			$(this).append(draggable);
+			$('*[data-drop-role_id="'+draggable.data('role_id')+'"]').droppable( {
+	      		drop: handleDropEvent,
+	      		hoverClass: 'hoverActive',
+		    } );
 			$('*[data-drop-role_id="'+draggable.data('role_id')+'"]').attr('data-drop-role_id', '');
+
 			var oldItems = JSON.parse(localStorage.getItem('mapArray')) || [];
 			$.each(oldItems, function(key,val){
 		    	if ( val ) {
@@ -238,6 +246,10 @@ jQuery( document ).ready( function( $ ) {
 
 			$(this).append(ui.draggable);
 			$(this).find('span').css({'order':'2'});
+			if(jQuery(this).find('.makeMeDraggable').length >= 1){
+				$(this).droppable("destroy");
+			}
+			
 		    draggable.css({'width':'100%','left': '0','top':'0','margin-bottom':'0px','order':'1'});
 	  	}
   	}

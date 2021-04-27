@@ -94,9 +94,9 @@ class Ets_Pmpro_Admin_Setting {
 		$all_roles = unserialize( get_option('ets_discord_all_roles') );
 		$curr_level_id = $this->get_current_level_id($user_id);
 		$mapped_role_name = '';
-		if ( $curr_level_id )
+		if ( $curr_level_id && is_array($all_roles) )
 		{
-			if ( array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) && is_array($all_roles) ) {
+			if ( array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
 				$mapped_role_id = $ets_discord_role_mapping['level_id_'.$curr_level_id];
 				if ( array_key_exists($mapped_role_id, $all_roles) ) {
 					$mapped_role_name = $all_roles[$mapped_role_id];
@@ -354,7 +354,7 @@ class Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_setting_page() {
 		if ( !current_user_can('administrator') ) {
-			wp_send_json_error( 'You do not have sufficient rights', 404 );
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
 		$ets_discord_client_id = isset( $_POST['ets_discord_client_id'] ) ? sanitize_text_field( trim( $_POST['ets_discord_client_id'] ) ) : '';
@@ -487,7 +487,7 @@ class Ets_Pmpro_Admin_Setting {
 	*/
 	public function get_Support_Data() {
 		if ( !current_user_can('administrator') ) {
-			wp_send_json_error( 'You do not have sufficient rights', 404 );
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
 		if ( isset( $_POST['save'] ) ) {
@@ -562,7 +562,7 @@ class Ets_Pmpro_Admin_Setting {
 	*/
 	public function load_migrations() {
 		if ( !current_user_can('administrator') ) {
-			wp_send_json_error( 'You do not have sufficient rights', 404 );
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
 		$all_users = get_users();

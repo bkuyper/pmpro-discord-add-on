@@ -571,6 +571,7 @@ class Ets_Pmpro_Admin_Setting {
 			$old_discord_role_id = get_user_meta( $user_id, "discord_role_id", true );
 			$old_discord_user_id = get_user_meta( $user_id, "discord_user_id", true );
 			$old_token = get_user_meta( $user_id, "discord_access_token", true );
+			$old_userName = get_user_meta( $user_id, "discord_username", true );
 
 			if ( $old_discord_role_id ) {
 				update_user_meta($user_id,'ets_discord_role_id',$old_discord_role_id);
@@ -584,6 +585,9 @@ class Ets_Pmpro_Admin_Setting {
 				update_user_meta($user_id,'ets_discord_user_id',$old_discord_user_id);
 			}
 			
+			if ( $old_userName ) {
+				update_user_meta($user_id,'ets_discord_username',$old_userName);
+			}
 		}
 	}
 }

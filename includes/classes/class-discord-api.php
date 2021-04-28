@@ -293,31 +293,39 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					if ( !empty($response ) ) {
 						$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
 						$discord_exist_user_id = sanitize_text_field( trim( get_user_meta( $user_id, "ets_discord_user_id", true ) ) );
-						
-						if ( array_key_exists('access_token', $res_body) ) {				
-							$access_token = sanitize_text_field( trim( $res_body['access_token'] ) );
-							update_user_meta( $user_id, "ets_discord_access_token", $access_token );
-							if ( array_key_exists('refresh_token', $res_body) ) {
-								$refresh_token = sanitize_text_field( trim( $res_body['refresh_token'] ) );
-								update_user_meta( $user_id, "ets_discord_refresh_token", $refresh_token );
-							}
-							if ( array_key_exists('expires_in', $res_body) ) {
-								$expires_in = $res_body['expires_in'];
-								$date = new DateTime();
-								$date->add(DateInterval::createFromDateString(''.$expires_in.' seconds')); 
-								$token_expiry_time = $date->getTimestamp();
-								update_user_meta( $user_id, "ets_discord_expires_in", $token_expiry_time );
-							}
-							$user_body = $this->get_discord_current_user( $access_token );
-							if ( is_array($user_body) && array_key_exists('id', $user_body) ) {
-								$ets_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
-								if ( $discord_exist_user_id == $ets_discord_user_id ) {
-									$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
-									$this->delete_discord_role( $user_id, $ets_discord_role_id );
+						if ( is_array($res_body) ) {	
+							if ( array_key_exists('access_token', $res_body) ) {				
+								$access_token = sanitize_text_field( trim( $res_body['access_token'] ) );
+								update_user_meta( $user_id, "ets_discord_access_token", $access_token );
+								if ( array_key_exists('refresh_token', $res_body) ) {
+									$refresh_token = sanitize_text_field( trim( $res_body['refresh_token'] ) );
+									update_user_meta( $user_id, "ets_discord_refresh_token", $refresh_token );
 								}
-								update_user_meta( $user_id, "ets_discord_user_id", $ets_discord_user_id );
-								$this->add_discord_member_in_guild( $ets_discord_user_id, $user_id,$access_token );
-							}	
+								if ( array_key_exists('expires_in', $res_body) ) {
+									$expires_in = $res_body['expires_in'];
+									$date = new DateTime();
+									$date->add(DateInterval::createFromDateString(''.$expires_in.' seconds')); 
+									$token_expiry_time = $date->getTimestamp();
+									update_user_meta( $user_id, "ets_discord_expires_in", $token_expiry_time );
+								}
+								$user_body = $this->get_discord_current_user( $access_token );
+
+								if (array_key_exists( 'discriminator', $user_body )) {
+									$discord_user_number = $user_body['discriminator'];
+									$discord_user_name = $user_body['username'];
+									$discord_user_name_with_number = $discord_user_name.'#'.$discord_user_number;
+									update_user_meta( $user_id, 'ets_discord_username', $discord_user_name_with_number );
+								}
+								if ( is_array($user_body) && array_key_exists('id', $user_body) ) {
+									$ets_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
+									if ( $discord_exist_user_id == $ets_discord_user_id ) {
+										$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
+										$this->delete_discord_role( $user_id, $ets_discord_role_id );
+									}
+									update_user_meta( $user_id, "ets_discord_user_id", $ets_discord_user_id );
+									$this->add_discord_member_in_guild( $ets_discord_user_id, $user_id,$access_token );
+								}	
+							}
 						}
 					}
 				}

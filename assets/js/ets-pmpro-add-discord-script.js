@@ -206,6 +206,10 @@ jQuery( document ).ready( function( $ ) {
 	  	function handleDropEvent( event, ui ) {
 		    var draggable = ui.draggable;
 		   	var newItem = [];
+		   	$('*[data-drop-role_id="'+draggable.data('role_id')+'"]').droppable( {
+	      		drop: handleDropEvent,
+	      		hoverClass: 'hoverActive',
+		    } );
 		   	$('*[data-drop-role_id="'+draggable.data('role_id')+'"]').attr('data-drop-role_id', '');
 		    if ( $(this).data( 'drop-role_id') != draggable.data('role_id') ) {
 			    var oldItems = JSON.parse(localStorage.getItem('mapArray')) || [];

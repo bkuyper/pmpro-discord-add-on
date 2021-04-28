@@ -364,6 +364,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			delete_user_meta($user_id,'ets_discord_refresh_token');
 			delete_user_meta($user_id,'ets_discord_role_id');
 			delete_user_meta($user_id, 'ets_discord_default_role_id');
+			delete_user_meta($user_id, 'ets_discord_username');
 			if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 				if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 					$Logs = new PMPro_Discord_Logs();

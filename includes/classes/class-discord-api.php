@@ -359,12 +359,16 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			$guild_response = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
 			update_option( 'ets_discord_delete_member_rate_limit', $guild_response['headers']['x-ratelimit-limit'] );
 			$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
+      
+      /*Delete all usermeta related to discord connection*/
 			delete_user_meta($user_id,'ets_discord_user_id');
 			delete_user_meta($user_id,'ets_discord_access_token');
 			delete_user_meta($user_id,'ets_discord_refresh_token');
 			delete_user_meta($user_id,'ets_discord_role_id');
 			delete_user_meta($user_id, 'ets_discord_default_role_id');
 			delete_user_meta($user_id, 'ets_discord_username');
+      delete_user_meta($user_id, 'ets_discord_expires_in');
+
 			if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 				if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 					$Logs = new PMPro_Discord_Logs();

@@ -31,7 +31,6 @@ jQuery( document ).ready( function( $ ) {
 	        data: {'action': 'load_discord_roles'},
 	        beforeSend:function () {
 				$(".discord-roles .spinner").addClass("is-active");
-
 			},
 			success:function (response) {
 				if ( response.hasOwnProperty('code') && response.code == 50001 && response.message == 'Missing Access' ) {
@@ -84,6 +83,10 @@ jQuery( document ).ready( function( $ ) {
 				   	$('*[data-role_id="'+val+'"]').css({'width':'100%','left': '0','top':'0','margin-bottom':'0px','order':'1'}).attr( 'data-level_id' ,arrayofkey[1]);
 			    });
 			},
+      error: function(response) {
+        $("#connect-discord-bot").show().html("Error: Please check all details are correct").addClass('error-bk');
+        console.error(response);
+      },
 			complete: function(){
 				$(".discord-roles .spinner").removeClass("is-active").css({"float":"right"});
 			}

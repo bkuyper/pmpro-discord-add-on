@@ -23,7 +23,7 @@ Now you can add/remove PMPRO members directly to your discord server roles, assi
 - OR Upload the `pmpro-discord-add-on` folder to the `/wp-content/plugins/` directory.
 - Activate the plugin through the 'Installed Plugins' page in WordPress admin.
 
-## Connecting the plugin to your Discord.
+## Connecting the plugin to your Discord Server.
 - Inside WP Admin, you will find Discord Settings sub-menu under top-level PMPRRO Memberships menu in the left hand side.
 - Login to your dsicord account and open this url: https://discord.com/developers/applications
 - Click Top right button "New Appliaction", and name your Application and do create.

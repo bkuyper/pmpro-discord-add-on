@@ -30,10 +30,6 @@ class Ets_Pmpro_Admin_Setting {
 		add_action( 'ets_cron_pmpro_reset_rate_limits', array( $this, 'ets_cron_pmpro_reset_rate_limits_hook' ) );
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_cron_pmpro_add_user_into_cancel_queue' ), 10, 8 );
 		add_action( 'admin_init', array( $this, 'set_redirect_url_on_pmpro_activation' ) );
-
-		//upgrade migration
-		add_action( 'wp_ajax_load_migrations', array( $this, 'load_migrations' ) );
-
 	}
 
 	/**
@@ -286,7 +282,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		wp_register_style(
 		    'ets_pmpro_add_discord_style',
-		    ETS_PMPRO_DISCORD_URL. 'assets/css/ets-pmpro-discord-style.css'
+		    ETS_PMPRO_DISCORD_URL. 'assets/css/ets-pmpro-discord-style.min.css'
 		); 
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
 
@@ -297,7 +293,7 @@ class Ets_Pmpro_Admin_Setting {
 	  
 	    wp_register_script(
 			'ets_pmpro_add_discord_script',
-			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.js',
+			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.min.js',
 			array( 'jquery' )
 		);
         wp_enqueue_script( 'ets_pmpro_add_discord_script' );
@@ -553,42 +549,6 @@ class Ets_Pmpro_Admin_Setting {
 			update_option( 'ets_discord_redirect_url', $ets_discord_redirect_url );
 		}
 		
-	}
-
-	/**
-	 * Description: To load migrations
-	 * @param None
-	 * @return None
-	*/
-	public function load_migrations() {
-		if ( !current_user_can('administrator') ) {
-			wp_send_json_error( 'You do not have sufficient rights', 403 );
-			exit();
-		}
-		$all_users = get_users();
-		foreach ($all_users as $key => $user) {
-			$user_id = $user->ID;
-			$old_discord_role_id = get_user_meta( $user_id, "discord_role_id", true );
-			$old_discord_user_id = get_user_meta( $user_id, "discord_user_id", true );
-			$old_token = get_user_meta( $user_id, "discord_access_token", true );
-			$old_userName = get_user_meta( $user_id, "discord_username:", true );
-
-			if ( $old_discord_role_id ) {
-				update_user_meta($user_id,'ets_discord_role_id',$old_discord_role_id);
-			}
-			
-			if ( $old_token ) {
-				update_user_meta($user_id,'ets_discord_access_token',$old_token);
-			}
-			
-			if ( $old_discord_user_id ) {
-				update_user_meta($user_id,'ets_discord_user_id',$old_discord_user_id);
-			}
-			
-			if ( $old_userName ) {
-				update_user_meta($user_id,'ets_discord_username',$old_userName);
-			}
-		}
 	}
 }
 new Ets_Pmpro_Admin_Setting();

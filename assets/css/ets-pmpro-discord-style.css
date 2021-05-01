@@ -26,10 +26,6 @@
 .tab button:hover {
   color: #000000;
 }
-
-p .migrate-spinner{
-  float: inherit !important;
-}
 /* Create an active/current tablink class */
 .tab button.active {
   color: #ffffff;
@@ -344,6 +340,9 @@ a{
  .ets-danger-text{
   color: #FF0000 !important;
  }
+ .top-icon-title svg{
+  margin-right: 5px;
+ }
  @media (max-width: 992px) and (min-width: 768px){
   .contact-details .contact-body p{
     font-size: 12px;
@@ -472,6 +471,12 @@ div.mapping-json{
     margin:10px 22px;
     font-size:2em;
     vertical-align:middle;
+}
+.discord-roles .spinner{
+  display: inline-block;
+}
+.spinner{
+  display: none;
 }
 select#defaultRole{
   border-radius: 0px;

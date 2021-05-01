@@ -1,5 +1,5 @@
 <div class="contact-form ">
-	<form accept="#" method="post">
+  <form accept="#" method="post">
       <div class="ets-container">
         <div class="top-logo-title">
           <img src="<?php echo ETS_PMPRO_DISCORD_URL. 'assets/images/ets-logo.png'; ?>" class="img-fluid company-logo" alt="">
@@ -18,7 +18,7 @@
                 <div class="ets-form-group">
                   <label><?php echo __( "Contact Email", "ets_pmpro_discord" );?></label>
                   <input type="text" name="ets_user_email" class="form-control contact-input" value="<?php echo get_option( 'admin_email' );
-							 ?>" placeholder="Write Your Email">
+               ?>" placeholder="Write Your Email">
                 </div>
                 <div class="ets-form-group">
                   <label><?php echo __( "Subject", "ets_pmpro_discord" );?></label>
@@ -38,7 +38,7 @@
               <div class="right-side-box">
                 <div class="contact-details d-inline-block w-100 mb-4">
                   <div class="top-icon-title d-flex align-items-center w-100">
-                    <i class="fas fa-envelope title-icon fa-lg fa-inverse" style="margin-right: 5px" aria-hidden="true"></i>
+                    <i class="fas fa-envelope title-icon fa-lg fa-inverse" aria-hidden="true"></i>
                     <p><?php echo __( "Email", "ets_pmpro_discord" );?></p>
                   </div>
                   <div class="contact-body mt-3">
@@ -48,7 +48,7 @@
                 </div>
                 <div class="contact-details d-inline-block w-100 mb-4">
                   <div class="top-icon-title d-flex align-items-center w-100">
-                    <i class="fab fa-skype title-icon fa-lg fa-inverse" style="margin-right: 5px" aria-hidden="true"></i>
+                    <i class="fab fa-skype title-icon fa-lg fa-inverse" aria-hidden="true"></i>
                     <p><?php echo __( "Skype", "ets_pmpro_discord" );?></p>
                   </div>
                   <div class="contact-body mt-3">
@@ -57,7 +57,7 @@
                 </div>
                 <div class="contact-details d-inline-block w-100">
                   <div class="top-icon-title d-flex align-items-center w-100">
-                    <i class="fab fa-whatsapp title-icon fa-lg fa-inverse" style="margin-right: 5px" aria-hidden="true"></i>
+                    <i class="fab fa-whatsapp title-icon fa-lg fa-inverse" aria-hidden="true"></i>
                     <p><?php echo __( "Whatsapp / Phone", "ets_pmpro_discord" );?></p>
                   </div>
                   <div class="contact-body mt-3">
@@ -69,5 +69,5 @@
           </div>
         </div>
       </div>
-	</form>
+  </form>
 </div>

@@ -221,30 +221,31 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				$guild_response = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
 				$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 
-				if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
+				if ( is_array( $responseArr ) && !empty( $responseArr ) ) {
 					if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {
 						$Logs = new PMPro_Discord_Logs();
 						$Logs->write_api_response_logs( $responseArr, debug_backtrace()[0], 'api_error' );
-					}
-				}
-				$responseArr['previous_mapping'] = get_option( 'ets_discord_role_mapping' );
-				
-				$discord_roles = [];
-				foreach ($responseArr as $key => $value) {
-					$isbot = false;
-					if( is_array($value) ) {
-						if ( array_key_exists('tags', $value) ) {	
-							if ( array_key_exists('bot_id', $value['tags']) ) {
-								$isbot = true;
+					}else{
+						$responseArr['previous_mapping'] = get_option( 'ets_discord_role_mapping' );
+						
+						$discord_roles = [];
+						foreach ($responseArr as $key => $value) {
+							$isbot = false;
+							if( is_array($value) ) {
+								if ( array_key_exists('tags', $value) ) {	
+									if ( array_key_exists('bot_id', $value['tags']) ) {
+										$isbot = true;
+									}
+								}
+							}
+							if ( $key != 'previous_mapping' && $isbot == false && isset($value['name']) && $value['name'] != '@everyone' ) {
+								$discord_roles[$value['id']] = $value['name']; 
 							}
 						}
-					}
-					if ( $key != 'previous_mapping' && $isbot == false && $value['name'] != '@everyone' ) {
-						$discord_roles[$value['id']] = $value['name']; 
+						update_option( 'ets_discord_all_roles', serialize($discord_roles) );
+						return wp_send_json($responseArr);
 					}
 				}
-				update_option( 'ets_discord_all_roles', serialize($discord_roles) );
-				return wp_send_json($responseArr);
 			}
 		} catch ( Exception $e ) {
 			$errorArr = array('error' => $e->getMessage());
@@ -360,14 +361,14 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			update_option( 'ets_discord_delete_member_rate_limit', $guild_response['headers']['x-ratelimit-limit'] );
 			$responseArr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
       
-      /*Delete all usermeta related to discord connection*/
+      		/*Delete all usermeta related to discord connection*/
 			delete_user_meta($user_id,'ets_discord_user_id');
 			delete_user_meta($user_id,'ets_discord_access_token');
 			delete_user_meta($user_id,'ets_discord_refresh_token');
 			delete_user_meta($user_id,'ets_discord_role_id');
 			delete_user_meta($user_id, 'ets_discord_default_role_id');
 			delete_user_meta($user_id, 'ets_discord_username');
-      delete_user_meta($user_id, 'ets_discord_expires_in');
+      		delete_user_meta($user_id, 'ets_discord_expires_in');
 
 			if ( is_array( $responseArr ) && ! empty( $responseArr ) ) {
 				if ( array_key_exists('code', $responseArr) || array_key_exists('error', $responseArr) ) {

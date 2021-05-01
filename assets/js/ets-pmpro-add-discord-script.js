@@ -83,10 +83,10 @@ jQuery( document ).ready( function( $ ) {
 				   	$('*[data-role_id="'+val+'"]').css({'width':'100%','left': '0','top':'0','margin-bottom':'0px','order':'1'}).attr( 'data-level_id' ,arrayofkey[1]);
 			    });
 			},
-      error: function(response) {
-        $("#connect-discord-bot").show().html("Error: Please check all details are correct").addClass('error-bk');
-        console.error(response);
-      },
+	      	error: function(response) {
+		        $("#connect-discord-bot").show().html("Error: Please check all details are correct").addClass('error-bk');
+		        console.error(response);
+	      	},
 			complete: function(){
 				$(".discord-roles .spinner").removeClass("is-active").css({"float":"right"});
 			}
@@ -111,30 +111,14 @@ jQuery( document ).ready( function( $ ) {
 		        		$('.error-log').html("Clear logs Sucesssfully !");
 			        }
 		 	 	},
+		 	 	error: function(response) { 
+					console.error(response); 
+				},
 		  		complete: function(){
 					$(".spinner").removeClass("is-active").hide();
 		  		}
 		    });
 	  	});
-
-	  	$('#migratebtn').click(function(e) {
-			e.preventDefault();
-	  		$.ajax({
-		      	url: etsPmproParams.admin_ajax,
-		      	type: "POST",
-		      	data: 'action=load_migrations&',
-	      		beforeSend:function () {
-					$(".spinner").addClass("is-active").show();
-		   		},
-		      	success: function(data) {
-		      
-		 	 	},
-		  		complete: function(){
-					$(".spinner").removeClass("is-active").hide();
-		  		}
-		    });
-	  	});
-
 
 		/*Flush settings from local storage*/
 		$("#revertMapping").on('click', function(){
@@ -278,12 +262,9 @@ jQuery( document ).ready( function( $ ) {
 					window.location = window.location.href.split("?")[0];
 				}
 			},
-			error: function(data) {
-				alert('Server error');
-		  	}
+			error: function(response) { 
+				console.error(response); 
+			}
 		});
 	});
 });
-
-
-

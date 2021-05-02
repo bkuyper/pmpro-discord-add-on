@@ -100,7 +100,7 @@ class Ets_Pmpro_Admin_Setting {
 			}
 		}
 		$default_role_name = '';
-		if ( $default_role != 'none'  && array_key_exists($default_role, $all_roles) ) {
+		if ( $default_role != 'none'  && is_array($all_roles) && array_key_exists($default_role, $all_roles) ) {
 			$default_role_name = $all_roles[$default_role];
 		}
 		if ( $this->Check_saved_settings_status() ) {
@@ -166,7 +166,7 @@ class Ets_Pmpro_Admin_Setting {
 			}
 		}
 
-		if ( array_key_exists('level_id_'.$level_id, $ets_discord_role_mapping) ) {
+		if ( is_array($ets_discord_role_mapping) && array_key_exists('level_id_'.$level_id, $ets_discord_role_mapping) ) {
 			$key = 'level_id_'.$level_id;
 			unset( $ets_discord_role_mapping[$key] );
 			$mapping = json_encode( $ets_discord_role_mapping );
@@ -293,7 +293,7 @@ class Ets_Pmpro_Admin_Setting {
 	  
 	    wp_register_script(
 			'ets_pmpro_add_discord_script',
-			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.min.js',
+			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.js',
 			array( 'jquery' )
 		);
         wp_enqueue_script( 'ets_pmpro_add_discord_script' );
@@ -455,12 +455,17 @@ class Ets_Pmpro_Admin_Setting {
 		  <?php endif; ?>
 		  <button class="ets_tablinks" data-identity="logs" data-toggle="tab" data-event="ets_logs"><?php echo __( "Logs", "ets_pmpro_discord" ); ?>	
 		  </button>
+		  <button class="ets_tablinks" data-identity="docs" data-toggle="tab" data-event="ets_docs"><?php echo __( "Documentation", "ets_pmpro_discord" ); ?>	
+		  </button>
 		  <button class="ets_tablinks" data-identity="support" data-toggle="tab" data-event="ets_about_us"><?php echo __( "Support", "ets_pmpro_discord" ); ?>	
-		  </button> 
+		  </button>  
 		</div>
 
 		<div id="ets_setting" class="ets_tabcontent">
 			<?php include( ETS_PMPRO_DISCORD_PATH.'includes/pages/discord-settings.php' ); ?>
+		</div>
+		<div id="ets_docs" class="ets_tabcontent">
+			<?php include( ETS_PMPRO_DISCORD_PATH.'includes/pages/documentation.php' ); ?>
 		</div>
 		<div id="ets_about_us" class="ets_tabcontent">
 			<?php include( ETS_PMPRO_DISCORD_PATH.'includes/pages/get-support.php' ); ?>
@@ -471,6 +476,7 @@ class Ets_Pmpro_Admin_Setting {
 		<div id="ets_level_mapping" class="ets_tabcontent">
 			<?php include( ETS_PMPRO_DISCORD_PATH.'includes/pages/discord-role-level-map.php' ); ?>
 		</div>
+
 
 		<?php
 		$this->get_Support_Data();

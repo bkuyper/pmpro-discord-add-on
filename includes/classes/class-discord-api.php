@@ -611,7 +611,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			$curr_level_id = $this->get_current_level_id($user_id);
 			if( $level_id )
 			{
-				if(array_key_exists('level_id_'.$level_id, $ets_discord_role_mapping)){
+				if(is_array($ets_discord_role_mapping) && array_key_exists('level_id_'.$level_id, $ets_discord_role_mapping)){
 					$role_id = $ets_discord_role_mapping['level_id_'.$level_id];
 				}
 			}

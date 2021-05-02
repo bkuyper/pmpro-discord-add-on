@@ -124,7 +124,7 @@ jQuery( document ).ready( function( $ ) {
 		$("#revertMapping").on('click', function(){
 	  		localStorage.removeItem('mapArray');
 	  		localStorage.removeItem('mappingjson');
-	  		location.reload(true);
+	  		window.location.href = window.location.href;
 	  	});
 
 		/*Create droppable element*/

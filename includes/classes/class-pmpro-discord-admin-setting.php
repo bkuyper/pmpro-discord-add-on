@@ -92,7 +92,7 @@ class Ets_Pmpro_Admin_Setting {
 		$mapped_role_name = '';
 		if ( $curr_level_id && is_array($all_roles) )
 		{
-			if ( array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
+			if ( is_array($ets_discord_role_mapping) && array_key_exists('level_id_'.$curr_level_id, $ets_discord_role_mapping) ) {
 				$mapped_role_id = $ets_discord_role_mapping['level_id_'.$curr_level_id];
 				if ( array_key_exists($mapped_role_id, $all_roles) ) {
 					$mapped_role_name = $all_roles[$mapped_role_id];
@@ -293,7 +293,7 @@ class Ets_Pmpro_Admin_Setting {
 	  
 	    wp_register_script(
 			'ets_pmpro_add_discord_script',
-			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.js',
+			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.min.js',
 			array( 'jquery' )
 		);
         wp_enqueue_script( 'ets_pmpro_add_discord_script' );

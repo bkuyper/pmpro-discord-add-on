@@ -243,9 +243,9 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 							}
 						}
 						update_option( 'ets_discord_all_roles', serialize($discord_roles) );
-						return wp_send_json($responseArr);
 					}
 				}
+				return wp_send_json($responseArr);
 			}
 		} catch ( Exception $e ) {
 			$errorArr = array('error' => $e->getMessage());

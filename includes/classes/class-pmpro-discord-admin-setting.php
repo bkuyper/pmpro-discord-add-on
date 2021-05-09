@@ -146,10 +146,10 @@ class Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_cron_pmpro_add_user_into_cancel_queue($level_id) {
 		global $wpdb;
-	    $table_name = $wpdb->prefix."pmpro_memberships_users";
-	    $result = $wpdb->get_results( "SELECT `user_id` FROM $table_name WHERE `membership_id` = $level_id GROUP BY `user_id`" );
-	    $ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
-	    update_option('ets_admin_level_deleted', true);
+	  $result = $wpdb->get_results( $wpdb->prepare( "SELECT `user_id` FROM ".$wpdb->prefix.'pmpro_memberships_users'." WHERE `membership_id` = %d GROUP BY `user_id`", array( $level_id ) ) );
+
+	  $ets_discord_role_mapping = json_decode(get_option( 'ets_discord_role_mapping' ), true );
+	  update_option('ets_admin_level_deleted', true);
 		foreach ($result as $key => $ids) {
 			$user_id = $ids->user_id;
 			$existing_members_queue = sanitize_text_field( trim( get_option('ets_queue_of_pmpro_members') ) );
@@ -336,11 +336,11 @@ class Ets_Pmpro_Admin_Setting {
 	 * @param int $user_id
 	 * @return string $status
 	 */
-	public function ets_check_current_membership_status($user_id) {
+	public function ets_check_current_membership_status( $user_id ) {
 		global $wpdb;
-	    $table_name = $wpdb->prefix."pmpro_memberships_users";
-	    $result = $wpdb->get_results( "SELECT `status` FROM $table_name WHERE `user_id`= $user_id ORDER BY `id` desc limit 1" );
-		return $result[0]->status; 
+		$sql = $wpdb->prepare( "SELECT `status` FROM ".$wpdb->prefix.'pmpro_memberships_users'." WHERE `user_id`= %d ORDER BY `id` DESC limit 1", array( $user_id) );
+	  $result = $wpdb->get_results( $sql );
+		return $result[0]->status;
 	}
 
 	/**

@@ -58,11 +58,16 @@ class PMPro_Discord_Logs {
 			exit();
 		}
 		$error = current_time( 'mysql' );
+		$userid = get_current_user_id();
+		$user_details = '';
+		if ( $userid ) {
+			$user_details = "::User Id:".$userid;
+		}
 		$log_file_name = $this::$log_file_name;
 		if ( array_key_exists('code', $response_arr) ) {
-			$error .= "=>File:".$backtraceArr['file']."::Line:".$backtraceArr['line']."::Function:".$backtraceArr['function']."::".$response_arr['code'].':'.$response_arr['message'];
+			$error .= "=>File:".$backtraceArr['file'].$user_details."::Line:".$backtraceArr['line']."::Function:".$backtraceArr['function']."::".$response_arr['code'].':'.$response_arr['message'];
 		} elseif ( array_key_exists('error', $response_arr) ) {
-			$error .= "=>File:".$backtraceArr['file']."::Line:".$backtraceArr['line']."::Function:".$backtraceArr['function']."::".$response_arr['error'];
+			$error .= "=>File:".$backtraceArr['file'].$user_details."::Line:".$backtraceArr['line']."::Function:".$backtraceArr['function']."::".$response_arr['error'];
 		} else {
 			$error .= print_r($response_arr, true);
 		}

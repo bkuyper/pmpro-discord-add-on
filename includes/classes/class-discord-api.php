@@ -151,7 +151,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
 			$discord_role             = '';
 			$curr_level_id            = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
-			if ( array_key_exists( 'level_id_' . $curr_level_id, $ets_discord_role_mapping ) ) {
+			if ( is_array( $ets_discord_role_mapping ) && array_key_exists( 'level_id_' . $curr_level_id, $ets_discord_role_mapping ) ) {
 				$discord_role = sanitize_text_field( trim( $ets_discord_role_mapping[ 'level_id_' . $curr_level_id ] ) );
 			} elseif ( $discord_role = '' && $default_role ) {
 				$discord_role = $default_role;

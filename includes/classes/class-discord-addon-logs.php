@@ -52,16 +52,15 @@ class PMPro_Discord_Logs {
 	 * @param string $error_type
 	 * @return None
 	 */
-	public function write_api_response_logs( $response_arr,$backtraceArr,$error_type ) {
+	public function write_api_response_logs( $response_arr,$backtraceArr,$error_type,$user_id ) {
 		if( !is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
 		$error = current_time( 'mysql' );
-		$userid = get_current_user_id();
 		$user_details = '';
-		if ( $userid ) {
-			$user_details = "::User Id:".$userid;
+		if ( $user_id ) {
+			$user_details = "::User Id:".$user_id;
 		}
 		$log_file_name = $this::$log_file_name;
 		if ( array_key_exists('code', $response_arr) ) {

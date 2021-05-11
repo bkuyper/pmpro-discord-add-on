@@ -78,14 +78,14 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
 				if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
 					$logs = new PMPro_Discord_Logs();
-					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error' );
+					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error', $user_id );
 				}
 			}
 			return $response;
 		} catch ( Exception $e ) {
 			$error_arr = array( 'error' => $e->getMessage() );
 			$logs      = new PMPro_Discord_Logs();
-			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error' );
+			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error', $user_id );
 		}
 
 	}
@@ -101,6 +101,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
+		$user_id = get_current_user_id();
 		try {
 			$discord_cuser_api_url = ETS_DISCORD_API_URL . 'users/@me';
 			$param                 = array(
@@ -114,7 +115,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
 				if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
 					$logs = new PMPro_Discord_Logs();
-					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error' );
+					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error', $user_id );
 				}
 			}
 			$user_body = json_decode( wp_remote_retrieve_body( $user_response ), true );
@@ -122,7 +123,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		} catch ( Exception $e ) {
 			$error_arr = array( 'error' => $e->getMessage() );
 			$logs      = new PMPro_Discord_Logs();
-			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error' );
+			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error', $user_id );
 		}
 	}
 
@@ -178,7 +179,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
 				if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
 					$logs = new PMPro_Discord_Logs();
-					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error' );
+					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error', $user_id );
 				}
 			}
 
@@ -192,7 +193,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		} catch ( Exception $e ) {
 			$error_arr = array( 'error' => $e->getMessage() );
 			$logs      = new PMPro_Discord_Logs();
-			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error' );
+			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error', $user_id );
 		}
 
 	}
@@ -210,6 +211,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
+		$user_id = get_current_user_id();
 		try {
 			$guild_id          = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
 			$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
@@ -228,7 +230,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
 					if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
 						$logs = new PMPro_Discord_Logs();
-						$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error' );
+						$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error', $user_id );
 					} else {
 						$response_arr['previous_mapping'] = get_option( 'ets_discord_role_mapping' );
 
@@ -254,7 +256,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		} catch ( Exception $e ) {
 			$error_arr = array( 'error' => $e->getMessage() );
 			$logs      = new PMPro_Discord_Logs();
-			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error' );
+			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error', $user_id );
 		}
 	}
 
@@ -266,6 +268,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function discord_api_callback() {
 		if ( is_user_logged_in() ) {
+			$user_id  = get_current_user_id();
 			try {
 				if ( isset( $_GET['action'] ) && $_GET['action'] == 'discord-login' ) {
 					$params                    = array(
@@ -294,7 +297,6 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				}
 				if ( isset( $_GET['code'] ) ) {
 					$code     = sanitize_text_field( trim( $_GET['code'] ) );
-					$user_id  = get_current_user_id();
 					$response = $this->create_discord_auth_token( $code, $user_id );
 					if ( ! empty( $response ) ) {
 						$res_body              = json_decode( wp_remote_retrieve_body( $response ), true );
@@ -338,7 +340,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			} catch ( Exception $e ) {
 				$error_arr = array( 'error' => $e->getMessage() );
 				$logs      = new PMPro_Discord_Logs();
-				$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error' );
+				$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error', $user_id );
 			}
 		}
 	}
@@ -385,7 +387,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		} catch ( Exception $e ) {
 			$error_arr = array( 'error' => $e->getMessage() );
 			$logs      = new PMPro_Discord_Logs();
-			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error' );
+			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error', $user_id );
 		}
 
 	}
@@ -423,7 +425,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
 					if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
 						$logs = new PMPro_Discord_Logs();
-						$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error' );
+						$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error', $user_id );
 					}
 				}
 				if ( ( $default_role != $role_id && $role_id != $previous_role ) || empty( $previous_role ) ) {
@@ -437,7 +439,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		} catch ( Exception $e ) {
 				$error_arr = array( 'error' => $e->getMessage() );
 				$logs      = new PMPro_Discord_Logs();
-				$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error' );
+				$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error', $user_id );
 		}
 	}
 
@@ -471,7 +473,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		} catch ( Exception $e ) {
 			$error_arr = array( 'error' => $e->getMessage() );
 			$logs      = new PMPro_Discord_Logs();
-			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error' );
+			$logs->write_api_response_logs( $error_arr, debug_backtrace()[0], 'api_error', $user_id );
 		}
 	}
 

@@ -368,20 +368,20 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			update_option( 'ets_discord_delete_member_rate_limit', $guild_response['headers']['x-ratelimit-limit'] );
 			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 
-			/*Delete all usermeta related to discord connection*/
-			delete_user_meta( $user_id, 'ets_discord_user_id' );
-			delete_user_meta( $user_id, 'ets_discord_access_token' );
-			delete_user_meta( $user_id, 'ets_discord_refresh_token' );
-			delete_user_meta( $user_id, 'ets_discord_role_id' );
-			delete_user_meta( $user_id, 'ets_discord_default_role_id' );
-			delete_user_meta( $user_id, 'ets_discord_username' );
-			delete_user_meta( $user_id, 'ets_discord_expires_in' );
-
 			if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
 				if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
 					$logs = new PMPro_Discord_Logs();
-					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error' );
+					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error', $user_id );
 				}
+			}else{
+					/*Delete all usermeta related to discord connection*/
+					delete_user_meta( $user_id, 'ets_discord_user_id' );
+					delete_user_meta( $user_id, 'ets_discord_access_token' );
+					delete_user_meta( $user_id, 'ets_discord_refresh_token' );
+					delete_user_meta( $user_id, 'ets_discord_role_id' );
+					delete_user_meta( $user_id, 'ets_discord_default_role_id' );
+					delete_user_meta( $user_id, 'ets_discord_username' );
+					delete_user_meta( $user_id, 'ets_discord_expires_in' );
 			}
 			return $guild_response;
 		} catch ( Exception $e ) {

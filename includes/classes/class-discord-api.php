@@ -373,7 +373,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					$logs = new PMPro_Discord_Logs();
 					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], 'api_error', $user_id );
 				}
-			}else{
+			} else {
 					/*Delete all usermeta related to discord connection*/
 					delete_user_meta( $user_id, 'ets_discord_user_id' );
 					delete_user_meta( $user_id, 'ets_discord_access_token' );

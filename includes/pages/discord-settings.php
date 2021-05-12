@@ -1,4 +1,5 @@
 <form method="post" action="#">
+    <?php wp_nonce_field( 'save_discord_settings', 'ets_discord_save_settings' ); ?>
     <div class="ets-input-group">
       <label><?php echo __( "Client ID", "ets_pmpro_discord" );?> :</label>
         <input type="text" class="ets-input" name="ets_discord_client_id" value="<?php if ( isset( $ets_discord_client_id ) )echo $ets_discord_client_id;?>" required placeholder="Discord Client ID">

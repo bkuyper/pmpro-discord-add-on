@@ -42,6 +42,7 @@ $allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_allow_none_me
       <tr>
         <th scope="row"><label for="defaultRole"><?php echo __( "Default Role", "ets_pmpro_discord" );?></label></th>
         <td>
+          <?php wp_nonce_field( 'save_discord_mappings', 'ets_discord_save_mapping' ); ?>
           <input type="hidden" id="selected_default_role" value="<?php echo $default_role; ?>">
           <select id="defaultRole" name="defaultRole">
             <option value="none"><?php echo __( "-None-", "ets_pmpro_discord" );?></option>

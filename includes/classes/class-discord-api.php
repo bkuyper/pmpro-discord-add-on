@@ -491,7 +491,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
 		 // Check for nonce security      
      if ( ! wp_verify_nonce( $_POST['nonce'], 'ajax-nonce-disconnect-discord' ) ) {
-				die ( 'Busted!');
+				wp_send_json_error( 'You do not have sufficient rights', 403 );
+				exit();
 		}
 		$user_id = sanitize_text_field( trim( $_POST['user_id'] ) );
 		$this->delete_member_from_guild( $user_id );

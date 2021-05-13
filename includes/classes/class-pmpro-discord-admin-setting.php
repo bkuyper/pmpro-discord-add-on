@@ -527,13 +527,20 @@ class Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
+		
 		if ( isset( $_POST['save'] ) ) {
+			// Check for nonce security      
+			if ( ! wp_verify_nonce( $_POST['ets_discord_get_support'], 'get_support' ) ) {
+				wp_send_json_error( 'You do not have sufficient rights', 403 );
+				exit();
+			}
 			$etsUserName  = isset( $_POST['ets_user_name'] ) ? sanitize_text_field( trim( $_POST['ets_user_name'] ) ) : '';
 			$etsUserEmail = isset( $_POST['ets_user_email'] ) ? sanitize_text_field( trim( $_POST['ets_user_email'] ) ) : '';
 			$message      = isset( $_POST['ets_support_msg'] ) ? sanitize_text_field( trim( $_POST['ets_support_msg'] ) ) : '';
 			$sub          = isset( $_POST['ets_support_subject'] ) ? sanitize_text_field( trim( $_POST['ets_support_subject'] ) ) : '';
 
 			if ( $etsUserName && $etsUserEmail && $message && $sub ) {
+
 				$subject   = $sub;
 				$to        = 'contact@expresstechsoftwares.com';
 				$content   = 'Name: ' . $etsUserName . '<br>';

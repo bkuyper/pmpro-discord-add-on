@@ -14,6 +14,7 @@
                 <div class="ets-form-group">
                   <label><?php echo __( "Full Name", "ets_pmpro_discord" );?></label>
                   <input type="text" name="ets_user_name" value="<?php echo $currUserName; ?>" class="form-control contact-input" placeholder="Write Your Full Name">
+                  <?php wp_nonce_field( 'get_support', 'ets_discord_get_support' ); ?>
                 </div>
                 <div class="ets-form-group">
                   <label><?php echo __( "Contact Email", "ets_pmpro_discord" );?></label>

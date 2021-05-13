@@ -28,7 +28,7 @@ jQuery( document ).ready( function( $ ) {
 			type:"POST",
 			dataType:"JSON",
 			url:etsPmproParams.admin_ajax,
-	        data: {'action': 'load_discord_roles'},
+	        data: {'action': 'load_discord_roles','ets_discord_nonce': etsPmproParams.ets_discord_nonce,},
 	        beforeSend:function () {
 				$(".discord-roles .spinner").addClass("is-active");
 			},
@@ -99,7 +99,7 @@ jQuery( document ).ready( function( $ ) {
 	  		$.ajax({
 		      	url: etsPmproParams.admin_ajax,
 		      	type: "POST",
-		      	data: 'action=ets_clear_logs&',
+		      	data: {'action':'ets_clear_logs','ets_discord_nonce': etsPmproParams.ets_discord_nonce,},
 	      		beforeSend:function () {
 					$(".spinner").addClass("is-active").show();
 		   		},
@@ -253,7 +253,7 @@ jQuery( document ).ready( function( $ ) {
 			type:"POST",
 			dataType:"JSON",
 			url:etsPmproParams.admin_ajax,
-            data: {'action': 'disconnect_from_discord','user_id':userId,'nonce': etsPmproParams.nonce,},
+      data: {'action': 'disconnect_from_discord','user_id':userId,'nonce': etsPmproParams.nonce,},
 			beforeSend:function () {
 				$(".ets-spinner").addClass("ets-is-active");
 			},

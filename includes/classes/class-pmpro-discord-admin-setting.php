@@ -343,7 +343,7 @@ class Ets_Pmpro_Admin_Setting {
 			'admin_ajax'        => admin_url( 'admin-ajax.php' ),
 			'permissions_const' => ETS_DISCORD_BOT_PERMISSIONS,
 			'is_admin'          => is_admin(),
-			'nonce' => wp_create_nonce('ajax-nonce-disconnect-discord'),
+			'ets_discord_nonce' => wp_create_nonce('ets-discord-ajax-nonce'),
 		);
 
 		wp_localize_script( 'ets_pmpro_add_discord_script', 'etsPmproParams', $script_params );
@@ -435,8 +435,8 @@ class Ets_Pmpro_Admin_Setting {
 		if ( $ets_discord_roles ) {
 			$ets_discord_roles   = stripslashes( $ets_discord_roles );
 			$save_mapping_status = update_option( 'ets_discord_role_mapping', $ets_discord_roles );
-			if ( ( $save_mapping_status || isset( $_POST['ets_discord_role_mapping'] ) ) && ! isset( $_POST['flush'] ) ) {
-				if ( isset( $_POST['ets_discord_save_mapping'] ) || wp_verify_nonce( $_POST['ets_discord_save_mappings'], 'save_discord_mappings' ) ) {
+			if ( isset( $_POST['ets_discord_save_mapping'] ) || wp_verify_nonce( $_POST['ets_discord_role_mappings_nonce'], 'discord_role_mappings_nonce' ) ) {
+				if ( ( $save_mapping_status || isset( $_POST['ets_discord_role_mapping'] ) ) && ! isset( $_POST['flush'] ) ) {
 					if ( $ets_discord_default_role_id ) {
 						update_option( 'ets_discord_default_role_id', $ets_discord_default_role_id );
 					}
@@ -454,17 +454,17 @@ class Ets_Pmpro_Admin_Setting {
 					</div>
 					<?php
 				}
-			}
-			if ( isset( $_POST['flush'] ) ) {
-				delete_option( 'ets_discord_role_mapping' );
-				delete_option( 'ets_discord_default_role_id' );
-				delete_option( 'ets_upon_expiry' );
-				delete_option( 'ets_allow_none_member' );
-				?>
-			<div class="notice notice-success is-dismissible support-success-msg">
-				<p><?php echo __( 'Your settings flushed successfully.', 'ets_pmpro_discord' ); ?></p>
-			</div>
-				<?php
+				if ( isset( $_POST['flush'] ) ) {
+					delete_option( 'ets_discord_role_mapping' );
+					delete_option( 'ets_discord_default_role_id' );
+					delete_option( 'ets_upon_expiry' );
+					delete_option( 'ets_allow_none_member' );
+					?>
+				<div class="notice notice-success is-dismissible support-success-msg">
+					<p><?php echo __( 'Your settings flushed successfully.', 'ets_pmpro_discord' ); ?></p>
+				</div>
+					<?php
+				}
 			}
 		}
 		

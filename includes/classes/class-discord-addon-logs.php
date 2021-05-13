@@ -25,6 +25,11 @@ class PMPro_Discord_Logs {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
+		// Check for nonce security      
+		if ( ! wp_verify_nonce( $_POST['ets_discord_nonce'], 'ets-discord-ajax-nonce' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
 		try {
 			$file_name = $this::$log_file_name;
 			if( fopen(ETS_PMPRO_DISCORD_PATH.$file_name, "w") ) {

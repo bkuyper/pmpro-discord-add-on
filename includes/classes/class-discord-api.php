@@ -211,6 +211,11 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
+		// Check for nonce security      
+		if ( ! wp_verify_nonce( $_POST['ets_discord_nonce'], 'ets-discord-ajax-nonce' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
 		$user_id = get_current_user_id();
 		try {
 			$guild_id          = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
@@ -489,8 +494,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			exit();
 		}
 
-		 // Check for nonce security      
-     if ( ! wp_verify_nonce( $_POST['nonce'], 'ajax-nonce-disconnect-discord' ) ) {
+		// Check for nonce security      
+		if ( ! wp_verify_nonce( $_POST['ets_discord_nonce'], 'ets-discord-ajax-nonce' ) ) {
 				wp_send_json_error( 'You do not have sufficient rights', 403 );
 				exit();
 		}

@@ -488,6 +488,11 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
+
+		 // Check for nonce security      
+     if ( ! wp_verify_nonce( $_POST['nonce'], 'ajax-nonce-disconnect-discord' ) ) {
+				die ( 'Busted!');
+		}
 		$user_id = sanitize_text_field( trim( $_POST['user_id'] ) );
 		$this->delete_member_from_guild( $user_id );
 		$event_res = array(

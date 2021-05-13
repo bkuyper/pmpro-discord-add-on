@@ -253,7 +253,7 @@ jQuery( document ).ready( function( $ ) {
 			type:"POST",
 			dataType:"JSON",
 			url:etsPmproParams.admin_ajax,
-            data: {'action': 'disconnect_from_discord','user_id':userId},
+            data: {'action': 'disconnect_from_discord','user_id':userId,'nonce': etsPmproParams.nonce,},
 			beforeSend:function () {
 				$(".ets-spinner").addClass("ets-is-active");
 			},

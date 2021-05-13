@@ -343,6 +343,7 @@ class Ets_Pmpro_Admin_Setting {
 			'admin_ajax'        => admin_url( 'admin-ajax.php' ),
 			'permissions_const' => ETS_DISCORD_BOT_PERMISSIONS,
 			'is_admin'          => is_admin(),
+			'nonce' => wp_create_nonce('ajax-nonce-disconnect-discord'),
 		);
 
 		wp_localize_script( 'ets_pmpro_add_discord_script', 'etsPmproParams', $script_params );

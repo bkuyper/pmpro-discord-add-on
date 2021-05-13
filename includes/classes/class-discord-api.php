@@ -370,7 +370,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				),
 			);
 			$guild_response                = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
-			update_option( 'ets_discord_delete_member_rate_limit', $guild_response['headers']['x-ratelimit-limit'] );
+			update_option( 'ets_discord_delete_member_rate_limit', $guild_response['headers']['x-ratelimit-remaining'] );
 			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 
 			if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
@@ -425,7 +425,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				);
 
 				$response = wp_remote_get( $discord_change_role_api_url, $param );
-				update_option( 'ets_discord_change_role_rate_limit', $response['headers']['x-ratelimit-limit'] );
+				update_option( 'ets_discord_change_role_rate_limit', $response['headers']['x-ratelimit-remaining'] );
 				$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
 				if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
 					if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
@@ -472,7 +472,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				);
 
 				$response = wp_remote_request( $discord_delete_role_api_url, $param );
-				update_option( 'ets_discord_delete_role_rate_limit', $response['headers']['x-ratelimit-limit'] );
+				update_option( 'ets_discord_delete_role_rate_limit', $response['headers']['x-ratelimit-remaining'] );
 				return $response;
 			}
 		} catch ( Exception $e ) {

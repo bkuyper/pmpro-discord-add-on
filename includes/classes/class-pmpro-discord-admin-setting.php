@@ -600,5 +600,20 @@ class Ets_Pmpro_Admin_Setting {
 		}
 
 	}
+
+	/**
+	 * Description: Get average rate limit for api calls
+	 *
+	 * @param None
+	 * @return int $avg_rate
+	 */
+	public function get_average_ratelimit_count() {
+		$ets_discord_delete_member_rate_limit = sanitize_text_field( trim( get_option( 'ets_discord_delete_member_rate_limit' ) ) );
+		$ets_discord_delete_role_rate_limit   = sanitize_text_field( trim( get_option( 'ets_discord_delete_role_rate_limit' ) ) );
+		$ets_discord_change_role_rate_limit   = sanitize_text_field( trim( get_option( 'ets_discord_change_role_rate_limit' ) ) );
+		$limits = array($ets_discord_delete_member_rate_limit,$ets_discord_delete_role_rate_limit,$ets_discord_change_role_rate_limit);
+		$avg_rate = array_sum($limits)/count($limits);
+		return $avg_rate;
+	}
 }
 new Ets_Pmpro_Admin_Setting();

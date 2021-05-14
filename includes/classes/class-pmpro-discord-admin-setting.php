@@ -16,11 +16,6 @@ class Ets_Pmpro_Admin_Setting {
 		// Add new button in pmpro profile
 		add_action( 'pmpro_show_user_profile', array( $this, 'add_connect_discord_button' ) );
 
-		// initiate cron event
-		add_action( 'init', array( $this, 'schedule_cron_jobs' ) );
-
-		add_filter( 'cron_schedules', array( $this, 'ets_cron_schedules' ) );
-
 		// change hook call on cancel and change
 		add_action( 'pmpro_after_change_membership_level', array( $this, 'on_cancel_add_member_into_queue' ), 10, 3 );
 
@@ -31,48 +26,6 @@ class Ets_Pmpro_Admin_Setting {
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_cron_pmpro_add_user_into_cancel_queue' ), 10, 8 );
 		add_action( 'admin_init', array( $this, 'set_redirect_url_on_pmpro_activation' ) );
 	}
-
-	/**
-	 * Description: Create cron events
-	 *
-	 * @param None
-	 * @return None
-	 */
-	public static function schedule_cron_jobs() {
-		if ( ! wp_next_scheduled( 'ets_cron_pmpro_cancelled_members' ) ) {
-			wp_schedule_event( time(), 'ets_discord_time_1', 'ets_cron_pmpro_cancelled_members' );
-		}
-		if ( ! wp_next_scheduled( 'ets_cron_pmpro_expired_members' ) ) {
-			wp_schedule_event( time(), 'ets_discord_time_2', 'ets_cron_pmpro_expired_members' );
-		}
-		if ( ! wp_next_scheduled( 'ets_cron_pmpro_reset_rate_limits' ) ) {
-			wp_schedule_event( time(), 'ets_discord_time_3', 'ets_cron_pmpro_reset_rate_limits' );
-		}
-	}
-
-	/**
-	 * Description: time scheduler
-	 *
-	 * @param int $user_id
-	 * @param int $level_id
-	 * @return array $schedules
-	 */
-	function ets_cron_schedules( $schedules ) {
-		$schedules['ets_discord_time_1'] = array(
-			'interval' => ETS_CRON_TIME_1,
-			'display'  => __( ETS_CRON_NAME_1, 'ets_pmpro_discord' ),
-		);
-		$schedules['ets_discord_time_2'] = array(
-			'interval' => ETS_CRON_TIME_2,
-			'display'  => __( ETS_CRON_NAME_2, 'ets_pmpro_discord' ),
-		);
-		$schedules['ets_discord_time_3'] = array(
-			'interval' => ETS_CRON_TIME_3,
-			'display'  => __( ETS_CRON_NAME_3, 'ets_pmpro_discord' ),
-		);
-		return $schedules;
-	}
-
 	/**
 	 * Description: Show status of PMPro connection with user
 	 *

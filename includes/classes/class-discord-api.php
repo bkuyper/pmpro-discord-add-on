@@ -211,7 +211,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
-		// Check for nonce security      
+		// Check for nonce security
 		if ( ! wp_verify_nonce( $_POST['ets_discord_nonce'], 'ets-discord-ajax-nonce' ) ) {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
@@ -273,7 +273,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function discord_api_callback() {
 		if ( is_user_logged_in() ) {
-			$user_id  = get_current_user_id();
+			$user_id = get_current_user_id();
 			try {
 				if ( isset( $_GET['action'] ) && $_GET['action'] == 'discord-login' ) {
 					$params                    = array(
@@ -494,7 +494,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			exit();
 		}
 
-		// Check for nonce security      
+		// Check for nonce security
 		if ( ! wp_verify_nonce( $_POST['ets_discord_nonce'], 'ets-discord-ajax-nonce' ) ) {
 				wp_send_json_error( 'You do not have sufficient rights', 403 );
 				exit();
@@ -523,8 +523,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$allow_none_member        = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
 		if ( $ets_members_queue ) {
 			foreach ( $ets_members_queue['expired'] as $key => $user_id ) {
-				$avg_rate = $this->get_average_ratelimit_count();
-				$ets_discord_role_id                  = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
+				$avg_rate            = $this->get_average_ratelimit_count();
+				$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
 				if ( $allow_none_member == 'no' ) {
 					if ( empty( $avg_rate ) || $avg_rate > 1 ) {
 						$this->delete_member_from_guild( $user_id );

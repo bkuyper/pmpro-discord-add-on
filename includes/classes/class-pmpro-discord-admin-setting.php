@@ -343,7 +343,7 @@ class Ets_Pmpro_Admin_Setting {
 			'admin_ajax'        => admin_url( 'admin-ajax.php' ),
 			'permissions_const' => ETS_DISCORD_BOT_PERMISSIONS,
 			'is_admin'          => is_admin(),
-			'ets_discord_nonce' => wp_create_nonce('ets-discord-ajax-nonce'),
+			'ets_discord_nonce' => wp_create_nonce( 'ets-discord-ajax-nonce' ),
 		);
 
 		wp_localize_script( 'ets_pmpro_add_discord_script', 'etsPmproParams', $script_params );
@@ -406,31 +406,30 @@ class Ets_Pmpro_Admin_Setting {
 				if ( $ets_discord_client_id ) {
 					update_option( 'ets_discord_client_id', $ets_discord_client_id );
 				}
-		
+
 				if ( $discord_client_secret ) {
 					update_option( 'ets_discord_client_secret', $discord_client_secret );
 				}
-		
+
 				if ( $discord_bot_token ) {
 					update_option( 'ets_discord_bot_token', $discord_bot_token );
 				}
-		
+
 				if ( $ets_discord_redirect_url ) {
 					update_option( 'ets_discord_redirect_url', $ets_discord_redirect_url );
 				}
-		
+
 				if ( $ets_discord_guild_id ) {
 					update_option( 'ets_discord_guild_id', $ets_discord_guild_id );
 				}
-			
+
 				?>
 				 <div class="notice notice-success is-dismissible support-success-msg">
 					<p><?php echo __( 'Your settings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
 				</div>
 				<?php
 			}
-		} 
-		
+		}
 
 		if ( $ets_discord_roles ) {
 			$ets_discord_roles   = stripslashes( $ets_discord_roles );
@@ -440,11 +439,11 @@ class Ets_Pmpro_Admin_Setting {
 					if ( $ets_discord_default_role_id ) {
 						update_option( 'ets_discord_default_role_id', $ets_discord_default_role_id );
 					}
-		
+
 					if ( $upon_expiry ) {
 						update_option( 'ets_upon_expiry', $upon_expiry );
 					}
-		
+
 					if ( $allow_none_member ) {
 						update_option( 'ets_allow_none_member', $allow_none_member );
 					}
@@ -467,7 +466,7 @@ class Ets_Pmpro_Admin_Setting {
 				}
 			}
 		}
-		
+
 		$currUserName = '';
 		$currentUser  = wp_get_current_user();
 		if ( $currentUser ) {
@@ -527,9 +526,9 @@ class Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
-		
+
 		if ( isset( $_POST['save'] ) ) {
-			// Check for nonce security      
+			// Check for nonce security
 			if ( ! wp_verify_nonce( $_POST['ets_discord_get_support'], 'get_support' ) ) {
 				wp_send_json_error( 'You do not have sufficient rights', 403 );
 				exit();
@@ -611,8 +610,8 @@ class Ets_Pmpro_Admin_Setting {
 		$ets_discord_delete_member_rate_limit = sanitize_text_field( trim( get_option( 'ets_discord_delete_member_rate_limit' ) ) );
 		$ets_discord_delete_role_rate_limit   = sanitize_text_field( trim( get_option( 'ets_discord_delete_role_rate_limit' ) ) );
 		$ets_discord_change_role_rate_limit   = sanitize_text_field( trim( get_option( 'ets_discord_change_role_rate_limit' ) ) );
-		$limits = array($ets_discord_delete_member_rate_limit,$ets_discord_delete_role_rate_limit,$ets_discord_change_role_rate_limit);
-		$avg_rate = array_sum($limits)/count($limits);
+		$limits                               = array( $ets_discord_delete_member_rate_limit, $ets_discord_delete_role_rate_limit, $ets_discord_change_role_rate_limit );
+		$avg_rate                             = array_sum( $limits ) / count( $limits );
 		return $avg_rate;
 	}
 }

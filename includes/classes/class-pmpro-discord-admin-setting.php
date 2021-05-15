@@ -24,7 +24,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_action( 'ets_cron_pmpro_reset_rate_limits', array( $this, 'ets_cron_pmpro_reset_rate_limits_hook' ) );
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_cron_pmpro_add_user_into_cancel_queue' ), 10, 8 );
-		add_action( 'admin_init', array( $this, 'set_redirect_url_on_pmpro_activation' ) );
+    
 	}
 	/**
 	 * Description: Show status of PMPro connection with user
@@ -540,21 +540,6 @@ class Ets_Pmpro_Admin_Setting {
 		return $status;
 	}
 
-	/**
-	 * Description: To to save redirect url
-	 *
-	 * @param None
-	 * @return None
-	 */
-	public function set_redirect_url_on_pmpro_activation() {
-		$ets_pre_saved_url         = get_option( 'ets_discord_redirect_url' );
-		$ets_pmpro_profile_page_id = get_option( 'pmpro_member_profile_edit_page_id' );
-		if ( $ets_pmpro_profile_page_id && empty( $ets_pre_saved_url ) ) {
-			$ets_discord_redirect_url = get_permalink( $ets_pmpro_profile_page_id );
-			update_option( 'ets_discord_redirect_url', $ets_discord_redirect_url );
-		}
-
-	}
 
 	/**
 	 * Description: Get average rate limit for api calls

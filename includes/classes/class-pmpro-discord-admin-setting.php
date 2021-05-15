@@ -24,7 +24,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_action( 'ets_cron_pmpro_reset_rate_limits', array( $this, 'ets_cron_pmpro_reset_rate_limits_hook' ) );
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_cron_pmpro_add_user_into_cancel_queue' ), 10, 8 );
-    
+
 	}
 	/**
 	 * Description: Show status of PMPro connection with user
@@ -358,7 +358,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		$allow_none_member = isset( $_POST['allow_none_member'] ) ? sanitize_textarea_field( trim( $_POST['allow_none_member'] ) ) : '';
 		if ( isset( $_POST['submit'] ) && ! isset( $_POST['ets_discord_role_mapping'] ) ) {
-			if ( isset( $_POST['ets_discord_save_settings'] ) || wp_verify_nonce( $_POST['ets_discord_save_settings'], 'save_discord_settings' ) ) {
+			if ( isset( $_POST['ets_discord_save_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_settings'], 'save_discord_settings' ) ) {
 				if ( $ets_discord_client_id ) {
 					update_option( 'ets_discord_client_id', $ets_discord_client_id );
 				}
@@ -372,6 +372,8 @@ class Ets_Pmpro_Admin_Setting {
 				}
 
 				if ( $ets_discord_redirect_url ) {
+					// add a query string param `via` GH #185.
+					$ets_discord_redirect_url = $this->get_formated_discord_redirect_url( $ets_discord_redirect_url );
 					update_option( 'ets_discord_redirect_url', $ets_discord_redirect_url );
 				}
 
@@ -390,7 +392,7 @@ class Ets_Pmpro_Admin_Setting {
 		if ( $ets_discord_roles ) {
 			$ets_discord_roles   = stripslashes( $ets_discord_roles );
 			$save_mapping_status = update_option( 'ets_discord_role_mapping', $ets_discord_roles );
-			if ( isset( $_POST['ets_discord_save_mapping'] ) || wp_verify_nonce( $_POST['ets_discord_role_mappings_nonce'], 'discord_role_mappings_nonce' ) ) {
+			if ( isset( $_POST['ets_discord_save_mapping'] ) && wp_verify_nonce( $_POST['ets_discord_role_mappings_nonce'], 'discord_role_mappings_nonce' ) ) {
 				if ( ( $save_mapping_status || isset( $_POST['ets_discord_role_mapping'] ) ) && ! isset( $_POST['flush'] ) ) {
 					if ( $ets_discord_default_role_id ) {
 						update_option( 'ets_discord_default_role_id', $ets_discord_default_role_id );
@@ -423,11 +425,6 @@ class Ets_Pmpro_Admin_Setting {
 			}
 		}
 
-		$currUserName = '';
-		$currentUser  = wp_get_current_user();
-		if ( $currentUser ) {
-			$currUserName = sanitize_text_field( trim( $currentUser->user_login ) );
-		}
 		$ets_discord_client_id    = sanitize_text_field( trim( get_option( 'ets_discord_client_id' ) ) );
 		$discord_client_secret    = sanitize_text_field( trim( get_option( 'ets_discord_client_secret' ) ) );
 		$discord_bot_token        = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
@@ -554,6 +551,27 @@ class Ets_Pmpro_Admin_Setting {
 		$limits                               = array( $ets_discord_delete_member_rate_limit, $ets_discord_delete_role_rate_limit, $ets_discord_change_role_rate_limit );
 		$avg_rate                             = array_sum( $limits ) / count( $limits );
 		return $avg_rate;
+	}
+
+	/**
+	 * This method parse url and append a query param to it.
+	 *
+	 * @param string $url
+	 * @return string $url
+	 */
+	public function get_formated_discord_redirect_url( $url ) {
+		$parsed = parse_url( $url, PHP_URL_QUERY );
+		if ( $parsed === null ) {
+			return $url .= '?via=discord';
+		}
+		else {
+			if ( stristr( $url, 'via=discord' ) !== FALSE ) {
+				return $url;
+			}
+			else {
+				return $url .= '&via=discord';
+			}
+		}
 	}
 }
 new Ets_Pmpro_Admin_Setting();

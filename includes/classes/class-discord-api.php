@@ -300,9 +300,10 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					header( 'Location: ' . $discord_authorise_api_url );
 					die();
 				}
-				if ( isset( $_GET['code'] ) ) {
+				if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) ) {
 					$code     = sanitize_text_field( trim( $_GET['code'] ) );
 					$response = $this->create_discord_auth_token( $code, $user_id );
+
 					if ( ! empty( $response ) ) {
 						$res_body              = json_decode( wp_remote_retrieve_body( $response ), true );
 						$discord_exist_user_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id', true ) ) );

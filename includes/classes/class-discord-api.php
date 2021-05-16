@@ -183,10 +183,10 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				}
 			}
 
-			if ( $discord_role ) {
+			if ( $discord_role && $discord_role!='none' ) {
 				$this->change_discord_role_api( $user_id, $discord_role );
 			}
-			if ( $default_role ) {
+			if ( $default_role && $default_role!='none'  ) {
 				$this->change_discord_role_api( $user_id, $default_role );
 			}
 			return $guild_response;
@@ -538,7 +538,9 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				} elseif ( $allow_none_member == 'yes' && ! empty( $ets_discord_role_id ) ) {
 					if ( empty( $avg_rate ) || $avg_rate > 1 ) {
 						$this->delete_discord_role( $user_id, $ets_discord_role_id );
-						$this->change_discord_role_api( $user_id, $role_id );
+            if ( $role_id!='none' ) {
+						  $this->change_discord_role_api( $user_id, $role_id );
+            }
 						unset( $ets_members_queue['expired'][ $key ] );
 						$reset_queue = serialize( $ets_members_queue );
 						update_option( 'ets_queue_of_pmpro_members', $reset_queue );
@@ -585,7 +587,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 							break;
 						}
 					} elseif ( $allow_none_member == 'yes' ) {
-						if ( empty( $avg_rate ) || $avg_rate > 1 ) {
+						if ( (empty( $avg_rate ) || $avg_rate > 1) && $role_id!='none' ) {
 							$this->change_discord_role_api( $user_id, $role_id );
 							unset( $ets_members_queue['cancelled'][ $key ] );
 							$reset_queue = serialize( $ets_members_queue );
@@ -600,7 +602,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: Change discord role form pmpro role
+	 * Change discord role from admin user edit.
 	 *
 	 * @param $level_id
 	 * @param $user_id
@@ -608,31 +610,38 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @return none
 	 */
 	public function change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
-		$ets_discord_user_id   = get_user_meta( $user_id, 'ets_discord_user_id', true );
-		$ets_discord_role_id   = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
-		$default_role          = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
-		$previous_default_role = get_user_meta( $user_id, 'ets_discord_default_role_id', true );
-		if ( $ets_discord_user_id && empty( $cancel_level ) && $ets_discord_user_id ) {
-			if ( $ets_discord_role_id != $default_role ) {
-				$role_delete = $this->delete_discord_role( $user_id, $ets_discord_role_id );
-			}
-			if ( $previous_default_role != $default_role && $default_role != 'none' ) {
-				$this->delete_discord_role( $user_id, $previous_default_role );
-				$this->change_discord_role_api( $user_id, $default_role );
-			} elseif ( $previous_default_role != 'none' && $default_role == 'none' ) {
-				$this->delete_discord_role( $user_id, $previous_default_role );
-				update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
-			}
-			$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
-			$role_id                  = '';
-			$curr_level_id            = $this->get_current_level_id( $user_id );
-			if ( $level_id ) {
-				if ( is_array( $ets_discord_role_mapping ) && array_key_exists( 'level_id_' . $level_id, $ets_discord_role_mapping ) ) {
-					$role_id = $ets_discord_role_mapping[ 'level_id_' . $level_id ];
+		// This if condition check if the method is being called from Admin interface
+		if( current_user_can( 'edit_user', $user_id ) && isset( $_POST['user_id'] ) ){
+			$ets_discord_user_id   = get_user_meta( $user_id, 'ets_discord_user_id', true );
+			$ets_discord_role_id   = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
+			$default_role          = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
+			$previous_default_role = get_user_meta( $user_id, 'ets_discord_default_role_id', true );
+			
+			if ( $ets_discord_user_id && empty( $cancel_level ) && $ets_discord_user_id ) {
+				if ( isset( $ets_discord_role_id ) && $ets_discord_role_id!='' && $ets_discord_role_id != $default_role ) {
+					$role_delete = $this->delete_discord_role( $user_id, $ets_discord_role_id );
 				}
-			}
-			if ( ! empty( $role_id ) ) {
-				$this->change_discord_role_api( $user_id, $role_id );
+				if ( isset($previous_default_role) && $previous_default_role!='none' && $previous_default_role != $default_role && $default_role != 'none' ) {
+					$this->delete_discord_role( $user_id, $previous_default_role );
+					if ($default_role!='none') {
+						$this->change_discord_role_api( $user_id, $default_role );
+					}
+				} elseif ( isset($previous_default_role) && $previous_default_role != 'none' && $default_role == 'none' ) {
+					$this->delete_discord_role( $user_id, $previous_default_role );
+					update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
+				}
+				$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
+				$role_id                  = '';
+				$curr_level_id            = $this->get_current_level_id( $user_id );
+				if ( $level_id ) {
+					if ( is_array( $ets_discord_role_mapping ) && array_key_exists( 'level_id_' . $level_id, $ets_discord_role_mapping ) ) {
+						$role_id = $ets_discord_role_mapping[ 'level_id_' . $level_id ];
+					}
+				}
+				if ( ! empty( $role_id ) && $role_id!='none' ) {
+					
+					$this->change_discord_role_api( $user_id, $role_id );
+				}
 			}
 		}
 	}

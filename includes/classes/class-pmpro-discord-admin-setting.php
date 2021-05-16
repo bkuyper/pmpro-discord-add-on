@@ -205,6 +205,7 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return None
 	 */
 	public function pmpro_expiry_membership( $user_id, $level_id ) {
+    update_option('Log2','pmpro_expiry_membership');
 		$existing_members_queue = sanitize_text_field( trim( get_option( 'ets_queue_of_pmpro_members' ) ) );
 		$membership_status      = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
 		$access_token           = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );

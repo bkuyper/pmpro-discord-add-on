@@ -567,15 +567,16 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			foreach ( $ets_members_queue['cancelled'] as $key => $user_id ) {
 				$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
 				$ets_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id', true ) ) );
+				$avg_rate = $this->get_average_ratelimit_count();
 				if ( $ets_discord_user_id ) {
-					$role_delete = $this->delete_discord_role( $user_id, $ets_discord_role_id );
+					if ( empty( $avg_rate ) || $avg_rate > 1 ) {
+						$role_delete = $this->delete_discord_role( $user_id, $ets_discord_role_id );
+					}
 					$role_id     = '';
 					if ( $discord_default_role ) {
 
 						$role_id = $discord_default_role;
 					}
-
-					$avg_rate = $this->get_average_ratelimit_count();
 
 					if ( $allow_none_member == 'no' ) {
 						if ( empty( $avg_rate ) || $avg_rate > 1 ) {

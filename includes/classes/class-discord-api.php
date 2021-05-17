@@ -183,10 +183,10 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				}
 			}
 
-			if ( $discord_role && $discord_role!='none' ) {
+			if ( $discord_role && $discord_role != 'none' ) {
 				$this->change_discord_role_api( $user_id, $discord_role );
 			}
-			if ( $default_role && $default_role!='none'  ) {
+			if ( $default_role && $default_role != 'none'  ) {
 				$this->change_discord_role_api( $user_id, $default_role );
 			}
 			return $guild_response;
@@ -538,7 +538,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				} elseif ( $allow_none_member == 'yes' && ! empty( $ets_discord_role_id ) ) {
 					if ( empty( $avg_rate ) || $avg_rate > 1 ) {
 						$this->delete_discord_role( $user_id, $ets_discord_role_id );
-            if ( $role_id!='none' ) {
+            if ( $role_id != 'none' ) {
 						  $this->change_discord_role_api( $user_id, $role_id );
             }
 						unset( $ets_members_queue['expired'][ $key ] );
@@ -588,7 +588,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 							break;
 						}
 					} elseif ( $allow_none_member == 'yes' ) {
-						if ( (empty( $avg_rate ) || $avg_rate > 1) && $role_id!='none' ) {
+						if ( (empty( $avg_rate ) || $avg_rate > 1) && $role_id != 'none' ) {
 							$this->change_discord_role_api( $user_id, $role_id );
 							unset( $ets_members_queue['cancelled'][ $key ] );
 							$reset_queue = serialize( $ets_members_queue );
@@ -619,12 +619,12 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			$previous_default_role = get_user_meta( $user_id, 'ets_discord_default_role_id', true );
 			
 			if ( $ets_discord_user_id && empty( $cancel_level ) && $ets_discord_user_id ) {
-				if ( isset( $ets_discord_role_id ) && $ets_discord_role_id!='' && $ets_discord_role_id != $default_role ) {
+				if ( isset( $ets_discord_role_id ) && $ets_discord_role_id != '' && $ets_discord_role_id != $default_role ) {
 					$role_delete = $this->delete_discord_role( $user_id, $ets_discord_role_id );
 				}
-				if ( isset($previous_default_role) && $previous_default_role!='none' && $previous_default_role != $default_role && $default_role != 'none' ) {
+				if ( isset($previous_default_role) && $previous_default_role != 'none' && $previous_default_role != $default_role && $default_role != 'none' ) {
 					$this->delete_discord_role( $user_id, $previous_default_role );
-					if ($default_role!='none') {
+					if ($default_role != 'none') {
 						$this->change_discord_role_api( $user_id, $default_role );
 					}
 				} elseif ( isset($previous_default_role) && $previous_default_role != 'none' && $default_role == 'none' ) {
@@ -639,7 +639,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 						$role_id = $ets_discord_role_mapping[ 'level_id_' . $level_id ];
 					}
 				}
-				if ( ! empty( $role_id ) && $role_id!='none' ) {
+				if ( ! empty( $role_id ) && $role_id != 'none' ) {
 					
 					$this->change_discord_role_api( $user_id, $role_id );
 				}

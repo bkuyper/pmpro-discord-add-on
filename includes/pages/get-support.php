@@ -1,3 +1,10 @@
+<?php
+  $currUserName = "";
+  $currentUser = wp_get_current_user();
+  if ( $currentUser ) {
+    $currUserName = sanitize_text_field( trim( $currentUser->user_login ) );
+  }
+?>
 <div class="contact-form ">
   <form accept="#" method="post">
       <div class="ets-container">

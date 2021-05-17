@@ -122,6 +122,10 @@
   text-decoration: none;
   background-color:#FF0000;
 }
+.error-log{
+  height: 400px;
+  overflow: scroll;
+}
 .btn-connect{
   background-color: #77A02E;
 }

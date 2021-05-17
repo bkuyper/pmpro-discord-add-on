@@ -18,6 +18,9 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		add_action( 'pmpro_after_change_membership_level', array( $this, 'change_discord_role_from_pmpro' ), 10, 4 );
 
 		add_action( 'ets_cron_pmpro_cancelled_members', array( $this, 'ets_cron_pmpro_cancelled_members_hook' ) );
+
+    add_action( 'as_handle_pmpro_expiry', array( $this, 'as_handler_pmpro_expiry'), 10, 2 );
+		add_action( 'as_handle_pmpro_cancel', array( $this, 'as_handler_pmpro_cancel'), 10, 3 );
 	}
 
 	/**
@@ -548,6 +551,57 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 						break;
 					}
 				}
+			}
+		}
+	}
+
+  /*
+  * Action scheduler method to process expired pmpro members.
+  */
+  public function as_handler_pmpro_expiry( $user_id, $level_id ) {
+    $ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
+		$role_id                  = '';
+		$role_id                  = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
+		$allow_none_member        = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
+    $avg_rate                 = $this->get_average_ratelimit_count();
+		$ets_discord_role_id      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
+		
+		// Case when members are not allowed in guild after expiry.
+		if ( $allow_none_member == 'no' ) {
+			if ( empty( $avg_rate ) || $avg_rate > 1 ) {
+				$this->delete_member_from_guild( $user_id );
+			}
+		}
+		if ( $allow_none_member == 'yes' && ! empty( $ets_discord_role_id ) ) {
+			if ( empty( $avg_rate ) || $avg_rate > 1 ) {
+				$this->delete_discord_role( $user_id, $ets_discord_role_id );
+				if ( $role_id!='none' ) {
+					$this->change_discord_role_api( $user_id, $role_id );
+				}
+			}
+		}
+	}
+
+	/*
+	* Method to process queue of canceled pmpro members.
+	*/
+	public function as_handler_pmpro_cancel( $user_id, $level_id , $cancel_level ) {
+		$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
+		$discord_default_role     = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
+		$allow_none_member        = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
+		$ets_discord_role_id      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
+		$ets_discord_user_id      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id', true ) ) );
+		if ( $ets_discord_user_id ) {
+			$this->delete_discord_role( $user_id, $ets_discord_role_id );
+			$role_id                = '';
+			if ( $discord_default_role ) {
+				$role_id = $discord_default_role;
+			}
+			if ( $allow_none_member == 'no' ) {
+				$this->delete_member_from_guild( $user_id );
+			}
+			if ( $allow_none_member == 'yes' && $role_id != 'none' ) {
+				$this->change_discord_role_api( $user_id, $role_id );
 			}
 		}
 	}

@@ -48,14 +48,16 @@ class Ets_Pmpro_Add_Discord {
 		require_once ETS_PMPRO_DISCORD_PATH . 'includes/classes/class-pmpro-discord-admin-setting.php';
 		require_once ETS_PMPRO_DISCORD_PATH . 'includes/classes/class-discord-api.php';
 		require_once ETS_PMPRO_DISCORD_PATH . 'includes/classes/class-discord-addon-logs.php';
-
+    require_once ETS_PMPRO_DISCORD_PATH . 'libraries/action-scheduler/action-scheduler.php';
+    require_once ETS_PMPRO_DISCORD_PATH . 'includes/functions.php';
 		// Add cron schedules
 		add_filter( 'cron_schedules', array( $this, 'ets_cron_schedules' ) );
 
 		// initiate cron event
 		register_activation_hook( __FILE__, array( $this, 'set_up_plugin' ) );
-	}
 
+	}
+  
 	/**
 	 * Description: set up the plugin upon activation.
 	 *

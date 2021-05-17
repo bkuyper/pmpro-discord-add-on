@@ -17,14 +17,14 @@ class Ets_Pmpro_Admin_Setting {
 		add_action( 'pmpro_show_user_profile', array( $this, 'add_connect_discord_button' ) );
 
 		// change hook call on cancel and change
-		add_action( 'pmpro_after_change_membership_level', array( $this, 'on_cancel_add_member_into_queue' ), 10, 3 );
+		add_action( 'pmpro_after_change_membership_level', array( $this, 'as_schdule_job_pmpro_cancel' ), 10, 3 );
 
 		// Pmpro expiry
-		add_action( 'pmpro_membership_post_membership_expiry', array( $this, 'pmpro_expiry_membership' ), 10, 2 );
+		add_action( 'pmpro_membership_post_membership_expiry', array( $this, 'as_schdule_job_pmpro_expiry' ), 10, 2 );
 
 		add_action( 'ets_cron_pmpro_reset_rate_limits', array( $this, 'ets_cron_pmpro_reset_rate_limits_hook' ) );
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_cron_pmpro_add_user_into_cancel_queue' ), 10, 8 );
-
+		
 	}
 	/**
 	 * Description: Show status of PMPro connection with user
@@ -143,7 +143,38 @@ class Ets_Pmpro_Admin_Setting {
 		}
 
 	}
+	
+	/*
+	* Method to save job queue for canceled pmpro members.
+	 * @param int $level_id
+	 * @param int $user_id
+	 * @param int $cancel_level
+	 * @return None
+	*/
+	public function as_schdule_job_pmpro_cancel( $level_id, $user_id, $cancel_level ){
+		$delete_level_status    = get_option( 'ets_admin_level_deleted' );
+		$membership_status      = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
+		$access_token           = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
+		if ( ! empty( $cancel_level ) || $membership_status == 'admin_cancelled' ) {
 
+			$args = [
+				'hook' => 'as_handle_pmpro_cancel',
+				'args' => array ($level_id, $user_id, $cancel_level),
+				'status' => ActionScheduler_Store::STATUS_PENDING, 
+				'orderby' => 'date'
+			];
+
+			// check if member is already added to job queue.
+			$cancl_arr_already_added = as_get_scheduled_actions( $args, ARRAY_A );
+			if (  count( $cancl_arr_already_added )===0 && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ) {
+				if ( false === as_next_scheduled_action( 'as_handle_pmpro_cancel' ) ) {
+					as_schedule_single_action( strtotime('now') + get_random_second(), 'as_handle_pmpro_cancel' , array ( $user_id, $level_id , $cancel_level) );
+				}
+			}
+		}
+	}
+
+	
 	/**
 	 * Description: Save cancelled member details into members queue
 	 *
@@ -205,7 +236,7 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return None
 	 */
 	public function pmpro_expiry_membership( $user_id, $level_id ) {
-    update_option('Log2','pmpro_expiry_membership');
+    
 		$existing_members_queue = sanitize_text_field( trim( get_option( 'ets_queue_of_pmpro_members' ) ) );
 		$membership_status      = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
 		$access_token           = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
@@ -228,6 +259,24 @@ class Ets_Pmpro_Admin_Setting {
 		}
 	}
 
+  /*
+  *  Action schedule to schedule a function to run upon PMPRO Expiry.
+    * @param int $user_id
+	  * @param int $level_id
+	  * @return None
+		* Todo: If member is in Canceled queue we need to remove from cancel queue.
+  */ 
+  public function as_schdule_job_pmpro_expiry( $user_id, $level_id ) {
+    if ( false === as_next_scheduled_action( 'as_handle_pmpro_expiry' ) ) {
+      $existing_members_queue = sanitize_text_field( trim( get_option( 'ets_queue_of_pmpro_members' ) ) );
+		  $membership_status      = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
+		  $access_token           = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
+			if ( $membership_status == 'expired' && $access_token ) {
+				as_schedule_single_action( strtotime('now') + get_random_second(), 'as_handle_pmpro_expiry' , array ( $user_id, $level_id ) );
+			}
+    }
+  }
+  
 	/**
 	 * Description: Reset rate limits
 	 *

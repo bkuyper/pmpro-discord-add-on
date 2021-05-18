@@ -463,7 +463,7 @@ class Ets_Pmpro_Admin_Setting {
 		if ( $ets_discord_roles ) {
 			$ets_discord_roles   = stripslashes( $ets_discord_roles );
 			$save_mapping_status = update_option( 'ets_discord_role_mapping', $ets_discord_roles );
-			if ( isset( $_POST['ets_discord_save_mapping'] ) && wp_verify_nonce( $_POST['ets_discord_role_mappings_nonce'], 'discord_role_mappings_nonce' ) ) {
+			if ( isset( $_POST['ets_discord_role_mappings_nonce'] ) && wp_verify_nonce( $_POST['ets_discord_role_mappings_nonce'], 'discord_role_mappings_nonce' ) ) {
 				if ( ( $save_mapping_status || isset( $_POST['ets_discord_role_mapping'] ) ) && ! isset( $_POST['flush'] ) ) {
 					if ( $ets_discord_default_role_id ) {
 						update_option( 'ets_discord_default_role_id', $ets_discord_default_role_id );

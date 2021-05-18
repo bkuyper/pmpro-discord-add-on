@@ -121,12 +121,6 @@ class Ets_Pmpro_Add_Discord {
 	 * @return None
 	 */
 	public static function schedule_cron_jobs() {
-		if ( ! wp_next_scheduled( 'ets_cron_pmpro_cancelled_members' ) ) {
-			wp_schedule_event( time(), 'ets_discord_time_1', 'ets_cron_pmpro_cancelled_members' );
-		}
-		if ( ! wp_next_scheduled( 'ets_cron_pmpro_expired_members' ) ) {
-			wp_schedule_event( time(), 'ets_discord_time_2', 'ets_cron_pmpro_expired_members' );
-		}
 		if ( ! wp_next_scheduled( 'ets_cron_pmpro_reset_rate_limits' ) ) {
 			wp_schedule_event( time(), 'ets_discord_time_3', 'ets_cron_pmpro_reset_rate_limits' );
 		}

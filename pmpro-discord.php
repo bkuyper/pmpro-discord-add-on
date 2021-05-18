@@ -35,9 +35,11 @@ define( 'ETS_DISCORD_OAUTH_SCOPES', 'identify email connections guilds guilds.jo
 define( 'ETS_CRON_NAME_1', 'Discord Cron hourly cron' );
 define( 'ETS_CRON_NAME_2', 'Discord Cron half-hourly cron' );
 define( 'ETS_CRON_NAME_3', 'Discord Cron five minutes cron' );
+define( 'ETS_CRON_NAME_4', 'Discord Cron reset DB counter' );
 define( 'ETS_CRON_TIME_1', 3600 );
 define( 'ETS_CRON_TIME_2', 1800 );
 define( 'ETS_CRON_TIME_3', 300 );
+define( 'ETS_CRON_TIME_4', 82800 );
 
 /**
  * Class to connect discord app
@@ -105,6 +107,10 @@ class Ets_Pmpro_Add_Discord {
 			'interval' => ETS_CRON_TIME_3,
 			'display'  => __( ETS_CRON_NAME_3, 'ets_pmpro_discord' ),
 		);
+    $schedules['ets_discord_time_4'] = array(
+			'interval' => ETS_CRON_TIME_4,
+			'display'  => __( ETS_CRON_NAME_4, 'ets_pmpro_discord' ),
+		);
 		return $schedules;
 	}
 
@@ -123,6 +129,9 @@ class Ets_Pmpro_Add_Discord {
 		}
 		if ( ! wp_next_scheduled( 'ets_cron_pmpro_reset_rate_limits' ) ) {
 			wp_schedule_event( time(), 'ets_discord_time_3', 'ets_cron_pmpro_reset_rate_limits' );
+		}
+    if ( ! wp_next_scheduled( 'ets_reset_incremental_counter' ) ) {
+			wp_schedule_event( time(), 'ets_discord_time_4', 'ets_reset_incremental_counter' );
 		}
 	}
 

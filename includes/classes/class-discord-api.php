@@ -461,6 +461,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function delete_discord_role( $user_id, $ets_role_id ) {
 		try {
+      //wp_mail('ravisoni6262@gmail.com', 'CC-Bill-'.date('H:i:s'), debug_backtrace() );
 			$guild_id                    = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
 			$ets_discord_user_id         = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id', true ) ) );
 			$discord_bot_token           = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );

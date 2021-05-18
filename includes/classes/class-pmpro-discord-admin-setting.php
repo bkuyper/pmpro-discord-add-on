@@ -23,7 +23,10 @@ class Ets_Pmpro_Admin_Setting {
 		add_action( 'pmpro_membership_post_membership_expiry', array( $this, 'as_schdule_job_pmpro_expiry' ), 10, 2 );
 
 		add_action( 'ets_cron_pmpro_reset_rate_limits', array( $this, 'ets_cron_pmpro_reset_rate_limits_hook' ) );
+
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_cron_pmpro_add_user_into_cancel_queue' ), 10, 8 );
+    
+    add_action( 'ets_reset_incremental_counter', array( $this, 'ets_reset_incremental_func' ) );
 		
 	}
 	/**
@@ -168,7 +171,7 @@ class Ets_Pmpro_Admin_Setting {
 			$cancl_arr_already_added = as_get_scheduled_actions( $args, ARRAY_A );
 			if (  count( $cancl_arr_already_added )===0 && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ) {
 				if ( false === as_next_scheduled_action( 'as_handle_pmpro_cancel' ) ) {
-					as_schedule_single_action( strtotime('now') + get_random_second(), 'as_handle_pmpro_cancel' , array ( $user_id, $level_id , $cancel_level) );
+					as_schedule_single_action( strtotime('now') + get_random_second( [], true ), 'as_handle_pmpro_cancel' , array ( $user_id, $level_id , $cancel_level) );
 				}
 			}
 		}
@@ -272,7 +275,7 @@ class Ets_Pmpro_Admin_Setting {
 		  $membership_status      = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
 		  $access_token           = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
 			if ( $membership_status == 'expired' && $access_token ) {
-				as_schedule_single_action( strtotime('now') + get_random_second(), 'as_handle_pmpro_expiry' , array ( $user_id, $level_id ) );
+				as_schedule_single_action( strtotime('now') + get_random_second( [], true ), 'as_handle_pmpro_expiry' , array ( $user_id, $level_id ) );
 			}
     }
   }
@@ -623,5 +626,14 @@ class Ets_Pmpro_Admin_Setting {
 			}
 		}
 	}
+
+  /*
+  * Method to reset DB counter every day
+  * @param NONE
+  * @return NONE
+  */
+  public function ets_reset_incremental_func() {
+		update_option( 'ets_seconds_incrementer', 0 );
+  }
 }
 new Ets_Pmpro_Admin_Setting();

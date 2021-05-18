@@ -57,9 +57,8 @@ class Ets_Pmpro_Add_Discord {
 
 		// initiate cron event
 		register_activation_hook( __FILE__, array( $this, 'set_up_plugin' ) );
-
 	}
-  
+
 	/**
 	 * Description: set up the plugin upon activation.
 	 *

@@ -27,6 +27,10 @@ class Ets_Pmpro_Admin_Setting {
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_cron_pmpro_add_user_into_cancel_queue' ), 10, 1 );
     
     add_action( 'ets_reset_incremental_counter', array( $this, 'ets_reset_incremental_func' ) );
+
+		add_action('pmpro_memberslist_extra_cols_header', array( $this, 'ets_discord_pmpro_extra_cols_header' ) );
+
+		add_action('pmpro_memberslist_extra_cols_body', array( $this, 'ets_discord_pmpro_extra_cols_body') );
 		
 	}
 	/**
@@ -111,7 +115,7 @@ class Ets_Pmpro_Admin_Setting {
 	 * Description: Add user into cancelled membership queue
 	 *
 	 * @param int $user_id
-	 * @return string $status
+	 * @return None 
 	 */
 	public function ets_cron_pmpro_add_user_into_cancel_queue( $level_id ) {
 		global $wpdb;
@@ -148,7 +152,7 @@ class Ets_Pmpro_Admin_Setting {
 	}
 	
 	/** 
-	 * Method to save job queue for canceled pmpro members.
+	 * Method to save job queue for cancelled pmpro members.
 	 * @param int $level_id
 	 * @param int $user_id
 	 * @param int $cancel_level
@@ -635,5 +639,32 @@ class Ets_Pmpro_Admin_Setting {
   public function ets_reset_incremental_func() {
 		update_option( 'ets_seconds_incrementer', 0 );
   }
+
+	/*
+  * Add extra column header into pmpro members list
+  * @param NONE
+  * @return NONE
+  */
+	public function ets_discord_pmpro_extra_cols_header()
+	{
+	echo __( '<th>Discord</th>', 'ets_pmpro_discord' );
+	}
+
+	/*
+  * Add extra column body into pmpro members list
+  * @param array $user
+  * @return NONE
+  */
+	public function ets_discord_pmpro_extra_cols_body($user)
+	{
+		echo "<td>";
+		$access_token = sanitize_text_field( trim( get_user_meta( $user->ID, 'ets_discord_access_token', true ) ) );
+		if (	$access_token ){ 
+		echo __( '<a class="button button-primary" href="#">Run API</a>', 'ets_pmpro_discord' );
+		} else {
+			echo "N/A";
+		}
+		echo "</td>";
+	}
 }
 new Ets_Pmpro_Admin_Setting();

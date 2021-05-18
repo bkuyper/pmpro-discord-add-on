@@ -24,7 +24,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_action( 'ets_cron_pmpro_reset_rate_limits', array( $this, 'ets_cron_pmpro_reset_rate_limits_hook' ) );
 
-		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_cron_pmpro_add_user_into_cancel_queue' ), 10, 8 );
+		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_cron_pmpro_add_user_into_cancel_queue' ), 10, 1 );
     
     add_action( 'ets_reset_incremental_counter', array( $this, 'ets_reset_incremental_func' ) );
 		
@@ -108,7 +108,7 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: Get user membership status by user_id
+	 * Description: Add user into cancelled membership queue
 	 *
 	 * @param int $user_id
 	 * @return string $status
@@ -147,8 +147,8 @@ class Ets_Pmpro_Admin_Setting {
 
 	}
 	
-	/*
-	* Method to save job queue for canceled pmpro members.
+	/** 
+	 * Method to save job queue for canceled pmpro members.
 	 * @param int $level_id
 	 * @param int $user_id
 	 * @param int $cancel_level

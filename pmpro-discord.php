@@ -39,7 +39,7 @@ define( 'ETS_CRON_NAME_4', 'Discord Cron reset DB counter' );
 define( 'ETS_CRON_TIME_1', 3600 );
 define( 'ETS_CRON_TIME_2', 1800 );
 define( 'ETS_CRON_TIME_3', 300 );
-define( 'ETS_CRON_TIME_4', 1800 );
+define( 'ETS_CRON_TIME_4', 60 );
 
 /**
  * Class to connect discord app
@@ -120,9 +120,6 @@ class Ets_Pmpro_Add_Discord {
 	 * @return None
 	 */
 	public static function schedule_cron_jobs() {
-		if ( ! wp_next_scheduled( 'ets_cron_pmpro_reset_rate_limits' ) ) {
-			wp_schedule_event( time(), 'ets_discord_time_3', 'ets_cron_pmpro_reset_rate_limits' );
-		}
     if ( ! wp_next_scheduled( 'ets_reset_incremental_counter' ) ) {
 			wp_schedule_event( time(), 'ets_discord_time_4', 'ets_reset_incremental_counter' );
 		}

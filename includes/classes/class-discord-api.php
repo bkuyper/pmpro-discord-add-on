@@ -355,7 +355,9 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 									$ets_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
 									if ( $discord_exist_user_id == $ets_discord_user_id ) {
 										$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
-										$this->delete_discord_role( $user_id, $ets_discord_role_id );
+                    if ( ! empty ($ets_discord_role_id) ){
+									  	$this->delete_discord_role( $user_id, $ets_discord_role_id );
+                    }
 									}
 									update_user_meta( $user_id, 'ets_discord_user_id', $ets_discord_user_id );
 									$this->add_discord_member_in_guild( $ets_discord_user_id, $user_id, $access_token );
@@ -604,7 +606,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$allow_none_member        = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
 		$ets_discord_role_id      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
 		$ets_discord_user_id      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id', true ) ) );
-		if ( $ets_discord_user_id ) {
+		if ( $ets_discord_user_id && ! empty ( $ets_discord_role_id ) ) {
 			$this->delete_discord_role( $user_id, $ets_discord_role_id );
 			$role_id                = '';
 			if ( $discord_default_role ) {
@@ -640,12 +642,12 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				if ( isset( $ets_discord_role_id ) && $ets_discord_role_id != '' && $ets_discord_role_id != $default_role ) {
 					$this->delete_discord_role( $user_id, $ets_discord_role_id );
 				}
-				if ( isset( $previous_default_role ) && $previous_default_role != 'none' && $previous_default_role != $default_role && $default_role != 'none' ) {
+				if ( ! empty ( $previous_default_role ) && $previous_default_role != 'none' && $previous_default_role != $default_role && $default_role != 'none' ) {
 					$this->delete_discord_role( $user_id, $previous_default_role );
 					if ( $default_role != 'none' ) {
 						$this->change_discord_role_api( $user_id, $default_role );
 					}
-				} elseif ( isset( $previous_default_role ) && $previous_default_role != 'none' && $default_role == 'none' ) {
+				} elseif ( ! empty ( $previous_default_role ) && $previous_default_role != 'none' && $default_role == 'none' ) {
 					$this->delete_discord_role( $user_id, $previous_default_role );
 					update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
 				}

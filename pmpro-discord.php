@@ -39,7 +39,7 @@ define( 'ETS_CRON_NAME_4', 'Discord Cron reset DB counter' );
 define( 'ETS_CRON_TIME_1', 3600 );
 define( 'ETS_CRON_TIME_2', 1800 );
 define( 'ETS_CRON_TIME_3', 300 );
-define( 'ETS_CRON_TIME_4', 82800 );
+define( 'ETS_CRON_TIME_4', 1800 );
 
 /**
  * Class to connect discord app

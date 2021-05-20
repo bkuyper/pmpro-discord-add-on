@@ -480,17 +480,30 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
   /*
-  * Method to reset DB counter every day
+  * Method to reset DB counter
   * @param NONE
   * @return NONE
   */
   public function ets_reset_incremental_func() {
-		update_option( 'ets_calcel_seconds', 0 );
-		update_option( 'ets_expiry_seconds', 0 );
-		update_option( 'ets_add_member_seconds', 0 );
-		update_option( 'ets_delete_member_seconds', 0 );
-		update_option( 'ets_change_role_seconds', 0 );
-		update_option( 'ets_delete_role_seconds', 0 );
+		// Reseting the cancel second counter, but before doing that we need to check if there is no next schedule.
+		if ( false === as_next_scheduled_action('ets_as_handle_pmpro_cancel') ) {
+			update_option( 'ets_calcel_seconds', 0 );
+		}
+		if ( false === as_next_scheduled_action('ets_as_handle_pmpro_expiry') ) {
+			update_option( 'ets_expiry_seconds', 0 );
+		}
+		if ( false === as_next_scheduled_action('ets_as_handle_add_member_to_guild') ) {
+			update_option( 'ets_add_member_seconds', 0 );
+		}
+		if ( false === as_next_scheduled_action('ets_as_schedule_delete_member') ) {
+			update_option( 'ets_delete_member_seconds', 0 );
+		}
+		if ( false === as_next_scheduled_action('ets_as_schedule_member_change_role') ) {
+			update_option( 'ets_change_role_seconds', 0 );
+		}
+		if ( false === as_next_scheduled_action('ets_as_schedule_delete_role') ) {
+			update_option( 'ets_delete_role_seconds', 0 );
+		}
   }
 
 	/*

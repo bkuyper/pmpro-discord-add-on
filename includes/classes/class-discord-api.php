@@ -305,8 +305,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					);
 					$discord_authorise_api_url = ETS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
 
-					header( 'Location: ' . $discord_authorise_api_url );
-					die();
+          wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
+					exit;
 				}
 
 				if ( isset( $_GET['action'] ) && $_GET['action'] == 'discord-connectToBot' ) {
@@ -318,8 +318,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					);
 					$discord_authorise_api_url = ETS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
 
-					header( 'Location: ' . $discord_authorise_api_url );
-					die();
+					wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
+					exit;
 				}
 				if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) ) {
 					$code     = sanitize_text_field( trim( $_GET['code'] ) );
@@ -563,7 +563,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				exit();
 		}
 		$user_id = sanitize_text_field( trim( $_POST['user_id'] ) );
-		$this->delete_member_from_guild( $user_id );
+		$this->delete_member_from_guild( $user_id, false );
     delete_user_meta( $user_id, 'ets_discord_access_token' );
 		$event_res = array(
 			'status'  => 1,
@@ -657,7 +657,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 						$role_id = $ets_discord_role_mapping[ 'level_id_' . $level_id ];
 					}
 				}
-				if ( ! empty( $role_id ) && $role_id != 'none' ) {
+				if ( ! empty( $role_id ) && $role_id != 'none' && $role_id != '' ) {
 					$this->change_discord_role_api( $user_id, $role_id );
 				}
 			}

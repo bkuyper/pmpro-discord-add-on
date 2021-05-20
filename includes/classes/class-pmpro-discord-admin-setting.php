@@ -22,8 +22,6 @@ class Ets_Pmpro_Admin_Setting {
 		// Pmpro expiry
 		add_action( 'pmpro_membership_post_membership_expiry', array( $this, 'ets_as_schdule_job_pmpro_expiry' ), 10, 2 );
 
-		add_action( 'ets_cron_pmpro_reset_rate_limits', array( $this, 'ets_cron_pmpro_reset_rate_limits_hook' ) );
-
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_as_schedule_job_pmpro_level_deleted' ), 10, 1 );
     
     add_action( 'ets_reset_incremental_counter', array( $this, 'ets_reset_incremental_func' ) );
@@ -34,7 +32,7 @@ class Ets_Pmpro_Admin_Setting {
 		
 	}
 	/**
-	 * Description: Show status of PMPro connection with user
+	 * Show status of PMPro connection with user
 	 *
 	 * @param None
 	 * @return None
@@ -95,7 +93,7 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: get pmpro current level id
+	 * Get pmpro current level id
 	 *
 	 * @param int $user_id
 	 * @return int $curr_level_id
@@ -129,46 +127,6 @@ class Ets_Pmpro_Admin_Setting {
 			}
 		}
 	}
-
-	/**
-	 * Description: Add user into cancelled membership queue
-	 *
-	 * @param int $user_id
-	 * @return None 
-	 */
-	public function ets_cron_pmpro_add_user_into_cancel_queue( $level_id ) {
-		global $wpdb;
-		$result = $wpdb->get_results( $wpdb->prepare( 'SELECT `user_id` FROM ' . $wpdb->prefix . 'pmpro_memberships_users' . ' WHERE `membership_id` = %d GROUP BY `user_id`', array( $level_id ) ) );
-
-		$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
-		update_option( 'ets_admin_level_deleted', true );
-		foreach ( $result as $key => $ids ) {
-			$user_id                = $ids->user_id;
-			$existing_members_queue = sanitize_text_field( trim( get_option( 'ets_queue_of_pmpro_members' ) ) );
-			$access_token           = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
-			if ( $existing_members_queue ) {
-				$members_queue = unserialize( $existing_members_queue );
-			} else {
-				$members_queue = array(
-					'expired'   => array(),
-					'cancelled' => array(),
-				);
-			}
-			if ( ! in_array( $user_id, $members_queue['cancelled'] ) && $access_token ) {
-				array_push( $members_queue['cancelled'], $user_id );
-				$members_queue_sr = serialize( $members_queue );
-				$st               = update_option( 'ets_queue_of_pmpro_members', $members_queue_sr );
-			}
-		}
-
-		if ( is_array( $ets_discord_role_mapping ) && array_key_exists( 'level_id_' . $level_id, $ets_discord_role_mapping ) ) {
-			$key = 'level_id_' . $level_id;
-			unset( $ets_discord_role_mapping[ $key ] );
-			$mapping = json_encode( $ets_discord_role_mapping );
-			update_option( 'ets_discord_role_mapping', $mapping );
-		}
-
-	}
 	
 	/** 
 	 * Method to save job queue for cancelled pmpro members.
@@ -198,91 +156,6 @@ class Ets_Pmpro_Admin_Setting {
 		}
 	}
 
-	
-	/**
-	 * Description: Save cancelled member details into members queue
-	 *
-	 * @param int $level_id
-	 * @param int $user_id
-	 * @param int $cancel_level
-	 * @return None
-	 */
-	public function on_cancel_add_member_into_queue( $level_id, $user_id, $cancel_level ) {
-		$delete_level_status = get_option( 'ets_admin_level_deleted' );
-
-		$existing_members_queue = sanitize_text_field( trim( get_option( 'ets_queue_of_pmpro_members' ) ) );
-		$membership_status      = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
-		$access_token           = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
-		if ( $existing_members_queue ) {
-			$members_queue = unserialize( $existing_members_queue );
-		} else {
-			$members_queue = array(
-				'expired'   => array(),
-				'cancelled' => array(),
-			);
-		}
-		if ( ! empty( $cancel_level ) || $membership_status == 'admin_cancelled' ) {
-
-			if ( ! in_array( $user_id, $members_queue['cancelled'] ) && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ) {
-				if ( in_array( $user_id, $members_queue['expired'] ) ) {
-					$key = array_search( $user_id, $members_queue['expired'] );
-					unset( $members_queue['expired'][ $key ] );
-				}
-				array_push( $members_queue['cancelled'], $user_id );
-				$members_queue_sr = serialize( $members_queue );
-				update_option( 'ets_queue_of_pmpro_members', $members_queue_sr );
-			}
-		} else {
-			if ( ! $delete_level_status ) {
-				if ( in_array( $user_id, $members_queue['cancelled'] ) ) {
-					$key = array_search( $user_id, $members_queue['cancelled'] );
-					unset( $members_queue['cancelled'][ $key ] );
-					$members_queue_sr = serialize( $members_queue );
-					update_option( 'ets_queue_of_pmpro_members', $members_queue_sr );
-				}
-				if ( in_array( $user_id, $members_queue['expired'] ) ) {
-					$key = array_search( $user_id, $members_queue['expired'] );
-					unset( $members_queue['expired'][ $key ] );
-					$members_queue_sr = serialize( $members_queue );
-					update_option( 'ets_queue_of_pmpro_members', $members_queue_sr );
-				}
-			} else {
-				delete_option( 'ets_admin_level_deleted' );
-			}
-		}
-	}
-
-	/**
-	 * Description: Save expired member details into members queue
-	 *
-	 * @param int $user_id
-	 * @param int $level_id
-	 * @return None
-	 */
-	public function pmpro_expiry_membership( $user_id, $level_id ) {
-    
-		$existing_members_queue = sanitize_text_field( trim( get_option( 'ets_queue_of_pmpro_members' ) ) );
-		$membership_status      = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
-		$access_token           = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
-		if ( $existing_members_queue ) {
-			$members_queue = unserialize( $existing_members_queue );
-		} else {
-			$members_queue = array(
-				'expired'   => array(),
-				'cancelled' => array(),
-			);
-		}
-		if ( ! in_array( $user_id, $members_queue['expired'] ) && $membership_status == 'expired' && $access_token ) {
-			if ( in_array( $user_id, $members_queue['cancelled'] ) ) {
-				$key = array_search( $user_id, $members_queue['cancelled'] );
-				unset( $members_queue['cancelled'][ $key ] );
-			}
-			array_push( $members_queue['expired'], $user_id );
-			$members_queue_sr = serialize( $members_queue );
-			update_option( 'ets_queue_of_pmpro_members', $members_queue_sr );
-		}
-	}
-
   /*
   *  Action schedule to schedule a function to run upon PMPRO Expiry.
     * @param int $user_id
@@ -297,33 +170,10 @@ class Ets_Pmpro_Admin_Setting {
 				as_schedule_single_action( strtotime('now') + get_expiry_seconds( true ), 'ets_as_handle_pmpro_expiry' , array ( $user_id, $level_id ) );
 			}
   }
-  
-	/**
-	 * Description: Reset rate limits
-	 *
-	 * @param None
-	 * @return None
-	 */
-	public function ets_cron_pmpro_reset_rate_limits_hook() {
-		$ets_discord_delete_member_rate_limit = sanitize_text_field( trim( get_option( 'ets_discord_delete_member_rate_limit' ) ) );
-		$ets_discord_delete_role_rate_limit   = sanitize_text_field( trim( get_option( 'ets_discord_delete_role_rate_limit' ) ) );
-		$ets_discord_change_role_rate_limit   = sanitize_text_field( trim( get_option( 'ets_discord_change_role_rate_limit' ) ) );
 
-		if ( $ets_discord_delete_member_rate_limit <= 1 ) {
-			delete_option( 'ets_discord_delete_member_rate_limit' );
-		}
-
-		if ( $ets_discord_delete_role_rate_limit <= 1 ) {
-			delete_option( 'ets_discord_delete_role_rate_limit' );
-		}
-
-		if ( $ets_discord_change_role_rate_limit <= 1 ) {
-			delete_option( 'ets_discord_change_role_rate_limit' );
-		}
-	}
 
 	/**
-	 * Description: Localized script and style
+	 * Localized script and style
 	 *
 	 * @param None
 	 * @return None
@@ -388,7 +238,7 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: Get user membership status by user_id
+	 * Get user membership status by user_id
 	 *
 	 * @param int $user_id
 	 * @return string $status
@@ -401,7 +251,7 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: Define plugin settings rules
+	 * Define plugin settings rules
 	 *
 	 * @param None
 	 * @return None
@@ -540,7 +390,7 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: Send mail to support form current user
+	 * Send mail to support form current user
 	 *
 	 * @param None
 	 * @return None
@@ -587,7 +437,7 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: To check settings values saved or not
+	 * To check settings values saved or not
 	 *
 	 * @param None
 	 * @return boolean $status
@@ -606,22 +456,6 @@ class Ets_Pmpro_Admin_Setting {
 		}
 
 		return $status;
-	}
-
-
-	/**
-	 * Description: Get average rate limit for api calls
-	 *
-	 * @param None
-	 * @return int $avg_rate
-	 */
-	public function get_average_ratelimit_count() {
-		$ets_discord_delete_member_rate_limit = sanitize_text_field( trim( get_option( 'ets_discord_delete_member_rate_limit' ) ) );
-		$ets_discord_delete_role_rate_limit   = sanitize_text_field( trim( get_option( 'ets_discord_delete_role_rate_limit' ) ) );
-		$ets_discord_change_role_rate_limit   = sanitize_text_field( trim( get_option( 'ets_discord_change_role_rate_limit' ) ) );
-		$limits                               = array( $ets_discord_delete_member_rate_limit, $ets_discord_delete_role_rate_limit, $ets_discord_change_role_rate_limit );
-		$avg_rate                             = array_sum( $limits ) / count( $limits );
-		return $avg_rate;
 	}
 
 	/**
@@ -674,16 +508,16 @@ class Ets_Pmpro_Admin_Setting {
   * @param array $user
   * @return NONE
   */
-	public function ets_discord_pmpro_extra_cols_body($user)
+	public function ets_discord_pmpro_extra_cols_body( $user )
 	{
-		echo "<td>";
+		echo '<td>';
 		$access_token = sanitize_text_field( trim( get_user_meta( $user->ID, 'ets_discord_access_token', true ) ) );
-		if (	$access_token ){ 
-		echo __( '<a class="button button-primary" href="#">Run API</a>', 'ets_pmpro_discord' );
+		if ( $access_token ){ 
+			echo __( '<a class="button button-primary" href="#">Run API</a>', 'ets_pmpro_discord' );
 		} else {
-			echo "N/A";
+			echo __( 'Not Connected', 'ets_pmpro_discord' );
 		}
-		echo "</td>";
+		echo '</td>';
 	}
 }
 new Ets_Pmpro_Admin_Setting();

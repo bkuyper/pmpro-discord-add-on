@@ -346,7 +346,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		wp_register_script(
 			'ets_pmpro_add_discord_script',
-			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.min.js',
+			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.js',
 			array( 'jquery' ),
 			ETS_PMPRO_VERSION
 		);
@@ -679,7 +679,7 @@ class Ets_Pmpro_Admin_Setting {
 		echo "<td>";
 		$access_token = sanitize_text_field( trim( get_user_meta( $user->ID, 'ets_discord_access_token', true ) ) );
 		if (	$access_token ){ 
-		echo __( '<a class="button button-primary" href="#">Run API</a>', 'ets_pmpro_discord' );
+		echo __( '<a class="button button-primary ets-run-api" data-uid="'.$user->ID.'" href="#">Run API</a>', 'ets_pmpro_discord' );
 		} else {
 			echo "N/A";
 		}

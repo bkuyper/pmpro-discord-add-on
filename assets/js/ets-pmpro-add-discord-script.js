@@ -267,4 +267,23 @@ jQuery( document ).ready( function( $ ) {
 			}
 		});
 	});
+	/*Call-back to manage member connection with discord from pmpro members-list*/
+	$('.ets-run-api').on('click',function (e) {
+		e.preventDefault();
+		var userId = $(this).data('uid');
+		$.ajax({
+			type:"POST",
+			dataType:"JSON",
+			url:etsPmproParams.admin_ajax,
+      data: {'action': 'ets_discord_run_api','user_id':userId,'ets_discord_nonce': etsPmproParams.ets_discord_nonce,},
+			success:function (response) {
+				if ( response.status == 1 ) {
+					window.location = window.location.href;
+				}
+			},
+			error: function(response) { 
+				console.error(response); 
+			}
+		});
+	});
 });

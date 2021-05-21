@@ -26,6 +26,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
     add_action( 'ets_as_schedule_member_change_role', array( $this, 'ets_as_handler_change_memberrole'), 10, 2 );
 
     add_action( 'ets_as_schedule_delete_role', array( $this, 'ets_as_handler_delete_memberrole'), 10, 2 );
+
+		add_action( 'wp_ajax_ets_discord_run_api', array( $this, 'ets_discord_run_api'), 10, 2 );
 	}
 
 	/**
@@ -566,6 +568,34 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		echo json_encode( $event_res );
 		die();
 	}
+
+	/**
+	 * Description:Manage user roles api calls
+	 *
+	 * @param none
+	 * @return Object json response
+	 */
+	public function ets_discord_run_api() {
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Unauthorized user', 401 );
+			exit();
+		}
+
+		// Check for nonce security
+		if ( ! wp_verify_nonce( $_POST['ets_discord_nonce'], 'ets-discord-ajax-nonce' ) ) {
+				wp_send_json_error( 'You do not have sufficient rights', 403 );
+				exit();
+		}
+		$user_id = $_POST['user_id'];
+		$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
+		$this->delete_discord_role( $user_id, $ets_discord_role_id );
+		$event_res = array(
+			'status'  => 1,
+			'message' => 'Run Api Successfully',
+		);
+		return wp_send_json( $event_res );
+	}
+	
 
 	/**
 	 * Description: callback for expired members cron events

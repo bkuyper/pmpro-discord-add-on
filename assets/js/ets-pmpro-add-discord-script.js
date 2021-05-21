@@ -31,6 +31,7 @@ jQuery( document ).ready( function( $ ) {
 	        data: {'action': 'load_discord_roles','ets_discord_nonce': etsPmproParams.ets_discord_nonce,},
 	        beforeSend:function () {
 				$(".discord-roles .spinner").addClass("is-active");
+				$(".ets_tablinks .spinner").addClass("is-active");
 			},
 			success:function (response) {
 				if ( response.hasOwnProperty('code') && response.code == 50001 && response.message == 'Missing Access' ) {
@@ -89,6 +90,7 @@ jQuery( document ).ready( function( $ ) {
 	      	},
 			complete: function(){
 				$(".discord-roles .spinner").removeClass("is-active").css({"float":"right"});
+				$(".ets_tablinks .spinner").removeClass("is-active").css({"float":"right", "display":"none"});
 			}
 		});
 	

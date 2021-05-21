@@ -416,7 +416,7 @@ a{
 .ets-is-active{
   visibility: visible;
 }
-.discord-roles .spinner{
+.discord-roles .spinner, .ets_tablinks .spinner{
   float: none;
 }
 .hoverActive{
@@ -476,7 +476,7 @@ div.mapping-json{
     font-size:2em;
     vertical-align:middle;
 }
-.discord-roles .spinner{
+.discord-roles .spinner, .ets_tablinks .spinner{
   display: inline-block;
 }
 .spinner{

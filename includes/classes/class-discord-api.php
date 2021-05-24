@@ -27,7 +27,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
     add_action( 'ets_as_schedule_delete_role', array( $this, 'ets_as_handler_delete_memberrole'), 10, 2 );
 
-		add_action( 'wp_ajax_ets_discord_run_api', array( $this, 'ets_discord_run_api'), 10, 2 );
+		add_action( 'wp_ajax_ets_discord_run_api', array( $this, 'ets_discord_run_api') );
 	}
 
 	/**
@@ -594,7 +594,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				wp_send_json_error( 'You do not have sufficient rights', 403 );
 				exit();
 		}
-		$user_id = $_POST['user_id'];
+		$user_id = sanitize_text_field( $_POST['user_id'] );
 		$ets_discord_role_id = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
     if ( isset( $user_id ) && isset( $ets_discord_role_id ) && $ets_discord_role_id != '' && $ets_discord_role_id != 'none' ){
 		  $this->delete_discord_role( $user_id, $ets_discord_role_id );

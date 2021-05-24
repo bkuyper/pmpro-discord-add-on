@@ -277,14 +277,20 @@ jQuery( document ).ready( function( $ ) {
 			type:"POST",
 			dataType:"JSON",
 			url:etsPmproParams.admin_ajax,
-      data: {'action': 'ets_discord_run_api','user_id':userId,'ets_discord_nonce': etsPmproParams.ets_discord_nonce,},
+      data: {'action': 'ets_discord_member_table_run_api','user_id':userId,'ets_discord_nonce': etsPmproParams.ets_discord_nonce,},
+			beforeSend:function () {
+				$(".spinner").addClass("is-active").show();
+			},
 			success:function (response) {
 				if ( response.status == 1 ) {
-					window.location = window.location.href;
+					alert('Success');
 				}
 			},
 			error: function(response) { 
 				console.error(response); 
+			},
+			complete: function(){
+				$(".spinner").removeClass("is-active").hide();
 			}
 		});
 	});

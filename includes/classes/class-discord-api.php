@@ -27,7 +27,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
     add_action( 'ets_as_schedule_delete_role', array( $this, 'ets_as_handler_delete_memberrole'), 10, 2 );
 
-		add_action( 'wp_ajax_ets_discord_run_api', array( $this, 'ets_discord_run_api') );
+		add_action( 'wp_ajax_ets_discord_member_table_run_api', array( $this, 'ets_discord_member_table_run_api') );
 	}
 
 	/**
@@ -583,7 +583,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @param none
 	 * @return Object json response
 	 */
-	public function ets_discord_run_api() {
+	public function ets_discord_member_table_run_api() {
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
@@ -601,7 +601,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
     }
 		$event_res = array(
 			'status'  => 1,
-			'message' => __( 'Run Api Successfully', 'ets_pmpro_discord' ),
+			'message' => __( 'success', 'ets_pmpro_discord' ),
 		);
 		return wp_send_json( $event_res );
 	}

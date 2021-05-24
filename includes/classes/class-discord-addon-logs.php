@@ -73,7 +73,7 @@ class PMPro_Discord_Logs {
 			$user_details = '::User Id:' . $user_id;
 		}
 		$log_file_name = $this::$log_file_name;
-		if ( array_key_exists( 'code', $response_arr ) ) {
+		if ( is_array( $response_arr ) && array_key_exists( 'code', $response_arr ) ) {
 			$error .= '=>File:' . $backtrace_arr['file'] . $user_details . '::Line:' . $backtrace_arr['line'] . '::Function:' . $backtrace_arr['function'] . '::' . $response_arr['code'] . ':' . $response_arr['message'];
 		} elseif ( array_key_exists( 'error', $response_arr ) ) {
 			$error .= '=>File:' . $backtrace_arr['file'] . $user_details . '::Line:' . $backtrace_arr['line'] . '::Function:' . $backtrace_arr['function'] . '::' . $response_arr['error'];

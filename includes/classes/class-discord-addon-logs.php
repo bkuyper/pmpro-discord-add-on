@@ -58,11 +58,11 @@ class PMPro_Discord_Logs {
 	 * Description: Add API error logs into log file
 	 *
 	 * @param array  $response_arr
-	 * @param array  $backtraceArr
+	 * @param array  $backtrace_arr
 	 * @param string $error_type
 	 * @return None
 	 */
-	public function write_api_response_logs( $response_arr, $backtraceArr, $error_type, $user_id ) {
+	public function write_api_response_logs( $response_arr, $backtrace_arr, $error_type, $user_id ) {
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
@@ -74,11 +74,11 @@ class PMPro_Discord_Logs {
 		}
 		$log_file_name = $this::$log_file_name;
 		if ( array_key_exists( 'code', $response_arr ) ) {
-			$error .= '=>File:' . $backtraceArr['file'] . $user_details . '::Line:' . $backtraceArr['line'] . '::Function:' . $backtraceArr['function'] . '::' . $response_arr['code'] . ':' . $response_arr['message'];
+			$error .= '=>File:' . $backtrace_arr['file'] . $user_details . '::Line:' . $backtrace_arr['line'] . '::Function:' . $backtrace_arr['function'] . '::' . $response_arr['code'] . ':' . $response_arr['message'];
 		} elseif ( array_key_exists( 'error', $response_arr ) ) {
-			$error .= '=>File:' . $backtraceArr['file'] . $user_details . '::Line:' . $backtraceArr['line'] . '::Function:' . $backtraceArr['function'] . '::' . $response_arr['error'];
+			$error .= '=>File:' . $backtrace_arr['file'] . $user_details . '::Line:' . $backtrace_arr['line'] . '::Function:' . $backtrace_arr['function'] . '::' . $response_arr['error'];
 		} else {
-			$error .= print_r( $response_arr, true );
+			$error .= print_r( $response_arr, true ).'::'.$user_id;
 		}
 
 		file_put_contents( ETS_PMPRO_DISCORD_PATH . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );

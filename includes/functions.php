@@ -18,9 +18,9 @@ function get_cancel_seconds( $get_from_db = false, $range = array() ) {
     return rand( 5, 20 );
   }
   else {
-		$ets_seconds_incrementer = get_option( 'ets_calcel_seconds' );
+		$ets_seconds_incrementer = get_option( 'ets_cancel_seconds' );
 		$ets_seconds_incrementer = $ets_seconds_incrementer + 5;
-		update_option( 'ets_calcel_seconds', $ets_seconds_incrementer );
+		update_option( 'ets_cancel_seconds', $ets_seconds_incrementer );
 		return $ets_seconds_incrementer;
   }
 }

@@ -588,7 +588,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
-
+		
 		// Check for nonce security
 		if ( ! wp_verify_nonce( $_POST['ets_discord_nonce'], 'ets-discord-ajax-nonce' ) ) {
 				wp_send_json_error( 'You do not have sufficient rights', 403 );

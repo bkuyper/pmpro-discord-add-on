@@ -174,7 +174,7 @@ jQuery( document ).ready( function( $ ) {
 		    $.each(oldItems, function(key,val){
 		    	if ( val ) {
 			    	var arrayofval = val.split(',');
-				    if( arrayofval[0] != 'level_id_'+draggable.data( 'level_id' ) || arrayofval[1] != draggable.data('role_id') ) {
+				    if ( arrayofval[0] != 'level_id_'+draggable.data( 'level_id' ) || arrayofval[1] != draggable.data('role_id') ) {
 				    	jsonStart = jsonStart+'"'+arrayofval[0]+'":'+'"'+arrayofval[1]+'",';
 				    }
 				}
@@ -208,7 +208,7 @@ jQuery( document ).ready( function( $ ) {
 			    $.each(oldItems, function(key,val){
 			    	if ( val ) {
 				    	var arrayofval = val.split(',');
-					    if( arrayofval[0] == 'level_id_'+$(this).data( 'level_id' ) || arrayofval[1] == draggable.data('role_id') ) {
+					    if ( arrayofval[0] == 'level_id_'+$(this).data( 'level_id' ) || arrayofval[1] == draggable.data('role_id') ) {
 					    	delete oldItems[key];
 					    }
 					}
@@ -239,7 +239,7 @@ jQuery( document ).ready( function( $ ) {
 
 			$(this).append(ui.draggable);
 			$(this).find('span').css({'order':'2'});
-			if(jQuery(this).find('.makeMeDraggable').length >= 1){
+			if ( jQuery(this).find('.makeMeDraggable').length >= 1 ) {
 				$(this).droppable("destroy");
 			}
 			
@@ -279,18 +279,24 @@ jQuery( document ).ready( function( $ ) {
 			url:etsPmproParams.admin_ajax,
       data: {'action': 'ets_discord_member_table_run_api','user_id':userId,'ets_discord_nonce': etsPmproParams.ets_discord_nonce,},
 			beforeSend:function () {
-				$(".spinner").addClass("is-active").show();
+				$("."+userId+".spinner").addClass("is-active").show();
 			},
 			success:function (response) {
 				if ( response.status == 1 ) {
-					alert('Success');
+					if ($("."+userId+".ets-save-success").hasClass("fadeout")) {
+						$("."+userId+".ets-save-success").removeClass("fadeout").addClass("fadein");
+						$(this).hide();
+						setTimeout(function () {
+							$("."+userId+".ets-save-success").removeClass("fadein").addClass("fadeout");
+						}, 2000);
+					}
 				}
 			},
 			error: function(response) { 
 				console.error(response); 
 			},
 			complete: function(){
-				$(".spinner").removeClass("is-active").hide();
+				$("."+userId+".spinner").removeClass("is-active").hide();
 			}
 		});
 	});

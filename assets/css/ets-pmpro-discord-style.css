@@ -489,3 +489,14 @@ select#defaultRole{
   display: none;
 }
 .right-side-box .svg-inline--fa{color:#77a02e}
+.fadeout {
+  opacity: 0;
+  display: none;
+  transition: opacity 0.4s ease-in-out;
+}
+.fadein {
+  display: block;
+  opacity: 1;
+  color: #2ca450;
+  transition: opacity 0.4s ease-in-out;
+}

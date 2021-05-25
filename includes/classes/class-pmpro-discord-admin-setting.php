@@ -529,7 +529,7 @@ class Ets_Pmpro_Admin_Setting {
 		$access_token = sanitize_text_field( trim( get_user_meta( $user->ID, 'ets_discord_access_token', true ) ) );
 		if (	$access_token ){ 
 			$discord_username = sanitize_text_field( trim( get_user_meta( $user->ID, 'ets_discord_username', true ) ) );
-			echo '<p class="'.$user->ID.' ets-save-success fadeout">'.__( 'Success', 'ets_pmpro_discord' ).'</p><a class="button button-primary ets-run-api" data-uid="'.$user->ID.'" href="#">';
+			echo '<p class="'.$user->ID.' ets-save-success">'.__( 'Success', 'ets_pmpro_discord' ).'</p><a class="button button-primary ets-run-api" data-uid="'.$user->ID.'" href="#">';
 			echo __( 'Run API', 'ets_pmpro_discord' );
 			echo '</a><span class="'.$user->ID.' spinner"></span>';
 			echo $discord_username;

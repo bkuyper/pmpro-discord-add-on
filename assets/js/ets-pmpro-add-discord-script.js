@@ -283,13 +283,7 @@ jQuery( document ).ready( function( $ ) {
 			},
 			success:function (response) {
 				if ( response.status == 1 ) {
-					if ($("."+userId+".ets-save-success").hasClass("fadeout")) {
-						$("."+userId+".ets-save-success").removeClass("fadeout").addClass("fadein");
-						$(this).hide();
-						setTimeout(function () {
-							$("."+userId+".ets-save-success").removeClass("fadein").addClass("fadeout");
-						}, 2000);
-					}
+					$("."+userId+".ets-save-success").show();;
 				}
 			},
 			error: function(response) { 

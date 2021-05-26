@@ -610,6 +610,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			}
 			if ( $default_role != 'none' ) {
 				$this->change_discord_role_api( $user_id, $default_role, false );
+				update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
 			} elseif ( $allow_none_member == "yes" && $previous_default_role ) {
 				$this->delete_discord_role( $user_id, $previous_default_role );
 			}
@@ -620,6 +621,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			}
 			if ( $default_role ) {
 				$this->change_discord_role_api( $user_id, $default_role, false );
+				update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
 			}
 		} elseif ( isset( $user_id ) && $allow_none_member == "no" ) {
 			$this->delete_member_from_guild( $user_id ,false );

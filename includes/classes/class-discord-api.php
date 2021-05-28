@@ -588,7 +588,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @return Object json response
 	 */
 	public function ets_discord_member_table_run_api() {
-		if ( ! is_user_logged_in() ) {
+		if ( ! is_user_logged_in() && current_user_can( 'edit_user' ) ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
@@ -605,7 +605,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
 		$curr_level_id            = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
 		$previous_default_role    = get_user_meta( $user_id, 'ets_discord_default_role_id', true );
-
+		
 		if ( $curr_level_id != null ) {
 			if ( is_array( $ets_discord_role_mapping ) && array_key_exists( 'level_id_' . $curr_level_id, $ets_discord_role_mapping ) ) {
 				$mapped_role_id = sanitize_text_field( trim( $ets_discord_role_mapping[ 'level_id_' . $curr_level_id ] ) );
@@ -621,6 +621,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			}
 		} elseif ( $allow_none_member == 'yes' ) {
 			if ( $ets_discord_role_id ) {
+				
 				$this->delete_discord_role( $user_id, $ets_discord_role_id, false );
 			}
 			if ( $default_role != 'none' && $previous_default_role !== $default_role) {

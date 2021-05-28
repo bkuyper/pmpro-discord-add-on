@@ -234,7 +234,7 @@ class Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_add_new_menu() {
 		// Add sub-menu into PmPro main-menus list
-		add_submenu_page( 'pmpro-dashboard', __( 'Discord Settings', 'paid-memberships-pro' ), __( 'Discord Settings', 'paid-memberships-pro' ), 'manage_options', 'discord-options', array( $this, 'ets_setting_page' ) );
+		add_submenu_page( 'pmpro-dashboard', __( 'Discord Settings', 'paid-memberships-pro' ), __( 'Discord Settings', 'paid-memberships-pro' ), 'manage_options', 'discord-options', array( $this, 'ets_pmpro_discord_setting_page' ) );
 	}
 
 	/**
@@ -256,7 +256,7 @@ class Ets_Pmpro_Admin_Setting {
 	 * @param None
 	 * @return None
 	 */
-	public function ets_setting_page() {
+	public function ets_pmpro_discord_setting_page() {
 		if ( ! current_user_can( 'administrator' ) ) {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();

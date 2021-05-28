@@ -467,7 +467,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			$discord_bot_token           = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
 			$default_role                = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
 			$discord_change_role_api_url = ETS_DISCORD_API_URL . 'guilds/' . $guild_id . '/members/' . $ets_discord_user_id . '/roles/' . $role_id;
-
+			
 			if ( $access_token && $ets_discord_user_id ) {
 				$param = array(
 					'method'  => 'PUT',
@@ -479,6 +479,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				);
 
 				$response     = wp_remote_get( $discord_change_role_api_url, $param );
+				
 				$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
 				if ( ! is_wp_error( $response ) && is_array( $response_arr ) && ! empty( $response_arr ) ) {
 					if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
@@ -700,7 +701,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$ets_discord_role_id   = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
 		$default_role          = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
 		$previous_default_role = get_user_meta( $user_id, 'ets_discord_default_role_id', true );
-
+		
 		// If user is connected to discord.
 		if ( $ets_discord_user_id && empty( $cancel_level ) ) {
 			if ( isset( $ets_discord_role_id ) && $ets_discord_role_id != '' && $ets_discord_role_id != $default_role ) {

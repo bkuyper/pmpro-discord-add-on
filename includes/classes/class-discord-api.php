@@ -219,6 +219,9 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		if ( $default_role && $default_role != 'none' && isset( $user_id ) ) {
 			$this->change_discord_role_api( $user_id, $default_role );
 		}
+		if ( empty( get_user_meta( $user_id, '_ets_pmpro_discord_join_date', true ) ) ) {
+			update_user_meta( $user_id, '_ets_pmpro_discord_join_date', current_time('Y-m-d H:i:s') );
+		}
 
 	}
 	/**

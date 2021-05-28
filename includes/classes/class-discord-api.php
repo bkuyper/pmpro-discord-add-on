@@ -609,6 +609,9 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				$this->change_discord_role_api( $user_id, $mapped_role_id, false );
 			}
 			if ( $default_role != 'none' ) {
+				if ( $previous_default_role ) {
+					$this->delete_discord_role( $user_id, $previous_default_role );
+				}
 				$this->change_discord_role_api( $user_id, $default_role, false );
 				update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
 			} elseif ( $allow_none_member == "yes" && $previous_default_role ) {
@@ -620,6 +623,9 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				$this->delete_discord_role( $user_id, $ets_discord_role_id );
 			}
 			if ( $default_role ) {
+				if ( $previous_default_role ) {
+					$this->delete_discord_role( $user_id, $previous_default_role );
+				}
 				$this->change_discord_role_api( $user_id, $default_role, false );
 				update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
 			}

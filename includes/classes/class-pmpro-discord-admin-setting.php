@@ -328,8 +328,8 @@ class Ets_Pmpro_Admin_Setting {
 			}
 			
 			if ( isset($_POST['set_job_cnrc']) ) {
-				if ( $set_job_cnrc < 1 ) {
-					update_option( 'ets_pmpro_job_queue', 5 );
+				if ( $set_job_cnrc < 2 ) {
+					update_option( 'ets_pmpro_job_queue', 2 );
 				} else {
 					update_option( 'ets_pmpro_job_queue', $set_job_cnrc );
 				}

@@ -26,8 +26,6 @@ class Ets_Pmpro_Admin_Setting {
     
     add_action( 'ets_reset_incremental_counter', array( $this, 'ets_reset_incremental_func' ) );
 
-		add_action('pmpro_memberslist_extra_cols_header', array( $this, 'ets_discord_pmpro_extra_cols_header' ) );
-
 		add_filter('pmpro_manage_memberslist_custom_column', array( $this, 'ets_discord_pmpro_extra_cols_body' ), 10, 2 );
 		
 		add_filter( 'pmpro_manage_memberslist_columns', array( $this, 'ets_discord_pmpro_manage_memberslist_columns' ) );

@@ -26,10 +26,9 @@ class Ets_Pmpro_Admin_Setting {
     
     add_action( 'ets_reset_incremental_counter', array( $this, 'ets_reset_incremental_func' ) );
 
-		add_action('pmpro_memberslist_extra_cols_header', array( $this, 'ets_discord_pmpro_extra_cols_header' ) );
-
-		add_action('pmpro_memberslist_extra_cols_body', array( $this, 'ets_discord_pmpro_extra_cols_body') );
+		add_filter('pmpro_manage_memberslist_custom_column', array( $this, 'ets_discord_pmpro_extra_cols_body' ), 10, 2 );
 		
+		add_filter( 'pmpro_manage_memberslist_columns', array( $this, 'ets_discord_pmpro_manage_memberslist_columns' ) );
 	}
 	/**
 	 * Show status of PMPro connection with user
@@ -510,37 +509,41 @@ class Ets_Pmpro_Admin_Setting {
   }
 
 	/*
-  * Add extra column header into pmpro members list
-  * @param NONE
-  * @return NONE
-  */
-	public function ets_discord_pmpro_extra_cols_header()
-	{
-		echo '<th>';
-		echo __( 'Discord', 'ets_pmpro_discord' );
-		echo '<span class="spinner"></span></th>';
-	}
-
-	/*
   * Add extra column body into pmpro members list
-  * @param array $user
+	* @param int $colname
+  * @param int $user
   * @return NONE
   */
-	public function ets_discord_pmpro_extra_cols_body( $user )
+	public function ets_discord_pmpro_extra_cols_body( $colname, $user_id )
 	{
-		echo '<td>';
-		$access_token = sanitize_text_field( trim( get_user_meta( $user->ID, 'ets_discord_access_token', true ) ) );
-		
-		if ( $access_token ){ 
-			$discord_username = sanitize_text_field( trim( get_user_meta( $user->ID, 'ets_discord_username', true ) ) );
-			echo '<p class="'.$user->ID.' ets-save-success">'.__( 'Success', 'ets_pmpro_discord' ).'</p><a class="button button-primary ets-run-api" data-uid="'.$user->ID.'" href="#">';
-			echo __( 'Run API', 'ets_pmpro_discord' );
-			echo '</a><span class="'.$user->ID.' spinner"></span>';
-			echo $discord_username;
-		} else {
-			echo __( 'Not Connected', 'ets_pmpro_discord' );
+		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
+		if ( 'discord' === $colname ){
+			if ( $access_token ) { 
+				$discord_username = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_username', true ) ) );
+				echo '<p class="'.$user_id.' ets-save-success">'.__( 'Success', 'ets_pmpro_discord' ).'</p><a class="button button-primary ets-run-api" data-uid="'.$user_id.'" href="#">';
+				echo __( 'Run API', 'ets_pmpro_discord' );
+				echo '</a><span class="'.$user_id.' spinner"></span>';
+				echo $discord_username;
+			} else {
+				echo __( 'Not Connected', 'ets_pmpro_discord' );
+			}
 		}
-		echo '</td>';
+
+		if ( 'joined_date' === $colname ) {
+			echo esc_html( get_user_meta( $user_id, '_ets_pmpro_discord_join_date', true ) );
+		}
 	}
+	/*
+  * Add extra column into pmpro members list
+  * @param array $columns
+  * @return array $columns
+  */
+	public function ets_discord_pmpro_manage_memberslist_columns( $columns )
+	{
+		$columns['discord'] = __( 'Discord', 'ets_pmpro_discord' );
+		$columns['joined_date'] = __( 'Joined Date', 'ets_pmpro_discord' );
+		return $columns;
+	}
+	
 }
 new Ets_Pmpro_Admin_Setting();

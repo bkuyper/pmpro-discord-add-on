@@ -123,7 +123,8 @@ class Ets_Pmpro_Admin_Setting {
 			$user_id                = $ids->user_id;
 			$access_token           = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
 			if ( $access_token ) {
-				as_schedule_single_action( strtotime('now') + get_cancel_seconds( true ), 'ets_as_handle_pmpro_cancel' , array ( $user_id, $level_id , $level_id) );
+				//as_schedule_single_action( strtotime('now') + get_cancel_seconds( true ), 'ets_as_handle_pmpro_cancel' , array ( $user_id, $level_id , $level_id) );
+        as_enqueue_async_action( 'ets_as_handle_pmpro_cancel' , array ( $user_id, $level_id , $level_id) );
 			}
 		}
 	}
@@ -151,7 +152,8 @@ class Ets_Pmpro_Admin_Setting {
 			// check if member is already added to job queue.
 			$cancl_arr_already_added = as_get_scheduled_actions( $args, ARRAY_A );
 			if (  count( $cancl_arr_already_added )===0 && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ) {
-				as_schedule_single_action( strtotime('now') + get_cancel_seconds( true ), 'ets_as_handle_pmpro_cancel' , array ( $user_id, $level_id , $cancel_level) );
+				//as_schedule_single_action( strtotime('now') + get_cancel_seconds( true ), 'ets_as_handle_pmpro_cancel' , array ( $user_id, $level_id , $cancel_level) );
+        as_enqueue_async_action( 'ets_as_handle_pmpro_cancel' , array ( $user_id, $level_id , $cancel_level) );
 			}
 		}
 	}
@@ -167,7 +169,8 @@ class Ets_Pmpro_Admin_Setting {
 		  $membership_status      = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
 		  $access_token           = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
 			if ( $membership_status == 'expired' && $access_token ) {
-				as_schedule_single_action( strtotime('now') + get_expiry_seconds( true ), 'ets_as_handle_pmpro_expiry' , array ( $user_id, $level_id ) );
+				//as_schedule_single_action( strtotime('now') + get_expiry_seconds( true ), 'ets_as_handle_pmpro_expiry' , array ( $user_id, $level_id ) );
+        as_enqueue_async_action( 'ets_as_handle_pmpro_expiry' , array ( $user_id, $level_id ) );
 			}
   }
 

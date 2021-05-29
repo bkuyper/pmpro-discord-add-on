@@ -280,6 +280,9 @@ class Ets_Pmpro_Admin_Setting {
 		$upon_expiry = isset( $_POST['upon_expiry'] ) ? sanitize_textarea_field( trim( $_POST['upon_expiry'] ) ) : '';
 
 		$allow_none_member = isset( $_POST['allow_none_member'] ) ? sanitize_textarea_field( trim( $_POST['allow_none_member'] ) ) : '';
+
+		$set_job_cnrc = isset( $_POST['set_job_cnrc'] ) ? sanitize_textarea_field( trim( $_POST['set_job_cnrc'] ) ) : '';
+
 		if ( isset( $_POST['submit'] ) && ! isset( $_POST['ets_discord_role_mapping'] ) ) {
 			if ( isset( $_POST['ets_discord_save_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_settings'], 'save_discord_settings' ) ) {
 				if ( $ets_discord_client_id ) {
@@ -311,7 +314,32 @@ class Ets_Pmpro_Admin_Setting {
 				<?php
 			}
 		}
-
+		if ( isset($_POST['adv_submit']) ) {
+			if ( isset($_POST['upon_failed_payment']) ) {
+				update_option( 'ETS_PMPRO_PAYMENT_FAILED', true );
+			}else{
+				update_option( 'ETS_PMPRO_PAYMENT_FAILED', false );
+			}
+			
+			if ( isset($_POST['log_api_res']) ) {
+				update_option( 'ets_pmpro_log_api_response', true );
+			}else{
+				update_option( 'ets_pmpro_log_api_response', false );
+			}
+			
+			if ( isset($_POST['set_job_cnrc']) ) {
+				if ( $set_job_cnrc < 1 ) {
+					update_option( 'ets_pmpro_job_queue', 5 );
+				} else {
+					update_option( 'ets_pmpro_job_queue', $set_job_cnrc );
+				}
+			}
+			?>
+				<div class="notice notice-success is-dismissible support-success-msg">
+					<p><?php echo __( 'Your settings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
+				</div>
+			<?php
+		}
 		if ( $ets_discord_roles ) {
 			$ets_discord_roles   = stripslashes( $ets_discord_roles );
 			$save_mapping_status = update_option( 'ets_discord_role_mapping', $ets_discord_roles );
@@ -362,12 +390,14 @@ class Ets_Pmpro_Admin_Setting {
 		  <?php if ( ! empty( $ets_discord_client_id ) && ! empty( $discord_client_secret ) && ! empty( $discord_bot_token ) && ! empty( $ets_discord_redirect_url ) && ! empty( $ets_discord_guild_id ) ) : ?>
 		   <button class="ets_tablinks" data-identity="level-mapping" data-toggle="tab" data-event="ets_level_mapping"><?php echo __( 'Role Mappings', 'ets_pmpro_discord' ); ?></button>
 		  <?php endif; ?>
+			<button class="ets_tablinks" data-identity="advanced" data-toggle="tab" data-event="ets_advanced"><?php echo __( 'Advanced', 'ets_pmpro_discord' ); ?>	
+		  </button>
 		  <button class="ets_tablinks" data-identity="logs" data-toggle="tab" data-event="ets_logs"><?php echo __( 'Logs', 'ets_pmpro_discord' ); ?>	
 		  </button>
 		  <button class="ets_tablinks" data-identity="docs" data-toggle="tab" data-event="ets_docs"><?php echo __( 'Documentation', 'ets_pmpro_discord' ); ?>	
 		  </button>
 		  <button class="ets_tablinks" data-identity="support" data-toggle="tab" data-event="ets_about_us"><?php echo __( 'Support', 'ets_pmpro_discord' ); ?>	
-		  </button>  
+		  </button>
 		</div>
 
 		<div id="ets_setting" class="ets_tabcontent">
@@ -378,6 +408,9 @@ class Ets_Pmpro_Admin_Setting {
 		</div>
 		<div id="ets_about_us" class="ets_tabcontent">
 			<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/get-support.php'; ?>
+		</div>
+		<div id="ets_advanced" class="ets_tabcontent">
+			<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/advanced.php'; ?>
 		</div>
 		<div id="ets_logs" class="ets_tabcontent">
 			<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/error_log.php'; ?>

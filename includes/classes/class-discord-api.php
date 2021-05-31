@@ -28,6 +28,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		add_action( 'ets_as_schedule_delete_role', array( $this, 'ets_as_handler_delete_memberrole' ), 10, 2 );
 
 		add_action( 'wp_ajax_ets_discord_member_table_run_api', array( $this, 'ets_discord_member_table_run_api' ) );
+		
+		add_action( 'pmpro_stripe_subscription_deleted', array( $this, 'ets_pmpro_stripe_subscription_deleted' ), 10, 1 );
 	}
 
 	/**
@@ -647,6 +649,36 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			'message' => __( 'success', 'ets_pmpro_discord' ),
 		);
 		return wp_send_json( $event_res );
+	}
+
+	/**
+	 * Description:Manage user roles on cancel payment
+	 *
+	 * @param int $user_id
+	 */
+	public function ets_pmpro_stripe_subscription_deleted( $user_id ) {
+		if ( ! is_user_logged_in() && current_user_can( 'edit_user' ) ) {
+			wp_send_json_error( 'Unauthorized user', 401 );
+			exit();
+		}
+
+		$allow_none_member        = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
+		$default_role             = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
+		$ets_discord_role_id      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
+		$previous_default_role    = get_user_meta( $user_id, 'ets_discord_default_role_id', true );
+
+		if ( $ets_discord_role_id ) {
+			$this->delete_discord_role( $user_id, $ets_discord_role_id, false );
+		}
+		if ( $allow_none_member == 'yes' ) {
+			if ($previous_default_role) {
+				$this->delete_discord_role( $user_id, $previous_default_role, false );
+			}
+			if ( $default_role ) { 
+				$this->change_discord_role_api( $user_id, $default_role, false );
+				update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
+			}
+		}
 	}
 
 	/*

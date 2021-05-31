@@ -315,30 +315,32 @@ class Ets_Pmpro_Admin_Setting {
 			}
 		}
 		if ( isset($_POST['adv_submit']) ) {
-			if ( isset($_POST['upon_failed_payment']) ) {
-				update_option( 'ETS_PMPRO_PAYMENT_FAILED', true );
-			}else{
-				update_option( 'ETS_PMPRO_PAYMENT_FAILED', false );
-			}
-			
-			if ( isset($_POST['log_api_res']) ) {
-				update_option( 'ets_pmpro_log_api_response', true );
-			}else{
-				update_option( 'ets_pmpro_log_api_response', false );
-			}
-			
-			if ( isset($_POST['set_job_cnrc']) ) {
-				if ( $set_job_cnrc < 2 ) {
-					update_option( 'ets_pmpro_job_queue', 2 );
-				} else {
-					update_option( 'ets_pmpro_job_queue', $set_job_cnrc );
+			if ( isset( $_POST['ets_discord_save_adv_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_adv_settings'], 'save_discord_adv_settings' ) ) {
+				if ( isset($_POST['upon_failed_payment']) ) {
+					update_option( 'ETS_PMPRO_PAYMENT_FAILED', true );
+				}else{
+					update_option( 'ETS_PMPRO_PAYMENT_FAILED', false );
 				}
+				
+				if ( isset($_POST['log_api_res']) ) {
+					update_option( 'ets_pmpro_log_api_response', true );
+				}else{
+					update_option( 'ets_pmpro_log_api_response', false );
+				}
+				
+				if ( isset($_POST['set_job_cnrc']) ) {
+					if ( $set_job_cnrc < 1 ) {
+						update_option( 'ets_pmpro_job_queue', 2 );
+					} else {
+						update_option( 'ets_pmpro_job_queue', $set_job_cnrc );
+					}
+				}
+				?>
+					<div class="notice notice-success is-dismissible support-success-msg">
+						<p><?php echo __( 'Your settings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
+					</div>
+				<?php
 			}
-			?>
-				<div class="notice notice-success is-dismissible support-success-msg">
-					<p><?php echo __( 'Your settings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
-				</div>
-			<?php
 		}
 		if ( $ets_discord_roles ) {
 			$ets_discord_roles   = stripslashes( $ets_discord_roles );

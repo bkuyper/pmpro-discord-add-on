@@ -9,6 +9,7 @@ $set_job_cnrc = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue' ) )
       <tr>
         <th scope="row"><?php echo __( "Remove Role and Adjust default upon Member Failed Payment", "ets_pmpro_discord" );?></th>
         <td> <fieldset>
+        <?php wp_nonce_field( 'save_discord_adv_settings', 'ets_discord_save_adv_settings' ); ?>
         <input name="upon_failed_payment" type="checkbox" id="upon_failed_payment" <?php if ( $upon_failed_payment == true ) { echo 'checked="checked"'; } ?> value="1">
         </fieldset></td>
       </tr>

@@ -32,6 +32,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		add_action( 'pmpro_stripe_subscription_deleted', array( $this, 'ets_pmpro_stripe_subscription_deleted' ), 10, 1 );
 
 		add_action( 'pmpro_subscription_payment_failed', array( $this, 'ets_pmpro_subscription_payment_failed' ), 10, 1 );
+
 	}
 
 	/**
@@ -659,11 +660,31 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @param int $user_id
 	 */
 	public function ets_pmpro_stripe_subscription_deleted( $user_id ) {
-		if ( ! is_user_logged_in() && current_user_can( 'edit_user' ) ) {
-			wp_send_json_error( 'Unauthorized user', 401 );
-			exit();
+		if ( isset( $user_id ) ) {
+			$this->ets_manage_roles_on_payment_failed( $user_id );
 		}
+	}
 
+	/**
+	 * Description:Manage user roles on subscription  payment failed
+	 *
+	 * @param array $old_order
+	 */
+	public function ets_pmpro_subscription_payment_failed( $old_order ) {
+		$user_id 									= $old_order->user_id;
+		$ets_payment_fld	        = sanitize_text_field( trim( get_option( 'ETS_PMPRO_PAYMENT_FAILED' ) ) );
+
+		if ( $ets_payment_fld == true && isset( $user_id ) ) {
+			$this->ets_manage_roles_on_payment_failed( $user_id );
+		}
+	}
+	
+	/**
+	 * Description:Manage user roles on cancel payment
+	 *
+	 * @param int $user_id
+	 */
+	public function ets_manage_roles_on_payment_failed( $user_id ) {
 		$allow_none_member        = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
 		$default_role             = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
 		$ets_discord_role_id      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
@@ -680,31 +701,10 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				$this->change_discord_role_api( $user_id, $default_role, false );
 				update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
 			}
-		}
-	}
-
-	/**
-	 * Description:Manage user roles on subscription  payment failed
-	 *
-	 * @param array $old_order
-	 */
-	public function ets_pmpro_subscription_payment_failed( $old_order ) {
-		if ( ! is_user_logged_in() && current_user_can( 'edit_user' ) ) {
-			wp_send_json_error( 'Unauthorized user', 401 );
-			exit();
-		}
-		$user_id 									= $old_order->user_id;
-		$ets_payment_fld	        = sanitize_text_field( trim( get_option( 'ETS_PMPRO_PAYMENT_FAILED' ) ) );
-		$allow_none_member        = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
-		$default_role             = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
-		$ets_discord_role_id      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
-		$previous_default_role    = get_user_meta( $user_id, 'ets_discord_default_role_id', true );
-
-		if ( $ets_payment_fld == true ) {
-			if ( $ets_discord_role_id ) {
-				$this->delete_discord_role( $user_id, $ets_discord_role_id, false );
-			}
-			if ( $allow_none_member == 'yes' ) {
+		} elseif ( $allow_none_member == 'no' ) {
+			if( $default_role == 'none' ){
+				$this->delete_member_from_guild( $user_id, false );
+			} else {
 				if ($previous_default_role) {
 					$this->delete_discord_role( $user_id, $previous_default_role, false );
 				}
@@ -715,7 +715,6 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			}
 		}
 	}
-	
 
 	/*
 	* Action scheduler method to process expired pmpro members.

@@ -57,6 +57,8 @@ class Ets_Pmpro_Add_Discord {
 
 		// initiate cron event
 		register_activation_hook( __FILE__, array( $this, 'set_up_plugin' ) );
+
+		register_deactivation_hook( __FILE__, array( $this, 'ets_discord_deactivation_operations' ) );
 	}
 
 	/**
@@ -72,7 +74,7 @@ class Ets_Pmpro_Add_Discord {
 	}
 
 	/**
-	 * Description: To to save redirect url
+	 * To to save redirect url
 	 *
 	 * @param None
 	 * @return None
@@ -87,7 +89,7 @@ class Ets_Pmpro_Add_Discord {
 	}
 
 	/**
-	 * Description: time scheduler
+	 * time scheduler
 	 *
 	 * @param int $user_id
 	 * @param int $level_id
@@ -114,7 +116,7 @@ class Ets_Pmpro_Add_Discord {
 	}
 
 	/**
-	 * Description: Create cron events
+	 * Create cron events
 	 *
 	 * @param None
 	 * @return None
@@ -125,6 +127,52 @@ class Ets_Pmpro_Add_Discord {
 		}
 	}
 
+	/**
+	 * plugin deactivation operations
+	 *
+	 * @param None
+	 * @return None
+	 */
+	public function ets_discord_deactivation_operations() {
+		$deactivate_options = sanitize_text_field( trim( get_option( 'ets_discord_deactivate_options' ) ) );
+		$deactivate_user_meta = sanitize_text_field( trim( get_option( 'ets_discord_deactivate_user_meta' ) ) );
 
+		if ($deactivate_options == true) {
+			//Remove API credetials
+			delete_option( 'ets_discord_client_id' );
+			delete_option( 'ets_discord_client_secret' );
+			delete_option( 'ets_discord_bot_token' );
+			delete_option( 'ets_discord_redirect_url' );
+			delete_option( 'ets_discord_guild_id' );
+
+			//Remove role mapping settings
+			delete_option( 'ets_discord_role_mapping' );
+			delete_option( 'ets_discord_default_role_id' );
+			delete_option( 'ets_upon_expiry' );
+			delete_option( 'ets_allow_none_member' );	
+
+			//Remove advance settings
+			delete_option( 'ETS_PMPRO_PAYMENT_FAILED' );
+			delete_option( 'ets_pmpro_log_api_response' );
+			delete_option( 'ets_pmpro_job_queue' );
+			delete_option( 'ets_pmpro_job_queue_batch_size' );	
+			delete_option( 'ets_discord_deactivate_options' );
+			delete_option( 'ets_discord_deactivate_user_meta' );		
+		}
+
+		if ($deactivate_user_meta == true) {
+			$ets_discord_user_ids = get_users( 'fields=ID' );
+			foreach ( $ets_discord_user_ids as $user_id ) {
+					delete_user_meta( $user_id, 'ets_discord_user_id' );
+					delete_user_meta( $user_id, 'ets_discord_access_token' );
+					delete_user_meta( $user_id, 'ets_discord_refresh_token' );
+					delete_user_meta( $user_id, 'ets_discord_role_id' );
+					delete_user_meta( $user_id, 'ets_discord_default_role_id' );
+					delete_user_meta( $user_id, 'ets_discord_username' );
+					delete_user_meta( $user_id, 'ets_discord_expires_in' );
+					delete_user_meta( $user_id, '_ets_pmpro_discord_join_date' );
+			}
+		}
+	}
 }
 new Ets_Pmpro_Add_Discord();

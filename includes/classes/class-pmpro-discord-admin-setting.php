@@ -285,6 +285,10 @@ class Ets_Pmpro_Admin_Setting {
 
 		$set_job_q_batch_size = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
 
+		$deactivate_options = isset( $_POST['deactivate_options'] ) ? sanitize_textarea_field( trim( $_POST['deactivate_options'] ) ) : '';
+
+		$deactivate_user_meta = isset( $_POST['deactivate_user_meta'] ) ? sanitize_textarea_field( trim( $_POST['deactivate_user_meta'] ) ) : '';
+
 		if ( isset( $_POST['submit'] ) && ! isset( $_POST['ets_discord_role_mapping'] ) ) {
 			if ( isset( $_POST['ets_discord_save_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_settings'], 'save_discord_settings' ) ) {
 				if ( $ets_discord_client_id ) {
@@ -328,6 +332,18 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_pmpro_log_api_response', true );
 				}else{
 					update_option( 'ets_pmpro_log_api_response', false );
+				}
+
+				if ( isset($_POST['deactivate_options']) ) {
+					update_option( 'ets_discord_deactivate_options', true );
+				}else{
+					update_option( 'ets_discord_deactivate_options', false );
+				}
+
+				if ( isset($_POST['deactivate_user_meta']) ) {
+					update_option( 'ets_discord_deactivate_user_meta', true );
+				}else{
+					update_option( 'ets_discord_deactivate_user_meta', false );
 				}
 				
 				if ( isset($_POST['set_job_cnrc']) ) {

@@ -2,6 +2,7 @@
 $upon_failed_payment = sanitize_text_field( trim( get_option( 'ETS_PMPRO_PAYMENT_FAILED' ) ) );
 $log_api_res = sanitize_text_field( trim( get_option( 'ets_pmpro_log_api_response' ) ) );
 $set_job_cnrc = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue' ) ) );
+$set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue_batch_size' ) ) );
 ?>
 <form method="post" action="#">
   <table class="form-table" role="presentation">
@@ -22,7 +23,13 @@ $set_job_cnrc = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue' ) )
       <tr>
         <th scope="row"><?php echo __( "Set Job Queue Concurrency", "ets_pmpro_discord" );?></th>
         <td> <fieldset>
-        <input name="set_job_cnrc" type="text" id="set_job_cnrc" value="<?php if ( isset( $set_job_cnrc ) ) { echo $set_job_cnrc; } ?>">
+        <input name="set_job_cnrc" type="text" id="set_job_cnrc" value="<?php if ( isset( $set_job_cnrc ) ) { echo $set_job_cnrc; } else { echo 2; } ?>">
+        </fieldset></td>
+      </tr>
+      <tr>
+        <th scope="row"><?php echo __( "Set Job Queue batch size", "ets_pmpro_discord" );?></th>
+        <td> <fieldset>
+        <input name="set_job_q_batch_size" type="text" id="set_job_q_batch_size" value="<?php if ( isset( $set_job_q_batch_size ) ) { echo $set_job_q_batch_size; } else { echo 10; } ?>">
         </fieldset></td>
       </tr>
     </tbody>

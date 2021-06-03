@@ -230,7 +230,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
 	}
 	/**
-	 * Description: Add new member into discord guild
+	 * Add new member into discord guild
 	 *
 	 * @param int    $ets_discord_user_id
 	 * @param int    $user_id
@@ -297,7 +297,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: For authorization process call discord API
+	 * For authorization process call discord API
 	 *
 	 * @param None
 	 * @return object API response
@@ -446,7 +446,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description: API call to change discord user role
+	 * API call to change discord user role
 	 *
 	 * @param int $user_id
 	 * @param int $role_id
@@ -593,7 +593,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description:Manage user roles api calls
+	 * Manage user roles api calls
 	 *
 	 * @param none
 	 * @return Object json response
@@ -655,8 +655,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description:Manage user roles on cancel payment
-	 *
+	 * Manage user roles on cancel payment
 	 * @param int $user_id
 	 */
 	public function ets_pmpro_stripe_subscription_deleted( $user_id ) {
@@ -666,7 +665,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Description:Manage user roles on subscription  payment failed
+	 * Manage user roles on subscription  payment failed
 	 *
 	 * @param array $old_order
 	 */
@@ -680,8 +679,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	}
 	
 	/**
-	 * Description:Manage user roles on cancel payment
-	 *
+	 * Manage user roles on cancel payment
+	 * 
 	 * @param int $user_id
 	 */
 	public function ets_manage_roles_on_payment_failed( $user_id ) {
@@ -690,10 +689,10 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$ets_discord_role_id      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
 		$previous_default_role    = get_user_meta( $user_id, 'ets_discord_default_role_id', true );
 
-		if ( $ets_discord_role_id ) {
-			$this->delete_discord_role( $user_id, $ets_discord_role_id, false );
-		}
 		if ( $allow_none_member == 'yes' ) {
+			if ( $ets_discord_role_id ) {
+				$this->delete_discord_role( $user_id, $ets_discord_role_id, false );
+			}
 			if ($previous_default_role) {
 				$this->delete_discord_role( $user_id, $previous_default_role, false );
 			}
@@ -702,17 +701,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
 			}
 		} elseif ( $allow_none_member == 'no' ) {
-			if( $default_role == 'none' ){
-				$this->delete_member_from_guild( $user_id, false );
-			} else {
-				if ($previous_default_role) {
-					$this->delete_discord_role( $user_id, $previous_default_role, false );
-				}
-				if ( $default_role ) { 
-					$this->change_discord_role_api( $user_id, $default_role, false );
-					update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
-				}
-			}
+			$this->delete_member_from_guild( $user_id, false );
 		}
 	}
 

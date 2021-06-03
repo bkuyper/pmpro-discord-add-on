@@ -9,7 +9,7 @@ class PMPro_Discord_Logs {
 	}
 
 	/**
-	 * Description: Static property to define log file name
+	 * Static property to define log file name
 	 *
 	 * @param None
 	 * @return string $log_file_name
@@ -17,7 +17,7 @@ class PMPro_Discord_Logs {
 	public static $log_file_name = 'discord_api_logs.txt';
 
 	/**
-	 * Description: Clear previous logs history
+	 * Clear previous logs history
 	 *
 	 * @param None
 	 * @return None
@@ -55,7 +55,7 @@ class PMPro_Discord_Logs {
 	}
 
 	/**
-	 * Description: Add API error logs into log file
+	 * Add API error logs into log file
 	 *
 	 * @param array  $response_arr
 	 * @param array  $backtrace_arr

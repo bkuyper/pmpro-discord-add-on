@@ -134,10 +134,9 @@ class Ets_Pmpro_Add_Discord {
 	 * @return None
 	 */
 	public function ets_discord_deactivation_operations() {
-		$deactivate_options = sanitize_text_field( trim( get_option( 'ets_discord_deactivate_options' ) ) );
-		$deactivate_user_meta = sanitize_text_field( trim( get_option( 'ets_discord_deactivate_user_meta' ) ) );
+		$deactivate_plugin = sanitize_text_field( trim( get_option( 'ets_discord_remove_data_on_uninstalling' ) ) );
 
-		if ($deactivate_options == true) {
+		if ($deactivate_plugin == true) {
 			//Remove API credetials
 			delete_option( 'ets_discord_client_id' );
 			delete_option( 'ets_discord_client_secret' );
@@ -156,11 +155,9 @@ class Ets_Pmpro_Add_Discord {
 			delete_option( 'ets_pmpro_log_api_response' );
 			delete_option( 'ets_pmpro_job_queue' );
 			delete_option( 'ets_pmpro_job_queue_batch_size' );	
-			delete_option( 'ets_discord_deactivate_options' );
-			delete_option( 'ets_discord_deactivate_user_meta' );		
-		}
-
-		if ($deactivate_user_meta == true) {
+			delete_option( 'ets_discord_remove_data_on_uninstalling' );	
+		
+			//Remove user meta
 			$ets_discord_user_ids = get_users( 'fields=ID' );
 			foreach ( $ets_discord_user_ids as $user_id ) {
 					delete_user_meta( $user_id, 'ets_discord_user_id' );

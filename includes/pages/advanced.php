@@ -3,8 +3,7 @@ $upon_failed_payment = sanitize_text_field( trim( get_option( 'ETS_PMPRO_PAYMENT
 $log_api_res = sanitize_text_field( trim( get_option( 'ets_pmpro_log_api_response' ) ) );
 $set_job_cnrc = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue' ) ) );
 $set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue_batch_size' ) ) );
-$deactivate_options = sanitize_text_field( trim( get_option( 'ets_discord_deactivate_options' ) ) );
-$deactivate_user_meta = sanitize_text_field( trim( get_option( 'ets_discord_deactivate_user_meta' ) ) );
+$deactivate_plugin = sanitize_text_field( trim( get_option( 'ets_discord_remove_data_on_uninstalling' ) ) );
 ?>
 <form method="post" action="#">
   <table class="form-table" role="presentation">
@@ -23,15 +22,9 @@ $deactivate_user_meta = sanitize_text_field( trim( get_option( 'ets_discord_deac
         </fieldset></td>
       </tr>
       <tr>
-        <th scope="row"><?php echo __( "We will delete options table data", "ets_pmpro_discord" );?></th>
+        <th scope="row"><?php echo __( "Remove data after uninstalling the plugin", "ets_pmpro_discord" );?></th>
         <td> <fieldset>
-        <input name="deactivate_options" type="checkbox" id="deactivate_options" <?php if ( $deactivate_options == true ) { echo 'checked="checked"'; } ?> value="1">
-        </fieldset></td>
-      </tr>
-      <tr>
-        <th scope="row"><?php echo __( "We will delete usermeta table data", "ets_pmpro_discord" );?></th>
-        <td> <fieldset>
-        <input name="deactivate_user_meta" type="checkbox" id="deactivate_user_meta" <?php if ( $deactivate_user_meta == true ) { echo 'checked="checked"'; } ?> value="1">
+        <input name="deactivate_plugin" type="checkbox" id="deactivate_plugin" <?php if ( $deactivate_plugin == true ) { echo 'checked="checked"'; } ?> value="1">
         </fieldset></td>
       </tr>
       <tr>

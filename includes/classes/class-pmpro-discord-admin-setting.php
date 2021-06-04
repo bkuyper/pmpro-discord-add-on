@@ -285,7 +285,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		$set_job_q_batch_size = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
 
-		$deactivate_options = isset( $_POST['deactivate_options'] ) ? sanitize_textarea_field( trim( $_POST['deactivate_options'] ) ) : '';
+		$deactivate_plugin = isset( $_POST['deactivate_plugin'] ) ? sanitize_textarea_field( trim( $_POST['deactivate_plugin'] ) ) : '';
 
 		$deactivate_user_meta = isset( $_POST['deactivate_user_meta'] ) ? sanitize_textarea_field( trim( $_POST['deactivate_user_meta'] ) ) : '';
 
@@ -334,10 +334,10 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_pmpro_log_api_response', false );
 				}
 
-				if ( isset($_POST['deactivate_options']) ) {
-					update_option( 'ets_discord_deactivate_options', true );
+				if ( isset($_POST['deactivate_plugin']) ) {
+					update_option( 'ets_discord_remove_data_on_uninstalling', true );
 				}else{
-					update_option( 'ets_discord_deactivate_options', false );
+					update_option( 'ets_discord_remove_data_on_uninstalling', false );
 				}
 
 				if ( isset($_POST['deactivate_user_meta']) ) {

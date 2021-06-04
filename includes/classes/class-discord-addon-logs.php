@@ -67,6 +67,7 @@ class PMPro_Discord_Logs {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
+		$log_api_res_check = sanitize_text_field( trim( get_option( 'ets_pmpro_log_api_response' ) ) );
 		$error        = current_time( 'mysql' );
 		$user_details = '';
 		if ( $user_id ) {
@@ -80,8 +81,13 @@ class PMPro_Discord_Logs {
 		} else {
 			$error .= print_r( $response_arr, true ).'::'.$user_id;
 		}
-
-		file_put_contents( ETS_PMPRO_DISCORD_PATH . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
+		if ( $error_type == 'api_error' ) {
+			if ( $log_api_res_check == true ) {
+				file_put_contents( ETS_PMPRO_DISCORD_PATH . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
+			}
+		} else {
+			file_put_contents( ETS_PMPRO_DISCORD_PATH . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
+		}
 	}
 }
 new PMPro_Discord_Logs();

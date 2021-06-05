@@ -165,8 +165,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			}
 
 			// It is possible that we amy exhaust API rate limit while adding members to guild, so handling off the job to queue.
-			//as_schedule_single_action( strtotime( 'now' ) + get_add_member_seconds( true ), 'ets_as_handle_add_member_to_guild', array( $ets_discord_user_id, $user_id, $access_token ) );
       as_enqueue_async_action( 'ets_as_handle_add_member_to_guild', array( $ets_discord_user_id, $user_id, $access_token ) );
+
 		} catch ( Exception $e ) {
 			$error_arr = array( 'error' => $e->getMessage() );
 			$logs      = new PMPro_Discord_Logs();
@@ -391,7 +391,6 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function delete_member_from_guild( $user_id, $is_schedule = true ) {
 		if ( $is_schedule && isset( $user_id ) ) {
-			//as_schedule_single_action( strtotime( 'now' ) + get_delete_member_seconds( true ), 'ets_as_schedule_delete_member', array( $user_id ) );
       as_enqueue_async_action( 'ets_as_schedule_delete_member', array( $user_id ) );
 		} else {
 			if ( isset( $user_id ) ) {
@@ -454,7 +453,6 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function change_discord_role_api( $user_id, $role_id, $is_schedule = true ) {
 		if ( $is_schedule ) {
-			//as_schedule_single_action( strtotime( 'now' ) + get_change_role_seconds( true ), 'ets_as_schedule_member_change_role', array( $user_id, $role_id ) );
       as_enqueue_async_action( 'ets_as_schedule_member_change_role', array( $user_id, $role_id ) );
 		} else {
 			$this->ets_as_handler_change_memberrole( $user_id, $role_id );
@@ -520,7 +518,6 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function delete_discord_role( $user_id, $ets_role_id, $is_schedule = true ) {
 		if ( $is_schedule ) {
-			//as_schedule_single_action( strtotime( 'now' ) + get_delete_role_seconds( true ), 'ets_as_schedule_delete_role', array( $user_id, $ets_role_id ) );
       as_enqueue_async_action( 'ets_as_schedule_delete_role', array( $user_id, $ets_role_id ) );
 		} else {
 			$this->ets_as_handler_delete_memberrole( $user_id, $ets_role_id );
@@ -671,7 +668,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_pmpro_subscription_payment_failed( $old_order ) {
 		$user_id 									= $old_order->user_id;
-		$ets_payment_fld	        = sanitize_text_field( trim( get_option( 'ETS_PMPRO_PAYMENT_FAILED' ) ) );
+		$ets_payment_fld	        = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_payment_failed' ) ) );
 
 		if ( $ets_payment_fld == true && isset( $user_id ) ) {
 			$this->ets_manage_roles_on_payment_failed( $user_id );

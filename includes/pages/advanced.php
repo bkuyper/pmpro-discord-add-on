@@ -1,5 +1,5 @@
 <?php
-$upon_failed_payment = sanitize_text_field( trim( get_option( 'ETS_PMPRO_PAYMENT_FAILED' ) ) );
+$upon_failed_payment = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_payment_failed' ) ) );
 $log_api_res = sanitize_text_field( trim( get_option( 'ets_pmpro_log_api_response' ) ) );
 $set_job_cnrc = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue' ) ) );
 $set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue_batch_size' ) ) );

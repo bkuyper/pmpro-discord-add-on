@@ -62,14 +62,14 @@ class PMPro_Discord_Logs {
 	 * @param string $error_type
 	 * @return None
 	 */
-	public function write_api_response_logs( $response_arr, $backtrace_arr, $error_type, $user_id ) {
+	public function write_api_response_logs( $response_arr, $backtrace_arr = [], $user_id ) {
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
-		$log_api_res_check = sanitize_text_field( trim( get_option( 'ets_pmpro_log_api_response' ) ) );
-		$error             = current_time( 'mysql' );
-		$user_details      = '';
+
+		$error        = current_time( 'mysql' );
+		$user_details = '';
 		if ( $user_id ) {
 			$user_details = '::User Id:' . $user_id;
 		}
@@ -79,15 +79,9 @@ class PMPro_Discord_Logs {
 		} elseif ( is_array( $response_arr ) && array_key_exists( 'error', $response_arr ) ) {
 			$error .= '=>File:' . $backtrace_arr['file'] . $user_details . '::Line:' . $backtrace_arr['line'] . '::Function:' . $backtrace_arr['function'] . '::' . $response_arr['error'];
 		} else {
-			$error .= print_r( $response_arr, true ) . '::' . $user_id;
+			$error .= print_r( $response_arr, true ).'::'.$user_id;
 		}
-		if ( $error_type == 'api_error' ) {
-			if ( $log_api_res_check == true ) {
-				file_put_contents( ETS_PMPRO_DISCORD_PATH . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
-			}
-		} else {
-			file_put_contents( ETS_PMPRO_DISCORD_PATH . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
-		}
+		file_put_contents( ETS_PMPRO_DISCORD_PATH . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
 	}
 }
 new PMPro_Discord_Logs();

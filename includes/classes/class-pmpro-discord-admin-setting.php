@@ -24,11 +24,27 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_as_schedule_job_pmpro_level_deleted' ), 10, 1 );
 
-		add_action( 'ets_reset_incremental_counter', array( $this, 'ets_reset_incremental_func' ) );
-
 		add_filter( 'pmpro_manage_memberslist_custom_column', array( $this, 'ets_discord_pmpro_extra_cols_body' ), 10, 2 );
 
 		add_filter( 'pmpro_manage_memberslist_columns', array( $this, 'ets_discord_pmpro_manage_memberslist_columns' ) );
+
+		add_filter( 'action_scheduler_queue_runner_batch_size', array( $this, 'ets_discord_pmpro_queue_batch_size' ) );
+
+		add_filter( 'action_scheduler_queue_runner_concurrent_batches', array( $this, 'ets_discord_pmpro_concurrent_batches' ) );
+
+	}
+
+	/**
+	 * set action scheuduler concurrent batches number
+	 */
+	public function ets_discord_pmpro_concurrent_batches() {
+		return absint( get_option( 'ets_pmpro_job_queue_concurrency' ) );
+	}
+	/**
+	 * set action scheuduler batch size.
+	 */
+	public function ets_discord_pmpro_queue_batch_size() {
+		return absint( get_option( 'ets_pmpro_job_queue_batch_size' ) );
 	}
 	/**
 	 * Show status of PMPro connection with user
@@ -337,12 +353,11 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_discord_remove_data_on_uninstalling', false );
 				}
 
-
 				if ( isset( $_POST['set_job_cnrc'] ) ) {
 					if ( $set_job_cnrc < 1 ) {
-						update_option( 'ets_pmpro_job_queue', 1 );
+						update_option( 'ets_pmpro_job_queue_concurrency', 1 );
 					} else {
-						update_option( 'ets_pmpro_job_queue', $set_job_cnrc );
+						update_option( 'ets_pmpro_job_queue_concurrency', $set_job_cnrc );
 					}
 				}
 
@@ -513,34 +528,6 @@ class Ets_Pmpro_Admin_Setting {
 		return $status;
 	}
 
-
-
-	/*
-	* Method to reset DB counter
-	* @param NONE
-	* @return NONE
-	*/
-	public function ets_reset_incremental_func() {
-		// Reseting the cancel second counter, but before doing that we need to check if there is no next schedule.
-		if ( false === as_next_scheduled_action( 'ets_as_handle_pmpro_cancel' ) ) {
-			update_option( 'ets_cancel_seconds', 0 );
-		}
-		if ( false === as_next_scheduled_action( 'ets_as_handle_pmpro_expiry' ) ) {
-			update_option( 'ets_expiry_seconds', 0 );
-		}
-		if ( false === as_next_scheduled_action( 'ets_as_handle_add_member_to_guild' ) ) {
-			update_option( 'ets_add_member_seconds', 0 );
-		}
-		if ( false === as_next_scheduled_action( 'ets_as_schedule_delete_member' ) ) {
-			update_option( 'ets_delete_member_seconds', 0 );
-		}
-		if ( false === as_next_scheduled_action( 'ets_as_schedule_member_change_role' ) ) {
-			update_option( 'ets_change_role_seconds', 0 );
-		}
-		if ( false === as_next_scheduled_action( 'ets_as_schedule_delete_role' ) ) {
-			update_option( 'ets_delete_role_seconds', 0 );
-		}
-	}
 
 	/*
 	* Add extra column body into pmpro members list

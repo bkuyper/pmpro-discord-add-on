@@ -1,11 +1,11 @@
 <div class="error-log">
 <?php
 	$filename = PMPro_Discord_Logs::$log_file_name;
-	$handle = fopen(ETS_PMPRO_DISCORD_PATH.$filename, "a+");
-	while ( ! feof($handle) ) {
-	  echo fgets($handle). "<br />";
-	 }
-	fclose($handle);
+	$handle   = fopen( ETS_PMPRO_DISCORD_PATH . $filename, 'a+' );
+while ( ! feof( $handle ) ) {
+	echo fgets( $handle ) . '<br />';
+}
+	fclose( $handle );
 ?>
 </div>
 <div class="clrbtndiv">
@@ -17,6 +17,6 @@
 		<input type="button" class="ets-submit ets-bg-green" value="Refresh" onClick="window.location.href = window.location.href">
 	</div>
 	<div class="form-group">
-		<a href="<?php echo ETS_PMPRO_DISCORD_URL.'discord_api_logs.txt'; ?>" class="ets-submit ets-bg-download" download>Download</a>
+		<a href="<?php echo ETS_PMPRO_DISCORD_URL . 'discord_api_logs.txt'; ?>" class="ets-submit ets-bg-download" download>Download</a>
 	</div>
 </div>

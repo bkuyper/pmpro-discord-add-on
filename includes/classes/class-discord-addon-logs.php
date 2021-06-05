@@ -68,8 +68,8 @@ class PMPro_Discord_Logs {
 			exit();
 		}
 		$log_api_res_check = sanitize_text_field( trim( get_option( 'ets_pmpro_log_api_response' ) ) );
-		$error        = current_time( 'mysql' );
-		$user_details = '';
+		$error             = current_time( 'mysql' );
+		$user_details      = '';
 		if ( $user_id ) {
 			$user_details = '::User Id:' . $user_id;
 		}
@@ -79,7 +79,7 @@ class PMPro_Discord_Logs {
 		} elseif ( is_array( $response_arr ) && array_key_exists( 'error', $response_arr ) ) {
 			$error .= '=>File:' . $backtrace_arr['file'] . $user_details . '::Line:' . $backtrace_arr['line'] . '::Function:' . $backtrace_arr['function'] . '::' . $response_arr['error'];
 		} else {
-			$error .= print_r( $response_arr, true ).'::'.$user_id;
+			$error .= print_r( $response_arr, true ) . '::' . $user_id;
 		}
 		if ( $error_type == 'api_error' ) {
 			if ( $log_api_res_check == true ) {

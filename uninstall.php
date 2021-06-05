@@ -30,7 +30,7 @@ if ( defined( 'WP_UNINSTALL_PLUGIN' )
 			// Remove advance settings.
 			delete_option( 'ets_pmpro_discord_payment_failed' );
 			delete_option( 'ets_pmpro_log_api_response' );
-			delete_option( 'ets_pmpro_job_queue' );
+			delete_option( 'ets_pmpro_job_queue_concurrency' );
 			delete_option( 'ets_pmpro_job_queue_batch_size' );
 			delete_option( 'ets_discord_remove_data_on_uninstalling' );
 

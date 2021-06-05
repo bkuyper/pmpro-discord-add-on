@@ -286,8 +286,6 @@ class Ets_Pmpro_Admin_Setting {
 
 		$deactivate_plugin = isset( $_POST['deactivate_plugin'] ) ? sanitize_textarea_field( trim( $_POST['deactivate_plugin'] ) ) : '';
 
-		$deactivate_user_meta = isset( $_POST['deactivate_user_meta'] ) ? sanitize_textarea_field( trim( $_POST['deactivate_user_meta'] ) ) : '';
-
 		if ( isset( $_POST['submit'] ) && ! isset( $_POST['ets_discord_role_mapping'] ) ) {
 			if ( isset( $_POST['ets_discord_save_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_settings'], 'save_discord_settings' ) ) {
 				if ( $ets_discord_client_id ) {
@@ -304,7 +302,7 @@ class Ets_Pmpro_Admin_Setting {
 
 				if ( $ets_discord_redirect_url ) {
 					// add a query string param `via` GH #185.
-					$ets_discord_redirect_url = $this->get_formated_discord_redirect_url( $ets_discord_redirect_url );
+					$ets_discord_redirect_url = get_formated_discord_redirect_url( $ets_discord_redirect_url );
 					update_option( 'ets_discord_redirect_url', $ets_discord_redirect_url );
 				}
 
@@ -339,15 +337,10 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_discord_remove_data_on_uninstalling', false );
 				}
 
-				if ( isset( $_POST['deactivate_user_meta'] ) ) {
-					update_option( 'ets_discord_deactivate_user_meta', true );
-				} else {
-					update_option( 'ets_discord_deactivate_user_meta', false );
-				}
 
 				if ( isset( $_POST['set_job_cnrc'] ) ) {
 					if ( $set_job_cnrc < 1 ) {
-						update_option( 'ets_pmpro_job_queue', 2 );
+						update_option( 'ets_pmpro_job_queue', 1 );
 					} else {
 						update_option( 'ets_pmpro_job_queue', $set_job_cnrc );
 					}
@@ -355,7 +348,7 @@ class Ets_Pmpro_Admin_Setting {
 
 				if ( isset( $_POST['set_job_q_batch_size'] ) ) {
 					if ( $set_job_q_batch_size < 1 ) {
-						update_option( 'ets_pmpro_job_queue_batch_size', 10 );
+						update_option( 'ets_pmpro_job_queue_batch_size', 1 );
 					} else {
 						update_option( 'ets_pmpro_job_queue_batch_size', $set_job_q_batch_size );
 					}
@@ -520,24 +513,7 @@ class Ets_Pmpro_Admin_Setting {
 		return $status;
 	}
 
-	/**
-	 * This method parse url and append a query param to it.
-	 *
-	 * @param string $url
-	 * @return string $url
-	 */
-	public function get_formated_discord_redirect_url( $url ) {
-		$parsed = parse_url( $url, PHP_URL_QUERY );
-		if ( $parsed === null ) {
-			return $url .= '?via=discord';
-		} else {
-			if ( stristr( $url, 'via=discord' ) !== false ) {
-				return $url;
-			} else {
-				return $url .= '&via=discord';
-			}
-		}
-	}
+
 
 	/*
 	* Method to reset DB counter

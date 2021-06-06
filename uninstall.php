@@ -32,7 +32,6 @@ if ( defined( 'WP_UNINSTALL_PLUGIN' )
 			delete_option( 'ets_pmpro_log_api_response' );
 			delete_option( 'ets_pmpro_job_queue_concurrency' );
 			delete_option( 'ets_pmpro_job_queue_batch_size' );
-			delete_option( 'ets_discord_remove_data_on_uninstalling' );
 
 			// Remove user meta
 			$ets_discord_user_ids = get_users( 'fields=ID' );

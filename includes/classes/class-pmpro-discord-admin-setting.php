@@ -347,12 +347,6 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_pmpro_log_api_response', false );
 				}
 
-				if ( isset( $_POST['deactivate_plugin'] ) ) {
-					update_option( 'ets_discord_remove_data_on_uninstalling', true );
-				} else {
-					update_option( 'ets_discord_remove_data_on_uninstalling', false );
-				}
-
 				if ( isset( $_POST['set_job_cnrc'] ) ) {
 					if ( $set_job_cnrc < 1 ) {
 						update_option( 'ets_pmpro_job_queue_concurrency', 1 );

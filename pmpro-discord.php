@@ -78,7 +78,6 @@ class Ets_Pmpro_Add_Discord {
 	public function set_default_setting_values(){
 		update_option( 'ets_pmpro_discord_payment_failed', false );
 		update_option( 'ets_pmpro_log_api_response', false );
-		update_option( 'ets_discord_remove_data_on_uninstalling', false );
 		update_option( 'ets_pmpro_job_queue_concurrency', 1 );
 		update_option( 'ets_pmpro_job_queue_batch_size', 10 );
 	}

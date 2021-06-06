@@ -22,7 +22,7 @@ define( 'ETS_PMPRO_DISCORD_URL', plugin_dir_url( __FILE__ ) );
 define( 'ETS_PMPRO_DISCORD_PATH', plugin_dir_path( __FILE__ ) );
 
 // discord API url
-define( 'ETS_DISCORD_API_URL', 'https://discordapp.com/api/v6/' );
+define( 'ETS_DISCORD_API_URL', 'https://discord.com/api/v6/' );
 
 // discord Bot Permissions
 define( 'ETS_DISCORD_BOT_PERMISSIONS', 8 );

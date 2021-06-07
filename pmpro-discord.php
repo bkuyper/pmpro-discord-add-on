@@ -80,6 +80,7 @@ class Ets_Pmpro_Add_Discord {
 		update_option( 'ets_pmpro_log_api_response', false );
 		update_option( 'ets_pmpro_job_queue_concurrency', 1 );
 		update_option( 'ets_pmpro_job_queue_batch_size', 10 );
+    update_option( 'ets_allow_none_member', 'yes' );
 	}
 
 }

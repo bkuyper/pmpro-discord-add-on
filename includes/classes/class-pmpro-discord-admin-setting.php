@@ -199,7 +199,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		wp_register_style(
 			'ets_pmpro_add_discord_style',
-			ETS_PMPRO_DISCORD_URL . 'assets/css/ets-pmpro-discord-style.min.css',
+			ETS_PMPRO_DISCORD_URL . 'assets/css/ets-pmpro-discord-style.css',
 			false,
 			ETS_PMPRO_VERSION
 		);
@@ -325,12 +325,7 @@ class Ets_Pmpro_Admin_Setting {
 				if ( $ets_discord_guild_id ) {
 					update_option( 'ets_discord_guild_id', $ets_discord_guild_id );
 				}
-
-				?>
-				 <div class="notice notice-success is-dismissible support-success-msg">
-					<p><?php echo __( 'Your settings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
-				</div>
-				<?php
+				add_action( 'admin_notices', $this->ets_save_settings_admin_notice() );
 			}
 		}
 		if ( isset( $_POST['adv_submit'] ) ) {
@@ -362,11 +357,7 @@ class Ets_Pmpro_Admin_Setting {
 						update_option( 'ets_pmpro_job_queue_batch_size', $set_job_q_batch_size );
 					}
 				}
-				?>
-					<div class="notice notice-success is-dismissible support-success-msg">
-						<p><?php echo __( 'Your settings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
-					</div>
-				<?php
+				add_action( 'admin_notices', $this->ets_save_settings_admin_notice() );
 			}
 		}
 		if ( $ets_discord_roles ) {
@@ -385,22 +376,14 @@ class Ets_Pmpro_Admin_Setting {
 					if ( $allow_none_member ) {
 						update_option( 'ets_allow_none_member', $allow_none_member );
 					}
-					?>
-					<div class="notice notice-success is-dismissible support-success-msg">
-						<p><?php echo __( 'Your mappings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
-					</div>
-					<?php
+					add_action( 'admin_notices', $this->ets_save_mappings_admin_notice() );
 				}
 				if ( isset( $_POST['flush'] ) ) {
 					delete_option( 'ets_discord_role_mapping' );
 					delete_option( 'ets_discord_default_role_id' );
 					delete_option( 'ets_upon_expiry' );
 					delete_option( 'ets_allow_none_member' );
-					?>
-				<div class="notice notice-success is-dismissible support-success-msg">
-					<p><?php echo __( 'Your settings flushed successfully.', 'ets_pmpro_discord' ); ?></p>
-				</div>
-					<?php
+					add_action( 'admin_notices', $this->ets_save_flush_mappings_admin_notice() );
 				}
 			}
 		}
@@ -557,6 +540,29 @@ class Ets_Pmpro_Admin_Setting {
 		$columns['joined_date'] = __( 'Joined Date', 'ets_pmpro_discord' );
 		return $columns;
 	}
+	
+	public function ets_save_settings_admin_notice() {
+		?>
+				<div class="notice notice-success is-dismissible support-success-msg">
+				<p><?php echo "ets_discord_settings_save_success"; ?></p>
+			</div>
+			<?php
+	}
+	
+	public function ets_save_mappings_admin_notice() {
+		?>
+			<div class="notice notice-success is-dismissible support-success-msg">
+				<p><?php echo __( 'Your mappings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
+			</div>
+		<?php
+	}
 
+	public function ets_save_flush_mappings_admin_notice() {
+		?>
+			<div class="notice notice-success is-dismissible support-success-msg">
+				<p><?php echo __( 'Your settings flushed successfully.', 'ets_pmpro_discord' ); ?></p>
+			</div>
+		<?php
+	}
 }
 new Ets_Pmpro_Admin_Setting();

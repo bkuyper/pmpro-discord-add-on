@@ -81,7 +81,9 @@ class PMPro_Discord_Logs {
 		} else {
 			$error .= print_r( $response_arr, true ).'::'.$user_id;
 		}
-		file_put_contents( ETS_PMPRO_DISCORD_PATH . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
+		if ( is_array( $response_arr ) ) {
+			file_put_contents( ETS_PMPRO_DISCORD_PATH . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
+		}
 	}
 }
 new PMPro_Discord_Logs();

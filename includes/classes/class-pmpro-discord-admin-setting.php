@@ -472,12 +472,7 @@ class Ets_Pmpro_Admin_Setting {
 				$mail      = wp_mail( $to, $subject, $content, $headers );
 
 				if ( $mail ) {
-					// general admin notice
-					?>
-				<div class="notice notice-success is-dismissible support-success-msg">
-					<p><?php echo __( 'Your request have been successfully submitted!', 'ets_pmpro_discord' ); ?></p>
-				</div>
-					<?php
+					add_action( 'admin_notices', $this->ets_mail_request_admin_notice() );
 				}
 			}
 		}
@@ -541,14 +536,24 @@ class Ets_Pmpro_Admin_Setting {
 		return $columns;
 	}
 	
+	/*
+	* Admin notice for save general settings successfully
+	* @param None
+	* @return None
+	*/
 	public function ets_save_settings_admin_notice() {
 		?>
 				<div class="notice notice-success is-dismissible support-success-msg">
-				<p><?php echo "ets_discord_settings_save_success"; ?></p>
+				<p><?php echo __( 'Your settings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
 			</div>
 			<?php
 	}
 	
+	/*
+	* Admin notice for save role mapping settings successfully
+	* @param None
+	* @return None
+	*/
 	public function ets_save_mappings_admin_notice() {
 		?>
 			<div class="notice notice-success is-dismissible support-success-msg">
@@ -557,10 +562,28 @@ class Ets_Pmpro_Admin_Setting {
 		<?php
 	}
 
+	/*
+	* Admin notice after flush role mapping settings successfully
+	* @param None
+	* @return None
+	*/
 	public function ets_save_flush_mappings_admin_notice() {
 		?>
 			<div class="notice notice-success is-dismissible support-success-msg">
 				<p><?php echo __( 'Your settings flushed successfully.', 'ets_pmpro_discord' ); ?></p>
+			</div>
+		<?php
+	}
+
+	/*
+	* Admin notice for mail request submited successfully
+	* @param None
+	* @return None
+	*/
+	public function ets_mail_request_admin_notice() {
+		?>
+			<div class="notice notice-success is-dismissible support-success-msg">
+				<p><?php echo __( 'Your request have been successfully submitted!', 'ets_pmpro_discord' ); ?></p>
 			</div>
 		<?php
 	}

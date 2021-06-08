@@ -11,7 +11,7 @@ while ( ! feof( $handle ) ) {
 <div class="clrbtndiv">
 	<div class="form-group">
 		<input type="button" class="clrbtn ets-submit ets-bg-red" id="clrbtn" name="clrbtn" value="Clear Logs !">
-		<span class="spinner" ></span>
+		<span class="clr-log spinner" ></span>
 	</div>
 	<div class="form-group">
 		<input type="button" class="ets-submit ets-bg-green" value="Refresh" onClick="window.location.href = window.location.href">

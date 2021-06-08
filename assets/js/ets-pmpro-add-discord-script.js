@@ -104,7 +104,7 @@ jQuery(document).ready(function ($) {
 				type: "POST",
 				data: { 'action': 'ets_clear_logs', 'ets_discord_nonce': etsPmproParams.ets_discord_nonce, },
 				beforeSend: function () {
-					$(".spinner").addClass("is-active").show();
+					$(".clr-log.spinner").addClass("is-active").show();
 				},
 				success: function (data) {
 					if (data.error) {
@@ -118,7 +118,7 @@ jQuery(document).ready(function ($) {
 					console.error(response);
 				},
 				complete: function () {
-					$(".spinner").removeClass("is-active").hide();
+					$(".clr-log.spinner").removeClass("is-active").hide();
 				}
 			});
 		});

@@ -3,7 +3,6 @@ $user_id             = sanitize_text_field( trim( get_current_user_id() ) );
 $pmpro_levels        = pmpro_getAllLevels( true, true );
 $membership_level    = pmpro_getMembershipLevelForUser( $user_id );
 $default_role        = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
-$upon_expiry_s       = sanitize_text_field( trim( get_option( 'ets_upon_expiry' ) ) );
 $allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
 ?>
 <div class="notice notice-warning ets-notice">

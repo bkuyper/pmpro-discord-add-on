@@ -163,13 +163,13 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		try {
 			$allow_none_member = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
 
-			if ( ! pmpro_hasMembershipLevel() && $allow_none_member == 'no' ) {
+			if ( $allow_none_member == 'no' ) {
 				return;
 			}
 
 			// It is possible that we amy exhaust API rate limit while adding members to guild, so handling off the job to queue.
 			as_enqueue_async_action( 'ets_as_handle_add_member_to_guild', array( $ets_discord_user_id, $user_id, $access_token ) );
-
+			
 		} catch ( Exception $e ) {
 			$error_arr = array( 'error' => $e->getMessage() );
 			$logs      = new PMPro_Discord_Logs();
@@ -194,7 +194,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		} elseif ( $discord_role = '' && $default_role ) {
 			$discord_role = $default_role;
 		}
-
+		
 		$guilds_memeber_api_url = ETS_DISCORD_API_URL . 'guilds/' . $guild_id . '/members/' . $ets_discord_user_id;
 		$guild_args             = array(
 			'method'  => 'PUT',
@@ -225,6 +225,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		if ( $discord_role && $discord_role != 'none' && isset( $user_id ) ) {
 			$this->change_discord_role_api( $user_id, $discord_role );
 		}
+    
 		if ( $default_role && $default_role != 'none' && isset( $user_id ) ) {
 			$this->change_discord_role_api( $user_id, $default_role );
 		}

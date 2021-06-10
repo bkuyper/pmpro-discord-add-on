@@ -37,3 +37,15 @@ function ets_pmpro_discord_log_api_response( $user_id, $api_url = '', $api_args 
 		$logs->write_api_response_logs( $log_string, array(), $user_id );
 	}
 }
+
+/**
+   * Log api erros
+   */
+	function ets_pmpro_discord_log_api_errors( $api_res = [] ) {
+	if ( is_array( $api_res ) ) {
+		
+		if ($api_res['code'] == 429 || array_key_exists( 'WP_Error', $api_res ) ) {
+			return true;
+		}
+	}
+}

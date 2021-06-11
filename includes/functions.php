@@ -70,7 +70,7 @@ function ets_pmpro_discord_as_get_action_data( $action_id ) {
 	global $wpdb;
 	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT aa.hook, aa.status, aa.args, ag.slug AS as_group FROM ' . $wpdb->prefix . 'actionscheduler_actions as aa INNER JOIN ' . $wpdb->prefix . 'actionscheduler_groups as ag ON aa.group_id=ag.group_id WHERE `action_id`=%d AND ag.slug=%s', $action_id, ETS_DISCORD_AS_GROUP_NAME ), ARRAY_A );
 
-	if ( !empty( $result ) ) {
+	if ( ! empty( $result ) ) {
 		return $result[0];
 	} else {
 		return false;
@@ -85,7 +85,7 @@ function ets_pmpro_discord_get_highest_last_attempt_timestamp() {
 	global $wpdb;
 	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT aa.last_attempt_gmt FROM ' . $wpdb->prefix . 'actionscheduler_actions as aa INNER JOIN ' . $wpdb->prefix . 'actionscheduler_groups as ag ON aa.group_id = ag.group_id WHERE ag.slug = %s ORDER BY aa.last_attempt_gmt DESC limit 1', ETS_DISCORD_AS_GROUP_NAME ), ARRAY_A );
 
-	if ( !empty( $result ) ) {
+	if ( ! empty( $result ) ) {
 		return strtotime( $result['0']['last_attempt_gmt'] );
 	} else {
 		return false;
@@ -95,10 +95,14 @@ function ets_pmpro_discord_get_highest_last_attempt_timestamp() {
 /**
  * Get randon integer between a predefined range.
  *
- * @param INT $action_id
+ * @param INT $add_upon
  */
-function ets_pmpro_discord_get_random_integer() {
-	return random_int( 2, 10 );
+function ets_pmpro_discord_get_random_timestamp( $add_upon = '' ) {
+	if ( $add_upon != '' && $add_upon !== false ) {
+		return $add_upon + random_int( 2, 10 );
+	} else {
+		return random_int( 2, 10 );
+	}
 }
 
 
@@ -109,7 +113,7 @@ function ets_pmpro_discord_get_all_pending_actions() {
 	global $wpdb;
 	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT aa.* FROM ' . $wpdb->prefix . 'actionscheduler_actions as aa INNER JOIN ' . $wpdb->prefix . 'actionscheduler_groups as ag ON aa.group_id = ag.group_id WHERE ag.slug = %s AND aa.status="pending" ', ETS_DISCORD_AS_GROUP_NAME ), ARRAY_A );
 
-	if ( !empty( $result ) ) {
+	if ( ! empty( $result ) ) {
 		return $result['0'];
 	} else {
 		return false;

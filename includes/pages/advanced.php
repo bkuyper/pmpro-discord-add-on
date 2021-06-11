@@ -1,6 +1,7 @@
 <?php
 $upon_failed_payment  = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_payment_failed' ) ) );
 $log_api_res          = sanitize_text_field( trim( get_option( 'ets_pmpro_log_api_response' ) ) );
+$retry_failed_api			= sanitize_text_field( trim( get_option( 'ets_pmpro_retry_failed_api' ) ) );
 $set_job_cnrc         = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue_concurrency' ) ) );
 $set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue_batch_size' ) ) );
 ?>
@@ -8,7 +9,7 @@ $set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_job_qu
   <table class="form-table" role="presentation">
 	<tbody>
 	  <tr>
-		<th scope="row"><?php echo __( 'Remove role and adjust default upon member failed payment', 'ets_pmpro_discord' ); ?></th>
+		<th scope="row"><?php echo __( 'Re-assign roles upon payment failure', 'ets_pmpro_discord' ); ?></th>
 		<td> <fieldset>
 		<?php wp_nonce_field( 'save_discord_adv_settings', 'ets_discord_save_adv_settings' ); ?>
 		<input name="upon_failed_payment" type="checkbox" id="upon_failed_payment" 
@@ -20,7 +21,7 @@ $set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_job_qu
 		</fieldset></td>
 	  </tr>
 	  <tr>
-		<th scope="row"><?php echo __( 'Log API calls response', 'ets_pmpro_discord' ); ?></th>
+		<th scope="row"><?php echo __( 'Log API calls response (For debugging purpose)', 'ets_pmpro_discord' ); ?></th>
 		<td> <fieldset>
 		<input name="log_api_res" type="checkbox" id="log_api_res" 
 		<?php
@@ -30,17 +31,28 @@ $set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_job_qu
 		 value="1">
 		</fieldset></td>
 	  </tr>
+		<tr>
+		<th scope="row"><?php echo __( 'Retry Failed API calls', 'ets_pmpro_discord' ); ?></th>
+		<td> <fieldset>
+		<input name="retry_failed_api" type="checkbox" id="retry_failed_api" 
+		<?php
+		if ( $retry_failed_api == true ) {
+			echo 'checked="checked"'; }
+		?>
+		 value="1">
+		</fieldset></td>
+	  </tr>
 
 	  <tr>
 		<th scope="row"><?php echo __( 'Set job queue concurrency', 'ets_pmpro_discord' ); ?></th>
 		<td> <fieldset>
-		<input name="set_job_cnrc" type="text" id="set_job_cnrc" value="<?php if ( isset( $set_job_cnrc ) ) { echo $set_job_cnrc; } else { echo 1; } ?>">
+		<input name="set_job_cnrc" type="number" min="1" id="set_job_cnrc" value="<?php if ( isset( $set_job_cnrc ) ) { echo $set_job_cnrc; } else { echo 1; } ?>">
 		</fieldset></td>
 	  </tr>
 	  <tr>
 		<th scope="row"><?php echo __( 'Set job queue batch size', 'ets_pmpro_discord' ); ?></th>
 		<td> <fieldset>
-		<input name="set_job_q_batch_size" type="text" id="set_job_q_batch_size" value="<?php if ( isset( $set_job_q_batch_size ) ) { echo $set_job_q_batch_size; } else { echo 10; } ?>">
+		<input name="set_job_q_batch_size" type="number" min="1" id="set_job_q_batch_size" value="<?php if ( isset( $set_job_q_batch_size ) ) { echo $set_job_q_batch_size; } else { echo 10; } ?>">
 		</fieldset></td>
 	  </tr>
     

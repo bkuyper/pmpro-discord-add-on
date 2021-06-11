@@ -139,7 +139,7 @@ class Ets_Pmpro_Admin_Setting {
 			$user_id      = $ids->user_id;
 			$access_token = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
 			if ( $access_token ) {
-				as_enqueue_async_action( 'ets_as_handle_pmpro_cancel', array( $user_id, $level_id, $level_id ) );
+				as_enqueue_async_action( 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $level_id ) );
 			}
 		}
 	}
@@ -159,7 +159,7 @@ class Ets_Pmpro_Admin_Setting {
 		if ( ! empty( $cancel_level ) || $membership_status == 'admin_cancelled' ) {
 
 			$args = array(
-				'hook'    => 'ets_as_handle_pmpro_cancel',
+				'hook'    => 'ets_pmpro_discord_as_handle_pmpro_cancel',
 				'args'    => array( $level_id, $user_id, $cancel_level ),
 				'status'  => ActionScheduler_Store::STATUS_PENDING,
 				'orderby' => 'date',
@@ -168,7 +168,7 @@ class Ets_Pmpro_Admin_Setting {
 			// check if member is already added to job queue.
 			$cancl_arr_already_added = as_get_scheduled_actions( $args, ARRAY_A );
 			if ( count( $cancl_arr_already_added ) === 0 && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ) {
-				as_enqueue_async_action( 'ets_as_handle_pmpro_cancel', array( $user_id, $level_id, $cancel_level ) );
+				as_enqueue_async_action( 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $cancel_level ) );
 			}
 		}
 	}
@@ -176,15 +176,15 @@ class Ets_Pmpro_Admin_Setting {
 	/*
 	*  Action schedule to schedule a function to run upon PMPRO Expiry.
 	* @param int $user_id
-	  * @param int $level_id
-	  * @return None
+	* @param int $level_id
+	* @return None
 	*/
 	public function ets_as_schdule_job_pmpro_expiry( $user_id, $level_id ) {
 		$existing_members_queue = sanitize_text_field( trim( get_option( 'ets_queue_of_pmpro_members' ) ) );
 		  $membership_status    = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
 		  $access_token         = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
 		if ( $membership_status == 'expired' && $access_token ) {
-			as_enqueue_async_action( 'ets_as_handle_pmpro_expiry', array( $user_id, $level_id ) );
+			as_enqueue_async_action( 'ets_pmpro_discord_as_handle_pmpro_expiry', array( $user_id, $level_id ) );
 		}
 	}
 

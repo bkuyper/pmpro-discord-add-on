@@ -86,8 +86,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				);
 				$response = wp_remote_post( $discord_token_api_url, $args );
 				ets_pmpro_discord_log_api_response( $user_id, $discord_token_api_url, $args, $response );
-				if ( ets_pmpro_discord_check_api_errors($response) ){
-					throw new Exception("Failed in function create_discord_auth_token");
+				if ( ets_pmpro_discord_check_api_errors( $response ) ) {
+					throw new Exception( 'Failed in function create_discord_auth_token' );
 				}
 			}
 		} else {
@@ -107,8 +107,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			);
 			$response = wp_remote_post( $discord_token_api_url, $args );
 			ets_pmpro_discord_log_api_response( $user_id, $discord_token_api_url, $args, $response );
-			if ( ets_pmpro_discord_check_api_errors($response) ){
-				throw new Exception("Failed in function create_discord_auth_token");
+			if ( ets_pmpro_discord_check_api_errors( $response ) ) {
+				throw new Exception( 'Failed in function create_discord_auth_token' );
 			}
 		}
 		$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
@@ -144,7 +144,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		);
 		$user_response         = wp_remote_get( $discord_cuser_api_url, $param );
 		ets_pmpro_discord_log_api_response( $user_id, $discord_cuser_api_url, $param, $user_response );
-		
+
 		$response_arr = json_decode( wp_remote_retrieve_body( $user_response ), true );
 
 		if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
@@ -219,8 +219,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$guild_response         = wp_remote_post( $guilds_memeber_api_url, $guild_args );
 
 		ets_pmpro_discord_log_api_response( $user_id, $guilds_memeber_api_url, $guild_args, $guild_response );
-		if ( ets_pmpro_discord_check_api_errors($guild_response) ){
-			throw new Exception("Failed in function ets_as_handler_add_member_to_guild");
+		if ( ets_pmpro_discord_check_api_errors( $guild_response ) ) {
+			throw new Exception( 'Failed in function ets_as_handler_add_member_to_guild' );
 		}
 		$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 
@@ -275,9 +275,9 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				),
 			);
 			$guild_response          = wp_remote_post( $discod_server_roles_api, $guild_args );
-			
+
 			ets_pmpro_discord_log_api_response( $user_id, $discod_server_roles_api, $guild_args, $guild_response );
-			
+
 			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 
 			if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
@@ -426,8 +426,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		);
 		$guild_response                = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
 		ets_pmpro_discord_log_api_response( $user_id, $guilds_delete_memeber_api_url, $guild_args, $guild_response );
-		if ( ets_pmpro_discord_check_api_errors($guild_response) ){
-			throw new Exception("Failed in function ets_as_handler_delete_member_from_guild");
+		if ( ets_pmpro_discord_check_api_errors( $guild_response ) ) {
+			throw new Exception( 'Failed in function ets_as_handler_delete_member_from_guild' );
 		}
 		$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 
@@ -491,8 +491,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
 			$response = wp_remote_get( $discord_change_role_api_url, $param );
 			ets_pmpro_discord_log_api_response( $user_id, $discord_change_role_api_url, $param, $response );
-			if ( ets_pmpro_discord_check_api_errors($response) ){
-				throw new Exception("Failed in function ets_as_handler_change_memberrole");
+			if ( ets_pmpro_discord_check_api_errors( $response ) ) {
+				throw new Exception( 'Failed in function ets_as_handler_change_memberrole' );
 			}
 			$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
 			if ( ! is_wp_error( $response ) && is_array( $response_arr ) && ! empty( $response_arr ) ) {

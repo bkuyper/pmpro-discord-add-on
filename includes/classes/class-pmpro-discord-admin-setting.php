@@ -344,6 +344,12 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_pmpro_log_api_response', false );
 				}
 
+				if ( isset( $_POST['retry_failed_api'] ) ) {
+					update_option( 'ets_pmpro_retry_failed_api', true );
+				} else {
+					update_option( 'ets_pmpro_retry_failed_api', false );
+				}
+
 				if ( isset( $_POST['set_job_cnrc'] ) ) {
 					if ( $set_job_cnrc < 1 ) {
 						update_option( 'ets_pmpro_job_queue_concurrency', 1 );

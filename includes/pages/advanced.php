@@ -32,7 +32,7 @@ $set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_job_qu
 		</fieldset></td>
 	  </tr>
 		<tr>
-		<th scope="row"><?php echo __( 'Retry Failed API call', 'ets_pmpro_discord' ); ?></th>
+		<th scope="row"><?php echo __( 'Retry Failed API calls', 'ets_pmpro_discord' ); ?></th>
 		<td> <fieldset>
 		<input name="retry_failed_api" type="checkbox" id="retry_failed_api" 
 		<?php

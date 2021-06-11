@@ -30,6 +30,9 @@ define( 'ETS_DISCORD_BOT_PERMISSIONS', 8 );
 // discord api call scopes
 define( 'ETS_DISCORD_OAUTH_SCOPES', 'identify email connections guilds guilds.join gdm.join rpc rpc.notifications.read rpc.voice.read rpc.voice.write rpc.activities.write bot webhook.incoming messages.read applications.builds.upload applications.builds.read applications.commands applications.store.update applications.entitlements activities.read activities.write relationships.read' );
 
+// define group name for action scheduler actions
+define('ETS_DISCORD_AS_GROUP_NAME', 'ets-pmpro-discord' );
+
 /**
  * Class to connect discord app
  */

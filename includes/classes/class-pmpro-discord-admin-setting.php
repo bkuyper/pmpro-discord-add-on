@@ -37,14 +37,22 @@ class Ets_Pmpro_Admin_Setting {
 	/**
 	 * set action scheuduler concurrent batches number
 	 */
-	public function ets_discord_pmpro_concurrent_batches() {
-		return absint( get_option( 'ets_pmpro_job_queue_concurrency' ) );
+	public function ets_discord_pmpro_concurrent_batches( $batch_size ) {
+		if ( ets_pmpro_discord_get_all_pending_actions() !== false ) {
+			return absint( get_option( 'ets_pmpro_job_queue_concurrency' ) );
+		} else {
+			return $batch_size;
+		}
 	}
 	/**
 	 * set action scheuduler batch size.
 	 */
-	public function ets_discord_pmpro_queue_batch_size() {
-		return absint( get_option( 'ets_pmpro_job_queue_batch_size' ) );
+	public function ets_discord_pmpro_queue_batch_size( $concurrent_batches ) {
+		if ( ets_pmpro_discord_get_all_pending_actions() !== false ) {
+			return absint( get_option( 'ets_pmpro_job_queue_batch_size' ) );
+		} else {
+			return $concurrent_batches;
+		}
 	}
 	/**
 	 * Show status of PMPro connection with user
@@ -139,7 +147,7 @@ class Ets_Pmpro_Admin_Setting {
 			$user_id      = $ids->user_id;
 			$access_token = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
 			if ( $access_token ) {
-				as_enqueue_async_action( 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $level_id ) );
+				as_schedule_single_action( ets_pmpro_discord_get_random_integer(), 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $level_id ), ETS_DISCORD_AS_GROUP_NAME );
 			}
 		}
 	}
@@ -168,7 +176,7 @@ class Ets_Pmpro_Admin_Setting {
 			// check if member is already added to job queue.
 			$cancl_arr_already_added = as_get_scheduled_actions( $args, ARRAY_A );
 			if ( count( $cancl_arr_already_added ) === 0 && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ) {
-				as_enqueue_async_action( 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $cancel_level ) );
+				as_schedule_single_action( ets_pmpro_discord_get_random_integer(), 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $cancel_level ), ETS_DISCORD_AS_GROUP_NAME );
 			}
 		}
 	}
@@ -184,7 +192,7 @@ class Ets_Pmpro_Admin_Setting {
 		  $membership_status    = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
 		  $access_token         = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
 		if ( $membership_status == 'expired' && $access_token ) {
-			as_enqueue_async_action( 'ets_pmpro_discord_as_handle_pmpro_expiry', array( $user_id, $level_id ) );
+			as_schedule_single_action( ets_pmpro_discord_get_random_integer(), 'ets_pmpro_discord_as_handle_pmpro_expiry', array( $user_id, $level_id ), ETS_DISCORD_AS_GROUP_NAME );
 		}
 	}
 

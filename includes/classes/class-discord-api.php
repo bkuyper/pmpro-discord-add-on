@@ -46,8 +46,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$hook        = $action_data['hook'];
 		$args        = json_decode( $action_data['args'] );
 
-		if ( stristr( $hook, 'ets_pmpro_discord' ) !== false && $action_data['status'] = 'failed' ) {
-			as_enqueue_async_action( $hook, array_values( $args ) );
+		if ( $action_data['as_group'] == ETS_DISCORD_AS_GROUP_NAME && $action_data['status'] = 'failed' ) {
+			as_schedule_single_action( ets_pmpro_discord_get_random_integer(), $hook, array_values( $args ), 'ets-pmpro-discord' );
 		}
 
 	}
@@ -108,15 +108,15 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			$response = wp_remote_post( $discord_token_api_url, $args );
 			ets_pmpro_discord_log_api_response( $user_id, $discord_token_api_url, $args, $response );
 			if ( ets_pmpro_discord_check_api_errors( $response ) ) {
+				$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
+				if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
+					if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
+						$logs = new PMPro_Discord_Logs();
+						$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], $user_id );
+					}
+				}
+				// this should be catch by Action schedule failed action.
 				throw new Exception( 'Failed in function create_discord_auth_token' );
-			}
-		}
-		$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
-
-		if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
-			if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
-				$logs = new PMPro_Discord_Logs();
-				$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], $user_id );
 			}
 		}
 		return $response;
@@ -178,8 +178,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			return;
 		}
 
-		// It is possible that we amy exhaust API rate limit while adding members to guild, so handling off the job to queue.
-		as_enqueue_async_action( 'ets_pmpro_discord_as_handle_add_member_to_guild', array( $ets_discord_user_id, $user_id, $access_token ) );
+		// It is possible that we may exhaust API rate limit while adding members to guild, so handling off the job to queue.
+		as_schedule_single_action( ets_pmpro_discord_get_random_integer(), 'ets_pmpro_discord_as_handle_add_member_to_guild', array( $ets_discord_user_id, $user_id, $access_token ), ETS_DISCORD_AS_GROUP_NAME );
 
 	}
 
@@ -220,16 +220,17 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
 		ets_pmpro_discord_log_api_response( $user_id, $guilds_memeber_api_url, $guild_args, $guild_response );
 		if ( ets_pmpro_discord_check_api_errors( $guild_response ) ) {
+			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
+			if ( ! is_wp_error( $response_arr ) && is_array( $response_arr ) && ! empty( $response_arr ) ) {
+				if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
+					$logs = new PMPro_Discord_Logs();
+					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], $user_id );
+				}
+			}
+			// this should be catch by Action schedule failed action.
 			throw new Exception( 'Failed in function ets_as_handler_add_member_to_guild' );
 		}
-		$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 
-		if ( ! is_wp_error( $response_arr ) && is_array( $response_arr ) && ! empty( $response_arr ) ) {
-			if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
-				$logs = new PMPro_Discord_Logs();
-				$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], $user_id );
-			}
-		}
 		update_user_meta( $user_id, 'ets_discord_role_id', $discord_role );
 		if ( $discord_role && $discord_role != 'none' && isset( $user_id ) ) {
 			$this->change_discord_role_api( $user_id, $discord_role );
@@ -398,7 +399,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function delete_member_from_guild( $user_id, $is_schedule = true ) {
 		if ( $is_schedule && isset( $user_id ) ) {
-			as_enqueue_async_action( 'ets_pmpro_discord_as_schedule_delete_member', array( $user_id ) );
+		
+			as_schedule_single_action( ets_pmpro_discord_get_random_integer(), 'ets_pmpro_discord_as_schedule_delete_member', array( $user_id ), ETS_DISCORD_AS_GROUP_NAME );
 		} else {
 			if ( isset( $user_id ) ) {
 				$this->ets_as_handler_delete_member_from_guild( $user_id );
@@ -427,25 +429,27 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$guild_response                = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
 		ets_pmpro_discord_log_api_response( $user_id, $guilds_delete_memeber_api_url, $guild_args, $guild_response );
 		if ( ets_pmpro_discord_check_api_errors( $guild_response ) ) {
+			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
+
+			if ( ! is_wp_error( $response_arr ) && is_array( $response_arr ) && ! empty( $response_arr ) ) {
+				if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
+					$logs = new PMPro_Discord_Logs();
+					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], $user_id );
+				}
+			}
+			// this exception should be catch by action scheduler.
 			throw new Exception( 'Failed in function ets_as_handler_delete_member_from_guild' );
 		}
-		$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
 
-		if ( ! is_wp_error( $response_arr ) && is_array( $response_arr ) && ! empty( $response_arr ) ) {
-			if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
-				$logs = new PMPro_Discord_Logs();
-				$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], $user_id );
-			}
-		} else {
-				/*Delete all usermeta related to discord connection*/
-				delete_user_meta( $user_id, 'ets_discord_user_id' );
-				delete_user_meta( $user_id, 'ets_discord_access_token' );
-				delete_user_meta( $user_id, 'ets_discord_refresh_token' );
-				delete_user_meta( $user_id, 'ets_discord_role_id' );
-				delete_user_meta( $user_id, 'ets_discord_default_role_id' );
-				delete_user_meta( $user_id, 'ets_discord_username' );
-				delete_user_meta( $user_id, 'ets_discord_expires_in' );
-		}
+		/*Delete all usermeta related to discord connection*/
+		delete_user_meta( $user_id, 'ets_discord_user_id' );
+		delete_user_meta( $user_id, 'ets_discord_access_token' );
+		delete_user_meta( $user_id, 'ets_discord_refresh_token' );
+		delete_user_meta( $user_id, 'ets_discord_role_id' );
+		delete_user_meta( $user_id, 'ets_discord_default_role_id' );
+		delete_user_meta( $user_id, 'ets_discord_username' );
+		delete_user_meta( $user_id, 'ets_discord_expires_in' );
+
 	}
 
 	/**
@@ -457,7 +461,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function change_discord_role_api( $user_id, $role_id, $is_schedule = true ) {
 		if ( $is_schedule ) {
-			as_enqueue_async_action( 'ets_pmpro_discord_as_schedule_member_change_role', array( $user_id, $role_id ) );
+			as_schedule_single_action( ets_pmpro_discord_get_random_integer(), 'ets_pmpro_discord_as_schedule_member_change_role', array( $user_id, $role_id ), ETS_DISCORD_AS_GROUP_NAME );
 		} else {
 			$this->ets_as_handler_change_memberrole( $user_id, $role_id );
 		}
@@ -492,15 +496,17 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			$response = wp_remote_get( $discord_change_role_api_url, $param );
 			ets_pmpro_discord_log_api_response( $user_id, $discord_change_role_api_url, $param, $response );
 			if ( ets_pmpro_discord_check_api_errors( $response ) ) {
+				$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
+				if ( ! is_wp_error( $response ) && is_array( $response_arr ) && ! empty( $response_arr ) ) {
+					if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
+						$logs = new PMPro_Discord_Logs();
+						$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], $user_id );
+					}
+				}
+				// this exception should be catch by action scheduler.
 				throw new Exception( 'Failed in function ets_as_handler_change_memberrole' );
 			}
-			$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
-			if ( ! is_wp_error( $response ) && is_array( $response_arr ) && ! empty( $response_arr ) ) {
-				if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
-					$logs = new PMPro_Discord_Logs();
-					$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], $user_id );
-				}
-			}
+
 			if ( ( $default_role != $role_id && $role_id != $previous_role ) || empty( $previous_role ) ) {
 				update_user_meta( $user_id, 'ets_discord_role_id', $role_id );
 			}
@@ -519,7 +525,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function delete_discord_role( $user_id, $ets_role_id, $is_schedule = true ) {
 		if ( $is_schedule ) {
-			as_enqueue_async_action( 'ets_pmpro_discord_as_schedule_delete_role', array( $user_id, $ets_role_id ) );
+			ets_pmpro_discord_get_random_integer( ets_pmpro_discord_get_random_integer(), 'ets_pmpro_discord_as_schedule_delete_role', array( $user_id, $ets_role_id ), ETS_DISCORD_AS_GROUP_NAME );
 		} else {
 			$this->ets_as_handler_delete_memberrole( $user_id, $ets_role_id );
 		}
@@ -549,6 +555,17 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
 			$response = wp_remote_request( $discord_delete_role_api_url, $param );
 			ets_pmpro_discord_log_api_response( $user_id, $discord_delete_role_api_url, $param, $response );
+			if ( ets_pmpro_discord_check_api_errors( $response ) ) {
+				$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );
+				if ( ! is_wp_error( $response ) && is_array( $response_arr ) && ! empty( $response_arr ) ) {
+					if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
+						$logs = new PMPro_Discord_Logs();
+						$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], $user_id );
+					}
+				}
+				// this exception should be catch by action scheduler.
+				throw new Exception( 'Failed in function ets_as_handler_change_memberrole' );
+			}
 			// Delete user_meta.
 			delete_user_meta( $user_id, 'ets_discord_role_id' );
 			return $response;

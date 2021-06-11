@@ -218,8 +218,6 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		);
 		$guild_response         = wp_remote_post( $guilds_memeber_api_url, $guild_args );
 
-		update_option('debugg', print_r($guild_response, true) );
-
 		ets_pmpro_discord_log_api_response( $user_id, $guilds_memeber_api_url, $guild_args, $guild_response );
 		if ( ets_pmpro_discord_check_api_errors($guild_response) ){
 			throw new Exception("Failed in function ets_as_handler_add_member_to_guild");

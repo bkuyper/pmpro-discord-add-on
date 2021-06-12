@@ -535,7 +535,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @param varchar $ets_role_id
 	 * @return object API response
 	 */
-	public function delete_discord_role( $user_id, $ets_role_id, $is_schedule ) {
+	public function delete_discord_role( $user_id, $ets_role_id, $is_schedule = true ) {
 		if ( $is_schedule ) {
 			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_schedule_delete_role', array( $user_id, $ets_role_id, $is_schedule ), ETS_DISCORD_AS_GROUP_NAME );
 		} else {
@@ -723,23 +723,23 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 					$this->change_discord_role_api( $user_id, $mapped_role_id, false );
 				}
 				if ( $default_role != 'none' && $previous_default_role !== $default_role ) {
-					$this->delete_discord_role( $user_id, $previous_default_role, false );
+					$this->delete_discord_role( $user_id, $previous_default_rol );
 					$this->change_discord_role_api( $user_id, $default_role, false );
 					update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
 				} elseif ( $previous_default_role ) {
-					$this->delete_discord_role( $user_id, $previous_default_role, false );
+					$this->delete_discord_role( $user_id, $previous_default_role );
 				}
 			}
 			if ( $ets_discord_role_id ) {
 
-				$this->delete_discord_role( $user_id, $ets_discord_role_id, false );
+				$this->delete_discord_role( $user_id, $ets_discord_role_id );
 			}
 			if ( $default_role != 'none' && $previous_default_role !== $default_role ) {
-				$this->delete_discord_role( $user_id, $previous_default_role, false );
+				$this->delete_discord_role( $user_id, $previous_default_role );
 				$this->change_discord_role_api( $user_id, $default_role, false );
 				update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
 			} elseif ( $previous_default_role ) {
-				$this->delete_discord_role( $user_id, $previous_default_role, false );
+				$this->delete_discord_role( $user_id, $previous_default_role );
 				update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
 			}
 		} elseif ( isset( $user_id ) && $allow_none_member == 'no' ) {
@@ -762,7 +762,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 				$this->delete_member_from_guild( $user_id, false );
 		}
 		if ( $allow_none_member == 'yes' && ! empty( $ets_discord_role_id ) ) {
-			$this->delete_discord_role( $user_id, $ets_discord_role_id, false );
+			$this->delete_discord_role( $user_id, $ets_discord_role_id );
 			if ( $role_id != 'none' && isset( $user_id ) ) {
 				$this->change_discord_role_api( $user_id, $role_id, false );
 			}
@@ -783,13 +783,13 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		if ( $allow_none_member == 'no' && isset( $user_id ) ) {
 			$this->delete_member_from_guild( $user_id );
 		} elseif ( $ets_discord_user_id && ! empty( $ets_discord_role_id ) ) {
-			$this->delete_discord_role( $user_id, $ets_discord_role_id );
+			$this->delete_discord_role( $user_id, $ets_discord_role_id);
 			$role_id = '';
 			if ( $discord_default_role ) {
 				$role_id = $discord_default_role;
 			}
 			if ( isset( $user_id ) && $allow_none_member == 'yes' && $role_id != 'none' ) {
-				$this->change_discord_role_api( $user_id, $role_id );
+				$this->change_discord_role_api( $user_id, $role_id, true );
 			}
 			if ( ! empty( $previous_default_role ) && $previous_default_role != 'none' && $previous_default_role != $discord_default_role ) {
 				$this->delete_discord_role( $user_id, $previous_default_role );
@@ -814,15 +814,15 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		// If user is connected to discord.
 		if ( $ets_discord_user_id && empty( $cancel_level ) ) {
 			if ( isset( $ets_discord_role_id ) && $ets_discord_role_id != '' && $ets_discord_role_id != $default_role ) {
-				$this->delete_discord_role( $user_id, $ets_discord_role_id );
+				$this->delete_discord_role( $user_id, $ets_discord_role_id, false );
 			}
 			if ( ! empty( $previous_default_role ) && $previous_default_role != 'none' && $previous_default_role != $default_role && $default_role != 'none' ) {
-				$this->delete_discord_role( $user_id, $previous_default_role );
+				$this->delete_discord_role( $user_id, $previous_default_role, false );
 				if ( $default_role != 'none' && isset( $user_id ) ) {
 					$this->change_discord_role_api( $user_id, $default_role );
 				}
 			} elseif ( ! empty( $previous_default_role ) && $previous_default_role != 'none' && $default_role == 'none' ) {
-				$this->delete_discord_role( $user_id, $previous_default_role );
+				$this->delete_discord_role( $user_id, $previous_default_role, false );
 				update_user_meta( $user_id, 'ets_discord_default_role_id', $default_role );
 			}
 			$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );

@@ -101,7 +101,7 @@ function ets_pmpro_discord_get_random_timestamp( $add_upon = '' ) {
 	if ( $add_upon != '' && $add_upon !== false ) {
 		return $add_upon + random_int( 2, 10 );
 	} else {
-		return random_int( 2, 10 );
+		return strtotime('now')+random_int( 2, 10 );
 	}
 }
 

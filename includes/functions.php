@@ -47,6 +47,7 @@ function ets_pmpro_discord_log_api_response( $user_id, $api_url = '', $api_args 
  * Check API call response and detect conditions which can cause of action failure and retry should be attemped.
  *
  * @param ARRAY|OBJECT $api_response
+ * @param BOOLEAN
  */
 function ets_pmpro_discord_check_api_errors( $api_response ) {
 	// check if response code is a WordPress error.
@@ -101,7 +102,7 @@ function ets_pmpro_discord_get_random_timestamp( $add_upon = '' ) {
 	if ( $add_upon != '' && $add_upon !== false ) {
 		return $add_upon + random_int( 2, 10 );
 	} else {
-		return strtotime('now')+random_int( 2, 10 );
+		return strtotime( 'now' ) + random_int( 2, 10 );
 	}
 }
 

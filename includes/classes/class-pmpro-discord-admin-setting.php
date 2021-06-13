@@ -36,6 +36,8 @@ class Ets_Pmpro_Admin_Setting {
 
 	/**
 	 * set action scheuduler concurrent batches number
+   * @param INT $batch_size
+   * @return INT $batch_size
 	 */
 	public function ets_discord_pmpro_concurrent_batches( $batch_size ) {
 		if ( ets_pmpro_discord_get_all_pending_actions() !== false ) {
@@ -46,6 +48,8 @@ class Ets_Pmpro_Admin_Setting {
 	}
 	/**
 	 * set action scheuduler batch size.
+   * @param INT $concurrent_batches
+   * @return INT $concurrent_batches
 	 */
 	public function ets_discord_pmpro_queue_batch_size( $concurrent_batches ) {
 		if ( ets_pmpro_discord_get_all_pending_actions() !== false ) {
@@ -57,8 +61,8 @@ class Ets_Pmpro_Admin_Setting {
 	/**
 	 * Show status of PMPro connection with user
 	 *
-	 * @param None
-	 * @return None
+	 * @param NONE
+	 * @return NONE
 	 */
 	public function ets_pmpro_discord_add_connect_discord_button() {
 		if ( ! is_user_logged_in() ) {
@@ -88,7 +92,6 @@ class Ets_Pmpro_Admin_Setting {
 			$default_role_name = $all_roles[ $default_role ];
 		}
 		if ( $this->Check_saved_settings_status() ) {
-
 			if ( $access_token ) {
 				?>
 				<label class="ets-connection-lbl"><?php echo __( 'Discord connection', 'ets_pmpro_discord' ); ?></label>
@@ -118,8 +121,8 @@ class Ets_Pmpro_Admin_Setting {
 	/**
 	 * Get pmpro current level id
 	 *
-	 * @param int $user_id
-	 * @return int $curr_level_id
+	 * @param INT $user_id
+	 * @return INT|NULL $curr_level_id
 	 */
 	public function get_current_level_id( $user_id ) {
 			$membership_level = pmpro_getMembershipLevelForUser( $user_id );
@@ -135,8 +138,8 @@ class Ets_Pmpro_Admin_Setting {
 	/**
 	 * Method to queue all members into cancel job when pmpro level is deleted.
 	 *
-	 * @param int $user_id
-	 * @return string $status
+	 * @param INT $level_id
+	 * @return NONE
 	 */
 	public function ets_as_schedule_job_pmpro_level_deleted( $level_id ) {
 		global $wpdb;
@@ -155,13 +158,12 @@ class Ets_Pmpro_Admin_Setting {
 	/**
 	 * Method to save job queue for cancelled pmpro members.
 	 *
-	 * @param int $level_id
-	 * @param int $user_id
-	 * @param int $cancel_level
-	 * @return None
+	 * @param INT $level_id
+	 * @param INT $user_id
+	 * @param INT $cancel_level
+	 * @return NONE
 	 */
 	public function ets_as_schdule_job_pmpro_cancel( $level_id, $user_id, $cancel_level ) {
-
 		$membership_status = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
 		$access_token      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
 		if ( ! empty( $cancel_level ) || $membership_status == 'admin_cancelled' ) {
@@ -182,10 +184,11 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/*
-	*  Action schedule to schedule a function to run upon PMPRO Expiry.
-	* @param int $user_id
-	* @param int $level_id
-	* @return None
+	* Action schedule to schedule a function to run upon PMPRO Expiry.
+  *
+	* @param INT $user_id
+	* @param INT $level_id
+	* @return NONE
 	*/
 	public function ets_as_schdule_job_pmpro_expiry( $user_id, $level_id ) {
 		$existing_members_queue = sanitize_text_field( trim( get_option( 'ets_queue_of_pmpro_members' ) ) );
@@ -200,8 +203,8 @@ class Ets_Pmpro_Admin_Setting {
 	/**
 	 * Localized script and style
 	 *
-	 * @param None
-	 * @return None
+	 * @param NONE
+	 * @return NONE
 	 */
 	public function ets_add_script() {
 
@@ -254,8 +257,8 @@ class Ets_Pmpro_Admin_Setting {
 	/**
 	 * Add menu in PmPro membership dashboard sub-menu
 	 *
-	 * @param None
-	 * @return None
+	 * @param NONE
+	 * @return NONE
 	 */
 	public function ets_add_new_menu() {
 		// Add sub-menu into PmPro main-menus list
@@ -265,8 +268,8 @@ class Ets_Pmpro_Admin_Setting {
 	/**
 	 * Get user membership status by user_id
 	 *
-	 * @param int $user_id
-	 * @return string $status
+	 * @param INT $user_id
+	 * @return STRING $status
 	 */
 	public function ets_check_current_membership_status( $user_id ) {
 		global $wpdb;
@@ -278,8 +281,8 @@ class Ets_Pmpro_Admin_Setting {
 	/**
 	 * Define plugin settings rules
 	 *
-	 * @param None
-	 * @return None
+	 * @param NONE
+	 * @return NONE
 	 */
 	public function ets_pmpro_discord_setting_page() {
 		if ( ! current_user_can( 'administrator' ) ) {
@@ -462,8 +465,8 @@ class Ets_Pmpro_Admin_Setting {
 	/**
 	 * Send mail to support form current user
 	 *
-	 * @param None
-	 * @return None
+	 * @param NONE
+	 * @return NONE
 	 */
 	public function get_Support_Data() {
 		if ( ! current_user_can( 'administrator' ) ) {
@@ -508,8 +511,8 @@ class Ets_Pmpro_Admin_Setting {
 	/**
 	 * To check settings values saved or not
 	 *
-	 * @param None
-	 * @return boolean $status
+	 * @param NONE
+	 * @return BOOL $status
 	 */
 	public function Check_saved_settings_status() {
 		$ets_discord_client_id     = get_option( 'ets_discord_client_id' );
@@ -530,8 +533,8 @@ class Ets_Pmpro_Admin_Setting {
 
 	/*
 	* Add extra column body into pmpro members list
-	* @param int $colname
-	* @param int $user
+	* @param STRING $colname
+	* @param INT $user
 	* @return NONE
 	*/
 	public function ets_discord_pmpro_extra_cols_body( $colname, $user_id ) {
@@ -554,8 +557,8 @@ class Ets_Pmpro_Admin_Setting {
 	}
 	/*
 	* Add extra column into pmpro members list
-	* @param array $columns
-	* @return array $columns
+	* @param ARRAY $columns
+	* @return ARRAY $columns
 	*/
 	public function ets_discord_pmpro_manage_memberslist_columns( $columns ) {
 		$columns['discord']     = __( 'Discord', 'ets_pmpro_discord' );

@@ -39,8 +39,9 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
 	/**
 	 * Check if the failed action is the PMPRO Discord Add-on and re-schedule it
-	 * @param INT $action_id
-	 * @param OBJECT $e
+	 *
+	 * @param INT            $action_id
+	 * @param OBJECT         $e
 	 * @param OBJECT context
 	 * @return NONE
 	 */
@@ -60,13 +61,20 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * Create authentication token for discord API
 	 *
 	 * @param STRING $code
-	 * @param INT $user_id
+	 * @param INT    $user_id
 	 * @return OBJECT API response
 	 */
 	public function create_discord_auth_token( $code, $user_id ) {
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
+		}
+		// stop users who having the direct URL of discord Oauth.
+		// We must check IF NONE members is set to NO and user having no active membership.
+		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
+		$curr_level_id     = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
+		if ( $curr_level_id == null && $allow_none_member == 'no' ) {
+			return;
 		}
 		$response              = '';
 		$refresh_token         = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_refresh_token', true ) ) );
@@ -175,7 +183,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @param INT    $ets_discord_user_id
 	 * @param INT    $user_id
 	 * @param STRING $access_token
-	 * @return OBJECT API response
+	 * @return NONE
 	 */
 	public function add_discord_member_in_guild( $ets_discord_user_id, $user_id, $access_token ) {
 		if ( ! is_user_logged_in() ) {
@@ -191,6 +199,11 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
 	/**
 	 * Method to add new members to discord guild.
+	 *
+	 * @param INT    $ets_discord_user_id
+	 * @param INT    $user_id
+	 * @param STRING $access_token
+	 * @return NONE
 	 */
 	public function ets_as_handler_add_member_to_guild( $ets_discord_user_id, $user_id, $access_token ) {
 		$guild_id                 = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
@@ -253,6 +266,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	}
 	/**
 	 * Add new member into discord guild
+	 *
 	 * @return OBJECT REST API response
 	 */
 	public function ets_load_discord_roles() {
@@ -398,7 +412,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	/**
 	 * Schedule delete existing user from guild
 	 *
-	 * @param INT $user_id
+	 * @param INT  $user_id
 	 * @param BOOL $is_schedule
 	 * @param NONE
 	 */
@@ -416,7 +430,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	/**
 	 * AS Handling member delete from huild
 	 *
-	 * @param INT $user_id
+	 * @param INT  $user_id
 	 * @param BOOL $is_schedule
 	 * @return OBJECT API response
 	 */
@@ -463,8 +477,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	/**
 	 * API call to change discord user role
 	 *
-	 * @param INT $user_id
-	 * @param INT $role_id
+	 * @param INT  $user_id
+	 * @param INT  $role_id
 	 * @param BOOL $is_schedule
 	 * @return object API response
 	 */
@@ -479,8 +493,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	/**
 	 * Action Schedule handler for mmeber change role discord.
 	 *
-	 * @param INT $user_id
-	 * @param INT $role_id
+	 * @param INT  $user_id
+	 * @param INT  $role_id
 	 * @param BOOL $is_schedule
 	 * @return object API response
 	 */
@@ -522,8 +536,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	/**
 	 * Schedule delete discord role for a member
 	 *
-	 * @param INT     $user_id
-	 * @param INT $ets_role_id
+	 * @param INT  $user_id
+	 * @param INT  $ets_role_id
 	 * @param BOOL $is_schedule
 	 * @return OBJECT API response
 	 */
@@ -538,8 +552,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	/**
 	 * Action Schedule handler to process delete role of a member.
 	 *
-	 * @param INT     $user_id
-	 * @param INT $ets_role_id
+	 * @param INT  $user_id
+	 * @param INT  $ets_role_id
 	 * @param BOOL $is_schedule
 	 * @return OBJECT API response
 	 */
@@ -639,8 +653,8 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * Method to adjust level mapped and default role of a member.
 	 *
 	 * @param INT  $user_id
-	 * @param INT $expired_level_id
-	 * @param INT $cancel_level_id
+	 * @param INT  $expired_level_id
+	 * @param INT  $cancel_level_id
 	 * @param BOOL $is_schedule
 	 */
 	private function ets_pmpro_discord_set_member_roles( $user_id, $expired_level_id = false, $cancel_level_id = false, $is_schedule = true ) {
@@ -709,7 +723,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			$this->ets_pmpro_discord_set_member_roles( $user_id, false, false, true );
 		}
 	}
-	
+
 	/*
 	* Action scheduler method to process expired pmpro members.
 	* @param INT $user_id
@@ -721,7 +735,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
 	/*
 	* Method to process queue of canceled pmpro members.
-	* 
+	*
 	* @param INT $user_id
 	* @param INT $level_id
 	* @param INT $cancel_level_id

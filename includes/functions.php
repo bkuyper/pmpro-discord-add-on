@@ -56,10 +56,9 @@ function ets_pmpro_discord_check_api_errors( $api_response ) {
 	}
 	$response_code = strval( $api_response['response']['code'] );
 	// check if response code is in the range of HTTP error.
-	if ( 400 >= absint( $response_code ) && 599 <= absint( $response_code ) ) {
+	if ( ( 400 <= absint( $response_code ) ) && ( absint( $response_code ) <= 599 ) ) {
 		return true;
 	}
-
 }
 
 /**

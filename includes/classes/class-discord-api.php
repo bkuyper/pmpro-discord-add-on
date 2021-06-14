@@ -34,7 +34,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		add_action( 'pmpro_subscription_payment_failed', array( $this, 'ets_pmpro_subscription_payment_failed' ), 10, 1 );
 
 		add_action( 'action_scheduler_failed_execution', array( $this, 'ets_pmpro_discord_reschedule_failed_action' ), 10, 3 );
-		
+
 	}
 
 	/**
@@ -206,6 +206,10 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 * @return NONE
 	 */
 	public function ets_as_handler_add_member_to_guild( $ets_discord_user_id, $user_id, $access_token ) {
+		// Since we using a queue to delay the API call, there may be a condition when a member is delete from DB. so put a check.
+		if ( get_userdata( $user_id ) === false ) {
+			return;
+		}
 		$guild_id                 = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
 		$discord_bot_token        = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
 		$default_role             = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );

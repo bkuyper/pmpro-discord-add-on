@@ -120,3 +120,17 @@ function ets_pmpro_discord_get_all_pending_actions() {
 	}
 }
 
+/**
+ * Get how many times a hook is failed in a particular day.
+ *
+ * @param STRING $hook
+ */
+function ets_pmpro_discord_count_of_hooks_failures( $hook ) {
+	global $wpdb;
+	$result = $wpdb->get_results( $wpdb->prepare( 'SELECT count(last_attempt_gmt) as hook_failed_count FROM ' . $wpdb->prefix . 'actionscheduler_actions WHERE `hook`=%s AND status="failed" AND DATE(last_attempt_gmt) = %s', $hook, date( 'Y-m-d' ) ), ARRAY_A );
+	if ( ! empty( $result ) ) {
+		return $result['0']['hook_failed_count'];
+	} else {
+		return false;
+	}
+}

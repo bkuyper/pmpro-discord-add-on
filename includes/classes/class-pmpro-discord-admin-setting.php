@@ -309,7 +309,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		$set_job_q_batch_size = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
 
-		$deactivate_plugin = isset( $_POST['deactivate_plugin'] ) ? sanitize_textarea_field( trim( $_POST['deactivate_plugin'] ) ) : '';
+		$retry_api_count = isset( $_POST['ets_pmpro_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_retry_api_count'] ) ) : '';
 
 		if ( isset( $_POST['submit'] ) && ! isset( $_POST['ets_discord_role_mapping'] ) ) {
 			if ( isset( $_POST['ets_discord_save_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_settings'], 'save_discord_settings' ) ) {
@@ -374,6 +374,14 @@ class Ets_Pmpro_Admin_Setting {
 						update_option( 'ets_pmpro_job_queue_batch_size', 1 );
 					} else {
 						update_option( 'ets_pmpro_job_queue_batch_size', $set_job_q_batch_size );
+					}
+				}
+
+				if ( isset( $_POST['ets_pmpro_retry_api_count'] ) ) {
+					if ( $retry_api_count < 1 ) {
+						update_option( 'ets_pmpro_retry_api_count', 1 );
+					} else {
+						update_option( 'ets_pmpro_retry_api_count', $retry_api_count );
 					}
 				}
 				?>

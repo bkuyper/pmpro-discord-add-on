@@ -47,12 +47,13 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_pmpro_discord_reschedule_failed_action( $action_id, $e, $context ) {
 		// First check if the action is for PMPRO discord.
-		$action_data      = ets_pmpro_discord_as_get_action_data( $action_id );
-		$hook             = $action_data['hook'];
-		$args             = json_decode( $action_data['args'] );
-		$retry_failed_api = sanitize_text_field( trim( get_option( 'ets_pmpro_retry_failed_api' ) ) );
-		if ( $retry_failed_api == true && $action_data['as_group'] == ETS_DISCORD_AS_GROUP_NAME && $action_data['status'] = 'failed' ) {
-
+		$action_data       = ets_pmpro_discord_as_get_action_data( $action_id );
+		$hook              = $action_data['hook'];
+		$args              = json_decode( $action_data['args'] );
+		$retry_failed_api  = sanitize_text_field( trim( get_option( 'ets_pmpro_retry_failed_api' ) ) );
+		$hook_failed_count = ets_pmpro_discord_count_of_hooks_failures( $hook );
+		$retry_api_count   = absint( sanitize_text_field( trim( get_option( 'ets_pmpro_retry_api_count' ) ) ) );
+		if ( $hook_failed_count < $retry_api_count && $retry_failed_api == true && $action_data['as_group'] == ETS_DISCORD_AS_GROUP_NAME && $action_data['status'] = 'failed' ) {
 			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), $hook, array_values( $args ), 'ets-pmpro-discord' );
 		}
 

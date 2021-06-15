@@ -4,6 +4,7 @@ $log_api_res          = sanitize_text_field( trim( get_option( 'ets_pmpro_log_ap
 $retry_failed_api			= sanitize_text_field( trim( get_option( 'ets_pmpro_retry_failed_api' ) ) );
 $set_job_cnrc         = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue_concurrency' ) ) );
 $set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue_batch_size' ) ) );
+$retry_api_count = sanitize_text_field( trim( get_option( 'ets_pmpro_retry_api_count' ) ) );
 ?>
 <form method="post" action="#">
   <table class="form-table" role="presentation">
@@ -42,7 +43,12 @@ $set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_job_qu
 		 value="1">
 		</fieldset></td>
 	  </tr>
-
+    <tr>
+		<th scope="row"><?php echo __( 'How many times a failed API call should get re-try', 'ets_pmpro_discord' ); ?></th>
+		<td> <fieldset>
+		<input name="ets_pmpro_retry_api_count" type="number" min="1" id="ets_pmpro_retry_api_count" value="<?php if ( isset( $retry_api_count ) ) { echo $retry_api_count; } else { echo 1; } ?>">
+		</fieldset></td>
+	  </tr> 
 	  <tr>
 		<th scope="row"><?php echo __( 'Set job queue concurrency', 'ets_pmpro_discord' ); ?></th>
 		<td> <fieldset>

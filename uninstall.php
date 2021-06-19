@@ -15,6 +15,6 @@ if ( defined( 'WP_UNINSTALL_PLUGIN' )
   ) {
     global $wpdb;
 	  $wpdb->query("DELETE FROM ". $wpdb->prefix ."usermeta WHERE `meta_key` LIKE '_ets_pmpro_discord%'");
-	  $wpdb->query("DELETE FROM ". $wpdb->prefix ."options WHERE `option_name` LIKE '_ets_pmpro_discord_%'");
+	  $wpdb->query("DELETE FROM ". $wpdb->prefix ."options WHERE `option_name` LIKE 'ets_pmpro_discord_%'");
 }
 

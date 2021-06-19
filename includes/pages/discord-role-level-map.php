@@ -2,8 +2,8 @@
 $user_id             = sanitize_text_field( trim( get_current_user_id() ) );
 $pmpro_levels        = pmpro_getAllLevels( true, true );
 $membership_level    = pmpro_getMembershipLevelForUser( $user_id );
-$default_role        = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
-$allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
+$default_role        = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
+$allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_none_member' ) ) );
 ?>
 <div class="notice notice-warning ets-notice">
   <p><i class='fas fa-info'></i> <?php echo __( 'Drag and Drop the Discord Roles over to the PMPRO Levels', 'ets_pmpro_discord' ); ?></p>
@@ -41,7 +41,7 @@ $allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_allow_none_me
 	  <tr>
 		<th scope="row"><label for="defaultRole"><?php echo __( 'Default Role', 'ets_pmpro_discord' ); ?></label></th>
 		<td>
-		  <?php wp_nonce_field( 'discord_role_mappings_nonce', 'ets_discord_role_mappings_nonce' ); ?>
+		  <?php wp_nonce_field( 'discord_role_mappings_nonce', 'ets_pmpor_discord_role_mappings_nonce' ); ?>
 		  <input type="hidden" id="selected_default_role" value="<?php echo $default_role; ?>">
 		  <select id="defaultRole" name="defaultRole">
 			<option value="none"><?php echo __( '-None-', 'ets_pmpro_discord' ); ?></option>
@@ -73,7 +73,7 @@ $allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_allow_none_me
   </table>
 	<br>
   <div class="mapping-json">
-	<textarea id="maaping_json_val" name="ets_discord_role_mapping">
+	<textarea id="maaping_json_val" name="ets_pmpor_discord_role_mapping">
 	<?php
 	if ( isset( $ets_discord_roles ) ) {
 		echo stripslashes( $ets_discord_roles );}

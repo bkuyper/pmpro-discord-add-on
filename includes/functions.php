@@ -32,7 +32,7 @@ function get_formated_discord_redirect_url( $url ) {
    * @param ARRAY|OBJECT $api_response
    */
 function ets_pmpro_discord_log_api_response( $user_id, $api_url = '', $api_args = array(), $api_response = '' ) {
-	$log_api_response = get_option( 'ets_pmpro_log_api_response' );
+	$log_api_response = get_option( 'ets_pmpro_discord_log_api_response' );
 	if ( $log_api_response == true ) {
 		$log_string  = '==>' . $api_url;
 		$log_string .= '-::-' . serialize( $api_args );
@@ -150,4 +150,13 @@ function get_current_level_id( $user_id ) {
 		return null;
 	}
 
+}
+
+/*
+* uninstall cleanup
+*/
+function ets_pmpro_discord_clenup_before_uninstall(){
+	global $wpdb;
+	$wpdb->query("DELETE FROM ". $wpdb->prefix ."usermeta WHERE `meta_key` LIKE '_ets_pmpro_discord%'");
+	$wpdb->query("DELETE FROM ". $wpdb->prefix ."options WHERE `option_name` LIKE '_ets_pmpro_discord_%'");
 }

@@ -41,7 +41,7 @@ class Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_discord_pmpro_concurrent_batches( $batch_size ) {
 		if ( ets_pmpro_discord_get_all_pending_actions() !== false ) {
-			return absint( get_option( 'ets_pmpro_job_queue_concurrency' ) );
+			return absint( get_option( 'ets_pmpro_discord_job_queue_concurrency' ) );
 		} else {
 			return $batch_size;
 		}
@@ -54,7 +54,7 @@ class Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_discord_pmpro_queue_batch_size( $concurrent_batches ) {
 		if ( ets_pmpro_discord_get_all_pending_actions() !== false ) {
-			return absint( get_option( 'ets_pmpro_job_queue_batch_size' ) );
+			return absint( get_option( 'ets_pmpro_discord_job_queue_batch_size' ) );
 		} else {
 			return $concurrent_batches;
 		}
@@ -72,17 +72,17 @@ class Ets_Pmpro_Admin_Setting {
 		}
 		$user_id = sanitize_text_field( trim( get_current_user_id() ) );
 
-		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
+		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 
-		$allow_none_member        = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
-		$default_role             = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
-		$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
-		$all_roles                = unserialize( get_option( 'ets_discord_all_roles' ) );
+		$allow_none_member        = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_none_member' ) ) );
+		$default_role             = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
+		$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
+		$all_roles                = unserialize( get_option( 'ets_pmpro_discord_all_roles' ) );
 		$curr_level_id            = get_current_level_id( $user_id );
 		$mapped_role_name         = '';
 		if ( $curr_level_id && is_array( $all_roles ) ) {
-			if ( is_array( $ets_discord_role_mapping ) && array_key_exists( 'level_id_' . $curr_level_id, $ets_discord_role_mapping ) ) {
-				$mapped_role_id = $ets_discord_role_mapping[ 'level_id_' . $curr_level_id ];
+			if ( is_array( $ets_pmpor_discord_role_mapping ) && array_key_exists( 'level_id_' . $curr_level_id, $ets_pmpor_discord_role_mapping ) ) {
+				$mapped_role_id = $ets_pmpor_discord_role_mapping[ 'level_id_' . $curr_level_id ];
 				if ( array_key_exists( $mapped_role_id, $all_roles ) ) {
 					$mapped_role_name = $all_roles[ $mapped_role_id ];
 				}
@@ -130,11 +130,11 @@ class Ets_Pmpro_Admin_Setting {
 	public function ets_as_schedule_job_pmpro_level_deleted( $level_id ) {
 		global $wpdb;
 		$result                   = $wpdb->get_results( $wpdb->prepare( 'SELECT `user_id` FROM ' . $wpdb->prefix . 'pmpro_memberships_users' . ' WHERE `membership_id` = %d GROUP BY `user_id`', array( $level_id ) ) );
-		$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
+		$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
 		update_option( 'ets_admin_level_deleted', true );
 		foreach ( $result as $key => $ids ) {
 			$user_id      = $ids->user_id;
-			$access_token = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
+			$access_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 			if ( $access_token ) {
 				as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $level_id ), ETS_DISCORD_AS_GROUP_NAME );
 			}
@@ -151,7 +151,7 @@ class Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_as_schdule_job_pmpro_cancel( $level_id, $user_id, $cancel_level ) {
 		$membership_status = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
-		$access_token      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
+		$access_token      = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 		if ( ! empty( $cancel_level ) || $membership_status == 'admin_cancelled' ) {
 
 			$args = array(
@@ -179,7 +179,7 @@ class Ets_Pmpro_Admin_Setting {
 	public function ets_as_schdule_job_pmpro_expiry( $user_id, $level_id ) {
 		$existing_members_queue = sanitize_text_field( trim( get_option( 'ets_queue_of_pmpro_members' ) ) );
 		  $membership_status    = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
-		  $access_token         = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
+		  $access_token         = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 		if ( $membership_status == 'expired' && $access_token ) {
 			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_handle_pmpro_expiry', array( $user_id, $level_id ), ETS_DISCORD_AS_GROUP_NAME );
 		}
@@ -274,19 +274,19 @@ class Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
-		$ets_discord_client_id = isset( $_POST['ets_discord_client_id'] ) ? sanitize_text_field( trim( $_POST['ets_discord_client_id'] ) ) : '';
+		$ets_pmpro_discord_client_id = isset( $_POST['ets_pmpro_discord_client_id'] ) ? sanitize_text_field( trim( $_POST['ets_pmpro_discord_client_id'] ) ) : '';
 
-		$discord_client_secret = isset( $_POST['ets_discord_client_secret'] ) ? sanitize_text_field( trim( $_POST['ets_discord_client_secret'] ) ) : '';
+		$discord_client_secret = isset( $_POST['ets_pmpro_discord_client_secret'] ) ? sanitize_text_field( trim( $_POST['ets_pmpro_discord_client_secret'] ) ) : '';
 
-		$discord_bot_token = isset( $_POST['ets_discord_bot_token'] ) ? sanitize_text_field( trim( $_POST['ets_discord_bot_token'] ) ) : '';
+		$discord_bot_token = isset( $_POST['ets_pmpro_discord_bot_token'] ) ? sanitize_text_field( trim( $_POST['ets_pmpro_discord_bot_token'] ) ) : '';
 
-		$ets_discord_redirect_url = isset( $_POST['ets_discord_redirect_url'] ) ? sanitize_text_field( trim( $_POST['ets_discord_redirect_url'] ) ) : '';
+		$ets_pmpro_discord_redirect_url = isset( $_POST['ets_pmpro_discord_redirect_url'] ) ? sanitize_text_field( trim( $_POST['ets_pmpro_discord_redirect_url'] ) ) : '';
 
-		$ets_discord_guild_id = isset( $_POST['ets_discord_guild_id'] ) ? sanitize_text_field( trim( $_POST['ets_discord_guild_id'] ) ) : '';
+		$ets_pmpro_discord_guild_id = isset( $_POST['ets_pmpro_discord_guild_id'] ) ? sanitize_text_field( trim( $_POST['ets_pmpro_discord_guild_id'] ) ) : '';
 
-		$ets_discord_roles = isset( $_POST['ets_discord_role_mapping'] ) ? sanitize_textarea_field( trim( $_POST['ets_discord_role_mapping'] ) ) : '';
+		$ets_discord_roles = isset( $_POST['ets_pmpor_discord_role_mapping'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpor_discord_role_mapping'] ) ) : '';
 
-		$ets_discord_default_role_id = isset( $_POST['defaultRole'] ) ? sanitize_textarea_field( trim( $_POST['defaultRole'] ) ) : '';
+		$_ets_pmpro_discord_default_role_id = isset( $_POST['defaultRole'] ) ? sanitize_textarea_field( trim( $_POST['defaultRole'] ) ) : '';
 
 		$allow_none_member = isset( $_POST['allow_none_member'] ) ? sanitize_textarea_field( trim( $_POST['allow_none_member'] ) ) : '';
 
@@ -296,28 +296,28 @@ class Ets_Pmpro_Admin_Setting {
 
 		$retry_api_count = isset( $_POST['ets_pmpro_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_retry_api_count'] ) ) : '';
 
-		if ( isset( $_POST['submit'] ) && ! isset( $_POST['ets_discord_role_mapping'] ) ) {
+		if ( isset( $_POST['submit'] ) && ! isset( $_POST['ets_pmpor_discord_role_mapping'] ) ) {
 			if ( isset( $_POST['ets_discord_save_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_settings'], 'save_discord_settings' ) ) {
-				if ( $ets_discord_client_id ) {
-					update_option( 'ets_discord_client_id', $ets_discord_client_id );
+				if ( $ets_pmpro_discord_client_id ) {
+					update_option( 'ets_pmpro_discord_client_id', $ets_pmpro_discord_client_id );
 				}
 
 				if ( $discord_client_secret ) {
-					update_option( 'ets_discord_client_secret', $discord_client_secret );
+					update_option( 'ets_pmpro_discord_client_secret', $discord_client_secret );
 				}
 
 				if ( $discord_bot_token ) {
-					update_option( 'ets_discord_bot_token', $discord_bot_token );
+					update_option( 'ets_pmpro_discord_bot_token', $discord_bot_token );
 				}
 
-				if ( $ets_discord_redirect_url ) {
+				if ( $ets_pmpro_discord_redirect_url ) {
 					// add a query string param `via` GH #185.
-					$ets_discord_redirect_url = get_formated_discord_redirect_url( $ets_discord_redirect_url );
-					update_option( 'ets_discord_redirect_url', $ets_discord_redirect_url );
+					$ets_pmpro_discord_redirect_url = get_formated_discord_redirect_url( $ets_pmpro_discord_redirect_url );
+					update_option( 'ets_pmpro_discord_redirect_url', $ets_pmpro_discord_redirect_url );
 				}
 
-				if ( $ets_discord_guild_id ) {
-					update_option( 'ets_discord_guild_id', $ets_discord_guild_id );
+				if ( $ets_pmpro_discord_guild_id ) {
+					update_option( 'ets_pmpro_discord_guild_id', $ets_pmpro_discord_guild_id );
 				}
 				?>
 					<div class="notice notice-success is-dismissible support-success-msg">
@@ -335,9 +335,9 @@ class Ets_Pmpro_Admin_Setting {
 				}
 
 				if ( isset( $_POST['log_api_res'] ) ) {
-					update_option( 'ets_pmpro_log_api_response', true );
+					update_option( 'ets_pmpro_discord_log_api_response', true );
 				} else {
-					update_option( 'ets_pmpro_log_api_response', false );
+					update_option( 'ets_pmpro_discord_log_api_response', false );
 				}
 
 				if ( isset( $_POST['retry_failed_api'] ) ) {
@@ -348,17 +348,17 @@ class Ets_Pmpro_Admin_Setting {
 
 				if ( isset( $_POST['set_job_cnrc'] ) ) {
 					if ( $set_job_cnrc < 1 ) {
-						update_option( 'ets_pmpro_job_queue_concurrency', 1 );
+						update_option( 'ets_pmpro_discord_job_queue_concurrency', 1 );
 					} else {
-						update_option( 'ets_pmpro_job_queue_concurrency', $set_job_cnrc );
+						update_option( 'ets_pmpro_discord_job_queue_concurrency', $set_job_cnrc );
 					}
 				}
 
 				if ( isset( $_POST['set_job_q_batch_size'] ) ) {
 					if ( $set_job_q_batch_size < 1 ) {
-						update_option( 'ets_pmpro_job_queue_batch_size', 1 );
+						update_option( 'ets_pmpro_discord_job_queue_batch_size', 1 );
 					} else {
-						update_option( 'ets_pmpro_job_queue_batch_size', $set_job_q_batch_size );
+						update_option( 'ets_pmpro_discord_job_queue_batch_size', $set_job_q_batch_size );
 					}
 				}
 
@@ -378,15 +378,15 @@ class Ets_Pmpro_Admin_Setting {
 		}
 		if ( $ets_discord_roles ) {
 			$ets_discord_roles   = stripslashes( $ets_discord_roles );
-			$save_mapping_status = update_option( 'ets_discord_role_mapping', $ets_discord_roles );
-			if ( isset( $_POST['ets_discord_role_mappings_nonce'] ) && wp_verify_nonce( $_POST['ets_discord_role_mappings_nonce'], 'discord_role_mappings_nonce' ) ) {
-				if ( ( $save_mapping_status || isset( $_POST['ets_discord_role_mapping'] ) ) && ! isset( $_POST['flush'] ) ) {
-					if ( $ets_discord_default_role_id ) {
-						update_option( 'ets_discord_default_role_id', $ets_discord_default_role_id );
+			$save_mapping_status = update_option( 'ets_pmpor_discord_role_mapping', $ets_discord_roles );
+			if ( isset( $_POST['ets_pmpor_discord_role_mappings_nonce'] ) && wp_verify_nonce( $_POST['ets_pmpor_discord_role_mappings_nonce'], 'discord_role_mappings_nonce' ) ) {
+				if ( ( $save_mapping_status || isset( $_POST['ets_pmpor_discord_role_mapping'] ) ) && ! isset( $_POST['flush'] ) ) {
+					if ( $_ets_pmpro_discord_default_role_id ) {
+						update_option( '_ets_pmpro_discord_default_role_id', $_ets_pmpro_discord_default_role_id );
 					}
 
 					if ( $allow_none_member ) {
-						update_option( 'ets_allow_none_member', $allow_none_member );
+						update_option( 'ets_pmpro_allow_none_member', $allow_none_member );
 					}
 					?>
 						<div class="notice notice-success is-dismissible support-success-msg">
@@ -395,9 +395,9 @@ class Ets_Pmpro_Admin_Setting {
 					<?php
 				}
 				if ( isset( $_POST['flush'] ) ) {
-					delete_option( 'ets_discord_role_mapping' );
-					delete_option( 'ets_discord_default_role_id' );
-					delete_option( 'ets_allow_none_member' );
+					delete_option( 'ets_pmpor_discord_role_mapping' );
+					delete_option( '_ets_pmpro_discord_default_role_id' );
+					delete_option( 'ets_pmpro_allow_none_member' );
 					?>
 						<div class="notice notice-success is-dismissible support-success-msg">
 							<p><?php echo __( 'Your settings flushed successfully.', 'ets_pmpro_discord' ); ?></p>
@@ -407,18 +407,18 @@ class Ets_Pmpro_Admin_Setting {
 			}
 		}
 
-		$ets_discord_client_id    = sanitize_text_field( trim( get_option( 'ets_discord_client_id' ) ) );
-		$discord_client_secret    = sanitize_text_field( trim( get_option( 'ets_discord_client_secret' ) ) );
-		$discord_bot_token        = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
-		$ets_discord_redirect_url = sanitize_text_field( trim( get_option( 'ets_discord_redirect_url' ) ) );
-		$ets_discord_roles        = sanitize_text_field( trim( get_option( 'ets_discord_role_mapping' ) ) );
-		$ets_discord_guild_id     = sanitize_text_field( trim( get_option( 'ets_discord_guild_id' ) ) );
+		$ets_pmpro_discord_client_id    = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_client_id' ) ) );
+		$discord_client_secret    = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_client_secret' ) ) );
+		$discord_bot_token        = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_bot_token' ) ) );
+		$ets_pmpro_discord_redirect_url = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_redirect_url' ) ) );
+		$ets_discord_roles        = sanitize_text_field( trim( get_option( 'ets_pmpor_discord_role_mapping' ) ) );
+		$ets_pmpro_discord_guild_id     = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_guild_id' ) ) );
 		?>
 		<h1><?php echo __( 'PMPRO Discord Add On Settings', 'ets_pmpro_discord' ); ?></h1>
 		<div class="tab ets-tabs">
 
 		  <button class="ets_tablinks" data-identity="settings" data-toggle="tab" data-event="ets_setting"><?php echo __( 'Discord Settings', 'ets_pmpro_discord' ); ?><span class="spinner"></span></button>
-		  <?php if ( ! empty( $ets_discord_client_id ) && ! empty( $discord_client_secret ) && ! empty( $discord_bot_token ) && ! empty( $ets_discord_redirect_url ) && ! empty( $ets_discord_guild_id ) ) : ?>
+		  <?php if ( ! empty( $ets_pmpro_discord_client_id ) && ! empty( $discord_client_secret ) && ! empty( $discord_bot_token ) && ! empty( $ets_pmpro_discord_redirect_url ) && ! empty( $ets_pmpro_discord_guild_id ) ) : ?>
 		   <button class="ets_tablinks" data-identity="level-mapping" data-toggle="tab" data-event="ets_level_mapping"><?php echo __( 'Role Mappings', 'ets_pmpro_discord' ); ?></button>
 		  <?php endif; ?>
 			<button class="ets_tablinks" data-identity="advanced" data-toggle="tab" data-event="ets_advanced"><?php echo __( 'Advanced', 'ets_pmpro_discord' ); ?>	
@@ -508,13 +508,13 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return BOOL $status
 	 */
 	public function Check_saved_settings_status() {
-		$ets_discord_client_id     = get_option( 'ets_discord_client_id' );
-		$ets_discord_client_secret = get_option( 'ets_discord_client_secret' );
-		$ets_discord_bot_token     = get_option( 'ets_discord_bot_token' );
-		$ets_discord_redirect_url  = get_option( 'ets_discord_redirect_url' );
-		$ets_discord_guild_id      = get_option( 'ets_discord_guild_id' );
+		$ets_pmpro_discord_client_id     = get_option( 'ets_pmpro_discord_client_id' );
+		$ets_pmpro_discord_client_secret = get_option( 'ets_pmpro_discord_client_secret' );
+		$ets_pmpro_discord_bot_token     = get_option( 'ets_pmpro_discord_bot_token' );
+		$ets_pmpro_discord_redirect_url  = get_option( 'ets_pmpro_discord_redirect_url' );
+		$ets_pmpro_discord_guild_id      = get_option( 'ets_pmpro_discord_guild_id' );
 
-		if ( $ets_discord_client_id && $ets_discord_client_secret && $ets_discord_bot_token && $ets_discord_redirect_url && $ets_discord_guild_id ) {
+		if ( $ets_pmpro_discord_client_id && $ets_pmpro_discord_client_secret && $ets_pmpro_discord_bot_token && $ets_pmpro_discord_redirect_url && $ets_pmpro_discord_guild_id ) {
 			$status = true;
 		} else {
 			$status = false;
@@ -531,10 +531,10 @@ class Ets_Pmpro_Admin_Setting {
 	* @return NONE
 	*/
 	public function ets_discord_pmpro_extra_cols_body( $colname, $user_id ) {
-		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_access_token', true ) ) );
+		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 		if ( 'discord' === $colname ) {
 			if ( $access_token ) {
-				$discord_username = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_username', true ) ) );
+				$discord_username = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_username', true ) ) );
 				echo '<p class="' . $user_id . ' ets-save-success">' . __( 'Success', 'ets_pmpro_discord' ) . '</p><a class="button button-primary ets-run-api" data-uid="' . $user_id . '" href="#">';
 				echo __( 'Run API', 'ets_pmpro_discord' );
 				echo '</a><span class="' . $user_id . ' spinner"></span>';

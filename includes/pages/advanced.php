@@ -1,9 +1,9 @@
 <?php
 $upon_failed_payment  = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_payment_failed' ) ) );
-$log_api_res          = sanitize_text_field( trim( get_option( 'ets_pmpro_log_api_response' ) ) );
+$log_api_res          = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_log_api_response' ) ) );
 $retry_failed_api			= sanitize_text_field( trim( get_option( 'ets_pmpro_retry_failed_api' ) ) );
-$set_job_cnrc         = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue_concurrency' ) ) );
-$set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_job_queue_batch_size' ) ) );
+$set_job_cnrc         = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_job_queue_concurrency' ) ) );
+$set_job_q_batch_size = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_job_queue_batch_size' ) ) );
 $retry_api_count = sanitize_text_field( trim( get_option( 'ets_pmpro_retry_api_count' ) ) );
 ?>
 <form method="post" action="#">

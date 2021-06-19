@@ -71,11 +71,11 @@ class Ets_Pmpro_Add_Discord {
 	 * @return None
 	 */
 	public function set_redirect_url_on_pmpro_activation() {
-		$ets_pre_saved_url         = get_option( 'ets_discord_redirect_url' );
+		$ets_pre_saved_url         = get_option( 'ets_pmpro_discord_redirect_url' );
 		$ets_pmpro_profile_page_id = get_option( 'pmpro_member_profile_edit_page_id' );
 		if ( $ets_pmpro_profile_page_id && empty( $ets_pre_saved_url ) ) {
-			$ets_discord_redirect_url = get_formated_discord_redirect_url( get_permalink( $ets_pmpro_profile_page_id ) );
-			update_option( 'ets_discord_redirect_url', $ets_discord_redirect_url );
+			$ets_pmpro_discord_redirect_url = get_formated_discord_redirect_url( get_permalink( $ets_pmpro_profile_page_id ) );
+			update_option( 'ets_pmpro_discord_redirect_url', $ets_pmpro_discord_redirect_url );
 		}
 	}
 	/**
@@ -83,11 +83,11 @@ class Ets_Pmpro_Add_Discord {
 	 */
 	public function set_default_setting_values() {
 		update_option( 'ets_pmpro_discord_payment_failed', false );
-		update_option( 'ets_pmpro_log_api_response', false );
+		update_option( 'ets_pmpro_discord_log_api_response', false );
 		update_option( 'ets_pmpro_retry_failed_api', true );
-		update_option( 'ets_pmpro_job_queue_concurrency', 1 );
-		update_option( 'ets_pmpro_job_queue_batch_size', 7 );
-		update_option( 'ets_allow_none_member', 'yes' );
+		update_option( 'ets_pmpro_discord_job_queue_concurrency', 1 );
+		update_option( 'ets_pmpro_discord_job_queue_batch_size', 7 );
+		update_option( 'ets_pmpro_allow_none_member', 'yes' );
 		update_option( 'ets_pmpro_retry_api_count', '5' );
 	}
 

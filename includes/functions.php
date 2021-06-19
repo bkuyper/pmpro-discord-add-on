@@ -39,7 +39,7 @@ function ets_pmpro_discord_log_api_response( $user_id, $api_url = '', $api_args 
 		$log_string .= '-::-' . serialize( $api_response );
 
 		$logs = new PMPro_Discord_Logs();
-		$logs->write_api_response_logs( $log_string, array(), $user_id );
+		$logs->write_api_response_logs( $log_string, $user_id);
 	}
 }
 

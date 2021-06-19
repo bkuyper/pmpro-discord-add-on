@@ -296,6 +296,8 @@ class Ets_Pmpro_Admin_Setting {
 
 		$retry_api_count = isset( $_POST['ets_pmpro_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_retry_api_count'] ) ) : '';
 
+		$ets_pmpro_discord_send_expiration_warning_dm = isset( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ) : '';
+
 		if ( isset( $_POST['submit'] ) && ! isset( $_POST['ets_pmpor_discord_role_mapping'] ) ) {
 			if ( isset( $_POST['ets_discord_save_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_settings'], 'save_discord_settings' ) ) {
 				if ( $ets_pmpro_discord_client_id ) {
@@ -344,6 +346,12 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_pmpro_retry_failed_api', true );
 				} else {
 					update_option( 'ets_pmpro_retry_failed_api', false );
+				}
+
+				if ( isset( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ) {
+					update_option( 'ets_pmpro_discord_send_expiration_warning_dm', true );
+				} else {
+					update_option( 'ets_pmpro_discord_send_expiration_warning_dm', false );
 				}
 
 				if ( isset( $_POST['set_job_cnrc'] ) ) {

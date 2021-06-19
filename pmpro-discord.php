@@ -34,7 +34,7 @@ define( 'ETS_DISCORD_OAUTH_SCOPES', 'identify email connections guilds guilds.jo
 define('ETS_DISCORD_AS_GROUP_NAME', 'ets-pmpro-discord' );
 
 // define interval to keep checking and send membership expiration warning DM
-define('ETS_PMPRO_DISOCRD_EXPIRATION_WARNING_INTERVAL', 5);
+define('ETS_PMPRO_DISOCRD_EXPIRATION_WARNING_CRON', 5);
 
 /**
  * Class to connect discord app
@@ -62,6 +62,7 @@ class Ets_Pmpro_Add_Discord {
 	public function ets_pmpro_discord_set_up_plugin() {
 		$this->set_redirect_url_on_pmpro_activation();
 		$this->set_default_setting_values();
+    wp_schedule_event( time(), 'hourly', 'ets_pmrpo_discord_schedule_expiration_warnings' );
 	}
 
 	/**

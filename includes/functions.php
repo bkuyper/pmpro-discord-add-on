@@ -152,11 +152,3 @@ function get_current_level_id( $user_id ) {
 
 }
 
-/*
-* uninstall cleanup
-*/
-function ets_pmpro_discord_clenup_before_uninstall(){
-	global $wpdb;
-	$wpdb->query("DELETE FROM ". $wpdb->prefix ."usermeta WHERE `meta_key` LIKE '_ets_pmpro_discord%'");
-	$wpdb->query("DELETE FROM ". $wpdb->prefix ."options WHERE `option_name` LIKE '_ets_pmpro_discord_%'");
-}

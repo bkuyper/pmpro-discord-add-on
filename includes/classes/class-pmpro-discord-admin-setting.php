@@ -31,13 +31,13 @@ class Ets_Pmpro_Admin_Setting {
 		add_filter( 'action_scheduler_queue_runner_batch_size', array( $this, 'ets_discord_pmpro_queue_batch_size' ) );
 
 		add_filter( 'action_scheduler_queue_runner_concurrent_batches', array( $this, 'ets_discord_pmpro_concurrent_batches' ) );
-
 	}
 
 	/**
 	 * set action scheuduler concurrent batches number
-   * @param INT $batch_size
-   * @return INT $batch_size
+	 *
+	 * @param INT $batch_size
+	 * @return INT $batch_size
 	 */
 	public function ets_discord_pmpro_concurrent_batches( $batch_size ) {
 		if ( ets_pmpro_discord_get_all_pending_actions() !== false ) {
@@ -48,8 +48,9 @@ class Ets_Pmpro_Admin_Setting {
 	}
 	/**
 	 * set action scheuduler batch size.
-   * @param INT $concurrent_batches
-   * @return INT $concurrent_batches
+	 *
+	 * @param INT $concurrent_batches
+	 * @return INT $concurrent_batches
 	 */
 	public function ets_discord_pmpro_queue_batch_size( $concurrent_batches ) {
 		if ( ets_pmpro_discord_get_all_pending_actions() !== false ) {
@@ -77,7 +78,7 @@ class Ets_Pmpro_Admin_Setting {
 		$default_role             = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
 		$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
 		$all_roles                = unserialize( get_option( 'ets_discord_all_roles' ) );
-		$curr_level_id            = $this->get_current_level_id( $user_id );
+		$curr_level_id            = get_current_level_id( $user_id );
 		$mapped_role_name         = '';
 		if ( $curr_level_id && is_array( $all_roles ) ) {
 			if ( is_array( $ets_discord_role_mapping ) && array_key_exists( 'level_id_' . $curr_level_id, $ets_discord_role_mapping ) ) {
@@ -118,22 +119,7 @@ class Ets_Pmpro_Admin_Setting {
 
 	}
 
-	/**
-	 * Get pmpro current level id
-	 *
-	 * @param INT $user_id
-	 * @return INT|NULL $curr_level_id
-	 */
-	public function get_current_level_id( $user_id ) {
-			$membership_level = pmpro_getMembershipLevelForUser( $user_id );
-		if ( $membership_level ) {
-			$curr_level_id = sanitize_text_field( trim( $membership_level->ID ) );
-			return $curr_level_id;
-		} else {
-			return null;
-		}
 
-	}
 
 	/**
 	 * Method to queue all members into cancel job when pmpro level is deleted.
@@ -185,7 +171,7 @@ class Ets_Pmpro_Admin_Setting {
 
 	/*
 	* Action schedule to schedule a function to run upon PMPRO Expiry.
-  *
+	*
 	* @param INT $user_id
 	* @param INT $level_id
 	* @return NONE
@@ -207,7 +193,6 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return NONE
 	 */
 	public function ets_add_script() {
-
 		wp_register_style(
 			'ets_pmpro_add_discord_style',
 			ETS_PMPRO_DISCORD_URL . 'assets/css/ets-pmpro-discord-style.min.css',

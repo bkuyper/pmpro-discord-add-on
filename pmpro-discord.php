@@ -12,26 +12,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// create plugin url constant
+// create plugin url constant.
 define( 'ETS_PMPRO_VERSION', '1.0.0' );
 
-// create plugin url constant
+// create plugin url constant.
 define( 'ETS_PMPRO_DISCORD_URL', plugin_dir_url( __FILE__ ) );
 
-// create plugin path constant
+// create plugin path constant.
 define( 'ETS_PMPRO_DISCORD_PATH', plugin_dir_path( __FILE__ ) );
 
-// discord API url
+// discord API url.
 define( 'ETS_DISCORD_API_URL', 'https://discord.com/api/v6/' );
 
-// discord Bot Permissions
+// discord Bot Permissions.
 define( 'ETS_DISCORD_BOT_PERMISSIONS', 8 );
 
-// discord api call scopes
+// discord api call scopes.
 define( 'ETS_DISCORD_OAUTH_SCOPES', 'identify email connections guilds guilds.join gdm.join rpc rpc.notifications.read rpc.voice.read rpc.voice.write rpc.activities.write bot webhook.incoming messages.read applications.builds.upload applications.builds.read applications.commands applications.store.update applications.entitlements activities.read activities.write relationships.read' );
 
-// define group name for action scheduler actions
+// define group name for action scheduler actions.
 define('ETS_DISCORD_AS_GROUP_NAME', 'ets-pmpro-discord' );
+
+// define interval to keep checking and send membership expiration warning DM
+define('ETS_PMPRO_DISOCRD_EXPIRATION_WARNING_INTERVAL', 5);
 
 /**
  * Class to connect discord app

@@ -2,7 +2,7 @@
 /**
  * Class to handle discord API calls
  */
-class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
+class PMPro_Discord_API {
 	function __construct() {
 		// Discord api callback
 		add_action( 'init', array( $this, 'discord_api_callback' ) );
@@ -35,6 +35,186 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 
 		add_action( 'action_scheduler_failed_execution', array( $this, 'ets_pmpro_discord_reschedule_failed_action' ), 10, 3 );
 
+		add_action( 'init', array( $this, 'ets_pmpro_discord_schedule_expireation_reminders' ) );
+
+		add_action( 'ets_pmpro_discord_as_send_expiration_warning_dm', array( $this, 'ets_pmpro_discord_send_dm' ) );
+
+		add_action( 'ets_pmpro_discord_schduler_expiration_warning_function', array( $this, 'ets_pmpro_discord_send_expiration_warning_DM' ) );
+	}
+
+	public function ets_pmpro_discord_schedule_expireation_reminders() {
+		if ( false === as_next_scheduled_action( 'ets_pmpro_discord_schduler_expiration_warning_function' ) ) {
+			as_schedule_recurring_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), ETS_PMPRO_DISOCRD_EXPIRATION_WARNING_INTERVAL, 'ets_pmpro_discord_schduler_expiration_warning_function' );
+		}
+	}
+	/**
+	 * Send expiration warning DM to discord members.
+	 * @param NONE
+	 * @param NONE
+	 */
+
+	public function ets_pmpro_discord_send_expiration_warning_DM() {
+		global $wpdb;
+		// clean up errors in the memberships_users table that could cause problems.
+		pmpro_cleanup_memberships_users_table();
+		$today                              = date( 'Y-m-d 00:00:00', current_time( 'timestamp' ) );
+		$pmpro_email_days_before_expiration = apply_filters( 'pmpro_email_days_before_expiration', 7 );
+		// Configure the interval to select records from
+		$interval_start = $today;
+		$interval_end   = date( 'Y-m-d 00:00:00', strtotime( "{$today} +{$pmpro_email_days_before_expiration} days", current_time( 'timestamp' ) ) );
+
+		// look for memberships that are going to expire within one week (but we haven't emailed them within a week)
+		$sqlQuery      = $wpdb->prepare(
+			"SELECT DISTINCT 
+			mu.user_id, mu.membership_id, mu.startdate, mu.enddate 
+			FROM {$wpdb->pmpro_memberships_users} AS mu 
+			WHERE mu.enddate 
+			BETWEEN %s AND %s
+			AND ( mu.status = 'active' )
+			AND ( mu.membership_id <> 0 OR mu.membership_id <> NULL ) 
+			ORDER BY mu.enddate",
+			$today,
+			$interval_end
+		);
+		$expiring_soon = $wpdb->get_results( $sqlQuery );
+		if ( ! empty( $expiring_soon ) ) {
+			// foreach members and send DM
+			foreach ( $expiring_soon as $key => $user_obj ) {
+				// check if the message is not already sent
+				$membership_level = pmpro_getMembershipLevelForUser( $user_obj->user_id );
+				$already_sent     = get_user_meta( $user_obj->user_id, '_ets_pmpro_discord_expitration_warning_for_' . $membership_level->ID, true );
+				if ( $already_sent != 1 ) {
+					as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_send_expiration_warning_dm', array( $user_obj->user_id ), 'ets-pmpro-discord' );
+				}
+			}
+		}
+
+	}
+
+	/**
+	 * Discord DM a member using bot.
+	 *
+	 * @param INT    $user_id
+	 * @param STRING $type (warning|expired)
+	 */
+	public function ets_pmpro_discord_send_dm( $user_id, $type = 'warning' ) {
+		$discord_user_id   = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id', true ) ) );
+		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
+		$membership_level  = pmpro_getMembershipLevelForUser( $user_id );
+		$user_obj          = get_user_by( 'id', $user_id );
+
+		// Check if DM channel is already created for the user.
+		$user_dm = get_user_meta( $user_id, '_ets_pmpro_discord_dm_channel', true );
+
+		if ( $user_dm === false || empty( $user_dm ) ) {
+			$this->ets_pmpro_discord_create_member_dm_channel( $user_id );
+			$user_dm       = get_user_meta( $user_id, '_ets_pmpro_discord_dm_channel', true );
+			$dm_channel_id = $user_dm['id'];
+		} else {
+			$dm_channel_id = $user_dm['id'];
+		}
+
+		if ( $type = 'warning' ) {
+			update_user_meta( $user_id, '_ets_pmpro_discord_expitration_warning_for_' . $membership_level->ID, true );
+		}
+		if ( $type = 'expired' ) {
+			update_user_meta( $user_id, '_ets_pmpro_discord_expired_for_' . $membership_level->ID, true );
+		}
+
+		$creat_dm_url = ETS_DISCORD_API_URL . '/channels/' . $dm_channel_id . '/messages';
+		$dm_args      = array(
+			'method'  => 'POST',
+			'headers' => array(
+				'Content-Type'  => 'application/json',
+				'Authorization' => 'Bot ' . $discord_bot_token,
+			),
+			'body'    => json_encode(
+				apply_filters(
+					'ets_pmpro_discord_expiration_reminder_message',
+					array(
+						'content' => sprintf( __( 'Hello,', 'ets_pmpro_discord' ) . ' %s', $user_obj->user_login ),
+						'embed'   => array(
+							'title'       => __( 'Membership expiration reminder!', 'ets_pmpro_discord' ),
+							'description' => sprintf( __( 'Hi, This message is to remind you about your membership ', 'ets_pmpro_discord' ) . '"%s" ' . __( ' at ', 'ets_pmpro_discord' ) . ' %s ' . __( ' is expiring on ', 'ets_pmpro_discord' ) . ' %s ', $membership_level->name, get_bloginfo( 'name' ), date( 'F jS, Y', $membership_level->enddate ) ),
+						),
+					)
+				)
+			),
+		);
+		$dm_response  = wp_remote_post( $creat_dm_url, $dm_args );
+		ets_pmpro_discord_log_api_response( $user_id, $creat_dm_url, $dm_args, $dm_response );
+		$dm_response_body = json_decode( wp_remote_retrieve_body( $dm_response ), true );
+		if ( ets_pmpro_discord_check_api_errors( $dm_response ) ) {
+			if ( is_array( $dm_response_body ) && ! empty( $dm_response_body ) ) {
+				// check if there is  error in create dm message response
+				if ( array_key_exists( 'code', $dm_response_body ) || array_key_exists( 'error', $dm_response_body ) ) {
+					$logs = new PMPro_Discord_Logs();
+					$logs->write_api_response_logs( $dm_response_body, debug_backtrace()[0], $user_id );
+				}
+			}
+			// this should be catch by Action schedule failed action.
+			throw new Exception( 'Failed in function ets_pmpro_discord_send_dm' );
+		}
+	}
+
+	/**
+	 * Get discord channel by channel ID
+	 *
+	 * @param INT $user_id
+	 * @param INT $channel_id
+	 */
+	private function ets_pmpro_discord_get_channel( $user_id, $channel_id ) {
+		$discord_bot_token       = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
+		$get_channel_url         = ETS_DISCORD_API_URL . '/channels/' . $channel_id;
+		$get_channel_args        = array(
+			'method'  => 'GET',
+			'headers' => array(
+				'Content-Type'  => 'application/json',
+				'Authorization' => 'Bot ' . $discord_bot_token,
+			),
+		);
+		$response_arr            = wp_remote_get( $get_channel_url, $get_channel_args );
+		$getchannel_response_arr = json_decode( wp_remote_retrieve_body( $response_arr ), true );
+		return $getchannel_response_arr;
+	}
+
+
+	/**
+	 * Create DM channel for a give user_id
+	 *
+	 * @param INT $user_id
+	 * @return MIXED
+	 */
+	private function ets_pmpro_discord_create_member_dm_channel( $user_id ) {
+		$discord_user_id       = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_user_id', true ) ) );
+		$discord_bot_token     = sanitize_text_field( trim( get_option( 'ets_discord_bot_token' ) ) );
+		$create_channel_dm_url = ETS_DISCORD_API_URL . '/users/@me/channels';
+		$dm_channel_args       = array(
+			'method'  => 'POST',
+			'headers' => array(
+				'Content-Type'  => 'application/json',
+				'Authorization' => 'Bot ' . $discord_bot_token,
+			),
+			'body'    => json_encode(
+				array(
+					'recipient_id' => $discord_user_id,
+				)
+			),
+		);
+		$created_dm_response   = wp_remote_post( $create_channel_dm_url, $dm_channel_args );
+		ets_pmpro_discord_log_api_response( $user_id, $create_channel_dm_url, $dm_channel_args, $created_dm_response );
+		$response_arr = json_decode( wp_remote_retrieve_body( $created_dm_response ), true );
+
+		if ( is_array( $response_arr ) && ! empty( $response_arr ) ) {
+			// check if there is error in create dm response
+			if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
+				$logs = new PMPro_Discord_Logs();
+				$logs->write_api_response_logs( $response_arr, debug_backtrace()[0], $user_id );
+			} else {
+				update_user_meta( $user_id, '_ets_pmpro_discord_dm_channel', $response_arr );
+			}
+		}
+		return $response_arr;
 	}
 
 	/**
@@ -73,7 +253,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		// stop users who having the direct URL of discord Oauth.
 		// We must check IF NONE members is set to NO and user having no active membership.
 		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_allow_none_member' ) ) );
-		$curr_level_id     = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
+		$curr_level_id     = sanitize_text_field( trim( get_current_level_id( $user_id ) ) );
 		if ( $curr_level_id == null && $allow_none_member == 'no' ) {
 			return;
 		}
@@ -191,7 +371,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
-		$curr_level_id = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
+		$curr_level_id = sanitize_text_field( trim( get_current_level_id( $user_id ) ) );
 		if ( $curr_level_id !== null ) {
 			// It is possible that we may exhaust API rate limit while adding members to guild, so handling off the job to queue.
 			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_handle_add_member_to_guild', array( $ets_discord_user_id, $user_id, $access_token ), ETS_DISCORD_AS_GROUP_NAME );
@@ -216,7 +396,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$default_role             = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
 		$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
 		$discord_role             = '';
-		$curr_level_id            = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
+		$curr_level_id            = sanitize_text_field( trim( get_current_level_id( $user_id ) ) );
 
 		if ( is_array( $ets_discord_role_mapping ) && array_key_exists( 'level_id_' . $curr_level_id, $ets_discord_role_mapping ) ) {
 			$discord_role = sanitize_text_field( trim( $ets_discord_role_mapping[ 'level_id_' . $curr_level_id ] ) );
@@ -667,7 +847,7 @@ class PMPro_Discord_API extends Ets_Pmpro_Admin_Setting {
 		$default_role             = sanitize_text_field( trim( get_option( 'ets_discord_default_role_id' ) ) );
 		$ets_discord_role_id      = sanitize_text_field( trim( get_user_meta( $user_id, 'ets_discord_role_id', true ) ) );
 		$ets_discord_role_mapping = json_decode( get_option( 'ets_discord_role_mapping' ), true );
-		$curr_level_id            = sanitize_text_field( trim( $this->get_current_level_id( $user_id ) ) );
+		$curr_level_id            = sanitize_text_field( trim( get_current_level_id( $user_id ) ) );
 		$previous_default_role    = get_user_meta( $user_id, 'ets_discord_default_role_id', true );
 		if ( $expired_level_id ) {
 			$curr_level_id = $expired_level_id;

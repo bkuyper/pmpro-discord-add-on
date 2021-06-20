@@ -76,14 +76,14 @@ class PMPro_Discord_API {
 			$today,
 			$interval_end
 		);
-
 		$expiring_soon = $wpdb->get_results( $sqlQuery );
+		
 		if ( ! empty( $expiring_soon ) ) {
 			// foreach members and send DM
 			foreach ( $expiring_soon as $key => $user_obj ) {
 				// check if the message is not already sent
 				$membership_level = pmpro_getMembershipLevelForUser( $user_obj->user_id );
-				$already_sent     = get_user_meta( $user_obj->user_id, '_ets_pmpro_discord_expitration_warning_for_' . $membership_level->ID, true );
+				$already_sent     = get_user_meta( $user_obj->user_id, '_ets_pmpro_discord_expitration_warning_dm_for_' . $membership_level->ID, true );
 				if ( $membership_level !== false && $already_sent != 1 ) {
 					as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_send_dm', array( $user_obj->user_id, $membership_level->ID ), 'ets-pmpro-discord' );
 				}
@@ -861,6 +861,8 @@ class PMPro_Discord_API {
 		if ( isset( $user_id ) && $allow_none_member == 'no' && $curr_level_id == null ) {
 			$this->delete_member_from_guild( $user_id, false );
 		}
+
+		delete_user_meta( $user_id, '_ets_pmpro_discord_expitration_warning_dm_for_' . $curr_level_id );
 
 		// Send DM about expiry, but only when allow_none_member setting is yes
 		if ( $ets_pmpro_discord_send_membership_expired_dm == true && $expired_level_id !== false && $allow_none_member = 'yes' ) {

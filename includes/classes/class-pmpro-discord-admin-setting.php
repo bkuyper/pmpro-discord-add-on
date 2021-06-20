@@ -78,7 +78,7 @@ class Ets_Pmpro_Admin_Setting {
 		$default_role             = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
 		$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
 		$all_roles                = unserialize( get_option( 'ets_pmpro_discord_all_roles' ) );
-		$curr_level_id            = get_current_level_id( $user_id );
+		$curr_level_id            = ets_pmpro_discord_get_current_level_id( $user_id );
 		$mapped_role_name         = '';
 		if ( $curr_level_id && is_array( $all_roles ) ) {
 			if ( is_array( $ets_pmpor_discord_role_mapping ) && array_key_exists( 'level_id_' . $curr_level_id, $ets_pmpor_discord_role_mapping ) ) {
@@ -296,7 +296,21 @@ class Ets_Pmpro_Admin_Setting {
 
 		$retry_api_count = isset( $_POST['ets_pmpro_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_retry_api_count'] ) ) : '';
 
-		$ets_pmpro_discord_send_expiration_warning_dm = isset( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ) : '';
+		$ets_pmpro_discord_send_expiration_warning_dm = isset( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ) : false;
+
+		$ets_pmpro_discord_expiration_warning_message = isset( $_POST['ets_pmpro_discord_expiration_warning_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_expiration_warning_message'] ) ) : '';
+
+		$ets_pmpro_discord_send_membership_expired_dm = isset( $_POST['ets_pmpro_discord_send_membership_expired_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_membership_expired_dm'] ) ) : false;
+
+		$ets_pmpro_discord_expiration_expired_message  = isset( $_POST['ets_pmpro_discord_expiration_expired_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_expiration_expired_message'] ) ) : '';
+
+		$ets_pmpro_discord_send_welcome_dm  = isset( $_POST['ets_pmpro_discord_send_welcome_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_welcome_dm'] ) ) : false;
+
+		$ets_pmpro_discord_welcome_message = isset( $_POST['ets_pmpro_discord_welcome_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_welcome_message'] ) ) : '';
+
+		$ets_pmpro_discord_send_membership_cancel_dm = isset( $_POST['ets_pmpro_discord_send_membership_cancel_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_membership_cancel_dm'] ) ) : '';
+
+		$ets_pmpro_discord_cancel_message = isset( $_POST['ets_pmpro_discord_cancel_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_cancel_message'] ) ) : '';
 
 		if ( isset( $_POST['submit'] ) && ! isset( $_POST['ets_pmpor_discord_role_mapping'] ) ) {
 			if ( isset( $_POST['ets_discord_save_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_settings'], 'save_discord_settings' ) ) {
@@ -348,10 +362,52 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_pmpro_retry_failed_api', false );
 				}
 
+				if ( isset( $_POST['ets_pmpro_discord_send_welcome_dm'] ) ) {
+					update_option( 'ets_pmpro_discord_send_welcome_dm', true );
+				} else {
+					update_option( 'ets_pmpro_discord_send_welcome_dm', false );
+				}
+
 				if ( isset( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ) {
 					update_option( 'ets_pmpro_discord_send_expiration_warning_dm', true );
 				} else {
 					update_option( 'ets_pmpro_discord_send_expiration_warning_dm', false );
+				}
+
+				if ( isset( $_POST['ets_pmpro_discord_welcome_message'] ) && $_POST['ets_pmpro_discord_welcome_message']!='' ) {
+					update_option( 'ets_pmpro_discord_welcome_message', $ets_pmpro_discord_welcome_message );
+				} else {
+					update_option( 'ets_pmpro_discord_expiration_warning_message', 'Your membership is expiring' );
+				}
+
+				if ( isset( $_POST['ets_pmpro_discord_expiration_warning_message'] ) && $_POST['ets_pmpro_discord_expiration_warning_message']!='' ) {
+					update_option( 'ets_pmpro_discord_expiration_warning_message', $ets_pmpro_discord_expiration_warning_message );
+				} else {
+					update_option( 'ets_pmpro_discord_expiration_warning_message', 'Your membership is expiring' );
+				}
+
+				if ( isset( $_POST['ets_pmpro_discord_expiration_expired_message'] ) && $_POST['ets_pmpro_discord_expiration_expired_message']!='' ) {
+					update_option( 'ets_pmpro_discord_expiration_expired_message', $ets_pmpro_discord_expiration_expired_message );
+				} else {
+					update_option( 'ets_pmpro_discord_expiration_expired_message', 'Your membership is expired' );
+				}
+
+				if ( isset( $_POST['ets_pmpro_discord_send_membership_expired_dm'] ) ) {
+					update_option( 'ets_pmpro_discord_send_membership_expired_dm', true );
+				} else {
+					update_option( 'ets_pmpro_discord_send_membership_expired_dm', false );
+				}
+
+				if ( isset( $_POST['ets_pmpro_discord_send_membership_cancel_dm'] ) ) {
+					update_option( 'ets_pmpro_discord_send_membership_cancel_dm', true );
+				} else {
+					update_option( 'ets_pmpro_discord_send_membership_cancel_dm', false );
+				}
+
+				if ( isset( $_POST['ets_pmpro_discord_cancel_message'] ) && $_POST['ets_pmpro_discord_cancel_message']!='' ) {
+					update_option( 'ets_pmpro_discord_cancel_message', $ets_pmpro_discord_cancel_message );
+				} else {
+					update_option( 'ets_pmpro_discord_cancel_message', 'Your membership is cancled' );
 				}
 
 				if ( isset( $_POST['set_job_cnrc'] ) ) {

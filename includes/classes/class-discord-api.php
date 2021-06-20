@@ -35,12 +35,12 @@ class PMPro_Discord_API {
 
 		add_action( 'action_scheduler_failed_execution', array( $this, 'ets_pmpro_discord_reschedule_failed_action' ), 10, 3 );
 
-		add_action( 'ets_pmpro_discord_as_send_dm', array( $this, 'ets_pmpro_discord_handler_send_dm' ), 10, 2 );
+		add_action( 'ets_pmpro_discord_as_send_dm', array( $this, 'ets_pmpro_discord_handler_send_dm' ), 10, 3 );
 
 		add_action( 'ets_pmrpo_discord_schedule_expiration_warnings', array( $this, 'ets_pmpro_discord_send_expiration_warning_DM' ) );
 
 	}
-	
+
 	/**
 	 * Send expiration warning DM to discord members.
 	 *
@@ -55,7 +55,7 @@ class PMPro_Discord_API {
 		$today                                        = date( 'Y-m-d 00:00:00', current_time( 'timestamp' ) );
 		$pmpro_email_days_before_expiration           = apply_filters( 'pmpro_email_days_before_expiration', 7 );
 		$ets_pmpro_discord_send_expiration_warning_dm = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_send_expiration_warning_dm' ) ) );
-		
+
 		if ( $ets_pmpro_discord_send_expiration_warning_dm == false ) {
 			return;
 		}
@@ -84,8 +84,8 @@ class PMPro_Discord_API {
 				// check if the message is not already sent
 				$membership_level = pmpro_getMembershipLevelForUser( $user_obj->user_id );
 				$already_sent     = get_user_meta( $user_obj->user_id, '_ets_pmpro_discord_expitration_warning_for_' . $membership_level->ID, true );
-				if ( $membership_level!==false && $already_sent != 1 ) {
-					as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_send_dm', array( $user_obj->user_id ), 'ets-pmpro-discord' );
+				if ( $membership_level !== false && $already_sent != 1 ) {
+					as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_send_dm', array( $user_obj->user_id, $membership_level->ID ), 'ets-pmpro-discord' );
 				}
 			}
 		}
@@ -98,12 +98,13 @@ class PMPro_Discord_API {
 	 * @param INT    $user_id
 	 * @param STRING $type (warning|expired)
 	 */
-	public function ets_pmpro_discord_handler_send_dm( $user_id, $type = 'warning' ) {
-		$discord_user_id   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
-		$discord_bot_token = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_bot_token' ) ) );
-		$membership_level  = pmpro_getMembershipLevelForUser( $user_id );
-		$user_obj          = get_user_by( 'id', $user_id );
-
+	public function ets_pmpro_discord_handler_send_dm( $user_id, $membership_level_id, $type = 'warning' ) {
+		$discord_user_id                              = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
+		$discord_bot_token                            = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_bot_token' ) ) );
+		$ets_pmpro_discord_expiration_warning_message = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_expiration_warning_message' ) ) );
+		$ets_pmpro_discord_expiration_expired_message = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_expiration_expired_message' ) ) );
+		$ets_pmpro_discord_welcome_message            = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_welcome_message' ) ) );
+		$ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_cancel_message' ) ) );
 		// Check if DM channel is already created for the user.
 		$user_dm = get_user_meta( $user_id, '_ets_pmpro_discord_dm_channel', true );
 
@@ -115,11 +116,22 @@ class PMPro_Discord_API {
 			$dm_channel_id = $user_dm['id'];
 		}
 
-		if ( $type = 'warning' ) {
-			update_user_meta( $user_id, '_ets_pmpro_discord_expitration_warning_for_' . $membership_level->ID, true );
+		if ( $type == 'warning' ) {
+			update_user_meta( $user_id, '_ets_pmpro_discord_expitration_warning_dm_for_' . $membership_level_id, true );
+			$message = ets_pmpro_discord_get_formatted_dm( $user_id, $membership_level_id, $ets_pmpro_discord_expiration_warning_message );
 		}
-		if ( $type = 'expired' ) {
-			update_user_meta( $user_id, '_ets_pmpro_discord_expired_for_' . $membership_level->ID, true );
+		if ( $type == 'expired' ) {
+			update_user_meta( $user_id, '_ets_pmpro_discord_expired_dm_for_' . $membership_level_id, true );
+			$message = ets_pmpro_discord_get_formatted_dm( $user_id, $membership_level_id, $ets_pmpro_discord_expiration_expired_message );
+		}
+		if ( $type == 'welcome' ) {
+			update_user_meta( $user_id, '_ets_pmpro_discord_welcome_dm_for_' . $membership_level_id, true );
+			$message = ets_pmpro_discord_get_formatted_dm( $user_id, $membership_level_id, $ets_pmpro_discord_welcome_message );
+		}
+
+		if ( $type == 'cancel' ) {
+			update_user_meta( $user_id, '_ets_pmpro_discord_cancel_dm_for_' . $membership_level_id, true );
+			$message = ets_pmpro_discord_get_formatted_dm( $user_id, $membership_level_id, $ets_pmpro_discord_cancel_message );
 		}
 
 		$creat_dm_url = ETS_DISCORD_API_URL . '/channels/' . $dm_channel_id . '/messages';
@@ -130,15 +142,8 @@ class PMPro_Discord_API {
 				'Authorization' => 'Bot ' . $discord_bot_token,
 			),
 			'body'    => json_encode(
-				apply_filters(
-					'ets_pmpro_discord_expiration_reminder_message',
-					array(
-						'content' => sprintf( __( 'Hello,', 'ets_pmpro_discord' ) . ' %s', $user_obj->user_login ),
-						'embed'   => array(
-							'title'       => __( 'Membership expiration reminder!', 'ets_pmpro_discord' ),
-							'description' => sprintf( __( 'Hi, This message is to remind you about your membership ', 'ets_pmpro_discord' ) . '"%s" ' . __( ' at ', 'ets_pmpro_discord' ) . ' %s ' . __( ' is expiring on ', 'ets_pmpro_discord' ) . ' %s ', $membership_level->name, get_bloginfo( 'name' ), date( 'F jS, Y', $membership_level->enddate ) ),
-						),
-					)
+				array(
+					'content' => sanitize_text_field( trim( $message ) ),
 				)
 			),
 		);
@@ -158,7 +163,7 @@ class PMPro_Discord_API {
 	 * @param INT $user_id
 	 * @param INT $channel_id
 	 */
-	private function ets_pmpro_discord_get_channel( $user_id, $channel_id ) {
+	private function ets_pmpro_discord_get_dm_channel( $user_id, $channel_id ) {
 		$discord_bot_token       = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_bot_token' ) ) );
 		$get_channel_url         = ETS_DISCORD_API_URL . '/channels/' . $channel_id;
 		$get_channel_args        = array(
@@ -180,7 +185,7 @@ class PMPro_Discord_API {
 	 * @param INT $user_id
 	 * @return MIXED
 	 */
-	private function ets_pmpro_discord_create_member_dm_channel( $user_id ) {
+	public function ets_pmpro_discord_create_member_dm_channel( $user_id ) {
 		$discord_user_id       = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
 		$discord_bot_token     = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_bot_token' ) ) );
 		$create_channel_dm_url = ETS_DISCORD_API_URL . '/users/@me/channels';
@@ -204,6 +209,10 @@ class PMPro_Discord_API {
 			// check if there is error in create dm response
 			if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
 				PMPro_Discord_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
+				if ( ets_pmpro_discord_check_api_errors( $response_arr ) ) {
+					// this should be catch by Action schedule failed action.
+					throw new Exception( 'Failed in function ets_pmpro_discord_send_dm' );
+				}
 			} else {
 				update_user_meta( $user_id, '_ets_pmpro_discord_dm_channel', $response_arr );
 			}
@@ -247,7 +256,7 @@ class PMPro_Discord_API {
 		// stop users who having the direct URL of discord Oauth.
 		// We must check IF NONE members is set to NO and user having no active membership.
 		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_none_member' ) ) );
-		$curr_level_id     = sanitize_text_field( trim( get_current_level_id( $user_id ) ) );
+		$curr_level_id     = sanitize_text_field( trim( ets_pmpro_discord_get_current_level_id( $user_id ) ) );
 		if ( $curr_level_id == null && $allow_none_member == 'no' ) {
 			return;
 		}
@@ -348,7 +357,7 @@ class PMPro_Discord_API {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
-		$curr_level_id = sanitize_text_field( trim( get_current_level_id( $user_id ) ) );
+		$curr_level_id = sanitize_text_field( trim( ets_pmpro_discord_get_current_level_id( $user_id ) ) );
 		if ( $curr_level_id !== null ) {
 			// It is possible that we may exhaust API rate limit while adding members to guild, so handling off the job to queue.
 			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_handle_add_member_to_guild', array( $_ets_pmpro_discord_user_id, $user_id, $access_token ), ETS_DISCORD_AS_GROUP_NAME );
@@ -368,12 +377,13 @@ class PMPro_Discord_API {
 		if ( get_userdata( $user_id ) === false ) {
 			return;
 		}
-		$guild_id                       = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_guild_id' ) ) );
-		$discord_bot_token              = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_bot_token' ) ) );
-		$default_role                   = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
-		$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
-		$discord_role                   = '';
-		$curr_level_id                  = sanitize_text_field( trim( get_current_level_id( $user_id ) ) );
+		$guild_id                          = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_guild_id' ) ) );
+		$discord_bot_token                 = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_bot_token' ) ) );
+		$default_role                      = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
+		$ets_pmpor_discord_role_mapping    = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
+		$discord_role                      = '';
+		$curr_level_id                     = sanitize_text_field( trim( ets_pmpro_discord_get_current_level_id( $user_id ) ) );
+		$ets_pmpro_discord_send_welcome_dm = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_send_welcome_dm' ) ) );
 
 		if ( is_array( $ets_pmpor_discord_role_mapping ) && array_key_exists( 'level_id_' . $curr_level_id, $ets_pmpor_discord_role_mapping ) ) {
 			$discord_role = sanitize_text_field( trim( $ets_pmpor_discord_role_mapping[ 'level_id_' . $curr_level_id ] ) );
@@ -420,6 +430,10 @@ class PMPro_Discord_API {
 			update_user_meta( $user_id, '_ets_pmpro_discord_join_date', current_time( 'Y-m-d H:i:s' ) );
 		}
 
+		// Send welcome message.
+		if ( $ets_pmpro_discord_send_welcome_dm == true ) {
+			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_send_dm', array( $user_id, $curr_level_id, 'welcome' ), 'ets-pmpro-discord' );
+		}
 	}
 	/**
 	 * Add new member into discord guild
@@ -799,12 +813,15 @@ class PMPro_Discord_API {
 	 */
 	private function ets_pmpro_discord_set_member_roles( $user_id, $expired_level_id = false, $cancel_level_id = false, $is_schedule = true ) {
 		global $wpdb;
-		$allow_none_member              = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_none_member' ) ) );
-		$default_role                   = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
-		$_ets_pmpro_discord_role_id     = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_role_id', true ) ) );
-		$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
-		$curr_level_id                  = sanitize_text_field( trim( get_current_level_id( $user_id ) ) );
-		$previous_default_role          = get_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', true );
+		$allow_none_member                            = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_none_member' ) ) );
+		$default_role                                 = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
+		$_ets_pmpro_discord_role_id                   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_role_id', true ) ) );
+		$ets_pmpor_discord_role_mapping               = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
+		$curr_level_id                                = sanitize_text_field( trim( ets_pmpro_discord_get_current_level_id( $user_id ) ) );
+		$previous_default_role                        = get_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', true );
+		$ets_pmpro_discord_send_membership_expired_dm = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_send_membership_expired_dm' ) ) );
+		$ets_pmpro_discord_send_membership_cancel_dm  = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_send_membership_cancel_dm' ) ) );
+
 		if ( $expired_level_id ) {
 			$curr_level_id = $expired_level_id;
 		}
@@ -846,8 +863,13 @@ class PMPro_Discord_API {
 		}
 
 		// Send DM about expiry, but only when allow_none_member setting is yes
-		if( $expired_level_id!==false && $allow_none_member='yes' ){
-			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_send_dm', array( $user_id, 'expired' ), 'ets-pmpro-discord' );
+		if ( $ets_pmpro_discord_send_membership_expired_dm == true && $expired_level_id !== false && $allow_none_member = 'yes' ) {
+			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_send_dm', array( $user_id, $expired_level_id, 'expired' ), 'ets-pmpro-discord' );
+		}
+
+		// Send DM about cancel, but only when allow_none_member setting is yes
+		if ( $ets_pmpro_discord_send_membership_cancel_dm == true && $cancel_level_id !== false && $allow_none_member = 'yes' ) {
+			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_send_dm', array( $user_id, $expired_level_id, 'cancel' ), 'ets-pmpro-discord' );
 		}
 
 	}

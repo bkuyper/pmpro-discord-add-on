@@ -39,7 +39,7 @@ function ets_pmpro_discord_log_api_response( $user_id, $api_url = '', $api_args 
 		$log_string .= '-::-' . serialize( $api_response );
 
 		$logs = new PMPro_Discord_Logs();
-		$logs->write_api_response_logs( $log_string, $user_id);
+		$logs->write_api_response_logs( $log_string, $user_id );
 	}
 }
 
@@ -141,7 +141,7 @@ function ets_pmpro_discord_count_of_hooks_failures( $hook ) {
  * @param INT $user_id
  * @return INT|NULL $curr_level_id
  */
-function get_current_level_id( $user_id ) {
+function ets_pmpro_discord_get_current_level_id( $user_id ) {
 	$membership_level = pmpro_getMembershipLevelForUser( $user_id );
 	if ( $membership_level ) {
 		$curr_level_id = sanitize_text_field( trim( $membership_level->ID ) );
@@ -149,6 +149,63 @@ function get_current_level_id( $user_id ) {
 	} else {
 		return null;
 	}
+}
 
+/**
+ * Get formatted message to send in DM
+ *
+ * @param INT $user_id
+ * Merge fields: [MEMBER_USERNAME], [MEMBER_EMAIL], [MEMBERSHIP_LEVEL], [SITE_URL], [BLOG_NAME], [MEMBERSHIP_ENDDATE], [MEMBERSHIP_STARTDATE]</small>
+ */
+function ets_pmpro_discord_get_formatted_dm( $user_id, $level_id, $message ) {
+	global $wpdb;
+	$user_obj         = get_user_by( 'id', $user_id );
+	$level            = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->pmpro_membership_levels WHERE id = %d LIMIT 1", $level_id ) );
+	$membership_level = pmpro_getMembershipLevelForUser( $user_id );
+	
+	$MEMBER_USERNAME = $user_obj->user_login;
+	$MEMBER_EMAIL    = $user_obj->user_email;
+	if ( $membership_level !== false ) {
+		$MEMBERSHIP_LEVEL = $membership_level->name;
+	} elseif ( $level !== null ) {
+		$MEMBERSHIP_LEVEL = $level->name;
+	} else {
+		$MEMBERSHIP_LEVEL = '';
+	}
+
+	$SITE_URL  = get_bloginfo( 'url' );
+	$BLOG_NAME = get_bloginfo( 'name' );
+
+	if ( $membership_level !== false && isset( $membership_level->startdate ) && $membership_level->startdate != '' ) {
+		$MEMBERSHIP_STARTDATE = date( 'F jS, Y', strtotime( $membership_level->startdate ) );
+
+	} else {
+		$MEMBERSHIP_STARTDATE = '';
+	}
+	if ( $membership_level !== false && isset( $membership_level->enddate ) && $membership_level->enddate != '' ) {
+		$MEMBERSHIP_ENDDATE = date( 'F jS, Y', strtotime( $membership_level->enddate ) );
+	} else {
+		$MEMBERSHIP_ENDDATE = '';
+	}
+	$find    = array(
+		'[MEMBER_USERNAME]',
+		'[MEMBER_EMAIL]',
+		'[MEMBERSHIP_LEVEL]',
+		'[SITE_URL]',
+		'[BLOG_NAME]',
+		'[MEMBERSHIP_ENDDATE]',
+		'[MEMBERSHIP_STARTDATE]',
+	);
+	$replace = array(
+		$MEMBER_USERNAME,
+		$MEMBER_EMAIL,
+		$MEMBERSHIP_LEVEL,
+		$SITE_URL,
+		$BLOG_NAME,
+		$MEMBERSHIP_ENDDATE,
+		$MEMBERSHIP_STARTDATE,
+	);
+
+	return str_replace( $find, $replace, $message );
 }
 

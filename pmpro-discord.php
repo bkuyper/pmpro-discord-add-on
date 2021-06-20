@@ -31,10 +31,10 @@ define( 'ETS_DISCORD_BOT_PERMISSIONS', 8 );
 define( 'ETS_DISCORD_OAUTH_SCOPES', 'identify email connections guilds guilds.join gdm.join rpc rpc.notifications.read rpc.voice.read rpc.voice.write rpc.activities.write bot webhook.incoming messages.read applications.builds.upload applications.builds.read applications.commands applications.store.update applications.entitlements activities.read activities.write relationships.read' );
 
 // define group name for action scheduler actions.
-define('ETS_DISCORD_AS_GROUP_NAME', 'ets-pmpro-discord' );
+define( 'ETS_DISCORD_AS_GROUP_NAME', 'ets-pmpro-discord' );
 
 // define interval to keep checking and send membership expiration warning DM
-define('ETS_PMPRO_DISOCRD_EXPIRATION_WARNING_CRON', 5);
+define( 'ETS_PMPRO_DISOCRD_EXPIRATION_WARNING_CRON', 5 );
 
 /**
  * Class to connect discord app
@@ -62,7 +62,7 @@ class Ets_Pmpro_Add_Discord {
 	public function ets_pmpro_discord_set_up_plugin() {
 		$this->set_redirect_url_on_pmpro_activation();
 		$this->set_default_setting_values();
-    wp_schedule_event( time(), 'hourly', 'ets_pmrpo_discord_schedule_expiration_warnings' );
+		wp_schedule_event( time(), 'hourly', 'ets_pmrpo_discord_schedule_expiration_warnings' );
 	}
 
 	/**
@@ -90,6 +90,14 @@ class Ets_Pmpro_Add_Discord {
 		update_option( 'ets_pmpro_discord_job_queue_batch_size', 7 );
 		update_option( 'ets_pmpro_allow_none_member', 'yes' );
 		update_option( 'ets_pmpro_retry_api_count', '5' );
+		update_option( 'ets_pmpro_discord_send_welcome_dm', true );
+		update_option( 'ets_pmpro_discord_welcome_message', 'Hi [MEMBER_USERNAME] ([MEMBER_EMAIL]), Welcome, Your membership [MEMBERSHIP_LEVEL] is starting from [MEMBERSHIP_STARTDATE] at [SITE_URL] the last date of your membership is [MEMBERSHIP_STARTDATE] Thanks, Kind Regards, [BLOG_NAME]' );
+		update_option( 'ets_pmpro_discord_send_expiration_warning_dm', true );
+		update_option( 'ets_pmpro_discord_expiration_warning_message', 'Hi [MEMBER_USERNAME] ([MEMBER_EMAIL]), ,Your membership [MEMBERSHIP_LEVEL] is expiring at [MEMBERSHIP_ENDDATE] at [SITE_URL] Thanks, Kind Regards, [BLOG_NAME]' );
+		update_option( 'ets_pmpro_discord_send_membership_expired_dm', true );
+		update_option( 'ets_pmpro_discord_expiration_expired_message', 'Hi [MEMBER_USERNAME] ([MEMBER_EMAIL]), Your membership [MEMBERSHIP_LEVEL] is expired at [MEMBERSHIP_ENDDATE] at [SITE_URL] Thanks, Kind Regards, [BLOG_NAME]' );
+		update_option( 'ets_pmpro_discord_send_membership_cancel_dm', true );
+		update_option( 'ets_pmpro_discord_cancel_message', 'Hi [MEMBER_USERNAME], ([MEMBER_EMAIL]), Your membership [MEMBERSHIP_LEVEL] at [BLOG_NAME] is cancelled, Regards, [SITE_URL]' );
 	}
 
 }

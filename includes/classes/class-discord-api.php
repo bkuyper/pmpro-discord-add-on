@@ -77,7 +77,7 @@ class PMPro_Discord_API {
 			$interval_end
 		);
 		$expiring_soon = $wpdb->get_results( $sqlQuery );
-		
+
 		if ( ! empty( $expiring_soon ) ) {
 			// foreach members and send DM
 			foreach ( $expiring_soon as $key => $user_obj ) {
@@ -871,7 +871,7 @@ class PMPro_Discord_API {
 
 		// Send DM about cancel, but only when allow_none_member setting is yes
 		if ( $ets_pmpro_discord_send_membership_cancel_dm == true && $cancel_level_id !== false && $allow_none_member = 'yes' ) {
-			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_send_dm', array( $user_id, $expired_level_id, 'cancel' ), 'ets-pmpro-discord' );
+			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_send_dm', array( $user_id, $cancel_level_id, 'cancel' ), 'ets-pmpro-discord' );
 		}
 
 	}

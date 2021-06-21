@@ -177,13 +177,13 @@ function ets_pmpro_discord_get_formatted_dm( $user_id, $level_id, $message ) {
 	$BLOG_NAME = get_bloginfo( 'name' );
 
 	if ( $membership_level !== false && isset( $membership_level->startdate ) && $membership_level->startdate != '' ) {
-		$MEMBERSHIP_STARTDATE = date( 'F jS, Y', strtotime( $membership_level->startdate ) );
+		$MEMBERSHIP_STARTDATE = date( 'F jS, Y', $membership_level->startdate );
 
 	} else {
 		$MEMBERSHIP_STARTDATE = '';
 	}
 	if ( $membership_level !== false && isset( $membership_level->enddate ) && $membership_level->enddate != '' ) {
-		$MEMBERSHIP_ENDDATE = date( 'F jS, Y', strtotime( $membership_level->enddate ) );
+		$MEMBERSHIP_ENDDATE = date( 'F jS, Y', $membership_level->enddate );
 	} else {
 		$MEMBERSHIP_ENDDATE = '';
 	}

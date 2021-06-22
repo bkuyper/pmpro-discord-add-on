@@ -144,7 +144,7 @@ class PMPro_Discord_API {
 			),
 			'body'    => json_encode(
 				array(
-					'content' => sanitize_text_field( trim( $message ) ),
+					'content' => sanitize_text_field( trim( wp_unslash( $message ) ) ),
 				)
 			),
 		);

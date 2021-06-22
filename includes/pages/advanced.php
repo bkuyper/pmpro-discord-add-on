@@ -33,7 +33,7 @@ $ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_o
 	<tr>
 		<th scope="row"><?php echo __( 'Membership welcome message', 'ets_pmpro_discord' ); ?></th>
 		<td> <fieldset>
-		<textarea class="ets_pmpro_discord_dm_textarea" name="ets_pmpro_discord_welcome_message" id="ets_pmpro_discord_welcome_message" row="25" cols="50"><?php if ( $ets_pmpro_discord_welcome_message ) { echo $ets_pmpro_discord_welcome_message; } ?></textarea> 
+		<textarea class="ets_pmpro_discord_dm_textarea" name="ets_pmpro_discord_welcome_message" id="ets_pmpro_discord_welcome_message" row="25" cols="50"><?php if ( $ets_pmpro_discord_welcome_message ) { echo wp_unslash($ets_pmpro_discord_welcome_message); } ?></textarea> 
 	<br/>
 	<small>Merge fields: [MEMBER_USERNAME], [MEMBER_EMAIL], [MEMBERSHIP_LEVEL], [SITE_URL], [BLOG_NAME], [MEMBERSHIP_ENDDATE], [MEMBERSHIP_STARTDATE]</small>
 		</fieldset></td>
@@ -53,7 +53,7 @@ $ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_o
 	<tr>
 		<th scope="row"><?php echo __( 'Membership expiration warning message', 'ets_pmpro_discord' ); ?></th>
 		<td> <fieldset>
-		<textarea  class="ets_pmpro_discord_dm_textarea" name="ets_pmpro_discord_expiration_warning_message" id="ets_pmpro_discord_expiration_warning_message" row="25" cols="50"><?php if ( $ets_pmpro_discord_expiration_warning_message ) { echo $ets_pmpro_discord_expiration_warning_message; } ?></textarea> 
+		<textarea  class="ets_pmpro_discord_dm_textarea" name="ets_pmpro_discord_expiration_warning_message" id="ets_pmpro_discord_expiration_warning_message" row="25" cols="50"><?php if ( $ets_pmpro_discord_expiration_warning_message ) { echo wp_unslash($ets_pmpro_discord_expiration_warning_message); } ?></textarea> 
 	<br/>
 	<small>Merge fields: [MEMBER_USERNAME], [MEMBER_EMAIL], [MEMBERSHIP_LEVEL], [SITE_URL], [BLOG_NAME], [MEMBERSHIP_ENDDATE], [MEMBERSHIP_STARTDATE]</small>
 		</fieldset></td>
@@ -72,7 +72,7 @@ $ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_o
 	<tr>
 		<th scope="row"><?php echo __( 'Membership expired message', 'ets_pmpro_discord' ); ?></th>
 		<td> <fieldset>
-		<textarea  class="ets_pmpro_discord_dm_textarea" name="ets_pmpro_discord_expiration_expired_message" id="ets_pmpro_discord_expiration_expired_message" row="25" cols="50"><?php if ( $ets_pmpro_discord_expiration_expired_message ) { echo $ets_pmpro_discord_expiration_expired_message; } ?></textarea> 
+		<textarea  class="ets_pmpro_discord_dm_textarea" name="ets_pmpro_discord_expiration_expired_message" id="ets_pmpro_discord_expiration_expired_message" row="25" cols="50"><?php if ( $ets_pmpro_discord_expiration_expired_message ) { echo wp_unslash($ets_pmpro_discord_expiration_expired_message); } ?></textarea> 
 	<br/>
 	<small>Merge fields: [MEMBER_USERNAME], [MEMBER_EMAIL], [MEMBERSHIP_LEVEL], [SITE_URL], [BLOG_NAME]</small>
 		</fieldset>
@@ -92,7 +92,7 @@ $ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_o
 		<tr>
 		<th scope="row"><?php echo __( 'Membership cancel message', 'ets_pmpro_discord' ); ?></th>
 		<td> <fieldset>
-		<textarea  class="ets_pmpro_discord_dm_textarea" name="ets_pmpro_discord_cancel_message" id="ets_pmpro_discord_cancel_message" row="25" cols="50"><?php if ( $ets_pmpro_discord_cancel_message ) { echo $ets_pmpro_discord_cancel_message; } ?></textarea> 
+		<textarea  class="ets_pmpro_discord_dm_textarea" name="ets_pmpro_discord_cancel_message" id="ets_pmpro_discord_cancel_message" row="25" cols="50"><?php if ( $ets_pmpro_discord_cancel_message ) { echo wp_unslash($ets_pmpro_discord_cancel_message); } ?></textarea> 
 	<br/>
 	<small>Merge fields: [MEMBER_USERNAME], [MEMBER_EMAIL], [MEMBERSHIP_LEVEL], [SITE_URL], [BLOG_NAME]</small>
 		</fieldset>

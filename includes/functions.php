@@ -162,7 +162,7 @@ function ets_pmpro_discord_get_formatted_dm( $user_id, $level_id, $message ) {
 	$user_obj         = get_user_by( 'id', $user_id );
 	$level            = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->pmpro_membership_levels WHERE id = %d LIMIT 1", $level_id ) );
 	$membership_level = pmpro_getMembershipLevelForUser( $user_id );
-	
+
 	$MEMBER_USERNAME = $user_obj->user_login;
 	$MEMBER_EMAIL    = $user_obj->user_email;
 	if ( $membership_level !== false ) {
@@ -172,7 +172,7 @@ function ets_pmpro_discord_get_formatted_dm( $user_id, $level_id, $message ) {
 	} else {
 		$MEMBERSHIP_LEVEL = '';
 	}
-
+  update_option('debugg', date( 'y-m-d', $membership_level->startdate ).'-'. date( 'y-m-d', $membership_level->enddate ));
 	$SITE_URL  = get_bloginfo( 'url' );
 	$BLOG_NAME = get_bloginfo( 'name' );
 
@@ -184,9 +184,12 @@ function ets_pmpro_discord_get_formatted_dm( $user_id, $level_id, $message ) {
 	}
 	if ( $membership_level !== false && isset( $membership_level->enddate ) && $membership_level->enddate != '' ) {
 		$MEMBERSHIP_ENDDATE = date( 'F jS, Y', $membership_level->enddate );
+	} else if ($level->expiration_period=='') {
+		$MEMBERSHIP_ENDDATE = 'Never';
 	} else {
 		$MEMBERSHIP_ENDDATE = '';
 	}
+
 	$find    = array(
 		'[MEMBER_USERNAME]',
 		'[MEMBER_EMAIL]',

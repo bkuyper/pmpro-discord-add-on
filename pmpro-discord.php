@@ -98,7 +98,7 @@ class Ets_Pmpro_Add_Discord {
 		update_option( 'ets_pmpro_discord_send_welcome_dm', true );
 		update_option( 'ets_pmpro_discord_welcome_message', 'Hi [MEMBER_USERNAME] ([MEMBER_EMAIL]), Welcome, Your membership [MEMBERSHIP_LEVEL] is starting from [MEMBERSHIP_STARTDATE] at [SITE_URL] the last date of your membership is [MEMBERSHIP_STARTDATE] Thanks, Kind Regards, [BLOG_NAME]' );
 		update_option( 'ets_pmpro_discord_send_expiration_warning_dm', true );
-		update_option( 'ets_pmpro_discord_expiration_warning_message', 'Hi [MEMBER_USERNAME] ([MEMBER_EMAIL]), ,Your membership [MEMBERSHIP_LEVEL] is expiring at [MEMBERSHIP_ENDDATE] at [SITE_URL] Thanks, Kind Regards, [BLOG_NAME]' );
+		update_option( 'ets_pmpro_discord_expiration_warning_message', 'Hi [MEMBER_USERNAME] ([MEMBER_EMAIL]) ,Your membership [MEMBERSHIP_LEVEL] is expiring at [MEMBERSHIP_ENDDATE] at [SITE_URL] Thanks, Kind Regards, [BLOG_NAME]' );
 		update_option( 'ets_pmpro_discord_send_membership_expired_dm', true );
 		update_option( 'ets_pmpro_discord_expiration_expired_message', 'Hi [MEMBER_USERNAME] ([MEMBER_EMAIL]), Your membership [MEMBERSHIP_LEVEL] is expired at [MEMBERSHIP_ENDDATE] at [SITE_URL] Thanks, Kind Regards, [BLOG_NAME]' );
 		update_option( 'ets_pmpro_discord_send_membership_cancel_dm', true );

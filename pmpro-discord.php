@@ -33,9 +33,14 @@ define( 'ETS_DISCORD_OAUTH_SCOPES', 'identify email connections guilds guilds.jo
 // define group name for action scheduler actions.
 define( 'ETS_DISCORD_AS_GROUP_NAME', 'ets-pmpro-discord' );
 
-// define interval to keep checking and send membership expiration warning DM
+// define interval to keep checking and send membership expiration warning DM.
 define( 'ETS_PMPRO_DISOCRD_EXPIRATION_WARNING_CRON', 5 );
 
+// Follwing response codes not cosider for re-try API calls.
+define( 'ETS_PMPRO_DISCORD_DONOT_RETRY_THESE_API_CODES', array( 0, 10003, 50033, 10004, 50025, 10013, 10011 ) );
+
+// following http response codes should not get re-try. except 429 !
+define( 'ETS_PMPRO_DISCORD_DONOT_RETRY_HTTP_CODES', array( 400, 401, 403, 404, 405, 502 ) );
 /**
  * Class to connect discord app
  */

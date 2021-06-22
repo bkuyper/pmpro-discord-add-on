@@ -4,7 +4,6 @@ jQuery(document).ready(function ($) {
 		$.skeletabs.setDefaults({
 			keyboard: false,
 		});
-		
 		/*Load all roles from discord server*/
 		$.ajax({
 			type: "POST",
@@ -13,7 +12,7 @@ jQuery(document).ready(function ($) {
 			data: { 'action': 'load_discord_roles', 'ets_discord_nonce': etsPmproParams.ets_discord_nonce, },
 			beforeSend: function () {
 				$(".discord-roles .spinner").addClass("is-active");
-				$("#skeletabsTab1 .spinner").addClass("is-active");
+				$(".initialtab.spinner").addClass("is-active");
 			},
 			success: function (response) {
 				if (response != null && response.hasOwnProperty('code') && response.code == 50001 && response.message == 'Missing Access') {

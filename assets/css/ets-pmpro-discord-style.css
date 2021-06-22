@@ -394,7 +394,7 @@ a{
 .ets-is-active{
   visibility: visible;
 }
-.discord-roles .spinner, .skltbs-tab .spinner{
+.discord-roles .spinner, .initialtab.spinner{
   float: none;
 }
 .hoverActive{
@@ -454,8 +454,8 @@ div.mapping-json{
     font-size:2em;
     vertical-align:middle;
 }
-.discord-roles .spinner, .skltbs-tab .spinner{
-  display: inline-block !important;
+.discord-roles .spinner,.initialtab.spinner{
+  display: inline-block;
 }
 .spinner{
   display: none;

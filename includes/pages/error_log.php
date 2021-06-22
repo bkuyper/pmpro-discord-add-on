@@ -14,7 +14,7 @@ while ( ! feof( $handle ) ) {
 		<span class="clr-log spinner" ></span>
 	</div>
 	<div class="form-group">
-		<input type="button" class="ets-submit ets-bg-green" value="Refresh" onClick="window.location.href = window.location.href">
+		<input type="button" class="ets-submit ets-bg-green" value="Refresh" onClick="window.location.reload()">
 	</div>
 	<div class="form-group">
 		<a href="<?php echo ETS_PMPRO_DISCORD_URL . 'discord_api_logs.txt'; ?>" class="ets-submit ets-bg-download" download>Download</a>

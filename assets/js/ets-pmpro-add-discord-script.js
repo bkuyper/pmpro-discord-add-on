@@ -1,5 +1,10 @@
 jQuery(document).ready(function ($) {
 	if (etsPmproParams.is_admin) {
+		/*Tab options*/
+		$.skeletabs.setDefaults({
+			keyboard: false,
+		});
+		
 		/*Load all roles from discord server*/
 		$.ajax({
 			type: "POST",

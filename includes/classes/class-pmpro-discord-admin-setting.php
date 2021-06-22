@@ -7,11 +7,14 @@ class Ets_Pmpro_Admin_Setting {
 		// Add new menu option in the admin menu.
 		add_action( 'admin_menu', array( $this, 'ets_add_new_menu' ) );
 
-		// Add script for back end.
+		// Add script for front end.
 		add_action( 'admin_enqueue_scripts', array( $this, 'ets_add_script' ) );
 
 		// Add script for front end.
 		add_action( 'wp_enqueue_scripts', array( $this, 'ets_add_script' ) );
+
+			// Add script for back end.
+			add_action( 'admin_enqueue_scripts', array( $this, 'ets_add_admin_script' ) );
 
 		// Add new button in pmpro profile
 		add_action( 'pmpro_show_user_profile', array( $this, 'ets_pmpro_discord_add_connect_discord_button' ) );
@@ -202,14 +205,6 @@ class Ets_Pmpro_Admin_Setting {
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
 
 		wp_register_style(
-			'ets_pmpro_add_skeletabs_style',
-			ETS_PMPRO_DISCORD_URL . 'assets/css/skeletabs.css',
-			false,
-			ETS_PMPRO_VERSION
-		);
-		wp_enqueue_style( 'ets_pmpro_add_skeletabs_style' );
-
-		wp_register_style(
 			'ets_pmpro_font_awesome',
 			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css'
 		);
@@ -223,13 +218,6 @@ class Ets_Pmpro_Admin_Setting {
 		);
 		wp_enqueue_script( 'ets_pmpro_add_discord_script' );
 
-		wp_register_script(
-			'ets_pmpro_add_skeletabs_script',
-			ETS_PMPRO_DISCORD_URL . 'assets/js/skeletabs.js',
-			array( 'jquery' ),
-			ETS_PMPRO_VERSION
-		);
-		wp_enqueue_script( 'ets_pmpro_add_skeletabs_script' );
 
 		wp_register_script(
 			'ets_fab_icon_script',
@@ -255,6 +243,31 @@ class Ets_Pmpro_Admin_Setting {
 		wp_localize_script( 'ets_pmpro_add_discord_script', 'etsPmproParams', $script_params );
 	}
 
+	/**
+	 * Localized admin script and style
+	 *
+	 * @param NONE
+	 * @return NONE
+	 */
+	public function ets_add_admin_script() {
+		
+		wp_register_style(
+			'ets_pmpro_add_skeletabs_style',
+			ETS_PMPRO_DISCORD_URL . 'assets/css/skeletabs.css',
+			false,
+			ETS_PMPRO_VERSION
+		);
+		wp_enqueue_style( 'ets_pmpro_add_skeletabs_style' );
+
+		wp_register_script(
+			'ets_pmpro_add_skeletabs_script',
+			ETS_PMPRO_DISCORD_URL . 'assets/js/skeletabs.js',
+			array( 'jquery' ),
+			ETS_PMPRO_VERSION
+		);
+		wp_enqueue_script( 'ets_pmpro_add_skeletabs_script' );
+	}
+	
 	/**
 	 * Add menu in PmPro membership dashboard sub-menu
 	 *

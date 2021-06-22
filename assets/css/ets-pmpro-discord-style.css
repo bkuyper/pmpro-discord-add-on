@@ -8,19 +8,6 @@
   display: block;
   width: 90%;
 }
-/* Style the buttons inside the tab */
-.tab button {
-  background-color: inherit;
-  float: left;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px; 
-  transition: 0.3s;
-  font-size: 17px;
-  margin-bottom: -1px;
-  background: #fff;
-}
 
 /* Change background color of buttons on hover */
 .tab button:hover {
@@ -30,15 +17,6 @@
 .tab button.active {
   color: #ffffff;
   background: #77a02e;
-}
-
-/* Style the tab content */
-.ets_tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border-top: none;
-  background: #fff;
-  border-top: 1px solid #77a02e;
 }
 
 #ets_setting{
@@ -416,7 +394,7 @@ a{
 .ets-is-active{
   visibility: visible;
 }
-.discord-roles .spinner, .ets_tablinks .spinner{
+.discord-roles .spinner, .skltbs-tab .spinner{
   float: none;
 }
 .hoverActive{
@@ -476,8 +454,8 @@ div.mapping-json{
     font-size:2em;
     vertical-align:middle;
 }
-.discord-roles .spinner, .ets_tablinks .spinner{
-  display: inline-block;
+.discord-roles .spinner, .skltbs-tab .spinner{
+  display: inline-block !important;
 }
 .spinner{
   display: none;

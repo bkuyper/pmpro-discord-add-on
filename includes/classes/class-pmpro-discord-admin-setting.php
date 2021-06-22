@@ -202,6 +202,14 @@ class Ets_Pmpro_Admin_Setting {
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
 
 		wp_register_style(
+			'ets_pmpro_add_skeletabs_style',
+			ETS_PMPRO_DISCORD_URL . 'assets/css/skeletabs.css',
+			false,
+			ETS_PMPRO_VERSION
+		);
+		wp_enqueue_style( 'ets_pmpro_add_skeletabs_style' );
+
+		wp_register_style(
 			'ets_pmpro_font_awesome',
 			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css'
 		);
@@ -209,11 +217,19 @@ class Ets_Pmpro_Admin_Setting {
 
 		wp_register_script(
 			'ets_pmpro_add_discord_script',
-			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.min.js',
+			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.js',
 			array( 'jquery' ),
 			ETS_PMPRO_VERSION
 		);
 		wp_enqueue_script( 'ets_pmpro_add_discord_script' );
+
+		wp_register_script(
+			'ets_pmpro_add_skeletabs_script',
+			ETS_PMPRO_DISCORD_URL . 'assets/js/skeletabs.js',
+			array( 'jquery' ),
+			ETS_PMPRO_VERSION
+		);
+		wp_enqueue_script( 'ets_pmpro_add_skeletabs_script' );
 
 		wp_register_script(
 			'ets_fab_icon_script',
@@ -479,42 +495,56 @@ class Ets_Pmpro_Admin_Setting {
 		$ets_pmpro_discord_guild_id     = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_guild_id' ) ) );
 		?>
 		<h1><?php echo __( 'PMPRO Discord Add On Settings', 'ets_pmpro_discord' ); ?></h1>
-		<div class="tab ets-tabs">
-
-		  <button class="ets_tablinks" data-identity="settings" data-toggle="tab" data-event="ets_setting"><?php echo __( 'Discord Settings', 'ets_pmpro_discord' ); ?><span class="spinner"></span></button>
-		  <?php if ( ! empty( $ets_pmpro_discord_client_id ) && ! empty( $discord_client_secret ) && ! empty( $discord_bot_token ) && ! empty( $ets_pmpro_discord_redirect_url ) && ! empty( $ets_pmpro_discord_guild_id ) ) : ?>
-		   <button class="ets_tablinks" data-identity="level-mapping" data-toggle="tab" data-event="ets_level_mapping"><?php echo __( 'Role Mappings', 'ets_pmpro_discord' ); ?></button>
-		  <?php endif; ?>
-			<button class="ets_tablinks" data-identity="advanced" data-toggle="tab" data-event="ets_advanced"><?php echo __( 'Advanced', 'ets_pmpro_discord' ); ?>	
-		  </button>
-		  <button class="ets_tablinks" data-identity="logs" data-toggle="tab" data-event="ets_logs"><?php echo __( 'Logs', 'ets_pmpro_discord' ); ?>	
-		  </button>
-		  <button class="ets_tablinks" data-identity="docs" data-toggle="tab" data-event="ets_docs"><?php echo __( 'Documentation', 'ets_pmpro_discord' ); ?>	
-		  </button>
-		  <button class="ets_tablinks" data-identity="support" data-toggle="tab" data-event="ets_about_us"><?php echo __( 'Support', 'ets_pmpro_discord' ); ?>	
-		  </button>
-		</div>
-
-		<div id="ets_setting" class="ets_tabcontent">
-			<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/discord-settings.php'; ?>
-		</div>
-		<div id="ets_docs" class="ets_tabcontent">
-			<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/documentation.php'; ?>
-		</div>
-		<div id="ets_about_us" class="ets_tabcontent">
-			<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/get-support.php'; ?>
-		</div>
-		<div id="ets_advanced" class="ets_tabcontent">
-			<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/advanced.php'; ?>
-		</div>
-		<div id="ets_logs" class="ets_tabcontent">
-			<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/error_log.php'; ?>
-		</div>
-		<div id="ets_level_mapping" class="ets_tabcontent">
-			<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/discord-role-level-map.php'; ?>
-		</div>
-
-
+      <div id="outer" class="skltbs-theme-light" data-skeletabs='{ "startIndex": 1 }'>
+        <ul class="skltbs-tab-group">
+          <li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="settings" ><?php echo __( 'Discord Settings', 'ets_pmpro_discord' ); ?><span class="spinner"></span></button>
+          </li>
+					<?php if ( ! empty( $ets_pmpro_discord_client_id ) && ! empty( $discord_client_secret ) && ! empty( $discord_bot_token ) && ! empty( $ets_pmpro_discord_redirect_url ) && ! empty( $ets_pmpro_discord_guild_id ) ) : ?>
+          <li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="level-mapping" ><?php echo __( 'Role Mappings', 'ets_pmpro_discord' ); ?></button>
+          </li>
+					<?php endif; ?>
+          <li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="advanced" data-toggle="tab" data-event="ets_advanced"><?php echo __( 'Advanced', 'ets_pmpro_discord' ); ?>	
+					</button>
+          </li>
+          <li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="logs" data-toggle="tab" data-event="ets_logs"><?php echo __( 'Logs', 'ets_pmpro_discord' ); ?>	
+					</button>
+          </li>
+					<li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="docs" data-toggle="tab" data-event="ets_docs"><?php echo __( 'Documentation', 'ets_pmpro_discord' ); ?>	
+					</button>
+          </li>
+					<li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="support" data-toggle="tab" data-event="ets_about_us"><?php echo __( 'Support', 'ets_pmpro_discord' ); ?>	
+					</button>
+          </li>
+        </ul>
+        <div class="skltbs-panel-group">
+          <div class="skltbs-panel">
+					<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/discord-settings.php'; ?>
+          </div>
+					<?php if ( ! empty( $ets_pmpro_discord_client_id ) && ! empty( $discord_client_secret ) && ! empty( $discord_bot_token ) && ! empty( $ets_pmpro_discord_redirect_url ) && ! empty( $ets_pmpro_discord_guild_id ) ) : ?>
+          <div class="skltbs-panel">
+						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/discord-role-level-map.php'; ?>
+          </div>
+					<?php endif; ?>
+          <div class="skltbs-panel">
+						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/advanced.php'; ?>
+          </div>
+          <div class="skltbs-panel">
+						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/error_log.php'; ?>
+          </div>
+					<div class="skltbs-panel">
+						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/documentation.php'; ?>
+          </div>
+					<div class="skltbs-panel">
+						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/get-support.php'; ?>
+          </div>
+        </div>
+      </div>
 		<?php
 		$this->get_Support_Data();
 	}

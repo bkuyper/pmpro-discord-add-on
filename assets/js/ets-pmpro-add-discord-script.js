@@ -1,28 +1,7 @@
 jQuery(document).ready(function ($) {
 	if (etsPmproParams.is_admin) {
-		/*create tabs*/
-		$('.ets_tablinks').on('click', function () {
-			$('.ets_tabcontent').each(function () {
-				$(this).css({ "display": "none" });
-			});
-			$('.ets_tablinks').each(function () {
-				$(this).removeClass("active");;
-			});
-			$(this).addClass('active');
-			var event = $(this).data('event');
-			$('#' + event).css({ "display": "block" });
-			localStorage.setItem('activeTab', $(this).data('identity'));
-		});
 
-		/*check previous active tab*/
-		var activeTab = localStorage.getItem('activeTab');
-		if (activeTab) {
-			$('.ets-tabs button[data-identity="' + activeTab + '"]').trigger('click');
-		} else {
-			$('.ets-tabs button[data-identity="settings"]').trigger('click');
-		}
-
-
+		$.skeletabs.setClassNames('my');
 		/*Load all roles from discord server*/
 		$.ajax({
 			type: "POST",
@@ -31,7 +10,7 @@ jQuery(document).ready(function ($) {
 			data: { 'action': 'load_discord_roles', 'ets_discord_nonce': etsPmproParams.ets_discord_nonce, },
 			beforeSend: function () {
 				$(".discord-roles .spinner").addClass("is-active");
-				$(".ets_tablinks .spinner").addClass("is-active");
+				$("#skeletabsTab1 .spinner").addClass("is-active");
 			},
 			success: function (response) {
 				if (response != null && response.hasOwnProperty('code') && response.code == 50001 && response.message == 'Missing Access') {
@@ -91,7 +70,7 @@ jQuery(document).ready(function ($) {
 			},
 			complete: function () {
 				$(".discord-roles .spinner").removeClass("is-active").css({ "float": "right" });
-				$(".ets_tablinks .spinner").removeClass("is-active").css({ "float": "right", "display": "none" });
+				$("#skeletabsTab1 .spinner").removeClass("is-active").css({ "float": "right", "display": "none" });
 			}
 		});
 

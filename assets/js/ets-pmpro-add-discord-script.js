@@ -1,7 +1,5 @@
 jQuery(document).ready(function ($) {
 	if (etsPmproParams.is_admin) {
-
-		$.skeletabs.setClassNames('my');
 		/*Load all roles from discord server*/
 		$.ajax({
 			type: "POST",

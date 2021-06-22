@@ -149,6 +149,7 @@ class PMPro_Discord_API {
 			),
 		);
 		$dm_response  = wp_remote_post( $creat_dm_url, $dm_args );
+		
 		ets_pmpro_discord_log_api_response( $user_id, $creat_dm_url, $dm_args, $dm_response );
 		$dm_response_body = json_decode( wp_remote_retrieve_body( $dm_response ), true );
 		if ( ets_pmpro_discord_check_api_errors( $dm_response ) ) {
@@ -404,13 +405,13 @@ class PMPro_Discord_API {
 				array(
 					'access_token' => $access_token,
 					'roles'        => array(
-						$discord_role,
+						$discord_role
 					),
 				)
 			),
 		);
 		$guild_response         = wp_remote_post( $guilds_memeber_api_url, $guild_args );
-
+		
 		ets_pmpro_discord_log_api_response( $user_id, $guilds_memeber_api_url, $guild_args, $guild_response );
 		if ( ets_pmpro_discord_check_api_errors( $guild_response ) ) {
 
@@ -619,6 +620,7 @@ class PMPro_Discord_API {
 			),
 		);
 		$guild_response                = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
+		
 		ets_pmpro_discord_log_api_response( $user_id, $guilds_delete_memeber_api_url, $guild_args, $guild_response );
 		if ( ets_pmpro_discord_check_api_errors( $guild_response ) ) {
 			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );
@@ -682,6 +684,7 @@ class PMPro_Discord_API {
 			);
 
 			$response = wp_remote_get( $discord_change_role_api_url, $param );
+
 			ets_pmpro_discord_log_api_response( $user_id, $discord_change_role_api_url, $param, $response );
 			if ( ets_pmpro_discord_check_api_errors( $response ) ) {
 				$response_arr = json_decode( wp_remote_retrieve_body( $response ), true );

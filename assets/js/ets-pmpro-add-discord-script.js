@@ -38,7 +38,7 @@ jQuery(document).ready(function ($) {
 						}
 
 						if (key != 'previous_mapping' && isbot == false && val.name != '@everyone') {
-							$('.discord-roles').append('<div class="makeMeDraggable" data-role_id="' + val.id + '" >' + val.name + '</div>');
+							$('.discord-roles').append('<div class="makeMeDraggable" style="background-color:#'+val.color.toString(16)+'" data-role_id="' + val.id + '" >' + val.name + '</div>');
 							$('#defaultRole').append('<option value="' + val.id + '" >' + val.name + '</option>');
 							makeDrag($('.makeMeDraggable'));
 						}

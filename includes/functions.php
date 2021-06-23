@@ -54,7 +54,18 @@ function ets_pmpro_discord_check_api_errors( $api_response ) {
 	if ( is_wp_error( $api_response ) ) {
 		return true;
 	}
+
+	// First Check if response contain codes which should not get re-try.
+	$body = json_decode( wp_remote_retrieve_body( $api_response ), true );
+	if ( isset( $body['code'] ) && in_array( $body['code'], ETS_PMPRO_DISCORD_DONOT_RETRY_THESE_API_CODES ) ) {
+		return false;
+	}
+
 	$response_code = strval( $api_response['response']['code'] );
+	if ( isset( $api_response['response']['code'] ) && in_array( $response_code, ETS_PMPRO_DISCORD_DONOT_RETRY_HTTP_CODES ) ) {
+		return false;
+	}
+
 	// check if response code is in the range of HTTP error.
 	if ( ( 400 <= absint( $response_code ) ) && ( absint( $response_code ) <= 599 ) ) {
 		return true;

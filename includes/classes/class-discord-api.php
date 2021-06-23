@@ -149,7 +149,6 @@ class PMPro_Discord_API {
 			),
 		);
 		$dm_response  = wp_remote_post( $creat_dm_url, $dm_args );
-		
 		ets_pmpro_discord_log_api_response( $user_id, $creat_dm_url, $dm_args, $dm_response );
 		$dm_response_body = json_decode( wp_remote_retrieve_body( $dm_response ), true );
 		if ( ets_pmpro_discord_check_api_errors( $dm_response ) ) {
@@ -212,9 +211,9 @@ class PMPro_Discord_API {
 			// check if there is error in create dm response
 			if ( array_key_exists( 'code', $response_arr ) || array_key_exists( 'error', $response_arr ) ) {
 				PMPro_Discord_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
-				if ( ets_pmpro_discord_check_api_errors( $response_arr ) ) {
+				if ( ets_pmpro_discord_check_api_errors( $created_dm_response ) ) {
 					// this should be catch by Action schedule failed action.
-					throw new Exception( 'Failed in function ets_pmpro_discord_send_dm' );
+					throw new Exception( 'Failed in function ets_pmpro_discord_create_member_dm_channel' );
 				}
 			} else {
 				update_user_meta( $user_id, '_ets_pmpro_discord_dm_channel', $response_arr );
@@ -405,13 +404,13 @@ class PMPro_Discord_API {
 				array(
 					'access_token' => $access_token,
 					'roles'        => array(
-						$discord_role
+						$discord_role,
 					),
 				)
 			),
 		);
 		$guild_response         = wp_remote_post( $guilds_memeber_api_url, $guild_args );
-		
+
 		ets_pmpro_discord_log_api_response( $user_id, $guilds_memeber_api_url, $guild_args, $guild_response );
 		if ( ets_pmpro_discord_check_api_errors( $guild_response ) ) {
 
@@ -620,7 +619,7 @@ class PMPro_Discord_API {
 			),
 		);
 		$guild_response                = wp_remote_post( $guilds_delete_memeber_api_url, $guild_args );
-		
+
 		ets_pmpro_discord_log_api_response( $user_id, $guilds_delete_memeber_api_url, $guild_args, $guild_response );
 		if ( ets_pmpro_discord_check_api_errors( $guild_response ) ) {
 			$response_arr = json_decode( wp_remote_retrieve_body( $guild_response ), true );

@@ -183,7 +183,7 @@ function ets_pmpro_discord_get_formatted_dm( $user_id, $level_id, $message ) {
 	} else {
 		$MEMBERSHIP_LEVEL = '';
 	}
-	update_option( 'debugg', date( 'y-m-d', $membership_level->startdate ) . '-' . date( 'y-m-d', $membership_level->enddate ) );
+
 	$SITE_URL  = get_bloginfo( 'url' );
 	$BLOG_NAME = get_bloginfo( 'name' );
 
@@ -195,7 +195,7 @@ function ets_pmpro_discord_get_formatted_dm( $user_id, $level_id, $message ) {
 	}
 	if ( $membership_level !== false && isset( $membership_level->enddate ) && $membership_level->enddate != '' ) {
 		$MEMBERSHIP_ENDDATE = date( 'F jS, Y', $membership_level->enddate );
-	} elseif ( $level->expiration_period == '' ) {
+	} elseif ( $level !== null && $level->expiration_period == '' ) {
 		$MEMBERSHIP_ENDDATE = 'Never';
 	} else {
 		$MEMBERSHIP_ENDDATE = '';

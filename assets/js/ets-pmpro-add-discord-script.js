@@ -9,7 +9,7 @@ jQuery(document).ready(function ($) {
 			type: "POST",
 			dataType: "JSON",
 			url: etsPmproParams.admin_ajax,
-			data: { 'action': 'load_discord_roles', 'ets_discord_nonce': etsPmproParams.ets_discord_nonce, },
+			data: { 'action': 'ets_pmpro_discord_load_discord_roles', 'ets_discord_nonce': etsPmproParams.ets_discord_nonce, },
 			beforeSend: function () {
 				$(".discord-roles .spinner").addClass("is-active");
 				$(".initialtab.spinner").addClass("is-active");
@@ -83,7 +83,7 @@ jQuery(document).ready(function ($) {
 			$.ajax({
 				url: etsPmproParams.admin_ajax,
 				type: "POST",
-				data: { 'action': 'ets_clear_logs', 'ets_discord_nonce': etsPmproParams.ets_discord_nonce, },
+				data: { 'action': 'ets_pmpro_discord_clear_logs', 'ets_discord_nonce': etsPmproParams.ets_discord_nonce, },
 				beforeSend: function () {
 					$(".clr-log.spinner").addClass("is-active").show();
 				},
@@ -259,7 +259,7 @@ jQuery(document).ready(function ($) {
 			type: "POST",
 			dataType: "JSON",
 			url: etsPmproParams.admin_ajax,
-			data: { 'action': 'ets_discord_member_table_run_api', 'user_id': userId, 'ets_discord_nonce': etsPmproParams.ets_discord_nonce, },
+			data: { 'action': 'ets_pmpro_discord_member_table_run_api', 'user_id': userId, 'ets_discord_nonce': etsPmproParams.ets_discord_nonce, },
 			beforeSend: function () {
 				$("." + userId + ".spinner").addClass("is-active").show();
 			},

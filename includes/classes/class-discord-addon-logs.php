@@ -5,7 +5,7 @@
 class PMPro_Discord_Logs {
 	function __construct() {
 		// Clear all existing logs.
-		add_action( 'wp_ajax_ets_clear_logs', array( $this, 'clear_logs' ) );
+		add_action( 'wp_ajax_ets_pmpro_discord_clear_logs', array( $this, 'ets_pmpro_discord_clear_logs' ) );
 	}
 
 	/**
@@ -22,7 +22,7 @@ class PMPro_Discord_Logs {
 	 * @param None
 	 * @return None
 	 */
-	public function clear_logs() {
+	public function ets_pmpro_discord_clear_logs() {
 		if ( ! is_user_logged_in() && ! current_user_can( 'administrator' ) ) {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();

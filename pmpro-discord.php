@@ -88,7 +88,7 @@ class Ets_Pmpro_Add_Discord {
 	 * Set default settings on activation
 	 */
 	public function set_default_setting_values() {
-		update_option( 'ets_pmpro_discord_payment_failed', false );
+		update_option( 'ets_pmpro_discord_payment_failed', true );
 		update_option( 'ets_pmpro_discord_log_api_response', false );
 		update_option( 'ets_pmpro_retry_failed_api', true );
 		update_option( 'ets_pmpro_discord_job_queue_concurrency', 1 );

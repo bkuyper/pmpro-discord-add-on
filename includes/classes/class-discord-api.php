@@ -5,33 +5,33 @@
 class PMPro_Discord_API {
 	function __construct() {
 		// Discord api callback
-		add_action( 'init', array( $this, 'discord_api_callback' ) );
+		add_action( 'init', array( $this, 'ets_pmpro_discord_discord_api_callback' ) );
 
 		// front ajax function to disconnect from discord
-		add_action( 'wp_ajax_disconnect_from_discord', array( $this, 'disconnect_from_discord' ) );
+		add_action( 'wp_ajax_disconnect_from_discord', array( $this, 'ets_pmpro_discord_disconnect_from_discord' ) );
 
 		// front ajax function to disconnect from discord
-		add_action( 'wp_ajax_load_discord_roles', array( $this, 'ets_load_discord_roles' ) );
+		add_action( 'wp_ajax_ets_pmpro_discord_load_discord_roles', array( $this, 'ets_pmpro_discord_load_discord_roles' ) );
 
-		add_action( 'pmpro_after_change_membership_level', array( $this, 'ets_change_discord_role_from_pmpro' ), 10, 4 );
+		add_action( 'pmpro_after_change_membership_level', array( $this, 'ets_pmpro_discord_change_discord_role_from_pmpro' ), 10, 4 );
 
-		add_action( 'ets_pmpro_discord_as_handle_pmpro_expiry', array( $this, 'ets_as_handler_pmpro_expiry' ), 10, 2 );
+		add_action( 'ets_pmpro_discord_as_handle_pmpro_expiry', array( $this, 'ets_pmpro_discord_as_handler_pmpro_expiry' ), 10, 2 );
 
-		add_action( 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $this, 'ets_as_handler_pmpro_cancel' ), 10, 3 );
+		add_action( 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $this, 'ets_pmpro_discord_as_handler_pmpro_cancel' ), 10, 3 );
 
-		add_action( 'ets_pmpro_discord_as_handle_add_member_to_guild', array( $this, 'ets_as_handler_add_member_to_guild' ), 10, 3 );
+		add_action( 'ets_pmpro_discord_as_handle_add_member_to_guild', array( $this, 'ets_pmpro_discord_as_handler_add_member_to_guild' ), 10, 3 );
 
-		add_action( 'ets_pmpro_discord_as_schedule_delete_member', array( $this, 'ets_as_handler_delete_member_from_guild' ), 10, 2 );
+		add_action( 'ets_pmpro_discord_as_schedule_delete_member', array( $this, 'ets_pmpro_discord_as_handler_delete_member_from_guild' ), 10, 2 );
 
-		add_action( 'ets_pmpro_discord_as_schedule_member_put_role', array( $this, 'ets_as_handler_put_memberrole' ), 10, 3 );
+		add_action( 'ets_pmpro_discord_as_schedule_member_put_role', array( $this, 'ets_pmpro_discord_as_handler_put_memberrole' ), 10, 3 );
 
-		add_action( 'ets_pmpro_discord_as_schedule_delete_role', array( $this, 'ets_as_handler_delete_memberrole' ), 10, 3 );
+		add_action( 'ets_pmpro_discord_as_schedule_delete_role', array( $this, 'ets_pmpro_discord_as_handler_delete_memberrole' ), 10, 3 );
 
-		add_action( 'wp_ajax_ets_discord_member_table_run_api', array( $this, 'ets_discord_member_table_run_api' ) );
+		add_action( 'wp_ajax_ets_pmpro_discord_member_table_run_api', array( $this, 'ets_pmpro_discord_member_table_run_api' ) );
 
-		add_action( 'pmpro_stripe_subscription_deleted', array( $this, 'ets_pmpro_stripe_subscription_deleted' ), 10, 1 );
+		add_action( 'pmpro_stripe_subscription_deleted', array( $this, 'ets_pmpro_discord_stripe_subscription_deleted' ), 10, 1 );
 
-		add_action( 'pmpro_subscription_payment_failed', array( $this, 'ets_pmpro_subscription_payment_failed' ), 10, 1 );
+		add_action( 'pmpro_subscription_payment_failed', array( $this, 'ets_pmpro_discord_subscription_payment_failed' ), 10, 1 );
 
 		add_action( 'action_scheduler_failed_execution', array( $this, 'ets_pmpro_discord_reschedule_failed_action' ), 10, 3 );
 
@@ -232,16 +232,17 @@ class PMPro_Discord_API {
 	 */
 	public function ets_pmpro_discord_reschedule_failed_action( $action_id, $e, $context ) {
 		// First check if the action is for PMPRO discord.
-		$action_data       = ets_pmpro_discord_as_get_action_data( $action_id );
-		$hook              = $action_data['hook'];
-		$args              = json_decode( $action_data['args'] );
-		$retry_failed_api  = sanitize_text_field( trim( get_option( 'ets_pmpro_retry_failed_api' ) ) );
-		$hook_failed_count = ets_pmpro_discord_count_of_hooks_failures( $hook );
-		$retry_api_count   = absint( sanitize_text_field( trim( get_option( 'ets_pmpro_retry_api_count' ) ) ) );
-		if ( $hook_failed_count < $retry_api_count && $retry_failed_api == true && $action_data['as_group'] == ETS_DISCORD_AS_GROUP_NAME && $action_data['status'] = 'failed' ) {
-			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), $hook, array_values( $args ), 'ets-pmpro-discord' );
+		$action_data = ets_pmpro_discord_as_get_action_data( $action_id );
+		if ( $action_data !== false ) {
+			$hook              = $action_data['hook'];
+			$args              = json_decode( $action_data['args'] );
+			$retry_failed_api  = sanitize_text_field( trim( get_option( 'ets_pmpro_retry_failed_api' ) ) );
+			$hook_failed_count = ets_pmpro_discord_count_of_hooks_failures( $hook );
+			$retry_api_count   = absint( sanitize_text_field( trim( get_option( 'ets_pmpro_retry_api_count' ) ) ) );
+			if ( $hook_failed_count < $retry_api_count && $retry_failed_api == true && $action_data['as_group'] == ETS_DISCORD_AS_GROUP_NAME && $action_data['status'] = 'failed' ) {
+				as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), $hook, array_values( $args ), 'ets-pmpro-discord' );
+			}
 		}
-
 	}
 	/**
 	 * Create authentication token for discord API
@@ -374,7 +375,7 @@ class PMPro_Discord_API {
 	 * @param STRING $access_token
 	 * @return NONE
 	 */
-	public function ets_as_handler_add_member_to_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token ) {
+	public function ets_pmpro_discord_as_handler_add_member_to_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token ) {
 		// Since we using a queue to delay the API call, there may be a condition when a member is delete from DB. so put a check.
 		if ( get_userdata( $user_id ) === false ) {
 			return;
@@ -442,7 +443,7 @@ class PMPro_Discord_API {
 	 *
 	 * @return OBJECT REST API response
 	 */
-	public function ets_load_discord_roles() {
+	public function ets_pmpro_discord_load_discord_roles() {
 		if ( ! current_user_can( 'administrator' ) ) {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
@@ -505,7 +506,7 @@ class PMPro_Discord_API {
 	 * @param NONE
 	 * @return OBJECT REST API response
 	 */
-	public function discord_api_callback() {
+	public function ets_pmpro_discord_discord_api_callback() {
 		if ( is_user_logged_in() ) {
 			$user_id = get_current_user_id();
 			if ( isset( $_GET['action'] ) && $_GET['action'] == 'discord-login' ) {
@@ -594,7 +595,7 @@ class PMPro_Discord_API {
 			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_schedule_delete_member', array( $user_id, $is_schedule ), ETS_DISCORD_AS_GROUP_NAME );
 		} else {
 			if ( isset( $user_id ) ) {
-				$this->ets_as_handler_delete_member_from_guild( $user_id, $is_schedule );
+				$this->ets_pmpro_discord_as_handler_delete_member_from_guild( $user_id, $is_schedule );
 			}
 		}
 	}
@@ -606,7 +607,7 @@ class PMPro_Discord_API {
 	 * @param BOOL $is_schedule
 	 * @return OBJECT API response
 	 */
-	public function ets_as_handler_delete_member_from_guild( $user_id, $is_schedule ) {
+	public function ets_pmpro_discord_as_handler_delete_member_from_guild( $user_id, $is_schedule ) {
 		$guild_id                      = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_guild_id' ) ) );
 		$discord_bot_token             = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_bot_token' ) ) );
 		$_ets_pmpro_discord_user_id    = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
@@ -626,7 +627,7 @@ class PMPro_Discord_API {
 			PMPro_Discord_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 			if ( $is_schedule ) {
 				// this exception should be catch by action scheduler.
-				throw new Exception( 'Failed in function ets_as_handler_delete_member_from_guild' );
+				throw new Exception( 'Failed in function ets_pmpro_discord_as_handler_delete_member_from_guild' );
 			}
 		}
 
@@ -653,7 +654,7 @@ class PMPro_Discord_API {
 		if ( $is_schedule ) {
 			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_schedule_member_put_role', array( $user_id, $role_id, $is_schedule ), ETS_DISCORD_AS_GROUP_NAME );
 		} else {
-			$this->ets_as_handler_put_memberrole( $user_id, $role_id, $is_schedule );
+			$this->ets_pmpro_discord_as_handler_put_memberrole( $user_id, $role_id, $is_schedule );
 		}
 	}
 
@@ -665,7 +666,7 @@ class PMPro_Discord_API {
 	 * @param BOOL $is_schedule
 	 * @return object API response
 	 */
-	public function ets_as_handler_put_memberrole( $user_id, $role_id, $is_schedule ) {
+	public function ets_pmpro_discord_as_handler_put_memberrole( $user_id, $role_id, $is_schedule ) {
 		$access_token                = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 		$guild_id                    = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_guild_id' ) ) );
 		$_ets_pmpro_discord_user_id  = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
@@ -690,7 +691,7 @@ class PMPro_Discord_API {
 				PMPro_Discord_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 				if ( $is_schedule ) {
 					// this exception should be catch by action scheduler.
-					throw new Exception( 'Failed in function ets_as_handler_put_memberrole' );
+					throw new Exception( 'Failed in function ets_pmpro_discord_as_handler_put_memberrole' );
 				}
 			}
 		}
@@ -708,7 +709,7 @@ class PMPro_Discord_API {
 		if ( $is_schedule ) {
 			as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_schedule_delete_role', array( $user_id, $ets_role_id, $is_schedule ), ETS_DISCORD_AS_GROUP_NAME );
 		} else {
-			$this->ets_as_handler_delete_memberrole( $user_id, $ets_role_id, $is_schedule );
+			$this->ets_pmpro_discord_as_handler_delete_memberrole( $user_id, $ets_role_id, $is_schedule );
 		}
 	}
 
@@ -720,7 +721,7 @@ class PMPro_Discord_API {
 	 * @param BOOL $is_schedule
 	 * @return OBJECT API response
 	 */
-	public function ets_as_handler_delete_memberrole( $user_id, $ets_role_id, $is_schedule = true ) {
+	public function ets_pmpro_discord_as_handler_delete_memberrole( $user_id, $ets_role_id, $is_schedule = true ) {
 
 			$guild_id                    = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_guild_id' ) ) );
 			$_ets_pmpro_discord_user_id  = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
@@ -743,7 +744,7 @@ class PMPro_Discord_API {
 				PMPro_Discord_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 				if ( $is_schedule ) {
 					// this exception should be catch by action scheduler.
-					throw new Exception( 'Failed in function ets_as_handler_delete_memberrole' );
+					throw new Exception( 'Failed in function ets_pmpro_discord_as_handler_delete_memberrole' );
 				}
 			}
 			return $response;
@@ -756,7 +757,7 @@ class PMPro_Discord_API {
 	 * @param NONE
 	 * @return OBJECT JSON response
 	 */
-	public function disconnect_from_discord() {
+	public function ets_pmpro_discord_disconnect_from_discord() {
 		if ( ! is_user_logged_in() ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
@@ -786,7 +787,7 @@ class PMPro_Discord_API {
 	 * @param NONE
 	 * @return OBJECT JSON response
 	 */
-	public function ets_discord_member_table_run_api() {
+	public function ets_pmpro_discord_member_table_run_api() {
 		if ( ! is_user_logged_in() && current_user_can( 'edit_user' ) ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
@@ -884,7 +885,7 @@ class PMPro_Discord_API {
 	 *
 	 * @param INT $user_id
 	 */
-	public function ets_pmpro_stripe_subscription_deleted( $user_id ) {
+	public function ets_pmpro_discord_stripe_subscription_deleted( $user_id ) {
 		if ( isset( $user_id ) ) {
 			$this->ets_pmpro_discord_set_member_roles( $user_id, false, false, true );
 		}
@@ -895,7 +896,7 @@ class PMPro_Discord_API {
 	 *
 	 * @param ARRAY $old_order
 	 */
-	public function ets_pmpro_subscription_payment_failed( $old_order ) {
+	public function ets_pmpro_discord_subscription_payment_failed( $old_order ) {
 		$user_id         = $old_order->user_id;
 		$ets_payment_fld = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_payment_failed' ) ) );
 
@@ -909,7 +910,7 @@ class PMPro_Discord_API {
 	* @param INT $user_id
 	* @param INT $expired_level_id
 	*/
-	public function ets_as_handler_pmpro_expiry( $user_id, $expired_level_id ) {
+	public function ets_pmpro_discord_as_handler_pmpro_expiry( $user_id, $expired_level_id ) {
 		$this->ets_pmpro_discord_set_member_roles( $user_id, $expired_level_id, false, true );
 	}
 
@@ -921,7 +922,7 @@ class PMPro_Discord_API {
 	* @param INT $cancel_level_id
 	* @return NONE
 	*/
-	public function ets_as_handler_pmpro_cancel( $user_id, $level_id, $cancel_level_id ) {
+	public function ets_pmpro_discord_as_handler_pmpro_cancel( $user_id, $level_id, $cancel_level_id ) {
 		$this->ets_pmpro_discord_set_member_roles( $user_id, false, $cancel_level_id, true );
 	}
 
@@ -933,7 +934,7 @@ class PMPro_Discord_API {
 	 * @param INT $cancel_level
 	 * @return NONE
 	 */
-	public function ets_change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
+	public function ets_pmpro_discord_change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
 		$this->ets_pmpro_discord_set_member_roles( $user_id, false, false, true );
 	}
 }

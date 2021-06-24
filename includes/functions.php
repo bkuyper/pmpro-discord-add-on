@@ -110,9 +110,9 @@ function ets_pmpro_discord_get_highest_last_attempt_timestamp() {
  */
 function ets_pmpro_discord_get_random_timestamp( $add_upon = '' ) {
 	if ( $add_upon != '' && $add_upon !== false ) {
-		return $add_upon + random_int( 2, 10 );
+		return $add_upon + random_int( 5, 15 );
 	} else {
-		return strtotime( 'now' ) + random_int( 2, 10 );
+		return strtotime( 'now' ) + random_int( 5, 15 );
 	}
 }
 

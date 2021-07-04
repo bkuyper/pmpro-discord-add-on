@@ -2,18 +2,18 @@
 Contributors: expresstechsoftware, strangerstudios
 Tags: Discord, Talk, Video Chat, Hang Out, Friends, Meberships
 Requires at least: 4.7
-Tested up to: 5.7.1
+Tested up to: 5.8
 Requires PHP: 7.0
 Stable tag: 1.0
 
-Connect your PaidMebershipPro site to your discord server, enable your members to be part of your community.
+This add-on enables connecting your PMPRO enabled website to your discord server. Now you can add/remove PMPRO members directly to your discord server roles, assign roles according to your member levels, unassign roles when they expire, change role when they change membership.
  
 == Description ==
 The official PMPRO Discord AddOn enables connecting your PaidMebershipPro members to connect to your discord online community, with the server roles assigned to members as per their membership level.
 
 Very simple setup and intutive User interface to Manage Member Role inside Discord.
 
-[youtube https://www.youtube.com/watch?v=2eHgq5BvDpU]
+[youtube https://www.youtube.com/watch?v=rGCrrq2sbVo]
 
 This plugin provides the following features: 
 1) Allow any member to connect their discord account with their PaidMebershipPro membership account. 
@@ -25,41 +25,55 @@ This plugin provides the following features:
 7) Admin can decide if membership should stay in their discord server when membership expires or cancelled.
 8) Admin can decide what default role to be assigned when membership cancelled or expire.
 9) Admin can change role by changing the membership by editng user insider WP Manage user.
+10) Send a Direct message to discord members when their membership has expired. (Only work when allow none member is set to YES and Direct Message advanced setting is set ENABLED)
+11) Send a Direct message to discord members when their membership is cancelled. (Only work when allow none member is set to YES and Direct Message advanced setting is set ENABLED)
+12) Send membership expiration warnings Direct Message when membership is about to expire (Default 7 days before)
+
 
 [View all Screenshots](https://www.expresstechsoftwares.com/pmpro-official-discord-add-on/)
 
 == Installation ==
 
 = Download, Install and Activate! =
-1. Go to Plugins > Add New to find and install Paid Memberships Pro.
+1. Go to Plugins > Add New to find and install PMPRO discord Addon.
 2. Or, download the latest version of the plugin, then go to Plugins > Add New and click the "Upload Plugin" button to upload your .zip file.
 3. Activate the plugin.
 
 = Complete the Initial Plugin Setup =
-Go to Memberships > Discord Settings in the WordPress admin to begin setup. Our [Initial Setup Tutorial Video ](https://www.youtube.com/watch?v=2eHgq5BvDpU) will show you how to configure
+Go to Memberships > Discord Settings in the WordPress admin to begin setup. Our [Initial Setup Tutorial Video ](https://www.youtube.com/watch?v=rGCrrq2sbVo) will show you how to configure
 
 = More Installation and Setup Documentation =
-* [Installation Video](https://www.youtube.com/watch?v=2eHgq5BvDpU)
+* [Installation Video](https://www.youtube.com/watch?v=rGCrrq2sbVo)
 * [Installation Docs](https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon/)
 
 
 == Frequently Asked Questions ==
-
 = I need help installing, configuring, or customizing the plugin. =
 Please visit [our support site at https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon/](https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon/) for more documentation and our support forums.
-
-= I'm getting error in logs 'Missing Access' =
-Your bot role in your discord should have top priroty, please watch video on youtube how to do it. [Installation Video](https://www.youtube.com/watch?v=2eHgq5BvDpU)
+= I'm getting an error in error Log 'Missing Access'
+Please make sure your bot role has the highest priority among all other roles in your discord server roles settings. please watch video on youtube how to do it. [Installation Video](https://youtu.be/rGCrrq2sbVo?t=164)
+= Role Settings is not appearing.
+1. Clear browser cache, to uninstall and install again.
+2. Try the disabling cache
+3. Try Disabling other plugins, there may be any conflict with another plugin.
+= Members are not being added spontaneously.
+1. Due to the nature of Discord API, we have to use schedules to precisely control API calls, that why actions are delayed. 
+= Member roles are not being assigned spontaneously.
+1. Due to the nature of Discord API, we have to use schedules to precisely control API calls, that why actions are delayed. 
+= Some members are not getting their role and there is no error in the log.
+1. Sometimes discord API behaves weirdly, It is suggested to TRY again OR use another discord account.
+= After expiry or member cancellation the roles are not being removed
+1. It is seen in discord API that it return SUCCESS but does not work sometimes. It is suggested to manually adjust roles via PMPPRO->Members table.
 
 == Screenshots ==
 1. Install and activate the plugin and view the discord settings page inside Memberships
 2. Open discord application page to create a new application.
-3. Copy the OAuth2 credentials which are Client ID and Client Secret set a a redirect URL.
+3. Copy the OAuth2 credentials which are Client ID and Client Secret and set a redirect URL.
 4. Create a Bot inside your server and Copy the Bot Token.
 5. Enable the Developer Mode on your discord account.
 6. Copy the GuildID or Server ID of your server.
 7. Enter all details inside the plugin settings.
-8. Connect your bot to your server authorise it to your server of which GuildID you did copy in above step.
+8. Connect your bot to your server via authorise it to your server ( of which GuildID you did copy in above step).
 9. After successful authorising your bot to your server you will see Bot Connected button inside your Discord Add On settings.
 10. Most important setting: your Bot role should be the top role in your server role settings, we recommend to watch youtube video on how to do this step.
 11. Now Inside Roles Mappings settings you need to map discord roles and membership level together, and set default role and none-member settings.

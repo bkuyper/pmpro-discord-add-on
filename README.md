@@ -6,12 +6,12 @@ Tested up to: 5.8
 Requires PHP: 7.0
 Stable tag: 1.0
 License: GPLv2  
-License URI: http://www.gnu.org/licenses/gpl  
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 ## Description
 This add-on enables connecting your PMPRO enabled website to your discord server. Now you can add/remove PMPRO members directly to your discord server roles, assign roles according to your member levels, unassign roles when they expire, change role when they change membership.
 
 ## Some features
-- Allow any member to connect their discord account with their PaidMebershipPro membership account. 
+- Allow any member to connect their discord account with your PaidMebershipPro membership website.
 - Members will be assigned roles in discord as per their membership level.
 - Members roles can be changed/remove from the admin of the site.
 - Members roles will be updated when membership expires.

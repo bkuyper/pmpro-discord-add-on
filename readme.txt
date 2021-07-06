@@ -5,11 +5,13 @@ Requires at least: 4.7
 Tested up to: 5.8
 Requires PHP: 7.0
 Stable tag: 1.0
+License: GPLv2
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 This add-on enables connecting your PMPRO enabled website to your discord server. Now you can add/remove PMPRO members directly to your discord server roles, assign roles according to your member levels, unassign roles when they expire, change role when they change membership.
  
 == Description ==
-The official PMPRO Discord AddOn enables connecting your PaidMebershipPro members to connect to your discord online community, with the server roles assigned to members as per their membership level.
+= The official PMPRO Discord AddOn enables connecting your PaidMebershipPro members to connect to your discord online community, with the server roles assigned to members as per their membership level. =
 
 Very simple setup and intutive User interface to Manage Member Role inside Discord.
 
@@ -67,14 +69,6 @@ Please make sure your bot role has the highest priority among all other roles in
 
 == Screenshots ==
 1. Install and activate the plugin and view the discord settings page inside Memberships
-2. Open discord application page to create a new application.
-3. Copy the OAuth2 credentials which are Client ID and Client Secret and set a redirect URL.
-4. Create a Bot inside your server and Copy the Bot Token.
-5. Enable the Developer Mode on your discord account.
-6. Copy the GuildID or Server ID of your server.
-7. Enter all details inside the plugin settings.
-8. Connect your bot to your server via authorise it to your server ( of which GuildID you did copy in above step).
-9. After successful authorising your bot to your server you will see Bot Connected button inside your Discord Add On settings.
-10. Most important setting: your Bot role should be the top role in your server role settings, we recommend to watch youtube video on how to do this step.
-11. Now Inside Roles Mappings settings you need to map discord roles and membership level together, and set default role and none-member settings.
-
+2. Map Discord roles and PMPRO levels.
+3. Advanced settings.
+4. Spot the Connect to Discord on your profile page.

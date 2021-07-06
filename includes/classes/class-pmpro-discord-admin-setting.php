@@ -511,7 +511,7 @@ class Ets_Pmpro_Admin_Setting {
       <div id="outer" class="skltbs-theme-light" data-skeletabs='{ "startIndex": 1 }'>
         <ul class="skltbs-tab-group">
           <li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="settings" ><?php echo __( 'Discord Settings', 'ets_pmpro_discord' ); ?><span class="initialtab spinner"></span></button>
+					<button class="skltbs-tab" data-identity="settings" ><?php echo __( 'Application Details', 'ets_pmpro_discord' ); ?><span class="initialtab spinner"></span></button>
           </li>
 					<?php if ( ! empty( $ets_pmpro_discord_client_id ) && ! empty( $discord_client_secret ) && ! empty( $discord_bot_token ) && ! empty( $ets_pmpro_discord_redirect_url ) && ! empty( $ets_pmpro_discord_guild_id ) ) : ?>
           <li class="skltbs-tab-item">

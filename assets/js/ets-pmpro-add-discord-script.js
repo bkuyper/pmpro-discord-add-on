@@ -1,9 +1,8 @@
 jQuery(document).ready(function ($) {
 	if (etsPmproParams.is_admin) {
-		/*Tab options*/
-		$.skeletabs.setDefaults({
-			keyboard: false,
-		});
+		if(window.location.href.indexOf("skeletabsPanel") == -1) {
+			jQuery("#skeletabsTab1").trigger("click");
+		}
 		/*Load all roles from discord server*/
 		$.ajax({
 			type: "POST",
@@ -276,4 +275,8 @@ jQuery(document).ready(function ($) {
 			}
 		});
 	});
+});
+/*Tab options*/
+jQuery.skeletabs.setDefaults({
+	keyboard: false,
 });

@@ -6,15 +6,14 @@ class Ets_Pmpro_Admin_Setting {
 	function __construct() {
 		// Add new menu option in the admin menu.
 		add_action( 'admin_menu', array( $this, 'ets_pmpro_discord_add_new_menu' ) );
+		// Add script for back end.
+		add_action( 'admin_enqueue_scripts', array( $this, 'ets_pmpro_discord_add_admin_script' ) );
 
 		// Add script for front end.
 		add_action( 'admin_enqueue_scripts', array( $this, 'ets_pmpro_discord_add_script' ) );
-
+		
 		// Add script for front end.
 		add_action( 'wp_enqueue_scripts', array( $this, 'ets_pmpro_discord_add_script' ) );
-
-			// Add script for back end.
-			add_action( 'admin_enqueue_scripts', array( $this, 'ets_pmpro_discord_add_admin_script' ) );
 
 		// Add new button in pmpro profile
 		add_action( 'pmpro_show_user_profile', array( $this, 'ets_pmpro_discord_add_connect_discord_button' ) );
@@ -24,6 +23,12 @@ class Ets_Pmpro_Admin_Setting {
 
 		// Pmpro expiry
 		add_action( 'pmpro_membership_post_membership_expiry', array( $this, 'ets_pmpro_discord_as_schdule_job_pmpro_expiry' ), 10, 2 );
+
+		add_action( 'admin_post_pmpro_save_aplication_details', array( $this, 'ets_pmpro_save_aplication_details' ), 10 );
+
+		add_action( 'admin_post_pmpro_save_role_mapping', array( $this, 'ets_pmpro_save_role_mapping' ), 10 );
+
+		add_action( 'admin_post_pmpro_save_advance_settings', array( $this, 'ets_pmpro_save_advance_settings' ), 10 );
 
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_pmpro_discord_as_schedule_job_pmpro_level_deleted' ), 10, 1 );
 
@@ -95,7 +100,7 @@ class Ets_Pmpro_Admin_Setting {
 		if ( $default_role != 'none' && is_array( $all_roles ) && array_key_exists( $default_role, $all_roles ) ) {
 			$default_role_name = $all_roles[ $default_role ];
 		}
-		if ( $this->Check_saved_settings_status() ) {
+		if ( Check_saved_settings_status() ) {
 			if ( $access_token ) {
 				?>
 				<label class="ets-connection-lbl"><?php echo __( 'Discord connection', 'ets_pmpro_discord' ); ?></label>
@@ -212,7 +217,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		wp_register_script(
 			'ets_pmpro_add_discord_script',
-			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.min.js',
+			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.js',
 			array( 'jquery' ),
 			ETS_PMPRO_VERSION
 		);
@@ -303,6 +308,82 @@ class Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
+
+		if( isset($_GET['save_settings_msg']) ){
+			?>
+				<div class="notice notice-success is-dismissible support-success-msg">
+					<p><?php echo __( $_GET['save_settings_msg'], 'ets_memberpress_discord' ); ?></p>
+				</div>
+			<?php
+		}
+		?>
+		<h1><?php echo __( 'PMPRO Discord Add On Settings', 'ets_pmpro_discord' ); ?></h1>
+      <div id="outer" class="skltbs-theme-light" data-skeletabs='{ "startIndex": 1 }'>
+        <ul class="skltbs-tab-group">
+          <li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="settings" ><?php echo __( 'Application Details', 'ets_pmpro_discord' ); ?><span class="initialtab spinner"></span></button>
+          </li>
+					<?php if ( Check_saved_settings_status() ) : ?>
+          <li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="level-mapping" ><?php echo __( 'Role Mappings', 'ets_pmpro_discord' ); ?></button>
+          </li>
+					<?php endif; ?>
+          <li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="advanced" data-toggle="tab" data-event="ets_advanced"><?php echo __( 'Advanced', 'ets_pmpro_discord' ); ?>	
+					</button>
+          </li>
+          <li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="logs" data-toggle="tab" data-event="ets_logs"><?php echo __( 'Logs', 'ets_pmpro_discord' ); ?>	
+					</button>
+          </li>
+					<li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="docs" data-toggle="tab" data-event="ets_docs"><?php echo __( 'Documentation', 'ets_pmpro_discord' ); ?>	
+					</button>
+          </li>
+					<li class="skltbs-tab-item">
+					<button class="skltbs-tab" data-identity="support" data-toggle="tab" data-event="ets_about_us"><?php echo __( 'Support', 'ets_pmpro_discord' ); ?>	
+					</button>
+          </li>
+        </ul>
+        <div class="skltbs-panel-group">
+          <div class="skltbs-panel">
+					<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/discord-settings.php'; ?>
+          </div>
+					<?php if ( Check_saved_settings_status() ) : ?>
+          <div class="skltbs-panel">
+						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/discord-role-level-map.php'; ?>
+          </div>
+					<?php endif; ?>
+          <div class="skltbs-panel">
+						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/advanced.php'; ?>
+          </div>
+          <div class="skltbs-panel">
+						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/error_log.php'; ?>
+          </div>
+					<div class="skltbs-panel">
+						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/documentation.php'; ?>
+          </div>
+					<div class="skltbs-panel">
+						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/get-support.php'; ?>
+          </div>
+        </div>
+      </div>
+		<?php
+		$this->get_Support_Data();
+	}
+	
+
+	/**
+	 * Save application details 
+	 *
+	 * @param NONE
+	 * @return NONE
+	 */
+	public function ets_pmpro_save_aplication_details() {
+		if ( ! current_user_can( 'administrator' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
 		$ets_pmpro_discord_client_id = isset( $_POST['ets_pmpro_discord_client_id'] ) ? sanitize_text_field( trim( $_POST['ets_pmpro_discord_client_id'] ) ) : '';
 
 		$discord_client_secret = isset( $_POST['ets_pmpro_discord_client_secret'] ) ? sanitize_text_field( trim( $_POST['ets_pmpro_discord_client_secret'] ) ) : '';
@@ -312,34 +393,6 @@ class Ets_Pmpro_Admin_Setting {
 		$ets_pmpro_discord_redirect_url = isset( $_POST['ets_pmpro_discord_redirect_url'] ) ? sanitize_text_field( trim( $_POST['ets_pmpro_discord_redirect_url'] ) ) : '';
 
 		$ets_pmpro_discord_guild_id = isset( $_POST['ets_pmpro_discord_guild_id'] ) ? sanitize_text_field( trim( $_POST['ets_pmpro_discord_guild_id'] ) ) : '';
-
-		$ets_discord_roles = isset( $_POST['ets_pmpor_discord_role_mapping'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpor_discord_role_mapping'] ) ) : '';
-
-		$_ets_pmpro_discord_default_role_id = isset( $_POST['defaultRole'] ) ? sanitize_textarea_field( trim( $_POST['defaultRole'] ) ) : '';
-
-		$allow_none_member = isset( $_POST['allow_none_member'] ) ? sanitize_textarea_field( trim( $_POST['allow_none_member'] ) ) : '';
-
-		$set_job_cnrc = isset( $_POST['set_job_cnrc'] ) ? sanitize_textarea_field( trim( $_POST['set_job_cnrc'] ) ) : '';
-
-		$set_job_q_batch_size = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
-
-		$retry_api_count = isset( $_POST['ets_pmpro_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_retry_api_count'] ) ) : '';
-
-		$ets_pmpro_discord_send_expiration_warning_dm = isset( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ) : false;
-
-		$ets_pmpro_discord_expiration_warning_message = isset( $_POST['ets_pmpro_discord_expiration_warning_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_expiration_warning_message'] ) ) : '';
-
-		$ets_pmpro_discord_send_membership_expired_dm = isset( $_POST['ets_pmpro_discord_send_membership_expired_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_membership_expired_dm'] ) ) : false;
-
-		$ets_pmpro_discord_expiration_expired_message  = isset( $_POST['ets_pmpro_discord_expiration_expired_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_expiration_expired_message'] ) ) : '';
-
-		$ets_pmpro_discord_send_welcome_dm  = isset( $_POST['ets_pmpro_discord_send_welcome_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_welcome_dm'] ) ) : false;
-
-		$ets_pmpro_discord_welcome_message = isset( $_POST['ets_pmpro_discord_welcome_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_welcome_message'] ) ) : '';
-
-		$ets_pmpro_discord_send_membership_cancel_dm = isset( $_POST['ets_pmpro_discord_send_membership_cancel_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_membership_cancel_dm'] ) ) : '';
-
-		$ets_pmpro_discord_cancel_message = isset( $_POST['ets_pmpro_discord_cancel_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_cancel_message'] ) ) : '';
 
 		if ( isset( $_POST['submit'] ) && ! isset( $_POST['ets_pmpor_discord_role_mapping'] ) ) {
 			if ( isset( $_POST['ets_discord_save_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_settings'], 'save_discord_settings' ) ) {
@@ -364,13 +417,91 @@ class Ets_Pmpro_Admin_Setting {
 				if ( $ets_pmpro_discord_guild_id ) {
 					update_option( 'ets_pmpro_discord_guild_id', $ets_pmpro_discord_guild_id );
 				}
-				?>
-					<div class="notice notice-success is-dismissible support-success-msg">
-						<p><?php echo __( 'Your settings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
-					</div>
-				<?php
+				$message      = 'Your settings are saved successfully.';
+				$pre_location = $_SERVER['HTTP_REFERER'] . '&&save_settings_msg=' . $message . '#skeletabsPanel1';
+				wp_safe_redirect( $pre_location );
 			}
 		}
+	}
+
+	/**
+	 * Save Role mappiing settings 
+	 *
+	 * @param NONE
+	 * @return NONE
+	 */
+	public function ets_pmpro_save_role_mapping() {
+		if ( ! current_user_can( 'administrator' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
+		$ets_discord_roles = isset( $_POST['ets_pmpor_discord_role_mapping'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpor_discord_role_mapping'] ) ) : '';
+
+		$_ets_pmpro_discord_default_role_id = isset( $_POST['defaultRole'] ) ? sanitize_textarea_field( trim( $_POST['defaultRole'] ) ) : '';
+
+		$allow_none_member = isset( $_POST['allow_none_member'] ) ? sanitize_textarea_field( trim( $_POST['allow_none_member'] ) ) : '';
+
+		if ( $ets_discord_roles ) {
+			$ets_discord_roles   = stripslashes( $ets_discord_roles );
+			$save_mapping_status = update_option( 'ets_pmpor_discord_role_mapping', $ets_discord_roles );
+			if ( isset( $_POST['ets_pmpor_discord_role_mappings_nonce'] ) && wp_verify_nonce( $_POST['ets_pmpor_discord_role_mappings_nonce'], 'discord_role_mappings_nonce' ) ) {
+				if ( ( $save_mapping_status || isset( $_POST['ets_pmpor_discord_role_mapping'] ) ) && ! isset( $_POST['flush'] ) ) {
+					if ( $_ets_pmpro_discord_default_role_id ) {
+						update_option( '_ets_pmpro_discord_default_role_id', $_ets_pmpro_discord_default_role_id );
+					}
+
+					if ( $allow_none_member ) {
+						update_option( 'ets_pmpro_allow_none_member', $allow_none_member );
+					}
+					$message      = 'Your mappings are saved successfully.';
+				}
+				if ( isset( $_POST['flush'] ) ) {
+					delete_option( 'ets_pmpor_discord_role_mapping' );
+					delete_option( '_ets_pmpro_discord_default_role_id' );
+					delete_option( 'ets_pmpro_allow_none_member' );
+					$message      = 'Your settings flushed successfully.';
+				}
+				$pre_location = $_SERVER['HTTP_REFERER'] . '&&save_settings_msg=' . $message . '#skeletabsPanel2';
+				wp_safe_redirect( $pre_location );
+			}
+		}
+	}
+	
+	/**
+	 * Save Role mappiing settings 
+	 *
+	 * @param NONE
+	 * @return NONE
+	 */
+	public function ets_pmpro_save_advance_settings() {
+		if ( ! current_user_can( 'administrator' ) ) {
+			wp_send_json_error( 'You do not have sufficient rights', 403 );
+			exit();
+		}
+
+		$set_job_cnrc = isset( $_POST['set_job_cnrc'] ) ? sanitize_textarea_field( trim( $_POST['set_job_cnrc'] ) ) : '';
+
+		$set_job_q_batch_size = isset( $_POST['set_job_q_batch_size'] ) ? sanitize_textarea_field( trim( $_POST['set_job_q_batch_size'] ) ) : '';
+
+		$retry_api_count = isset( $_POST['ets_pmpro_retry_api_count'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_retry_api_count'] ) ) : '';
+
+		$ets_pmpro_discord_send_expiration_warning_dm = isset( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_expiration_warning_dm'] ) ) : false;
+
+		$ets_pmpro_discord_expiration_warning_message = isset( $_POST['ets_pmpro_discord_expiration_warning_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_expiration_warning_message'] ) ) : '';
+
+		$ets_pmpro_discord_send_membership_expired_dm = isset( $_POST['ets_pmpro_discord_send_membership_expired_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_membership_expired_dm'] ) ) : false;
+
+		$ets_pmpro_discord_expiration_expired_message  = isset( $_POST['ets_pmpro_discord_expiration_expired_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_expiration_expired_message'] ) ) : '';
+
+		$ets_pmpro_discord_send_welcome_dm  = isset( $_POST['ets_pmpro_discord_send_welcome_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_welcome_dm'] ) ) : false;
+
+		$ets_pmpro_discord_welcome_message = isset( $_POST['ets_pmpro_discord_welcome_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_welcome_message'] ) ) : '';
+
+		$ets_pmpro_discord_send_membership_cancel_dm = isset( $_POST['ets_pmpro_discord_send_membership_cancel_dm'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_send_membership_cancel_dm'] ) ) : '';
+
+		$ets_pmpro_discord_cancel_message = isset( $_POST['ets_pmpro_discord_cancel_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_cancel_message'] ) ) : '';
+
+		
 		if ( isset( $_POST['adv_submit'] ) ) {
 			if ( isset( $_POST['ets_discord_save_adv_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_adv_settings'], 'save_discord_adv_settings' ) ) {
 				if ( isset( $_POST['upon_failed_payment'] ) ) {
@@ -462,104 +593,12 @@ class Ets_Pmpro_Admin_Setting {
 						update_option( 'ets_pmpro_retry_api_count', $retry_api_count );
 					}
 				}
-				?>
-					<div class="notice notice-success is-dismissible support-success-msg">
-						<p><?php echo __( 'Your settings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
-					</div>
-				<?php
+				$message      = 'Your settings are saved successfully.';
+				$pre_location = $_SERVER['HTTP_REFERER'] . '&&save_settings_msg=' . $message . '#skeletabsPanel3';
+				wp_safe_redirect( $pre_location );
 			}
 		}
-		if ( $ets_discord_roles ) {
-			$ets_discord_roles   = stripslashes( $ets_discord_roles );
-			$save_mapping_status = update_option( 'ets_pmpor_discord_role_mapping', $ets_discord_roles );
-			if ( isset( $_POST['ets_pmpor_discord_role_mappings_nonce'] ) && wp_verify_nonce( $_POST['ets_pmpor_discord_role_mappings_nonce'], 'discord_role_mappings_nonce' ) ) {
-				if ( ( $save_mapping_status || isset( $_POST['ets_pmpor_discord_role_mapping'] ) ) && ! isset( $_POST['flush'] ) ) {
-					if ( $_ets_pmpro_discord_default_role_id ) {
-						update_option( '_ets_pmpro_discord_default_role_id', $_ets_pmpro_discord_default_role_id );
-					}
-
-					if ( $allow_none_member ) {
-						update_option( 'ets_pmpro_allow_none_member', $allow_none_member );
-					}
-					?>
-						<div class="notice notice-success is-dismissible support-success-msg">
-							<p><?php echo __( 'Your mappings are saved successfully.', 'ets_pmpro_discord' ); ?></p>
-						</div>
-					<?php
-				}
-				if ( isset( $_POST['flush'] ) ) {
-					delete_option( 'ets_pmpor_discord_role_mapping' );
-					delete_option( '_ets_pmpro_discord_default_role_id' );
-					delete_option( 'ets_pmpro_allow_none_member' );
-					?>
-						<div class="notice notice-success is-dismissible support-success-msg">
-							<p><?php echo __( 'Your settings flushed successfully.', 'ets_pmpro_discord' ); ?></p>
-						</div>
-					<?php
-				}
-			}
-		}
-
-		$ets_pmpro_discord_client_id    = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_client_id' ) ) );
-		$discord_client_secret    = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_client_secret' ) ) );
-		$discord_bot_token        = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_bot_token' ) ) );
-		$ets_pmpro_discord_redirect_url = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_redirect_url' ) ) );
-		$ets_discord_roles        = sanitize_text_field( trim( get_option( 'ets_pmpor_discord_role_mapping' ) ) );
-		$ets_pmpro_discord_guild_id     = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_guild_id' ) ) );
-		?>
-		<h1><?php echo __( 'PMPRO Discord Add On Settings', 'ets_pmpro_discord' ); ?></h1>
-      <div id="outer" class="skltbs-theme-light" data-skeletabs='{ "startIndex": 1 }'>
-        <ul class="skltbs-tab-group">
-          <li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="settings" ><?php echo __( 'Application Details', 'ets_pmpro_discord' ); ?><span class="initialtab spinner"></span></button>
-          </li>
-					<?php if ( ! empty( $ets_pmpro_discord_client_id ) && ! empty( $discord_client_secret ) && ! empty( $discord_bot_token ) && ! empty( $ets_pmpro_discord_redirect_url ) && ! empty( $ets_pmpro_discord_guild_id ) ) : ?>
-          <li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="level-mapping" ><?php echo __( 'Role Mappings', 'ets_pmpro_discord' ); ?></button>
-          </li>
-					<?php endif; ?>
-          <li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="advanced" data-toggle="tab" data-event="ets_advanced"><?php echo __( 'Advanced', 'ets_pmpro_discord' ); ?>	
-					</button>
-          </li>
-          <li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="logs" data-toggle="tab" data-event="ets_logs"><?php echo __( 'Logs', 'ets_pmpro_discord' ); ?>	
-					</button>
-          </li>
-					<li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="docs" data-toggle="tab" data-event="ets_docs"><?php echo __( 'Documentation', 'ets_pmpro_discord' ); ?>	
-					</button>
-          </li>
-					<li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="support" data-toggle="tab" data-event="ets_about_us"><?php echo __( 'Support', 'ets_pmpro_discord' ); ?>	
-					</button>
-          </li>
-        </ul>
-        <div class="skltbs-panel-group">
-          <div class="skltbs-panel">
-					<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/discord-settings.php'; ?>
-          </div>
-					<?php if ( ! empty( $ets_pmpro_discord_client_id ) && ! empty( $discord_client_secret ) && ! empty( $discord_bot_token ) && ! empty( $ets_pmpro_discord_redirect_url ) && ! empty( $ets_pmpro_discord_guild_id ) ) : ?>
-          <div class="skltbs-panel">
-						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/discord-role-level-map.php'; ?>
-          </div>
-					<?php endif; ?>
-          <div class="skltbs-panel">
-						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/advanced.php'; ?>
-          </div>
-          <div class="skltbs-panel">
-						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/error_log.php'; ?>
-          </div>
-					<div class="skltbs-panel">
-						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/documentation.php'; ?>
-          </div>
-					<div class="skltbs-panel">
-						<?php include ETS_PMPRO_DISCORD_PATH . 'includes/pages/get-support.php'; ?>
-          </div>
-        </div>
-      </div>
-		<?php
-		$this->get_Support_Data();
+		
 	}
 
 	/**
@@ -607,29 +646,6 @@ class Ets_Pmpro_Admin_Setting {
 			}
 		}
 	}
-
-	/**
-	 * To check settings values saved or not
-	 *
-	 * @param NONE
-	 * @return BOOL $status
-	 */
-	public function Check_saved_settings_status() {
-		$ets_pmpro_discord_client_id     = get_option( 'ets_pmpro_discord_client_id' );
-		$ets_pmpro_discord_client_secret = get_option( 'ets_pmpro_discord_client_secret' );
-		$ets_pmpro_discord_bot_token     = get_option( 'ets_pmpro_discord_bot_token' );
-		$ets_pmpro_discord_redirect_url  = get_option( 'ets_pmpro_discord_redirect_url' );
-		$ets_pmpro_discord_guild_id      = get_option( 'ets_pmpro_discord_guild_id' );
-
-		if ( $ets_pmpro_discord_client_id && $ets_pmpro_discord_client_secret && $ets_pmpro_discord_bot_token && $ets_pmpro_discord_redirect_url && $ets_pmpro_discord_guild_id ) {
-			$status = true;
-		} else {
-			$status = false;
-		}
-
-		return $status;
-	}
-
 
 	/*
 	* Add extra column body into pmpro members list

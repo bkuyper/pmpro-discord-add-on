@@ -44,6 +44,28 @@ function ets_pmpro_discord_log_api_response( $user_id, $api_url = '', $api_args 
 }
 
 /**
+	 * To check settings values saved or not
+	 *
+	 * @param NONE
+	 * @return BOOL $status
+	 */
+	 function Check_saved_settings_status() {
+		$ets_pmpro_discord_client_id     = get_option( 'ets_pmpro_discord_client_id' );
+		$ets_pmpro_discord_client_secret = get_option( 'ets_pmpro_discord_client_secret' );
+		$ets_pmpro_discord_bot_token     = get_option( 'ets_pmpro_discord_bot_token' );
+		$ets_pmpro_discord_redirect_url  = get_option( 'ets_pmpro_discord_redirect_url' );
+		$ets_pmpro_discord_guild_id      = get_option( 'ets_pmpro_discord_guild_id' );
+
+		if ( $ets_pmpro_discord_client_id && $ets_pmpro_discord_client_secret && $ets_pmpro_discord_bot_token && $ets_pmpro_discord_redirect_url && $ets_pmpro_discord_guild_id ) {
+			$status = true;
+		} else {
+			$status = false;
+		}
+
+		return $status;
+	}
+
+/**
  * Check API call response and detect conditions which can cause of action failure and retry should be attemped.
  *
  * @param ARRAY|OBJECT $api_response

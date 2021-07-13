@@ -53,6 +53,12 @@ This add-on enables connecting your PMPRO enabled website to your discord server
 - Send a Direct message to discord members when their membership is cancelled. (Only work when allow none member is set to YES and Direct Message advanced setting is set ENABLED)
 - Send membership expiration warnings Direct Message when membership is about to expire (Default 7 days before)
 
+## Solution of Missing Access Error
+- Inside the log tab you will see "50001:Missing Access", which is happening because the new BOT role need to the TOP priroty among the other roles.
+- - The new created BOT will add a ROLE with the same name as it is given to the BOT itself.
+- So, Go inside the "Server Settings" from the TOP left menu.
+- Go inside the "Roles" and Drag and Drop the new BOT over to the TOP all other roles.
+- Do not for forget to save the roles settings
 
 # Fequently Asked Questions
 - I'm getting an error in error Log 'Missing Access'

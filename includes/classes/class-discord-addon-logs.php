@@ -78,7 +78,7 @@ class PMPro_Discord_Logs {
 		if ( is_array( $response_arr ) && array_key_exists( 'code', $response_arr ) ) {
 			$error .= '==>File:' . $backtrace_arr['file'] . $user_details . '::Line:' . $backtrace_arr['line'] . '::Function:' . $backtrace_arr['function'] . '::' . $response_arr['code'] . ':' . $response_arr['message'];
 			if ( $response_arr['code'] == '50001' ) {
-				$error .= '<br><b> Solution: The BOT role need to the TOP priroty among the other roles. discord.com > Server Settings > Roles > Drag the BOT role to the TOP priority</b>';
+				$error .= '<br><b> Solution: The BOT role need to the TOP priority among the other roles. discord.com > Server Settings > Roles > Drag the BOT role to the TOP priority</b>';
 			}
 			file_put_contents( ETS_PMPRO_DISCORD_PATH . $log_file_name, $error . PHP_EOL, FILE_APPEND | LOCK_EX );
 		} elseif ( is_array( $response_arr ) && array_key_exists( 'error', $response_arr ) ) {

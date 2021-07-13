@@ -1,28 +1,15 @@
-# Discord Add-on for PaidMembershipPro
-Contributors: expresstechsoftware, strangerstudios
-Tags: Discord, Talk, Video Chat, Hang Out, Friends, Meberships
-Requires at least: 4.7
-Tested up to: 5.8
-Requires PHP: 7.0
-Stable tag: 1.0
-License: GPLv2  
-License URI: https://www.gnu.org/licenses/gpl-2.0.html
-## Description
-This add-on enables connecting your PMPRO enabled website to your discord server. Now you can add/remove PMPRO members directly to your discord server roles, assign roles according to your member levels, unassign roles when they expire, change role when they change membership.
+![](https://www.expresstechsoftwares.com/wp-content/uploads/paidmembershippro_discord_addon_banner.png)
 
-## Some features
-- Allow any member to connect their discord account with your PaidMebershipPro membership website.
-- Members will be assigned roles in discord as per their membership level.
-- Members roles can be changed/remove from the admin of the site.
-- Members roles will be updated when membership expires.
-- Members roles will be updated when membership cancelled.
-- Admin can decide what default role to be given to all members upon connecting their discord to their membership account.
-- Admin can decide if membership should stay in their discord server when membership expires or cancelled.
-- Admin can decide what default role to be assigned when membership cancelled or expire.
-- Admin can change role by changing the membership by editng user insider WP Manage user.
-- Send a Direct message to discord members when their membership has expired. (Only work when allow none member is set to YES and Direct Message advanced setting is set ENABLED)
-- Send a Direct message to discord members when their membership is cancelled. (Only work when allow none member is set to YES and Direct Message advanced setting is set ENABLED)
-- Send membership expiration warnings Direct Message when membership is about to expire (Default 7 days before)
+# [Discord Add-on for PaidMembershipPro](https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon/) #
+![](https://img.shields.io/badge/build-passing-green) ![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)
+
+### Welcome to the PMPRO Discord Add On GitHub Repository
+
+This add-on enables connecting your PMPRO enabled website to your discord server. Now you can add/remove PMPRO members directly to your discord server, assign roles according to the membership levels, unassign roles when member expire or cancel, change role when member change membership.
+
+# [Step By Step guide on how to set-up plugin](https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon/)
+
+
 ## Installation
 - You can find the plugin inside the PMPRO settings Add-ons and click install from there
 - OR Upload the `pmpro-discord` folder to the `/wp-content/plugins/` directory.
@@ -40,7 +27,7 @@ This add-on enables connecting your PMPRO enabled website to your discord server
 - Now again see inside discord left hand side menu, you will see "Bot" page link.
 - This is very important, you need to name your bot and click generate, this will generate "Bot Token".
 - Copy the "Bot Token" and paste into "Bot Token" setting of Discord aa-on Plugin.
-- Now the last and most important setting, "Server Guild ID".
+- Now the last and most important setting, "Server ID".
 - - Open https://discord.com/ and go inside your server.
 - - Enable Developer mode by going into Advanced setting of your account.
 - - Then you should right click on your server name and you will see "Copy ID"
@@ -50,6 +37,28 @@ This add-on enables connecting your PMPRO enabled website to your discord server
 - Here you need to select the Server of which Guild ID you just did copy in above steps.
 - Once successfully connect you should see Bot Authorized screen.
 - Open again the discord server settings and see Roles menu.
+- Please make sure your bot role has the highest priority among all other roles in your discord server roles settings otherwise you will see 5000:Missing Access Error in your plugin error logs.
+
+## Some features
+- Allow any member to connect their discord account with your PaidMebershipPro membership website.
+- Members will be assigned roles in discord as per their membership level.
+- Members roles can be changed/remove from the admin of the site.
+- Members roles will be updated when membership expires.
+- Members roles will be updated when membership cancelled.
+- Admin can decide what default role to be given to all members upon connecting their discord to their membership account.
+- Admin can decide if membership should stay in their discord server when membership expires or cancelled.
+- Admin can decide what default role to be assigned when membership cancelled or expire.
+- Admin can change role by changing the membership by editng user insider WP Manage user.
+- Send a Direct message to discord members when their membership has expired. (Only work when allow none member is set to YES and Direct Message advanced setting is set ENABLED)
+- Send a Direct message to discord members when their membership is cancelled. (Only work when allow none member is set to YES and Direct Message advanced setting is set ENABLED)
+- Send membership expiration warnings Direct Message when membership is about to expire (Default 7 days before)
+
+## Solution of Missing Access Error
+- Inside the log tab you will see "50001:Missing Access", which is happening because the new BOT role need to the TOP priroty among the other roles.
+- - The new created BOT will add a ROLE with the same name as it is given to the BOT itself.
+- So, Go inside the "Server Settings" from the TOP left menu.
+- Go inside the "Roles" and Drag and Drop the new BOT over to the TOP all other roles.
+- Do not for forget to save the roles settings
 
 # Fequently Asked Questions
 - I'm getting an error in error Log 'Missing Access'

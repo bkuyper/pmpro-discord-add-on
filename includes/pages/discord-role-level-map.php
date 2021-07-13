@@ -50,7 +50,7 @@ $allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_n
 		</td>
 	  </tr>
 	  <tr>
-		<th scope="row"><label><?php echo __( 'Allow none members', 'ets_pmpro_discord' ); ?></label></th>
+		<th scope="row"><label><?php echo __( 'Allow non-members', 'ets_pmpro_discord' ); ?></label></th>
 		<td>
 		  <fieldset>
 		  <label><input type="radio" name="allow_none_member" value="yes"  

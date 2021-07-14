@@ -36,7 +36,7 @@ $allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_n
   </div>
 </div>
 <form method="post" action="<?php echo get_site_url().'/wp-admin/admin-post.php' ?>">
- <input type="hidden" name="action" value="pmpro_save_role_mapping">
+ <input type="hidden" name="action" value="pmpro_discord_save_role_mapping">
   <table class="form-table" role="presentation">
 	<tbody>
 	  <tr>

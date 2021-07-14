@@ -24,11 +24,11 @@ class Ets_Pmpro_Admin_Setting {
 		// Pmpro expiry
 		add_action( 'pmpro_membership_post_membership_expiry', array( $this, 'ets_pmpro_discord_as_schdule_job_pmpro_expiry' ), 10, 2 );
 
-		add_action( 'admin_post_pmpro_save_aplication_details', array( $this, 'ets_pmpro_save_aplication_details' ), 10 );
+		add_action( 'admin_post_pmpro_discord_save_application_details', array( $this, 'ets_pmpro_discord_save_application_details' ), 10 );
 
-		add_action( 'admin_post_pmpro_save_role_mapping', array( $this, 'ets_pmpro_save_role_mapping' ), 10 );
+		add_action( 'admin_post_pmpro_discord_save_role_mapping', array( $this, 'ets_pmpro_discord_save_role_mapping' ), 10 );
 
-		add_action( 'admin_post_pmpro_save_advance_settings', array( $this, 'ets_pmpro_save_advance_settings' ), 10 );
+		add_action( 'admin_post_pmpro_discord_save_advance_settings', array( $this, 'ets_pmpro_discord_save_advance_settings' ), 10 );
 
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_pmpro_discord_as_schedule_job_pmpro_level_deleted' ), 10, 1 );
 
@@ -379,7 +379,7 @@ class Ets_Pmpro_Admin_Setting {
 	 * @param NONE
 	 * @return NONE
 	 */
-	public function ets_pmpro_save_aplication_details() {
+	public function ets_pmpro_discord_save_application_details() {
 		if ( ! current_user_can( 'administrator' ) ) {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
@@ -418,7 +418,7 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_pmpro_discord_guild_id', $ets_pmpro_discord_guild_id );
 				}
 				$message      = 'Your settings are saved successfully.';
-				$pre_location = $_SERVER['HTTP_REFERER'] . '&&save_settings_msg=' . $message . '#skeletabsPanel1';
+				$pre_location = $_SERVER['HTTP_REFERER'] . '&save_settings_msg=' . $message . '#skeletabsPanel1';
 				wp_safe_redirect( $pre_location );
 			}
 		}
@@ -430,7 +430,7 @@ class Ets_Pmpro_Admin_Setting {
 	 * @param NONE
 	 * @return NONE
 	 */
-	public function ets_pmpro_save_role_mapping() {
+	public function ets_pmpro_discord_save_role_mapping() {
 		if ( ! current_user_can( 'administrator' ) ) {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
@@ -461,19 +461,19 @@ class Ets_Pmpro_Admin_Setting {
 					delete_option( 'ets_pmpro_allow_none_member' );
 					$message      = 'Your settings flushed successfully.';
 				}
-				$pre_location = $_SERVER['HTTP_REFERER'] . '&&save_settings_msg=' . $message . '#skeletabsPanel2';
+				$pre_location = $_SERVER['HTTP_REFERER'] . '&save_settings_msg=' . $message . '#skeletabsPanel2';
 				wp_safe_redirect( $pre_location );
 			}
 		}
 	}
-	
+
 	/**
 	 * Save Role mappiing settings 
 	 *
 	 * @param NONE
 	 * @return NONE
 	 */
-	public function ets_pmpro_save_advance_settings() {
+	public function ets_pmpro_discord_save_advance_settings() {
 		if ( ! current_user_can( 'administrator' ) ) {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
@@ -501,7 +501,6 @@ class Ets_Pmpro_Admin_Setting {
 
 		$ets_pmpro_discord_cancel_message = isset( $_POST['ets_pmpro_discord_cancel_message'] ) ? sanitize_textarea_field( trim( $_POST['ets_pmpro_discord_cancel_message'] ) ) : '';
 
-		
 		if ( isset( $_POST['adv_submit'] ) ) {
 			if ( isset( $_POST['ets_discord_save_adv_settings'] ) && wp_verify_nonce( $_POST['ets_discord_save_adv_settings'], 'save_discord_adv_settings' ) ) {
 				if ( isset( $_POST['upon_failed_payment'] ) ) {
@@ -594,7 +593,7 @@ class Ets_Pmpro_Admin_Setting {
 					}
 				}
 				$message      = 'Your settings are saved successfully.';
-				$pre_location = $_SERVER['HTTP_REFERER'] . '&&save_settings_msg=' . $message . '#skeletabsPanel3';
+				$pre_location = $_SERVER['HTTP_REFERER'] . '&save_settings_msg=' . $message . '#skeletabsPanel3';
 				wp_safe_redirect( $pre_location );
 			}
 		}

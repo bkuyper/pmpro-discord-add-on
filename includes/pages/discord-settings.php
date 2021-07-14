@@ -7,7 +7,7 @@ $ets_discord_roles        = sanitize_text_field( trim( get_option( 'ets_pmpor_di
 $ets_pmpro_discord_guild_id     = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_guild_id' ) ) );
 ?>
 <form method="post" action="<?php echo get_site_url().'/wp-admin/admin-post.php' ?>">
- <input type="hidden" name="action" value="pmpro_save_aplication_details">
+ <input type="hidden" name="action" value="pmpro_discord_save_application_details">
 	<?php wp_nonce_field( 'save_discord_settings', 'ets_discord_save_settings' ); ?>
 	<div class="ets-input-group">
 	  <label><?php echo __( 'Client ID', 'ets_pmpro_discord' ); ?> :</label>

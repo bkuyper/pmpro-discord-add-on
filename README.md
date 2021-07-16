@@ -62,7 +62,7 @@ This add-on enables connecting your PMPRO enabled website to your discord server
 
 # Fequently Asked Questions
 - I'm getting an error in error Log 'Missing Access'
-- - Please make sure your bot role has the highest priority among all other roles in your discord server roles settings. Watch this video https://youtu.be/rGCrrq2sbVo?t=164
+- - Please make sure your bot role has the highest priority among all other roles in your discord server roles settings. Watch this video https://youtu.be/v7lxB_Bvlv4?t=363
 - Role Settings is not appearing.
 - - Clear browser cache, to uninstall and install again.
 - - Try the disabling cache

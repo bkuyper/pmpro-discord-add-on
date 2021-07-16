@@ -1,4 +1,4 @@
-=== Plugin Name ===
+=== PMPRO-Discord ===
 Contributors: expresstechsoftware, strangerstudios
 Tags: Discord, Talk, Video Chat, Hang Out, Friends, Meberships
 Requires at least: 4.7
@@ -45,7 +45,7 @@ This plugin provides the following features:
 Go to Memberships > Discord Settings in the WordPress admin to begin setup. Our [Initial Setup Tutorial Video ](https://www.youtube.com/watch?v=rGCrrq2sbVo) will show you how to configure
 
 = More Installation and Setup Documentation =
-* [Installation Video](https://www.youtube.com/watch?v=rGCrrq2sbVo)
+* [Installation Video](https://youtu.be/v7lxB_Bvlv4)
 * [Installation Docs](https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon/)
 
 

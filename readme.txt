@@ -1,6 +1,6 @@
 === PMPRO-Discord ===
 Contributors: expresstechsoftware, strangerstudios
-Tags: Discord, Talk, Video Chat, Hang Out, Friends, Meberships
+Tags: Discord, Talk, Video Chat, Hang Out, Friends, Meberships, discord role management
 Requires at least: 4.7
 Tested up to: 5.8
 Requires PHP: 7.0
@@ -15,7 +15,7 @@ This add-on enables connecting your PMPRO enabled website to your discord server
 
 Very simple setup and intutive User interface to Manage Member Role inside Discord.
 
-[youtube https://www.youtube.com/watch?v=rGCrrq2sbVo]
+[youtube https://youtu.be/v7lxB_Bvlv4]
 
 This plugin provides the following features: 
 1) Allow any member to connect their discord account with their PaidMebershipPro membership account. 
@@ -42,7 +42,7 @@ This plugin provides the following features:
 3. Activate the plugin.
 
 = Complete the Initial Plugin Setup =
-Go to Memberships > Discord Settings in the WordPress admin to begin setup. Our [Initial Setup Tutorial Video ](https://www.youtube.com/watch?v=rGCrrq2sbVo) will show you how to configure
+Go to Memberships > Discord Settings in the WordPress admin to begin setup. Our [Initial Setup Tutorial Video ](https://youtu.be/v7lxB_Bvlv4) will show you how to configure
 
 = More Installation and Setup Documentation =
 * [Installation Video](https://youtu.be/v7lxB_Bvlv4)
@@ -53,7 +53,7 @@ Go to Memberships > Discord Settings in the WordPress admin to begin setup. Our 
 = I need help installing, configuring, or customizing the plugin. =
 Please visit [our support site at https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon/](https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon/) for more documentation and our support forums.
 = I'm getting an error in error Log 'Missing Access'
-Please make sure your bot role has the highest priority among all other roles in your discord server roles settings. please watch video on youtube how to do it. [Installation Video](https://youtu.be/rGCrrq2sbVo?t=164)
+Please make sure your bot role has the highest priority among all other roles in your discord server roles settings. please watch video on youtube how to do it. [Installation Video](https://youtu.be/v7lxB_Bvlv4?t=363)
 = Role Settings is not appearing.
 1. Clear browser cache, to uninstall and install again.
 2. Try the disabling cache

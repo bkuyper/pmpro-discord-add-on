@@ -1,6 +1,6 @@
 ![](https://www.expresstechsoftwares.com/wp-content/uploads/paidmembershippro_discord_addon_banner.png)
 
-# [Discord Add-on for PaidMembershipPro](https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon/) #
+# [Connect Paid Memberships Pro to Discord](https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon/) #
 ![](https://img.shields.io/badge/build-passing-green) ![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)
 
 ### Welcome to the PMPRO Discord Add On GitHub Repository

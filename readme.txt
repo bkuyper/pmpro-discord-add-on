@@ -1,4 +1,4 @@
-=== PMPRO-Discord ===
+=== Connect Paid Memberships Pro to Discord ===
 Contributors: expresstechsoftware, strangerstudios
 Tags: Discord, Talk, Video Chat, Hang Out, Friends, Meberships, discord role management
 Requires at least: 4.7

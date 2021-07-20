@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Paid Memberships Pro Discord Add-on
+ * Plugin Name: Connect Paid Memberships Pro to Discord
  * Plugin URI:  https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon
  * Description: Connect your PaidMebershipPro site to your discord server, enable your members to be part of your community.
  * Version: 1.0.0

@@ -77,7 +77,7 @@ $allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_n
 	<textarea id="maaping_json_val" name="ets_pmpor_discord_role_mapping">
 	<?php
 	if ( isset( $ets_discord_roles ) ) {
-		echo stripslashes( $ets_discord_roles );}
+		echo stripslashes( esc_html( $ets_discord_roles ));}
 	?>
 	</textarea>
   </div>

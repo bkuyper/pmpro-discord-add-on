@@ -558,7 +558,7 @@ class PMPro_Discord_API {
 							}
 							$user_body = $this->get_discord_current_user( $access_token );
 
-							if ( array_key_exists( 'discriminator', $user_body ) ) {
+							if ( is_array( $user_body ) && array_key_exists( 'discriminator', $user_body ) ) {
 								$discord_user_number           = $user_body['discriminator'];
 								$discord_user_name             = $user_body['username'];
 								$discord_user_name_with_number = $discord_user_name . '#' . $discord_user_number;

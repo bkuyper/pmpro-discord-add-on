@@ -27,7 +27,7 @@ $allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_n
 	foreach ( $pmpro_levels as $key => $value ) {
 		if ( $value->allow_signups != 0 ) :
 			?>
-		  <div class="makeMeDroppable" data-level_id="<?php echo $value->id; ?>" ><span><?php echo $value->name; ?></span></div>
+		  <div class="makeMeDroppable" data-level_id="<?php echo esc_attr($value->id); ?>" ><span><?php echo esc_html($value->name); ?></span></div>
 			<?php
 		endif;
 	}

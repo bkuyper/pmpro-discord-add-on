@@ -20,12 +20,12 @@ if ( $currentUser ) {
 			  <div class="contact-fields pr-100">
 				<div class="ets-form-group">
 				  <label><?php echo __( 'Full Name', 'ets_pmpro_discord' ); ?></label>
-				  <input type="text" name="ets_user_name" value="<?php echo $currUserName; ?>" class="form-control contact-input" placeholder="Write Your Full Name">
+				  <input type="text" name="ets_user_name" value="<?php echo esc_attr($currUserName); ?>" class="form-control contact-input" placeholder="Write Your Full Name">
 				  <?php wp_nonce_field( 'get_support', 'ets_discord_get_support' ); ?>
 				</div>
 				<div class="ets-form-group">
 				  <label><?php echo __( 'Contact Email', 'ets_pmpro_discord' ); ?></label>
-				  <input type="text" name="ets_user_email" class="form-control contact-input" value="<?php echo get_option( 'admin_email' ); ?>" placeholder="Write Your Email">
+				  <input type="text" name="ets_user_email" class="form-control contact-input" value="<?php echo esc_attr(get_option( 'admin_email' )); ?>" placeholder="Write Your Email">
 				</div>
 				<div class="ets-form-group">
 				  <label><?php echo __( 'Subject', 'ets_pmpro_discord' ); ?></label>
@@ -49,8 +49,8 @@ if ( $currentUser ) {
 					<p><?php echo __( 'Email', 'ets_pmpro_discord' ); ?></p>
 				  </div>
 				  <div class="contact-body mt-3">
-					<p><a href="mailto:contact@expresstechsoftwares.com"><?php echo __( 'contact@expresstechsoftwares.com', 'ets_pmpro_discord' ); ?></a></p>
-					<p><a href="mailto:business@expresstechsoftwares.com"><?php echo __( 'business@expresstechsoftwares.com', 'ets_pmpro_discord' ); ?></a></p>
+					<p><a href="mailto:contact@expresstechsoftwares.com">contact@expresstechsoftwares.com</a></p>
+					<p><a href="mailto:business@expresstechsoftwares.com">business@expresstechsoftwares.com</a></p>
 				  </div>
 				</div>
 				<div class="contact-details d-inline-block w-100 mb-4">
@@ -59,7 +59,7 @@ if ( $currentUser ) {
 					<p><?php echo __( 'Skype', 'ets_pmpro_discord' ); ?></p>
 				  </div>
 				  <div class="contact-body mt-3">
-					<p><?php echo __( 'ravi.soni971', 'ets_pmpro_discord' ); ?></p>
+					<p>ravi.soni971</p>
 				  </div>
 				</div>
 				<div class="contact-details d-inline-block w-100">
@@ -68,7 +68,7 @@ if ( $currentUser ) {
 					<p><?php echo __( 'Whatsapp / Phone', 'ets_pmpro_discord' ); ?></p>
 				  </div>
 				  <div class="contact-body mt-3">
-					<p><?php echo __( '+91-9806724185', 'ets_pmpro_discord' ); ?></p>
+					<p>+91-9806724185</p>
 				  </div>
 				</div>
 			  </div>

@@ -777,8 +777,7 @@ class PMPro_Discord_API {
 			'status'  => 1,
 			'message' => 'Successfully disconnected',
 		);
-		echo json_encode( $event_res );
-		die();
+		wp_send_json( $event_res );
 	}
 
 	/**

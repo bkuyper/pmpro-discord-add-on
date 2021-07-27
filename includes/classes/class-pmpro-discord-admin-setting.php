@@ -230,12 +230,9 @@ class Ets_Pmpro_Admin_Setting {
 		);
 		wp_enqueue_script( 'ets_fab_icon_script' );
 
-		wp_register_script(
-			'jQuery_ui_script',
-			'https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js',
-			array( 'jquery' )
-		);
-		wp_enqueue_script( 'jQuery_ui_script' );
+		wp_enqueue_script( 'jquery-ui-draggable' );
+
+		wp_enqueue_script( 'jquery-ui-droppable' );
 
 		$script_params = array(
 			'admin_ajax'        => admin_url( 'admin-ajax.php' ),
@@ -243,8 +240,8 @@ class Ets_Pmpro_Admin_Setting {
 			'is_admin'          => is_admin(),
 			'ets_discord_nonce' => wp_create_nonce( 'ets-discord-ajax-nonce' ),
 		);
-
 		wp_localize_script( 'ets_pmpro_add_discord_script', 'etsPmproParams', $script_params );
+
 	}
 
 	/**

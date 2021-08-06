@@ -653,10 +653,10 @@ class Ets_Pmpro_Admin_Setting {
 		if ( 'discord' === $colname ) {
 			if ( $access_token ) {
 				$discord_username = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_username', true ) ) );
-				echo esc_html( '<p class="' . $user_id . ' ets-save-success">Success</p><a class="button button-primary ets-run-api" data-uid="' . esc_attr( $user_id ) . '" href="#">' );
+				echo '<p class="' . esc_attr( $user_id )  . ' ets-save-success">Success</p><a class="button button-primary ets-run-api" data-uid="' . esc_attr( $user_id ) . '" href="#">';
 				echo __( 'Run API', 'ets_pmpro_discord' );
-				echo '</a><span class="' . $user_id . ' spinner"></span>';
-				echo $discord_username;
+				echo '</a><span class="' . esc_attr( $user_id ) . ' spinner"></span>';
+				echo esc_html( $discord_username );
 			} else {
 				echo __( 'Not Connected', 'ets_pmpro_discord' );
 			}

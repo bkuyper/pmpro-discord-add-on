@@ -6,7 +6,7 @@
  * Version: 1.0.0
  * Author: ExpressTech Software Solutions Pvt. Ltd., Strangers Studios
  * Author URI: https://www.expresstechsoftwares.com
- * Text Domain: ets_pmpro_discord
+ * Text Domain: pmpro-discord-add-on
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

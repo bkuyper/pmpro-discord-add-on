@@ -802,7 +802,7 @@ class PMPro_Discord_API {
 
 		$event_res = array(
 			'status'  => 1,
-			'message' => __( 'success', 'ets_pmpro_discord' ),
+			'message' => __( 'success', 'pmpro-discord-add-on' ),
 		);
 		return wp_send_json( $event_res );
 	}

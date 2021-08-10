@@ -103,18 +103,18 @@ class Ets_Pmpro_Admin_Setting {
 		if ( Check_saved_settings_status() ) {
 			if ( $access_token ) {
 				?>
-				<label class="ets-connection-lbl"><?php echo __( 'Discord connection', 'ets_pmpro_discord' ); ?></label>
-				<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo esc_attr( $user_id ); ?>"><?php echo __( 'Disconnect From Discord ', 'ets_pmpro_discord' ); ?><i class='fab fa-discord'></i></a>
+				<label class="ets-connection-lbl"><?php echo __( 'Discord connection', 'pmpro-discord-add-on' ); ?></label>
+				<a href="#" class="ets-btn btn-disconnect" id="disconnect-discord" data-user-id="<?php echo esc_attr( $user_id ); ?>"><?php echo __( 'Disconnect From Discord ', 'pmpro-discord-add-on' ); ?><i class='fab fa-discord'></i></a>
 				<span class="ets-spinner"></span>
 				<?php
 			} elseif ( pmpro_hasMembershipLevel() || $allow_none_member == 'yes' ) {
 				?>
-				<label class="ets-connection-lbl"><?php echo __( 'Discord connection', 'ets_pmpro_discord' ); ?></label>
-				<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( 'Connect To Discord', 'ets_pmpro_discord' ); ?> <i class='fab fa-discord'></i></a>
+				<label class="ets-connection-lbl"><?php echo __( 'Discord connection', 'pmpro-discord-add-on' ); ?></label>
+				<a href="?action=discord-login" class="btn-connect ets-btn" ><?php echo __( 'Connect To Discord', 'pmpro-discord-add-on' ); ?> <i class='fab fa-discord'></i></a>
 				<?php if ( $mapped_role_name ) { ?>
 					<p class="ets_assigned_role">
 					<?php
-					echo __( 'Following Roles will be assigned to you in Discord: ', 'ets_pmpro_discord' );
+					echo __( 'Following Roles will be assigned to you in Discord: ', 'pmpro-discord-add-on' );
 					echo esc_html( $mapped_role_name );
 					if ( $default_role_name ) {
 						echo ', ' . esc_html( $default_role_name ); }
@@ -313,31 +313,31 @@ class Ets_Pmpro_Admin_Setting {
 			<?php
 		}
 		?>
-		<h1><?php echo __( 'PMPRO Discord Add On Settings', 'ets_pmpro_discord' ); ?></h1>
+		<h1><?php echo __( 'PMPRO Discord Add On Settings', 'pmpro-discord-add-on' ); ?></h1>
 	  <div id="outer" class="skltbs-theme-light" data-skeletabs='{ "startIndex": 1 }'>
 		<ul class="skltbs-tab-group">
 		  <li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="settings" ><?php echo __( 'Application Details', 'ets_pmpro_discord' ); ?><span class="initialtab spinner"></span></button>
+					<button class="skltbs-tab" data-identity="settings" ><?php echo __( 'Application Details', 'pmpro-discord-add-on' ); ?><span class="initialtab spinner"></span></button>
 		  </li>
 					<?php if ( Check_saved_settings_status() ) : ?>
 		  <li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="level-mapping" ><?php echo __( 'Role Mappings', 'ets_pmpro_discord' ); ?></button>
+					<button class="skltbs-tab" data-identity="level-mapping" ><?php echo __( 'Role Mappings', 'pmpro-discord-add-on' ); ?></button>
 		  </li>
 					<?php endif; ?>
 		  <li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="advanced" data-toggle="tab" data-event="ets_advanced"><?php echo __( 'Advanced', 'ets_pmpro_discord' ); ?>	
+					<button class="skltbs-tab" data-identity="advanced" data-toggle="tab" data-event="ets_advanced"><?php echo __( 'Advanced', 'pmpro-discord-add-on' ); ?>	
 					</button>
 		  </li>
 		  <li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="logs" data-toggle="tab" data-event="ets_logs"><?php echo __( 'Logs', 'ets_pmpro_discord' ); ?>	
+					<button class="skltbs-tab" data-identity="logs" data-toggle="tab" data-event="ets_logs"><?php echo __( 'Logs', 'pmpro-discord-add-on' ); ?>	
 					</button>
 		  </li>
 					<li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="docs" data-toggle="tab" data-event="ets_docs"><?php echo __( 'Documentation', 'ets_pmpro_discord' ); ?>	
+					<button class="skltbs-tab" data-identity="docs" data-toggle="tab" data-event="ets_docs"><?php echo __( 'Documentation', 'pmpro-discord-add-on' ); ?>	
 					</button>
 		  </li>
 					<li class="skltbs-tab-item">
-					<button class="skltbs-tab" data-identity="support" data-toggle="tab" data-event="ets_about_us"><?php echo __( 'Support', 'ets_pmpro_discord' ); ?>	
+					<button class="skltbs-tab" data-identity="support" data-toggle="tab" data-event="ets_about_us"><?php echo __( 'Support', 'pmpro-discord-add-on' ); ?>	
 					</button>
 		  </li>
 		</ul>
@@ -634,7 +634,7 @@ class Ets_Pmpro_Admin_Setting {
 				if ( $mail ) {
 					?>
 						<div class="notice notice-success is-dismissible support-success-msg">
-							<p><?php echo __( 'Your request have been successfully submitted!', 'ets_pmpro_discord' ); ?></p>
+							<p><?php echo __( 'Your request have been successfully submitted!', 'pmpro-discord-add-on' ); ?></p>
 						</div>
 					<?php
 				}
@@ -654,11 +654,11 @@ class Ets_Pmpro_Admin_Setting {
 			if ( $access_token ) {
 				$discord_username = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_username', true ) ) );
 				echo '<p class="' . esc_attr( $user_id )  . ' ets-save-success">Success</p><a class="button button-primary ets-run-api" data-uid="' . esc_attr( $user_id ) . '" href="#">';
-				echo __( 'Run API', 'ets_pmpro_discord' );
+				echo __( 'Run API', 'pmpro-discord-add-on' );
 				echo '</a><span class="' . esc_attr( $user_id ) . ' spinner"></span>';
 				echo esc_html( $discord_username );
 			} else {
-				echo __( 'Not Connected', 'ets_pmpro_discord' );
+				echo __( 'Not Connected', 'pmpro-discord-add-on' );
 			}
 		}
 
@@ -672,8 +672,8 @@ class Ets_Pmpro_Admin_Setting {
 	* @return ARRAY $columns
 	*/
 	public function ets_pmpro_discord_manage_memberslist_columns( $columns ) {
-		$columns['discord']     = __( 'Discord', 'ets_pmpro_discord' );
-		$columns['joined_date'] = __( 'Joined Date', 'ets_pmpro_discord' );
+		$columns['discord']     = __( 'Discord', 'pmpro-discord-add-on' );
+		$columns['joined_date'] = __( 'Joined Date', 'pmpro-discord-add-on' );
 		return $columns;
 	}
 }

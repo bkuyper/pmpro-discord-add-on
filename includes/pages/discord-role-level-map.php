@@ -66,7 +66,7 @@ $allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_n
 				echo 'checked="checked"'; }
 			?>
 			 > <span><?php echo __( 'No', 'pmpro-discord-add-on' ); ?></span></label>
-		  <p class="description"><?php echo __( 'This setting will apply on Cancel and Expiry of Membership' ); ?></p>
+		  <p class="description"><?php echo __( 'This setting will apply on Cancel and Expiry of Membership', 'pmpro-discord-add-on' ); ?></p>
 		  </fieldset>
 		</td>
 	  </tr>

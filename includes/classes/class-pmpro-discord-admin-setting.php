@@ -16,7 +16,9 @@ class Ets_Pmpro_Admin_Setting {
 		add_action( 'wp_enqueue_scripts', array( $this, 'ets_pmpro_discord_add_script' ) );
 
 		// Add new button in pmpro profile
-		add_action( 'pmpro_show_user_profile', array( $this, 'ets_pmpro_discord_add_connect_discord_button' ) );
+		add_shortcode( 'discord_connect_button', array( $this, 'ets_pmpro_discord_add_connect_discord_button' ) );
+
+		add_action( 'pmpro_show_user_profile', array( $this, 'ets_pmpro_show_discord_button' ) );
 
 		// change hook call on cancel and change
 		add_action( 'pmpro_after_change_membership_level', array( $this, 'ets_pmpro_discord_as_schdule_job_pmpro_cancel' ), 10, 3 );
@@ -68,7 +70,7 @@ class Ets_Pmpro_Admin_Setting {
 		}
 	}
 	/**
-	 * Show status of PMPro connection with user
+	 * Add button to make connection in between user and discord
 	 *
 	 * @param NONE
 	 * @return NONE
@@ -127,7 +129,15 @@ class Ets_Pmpro_Admin_Setting {
 
 	}
 
-
+	/**
+	 * Show status of PMPro connection with user
+	 *
+	 * @param NONE
+	 * @return NONE
+	 */
+	public function ets_pmpro_show_discord_button() {
+		echo do_shortcode( '[discord_connect_button]' );
+	}
 
 	/**
 	 * Method to queue all members into cancel job when pmpro level is deleted.
@@ -653,7 +663,7 @@ class Ets_Pmpro_Admin_Setting {
 		if ( 'discord' === $colname ) {
 			if ( $access_token ) {
 				$discord_username = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_username', true ) ) );
-				echo '<p class="' . esc_attr( $user_id )  . ' ets-save-success">Success</p><a class="button button-primary ets-run-api" data-uid="' . esc_attr( $user_id ) . '" href="#">';
+				echo '<p class="' . esc_attr( $user_id ) . ' ets-save-success">Success</p><a class="button button-primary ets-run-api" data-uid="' . esc_attr( $user_id ) . '" href="#">';
 				echo __( 'Run API', 'pmpro-discord-add-on' );
 				echo '</a><span class="' . esc_attr( $user_id ) . ' spinner"></span>';
 				echo esc_html( $discord_username );

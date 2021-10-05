@@ -68,6 +68,7 @@ class Ets_Pmpro_Add_Discord {
 	public function ets_pmpro_discord_set_up_plugin() {
 		$this->set_redirect_url_on_pmpro_activation();
 		$this->set_default_setting_values();
+		update_option( 'ets_pmpro_discord_uuid_file_name', wp_generate_uuid4() );
 		wp_schedule_event( time(), 'hourly', 'ets_pmrpo_discord_schedule_expiration_warnings' );
 	}
 

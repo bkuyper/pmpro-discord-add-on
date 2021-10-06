@@ -30,6 +30,7 @@ This plugin provides the following features:
 10) Send a Direct message to discord members when their membership has expired. (Only work when allow none member is set to YES and Direct Message advanced setting is set ENABLED)
 11) Send a Direct message to discord members when their membership is cancelled. (Only work when allow none member is set to YES and Direct Message advanced setting is set ENABLED)
 12) Send membership expiration warnings Direct Message when membership is about to expire (Default 7 days before)
+13) Short code [discord_connect_button] can be used on any page to display connect/disconnect button.
 
 
 [View all Screenshots](https://www.expresstechsoftwares.com/pmpro-official-discord-add-on/)

@@ -4,16 +4,19 @@ Tags: Discord, Talk, Video Chat, Hang Out, Friends, Meberships, discord role man
 Requires at least: 4.7
 Tested up to: 5.8
 Requires PHP: 7.0
-Stable tag: 1.0.0
+Stable tag: 1.0.2
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 This add-on enables connecting your PMPRO enabled website to your discord server. Now you can add/remove PMPRO members directly to your discord server roles, assign roles according to your member levels, unassign roles when they expire, change role when they change membership.
  
 == Description ==
-= The official PMPRO Discord AddOn enables connecting your PaidMebershipPro members to connect to your discord online community, with the server roles assigned to members as per their membership level. =
+= This PMPRO Discord AddOn enables connecting your PaidMebershipPro members to connect to your discord online community, with the server roles assigned to members as per their membership level. =
 
 Very simple setup and intutive User interface to Manage Member Role inside Discord.
+- Please always contact support if you are facing issues in setup or see any bug.
+- The plugin took us 9 months to develop, if you like our work so please support us in keep developing awesome free plugins.
+- - Our Paypal email is business@expresstechsoftwares.com
 
 [youtube https://youtu.be/v7lxB_Bvlv4]
 

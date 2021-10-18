@@ -276,7 +276,9 @@ jQuery(document).ready(function ($) {
 		});
 	});
 });
-/*Tab options*/
-jQuery.skeletabs.setDefaults({
-	keyboard: false,
-});
+if (etsPmproParams.is_admin) {
+	/*Tab options*/
+	jQuery.skeletabs.setDefaults({
+		keyboard: false,
+	});
+}

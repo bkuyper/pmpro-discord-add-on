@@ -42,7 +42,6 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_filter( 'action_scheduler_queue_runner_concurrent_batches', array( $this, 'ets_pmpro_discord_concurrent_batches' ) );
 	}
-
 	/**
 	 * set action scheuduler concurrent batches number
 	 *
@@ -80,6 +79,9 @@ class Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
+		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
+		wp_enqueue_script( 'ets_fab_icon_script' );
+		wp_enqueue_script( 'ets_pmpro_add_discord_script' );
 		$user_id = sanitize_text_field( trim( get_current_user_id() ) );
 
 		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
@@ -217,13 +219,6 @@ class Ets_Pmpro_Admin_Setting {
 			false,
 			ETS_PMPRO_VERSION
 		);
-		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
-
-		wp_register_style(
-			'ets_pmpro_font_awesome',
-			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css'
-		);
-		wp_enqueue_style( 'ets_pmpro_font_awesome' );
 
 		wp_register_script(
 			'ets_pmpro_add_discord_script',
@@ -231,18 +226,12 @@ class Ets_Pmpro_Admin_Setting {
 			array( 'jquery' ),
 			ETS_PMPRO_VERSION
 		);
-		wp_enqueue_script( 'ets_pmpro_add_discord_script' );
 
 		wp_register_script(
 			'ets_fab_icon_script',
 			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js',
 			array( 'jquery' )
 		);
-		wp_enqueue_script( 'ets_fab_icon_script' );
-
-		wp_enqueue_script( 'jquery-ui-draggable' );
-
-		wp_enqueue_script( 'jquery-ui-droppable' );
 
 		$script_params = array(
 			'admin_ajax'        => admin_url( 'admin-ajax.php' ),
@@ -276,7 +265,6 @@ class Ets_Pmpro_Admin_Setting {
 			array( 'jquery' ),
 			ETS_PMPRO_VERSION
 		);
-		wp_enqueue_script( 'ets_pmpro_add_skeletabs_script' );
 	}
 
 	/**
@@ -314,7 +302,12 @@ class Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
-
+		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
+		wp_enqueue_script( 'ets_fab_icon_script' );
+		wp_enqueue_script( 'ets_pmpro_add_discord_script' );
+		wp_enqueue_script( 'ets_pmpro_add_skeletabs_script' );
+		wp_enqueue_script( 'jquery-ui-draggable' );
+		wp_enqueue_script( 'jquery-ui-droppable' );
 		if ( isset( $_GET['save_settings_msg'] ) ) {
 			?>
 				<div class="notice notice-success is-dismissible support-success-msg">
@@ -657,6 +650,8 @@ class Ets_Pmpro_Admin_Setting {
 	* @return NONE
 	*/
 	public function ets_pmpro_discord_pmpro_extra_cols_body( $colname, $user_id ) {
+		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
+		wp_enqueue_script( 'ets_pmpro_add_discord_script' );
 		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 		if ( 'discord' === $colname ) {
 			if ( $access_token ) {

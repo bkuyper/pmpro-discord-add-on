@@ -304,8 +304,8 @@ class Ets_Pmpro_Admin_Setting {
 		}
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
 		wp_enqueue_script( 'ets_fab_icon_script' );
-		wp_enqueue_script( 'ets_pmpro_add_discord_script' );
 		wp_enqueue_script( 'ets_pmpro_add_skeletabs_script' );
+		wp_enqueue_script( 'ets_pmpro_add_discord_script' );
 		wp_enqueue_script( 'jquery-ui-draggable' );
 		wp_enqueue_script( 'jquery-ui-droppable' );
 		if ( isset( $_GET['save_settings_msg'] ) ) {

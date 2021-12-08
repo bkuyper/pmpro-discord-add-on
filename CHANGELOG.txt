@@ -1,3 +1,6 @@
+= 1.0.6 =
+* Fixed CSS/JS inclusion only where needed.
+
 = 1.0.5 =
 * Fixed JS error related to the TABS plugin.
 

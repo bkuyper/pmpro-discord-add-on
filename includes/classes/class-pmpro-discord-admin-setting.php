@@ -222,7 +222,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		wp_register_script(
 			'ets_pmpro_add_discord_script',
-			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.min.js',
+			ETS_PMPRO_DISCORD_URL . 'assets/js/ets-pmpro-add-discord-script.js',
 			array( 'jquery' ),
 			ETS_PMPRO_VERSION
 		);

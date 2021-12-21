@@ -104,30 +104,27 @@ class Ets_Pmpro_Admin_Setting {
 		if ( $default_role != 'none' && is_array( $all_roles ) && array_key_exists( $default_role, $all_roles ) ) {
 			$default_role_name = $all_roles[ $default_role ];
 		}
+		$pmpro_connecttodiscord_btn = '';
 		if ( Check_saved_settings_status() ) {
 			if ( $access_token ) {
-				?>
-				<label class="ets-connection-lbl"><?php echo __( 'Discord connection', 'pmpro-discord-add-on' ); ?></label>
-				<a href="#" class="ets-btn pmpro-btn-disconnect" id="pmpro-disconnect-discord" data-user-id="<?php echo esc_attr( $user_id ); ?>"><?php echo __( 'Disconnect From Discord ', 'pmpro-discord-add-on' ); ?><i class='fab fa-discord'></i></a>
-				<span class="ets-spinner"></span>
-				<?php
+				
+				$pmpro_connecttodiscord_btn .= '<label class="ets-connection-lbl">'. esc_html__( 'Discord connection', 'pmpro-discord-add-on' ) .'</label>';
+				$pmpro_connecttodiscord_btn .= '<a href="#" class="ets-btn pmpro-btn-disconnect" id="pmpro-disconnect-discord" data-user-id="'.esc_attr( $user_id ).'">'. esc_html__( 'Disconnect From Discord ', 'pmpro-discord-add-on' ) .'<i class="fab fa-discord"></i></a>';
+				$pmpro_connecttodiscord_btn .= '<span class="ets-spinner"></span>';
 			} elseif ( pmpro_hasMembershipLevel() || $allow_none_member == 'yes' ) {
-				?>
-				<label class="ets-connection-lbl"><?php echo __( 'Discord connection', 'pmpro-discord-add-on' ); ?></label>
-				<a href="?action=discord-login" class="pmpro-btn-connect ets-btn" ><?php echo __( 'Connect To Discord', 'pmpro-discord-add-on' ); ?> <i class='fab fa-discord'></i></a>
-				<?php if ( $mapped_role_name ) { ?>
-					<p class="ets_assigned_role">
-					<?php
-					echo __( 'Following Roles will be assigned to you in Discord: ', 'pmpro-discord-add-on' );
-					echo esc_html( $mapped_role_name );
+				$pmpro_connecttodiscord_btn .= '<label class="ets-connection-lbl">'. esc_html__( 'Discord connection', 'pmpro-discord-add-on' ) .'</label>';
+				$pmpro_connecttodiscord_btn .= '<a href="?action=discord-login" class="pmpro-btn-connect ets-btn" >'. esc_html__( 'Connect To Discord', 'pmpro-discord-add-on' ) .'<i class="fab fa-discord"></i></a>';
+				if ( $mapped_role_name ) {
+					$pmpro_connecttodiscord_btn .= '<p class="ets_assigned_role">'. esc_html__( 'Following Roles will be assigned to you in Discord: ', 'pmpro-discord-add-on' );
+					$pmpro_connecttodiscord_btn .= esc_html( $mapped_role_name );
 					if ( $default_role_name ) {
-						echo ', ' . esc_html( $default_role_name ); }
-					?>
-					 </p>
-				<?php } ?>
-				<?php
+						$pmpro_connecttodiscord_btn .= ', ' . esc_html( $default_role_name ); 
+					}
+					$pmpro_connecttodiscord_btn .= '</p>';
+				}
 			}
 		}
+		return $pmpro_connecttodiscord_btn;
 
 	}
 

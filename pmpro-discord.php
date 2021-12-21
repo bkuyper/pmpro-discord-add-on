@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // create plugin url constant.
-define( 'ETS_PMPRO_VERSION', '1.0.6' );
+define( 'ETS_PMPRO_VERSION', '1.0.7' );
 
 // create plugin url constant.
 define( 'ETS_PMPRO_DISCORD_URL', plugin_dir_url( __FILE__ ) );

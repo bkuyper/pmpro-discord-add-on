@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-// create plugin url constant.
+// create plugin version constant.
 define( 'ETS_PMPRO_VERSION', '1.0.7' );
 
 // create plugin url constant.

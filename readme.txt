@@ -15,6 +15,7 @@ This add-on enables connecting your PMPRO enabled website to your discord server
 
 Very simple setup and intutive User interface to Manage Member Role inside Discord.
 - Please always contact support if you are facing issues in setup or see any bug.
+- If you did like the plugin, kindly support us in doing free excellent work our PayPal email is: business@expresstechsoftwares.com
 
 [youtube https://youtu.be/v7lxB_Bvlv4]
 

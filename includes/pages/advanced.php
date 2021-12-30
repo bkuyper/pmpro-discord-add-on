@@ -5,6 +5,7 @@ $retry_failed_api                             = sanitize_text_field( trim( get_o
 $set_job_cnrc                                 = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_job_queue_concurrency' ) ) );
 $set_job_q_batch_size                         = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_job_queue_batch_size' ) ) );
 $retry_api_count                              = sanitize_text_field( trim( get_option( 'ets_pmpro_retry_api_count' ) ) );
+$member_kick_out                              = sanitize_text_field( trim( get_option( 'ets_pmpro_member_kick_out' ) ) );
 $ets_pmpro_discord_send_expiration_warning_dm = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_send_expiration_warning_dm' ) ) );
 $ets_pmpro_discord_expiration_warning_message = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_expiration_warning_message' ) ) );
 $ets_pmpro_discord_expired_message            = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_expired_message' ) ) );
@@ -110,7 +111,7 @@ $ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_o
 		 value="1">
 		</fieldset></td>
 	  </tr>
-	  </tr>
+	  <tr>
 		<th scope="row"><?php echo __( 'Retry Failed API calls', 'pmpro-discord-add-on' ); ?></th>
 		<td> <fieldset>
 		<input name="retry_failed_api" type="checkbox" id="retry_failed_api" 
@@ -121,7 +122,18 @@ $ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_o
 		 value="1">
 		</fieldset></td>
 	  </tr>
-	<tr>
+	  <tr>
+		<th scope="row"><?php echo __( 'Kick members out when they Disconnect their Account?', 'pmpro-discord-add-on' ); ?></th>
+		<td> <fieldset>
+		<input name="member_kick_out" type="checkbox" id="member_kick_out" 
+		<?php
+		if ( $member_kick_out == true ) {
+			echo 'checked="checked"'; }
+		?>
+		 value="1">
+		</fieldset></td>
+	  </tr>
+	  <tr>
 		<th scope="row"><?php echo __( 'How many times a failed API call should get re-try', 'pmpro-discord-add-on' ); ?></th>
 		<td> <fieldset>
 		<input name="ets_pmpro_retry_api_count" type="number" min="1" id="ets_pmpro_retry_api_count" value="<?php if ( isset( $retry_api_count ) ) { echo intval($retry_api_count); } else { echo 1; } ?>">

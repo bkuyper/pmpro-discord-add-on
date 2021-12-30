@@ -515,6 +515,12 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_pmpro_retry_failed_api', false );
 				}
 
+				if ( isset( $_POST['member_kick_out'] ) ) {
+					update_option( 'ets_pmpro_member_kick_out', true );
+				} else {
+					update_option( 'ets_pmpro_member_kick_out', false );
+				}
+
 				if ( isset( $_POST['ets_pmpro_discord_send_welcome_dm'] ) ) {
 					update_option( 'ets_pmpro_discord_send_welcome_dm', true );
 				} else {

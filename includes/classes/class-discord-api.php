@@ -265,9 +265,10 @@ class PMPro_Discord_API {
 		}
 		$response              = '';
 		$refresh_token         = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_refresh_token', true ) ) );
+		$pre_token         = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 		$token_expiry_time     = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_expires_in', true ) ) );
 		$discord_token_api_url = ETS_DISCORD_API_URL . 'oauth2/token';
-		if ( $refresh_token ) {
+		if ( $refresh_token && $pre_token ) {
 			$date              = new DateTime();
 			$current_timestamp = $date->getTimestamp();
 			if ( $current_timestamp > $token_expiry_time ) {
@@ -303,8 +304,7 @@ class PMPro_Discord_API {
 					'client_secret' => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_client_secret' ) ) ),
 					'grant_type'    => 'authorization_code',
 					'code'          => $code,
-					'redirect_uri'  => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_redirect_url' ) ) ),
-					'scope'         => ETS_DISCORD_OAUTH_SCOPES,
+					'redirect_uri'  => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_redirect_url' ) ) )
 				),
 			);
 			$response = wp_remote_post( $discord_token_api_url, $args );
@@ -543,6 +543,7 @@ class PMPro_Discord_API {
 					$discord_exist_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
 					if ( is_array( $res_body ) ) {
 						if ( array_key_exists( 'access_token', $res_body ) ) {
+							
 							$access_token = sanitize_text_field( trim( $res_body['access_token'] ) );
 							update_user_meta( $user_id, '_ets_pmpro_discord_access_token', $access_token );
 							if ( array_key_exists( 'refresh_token', $res_body ) ) {

@@ -34,6 +34,10 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_pmpro_discord_as_schedule_job_pmpro_level_deleted' ), 10, 1 );
 
+		add_action( 'pmpro_checkout_before_form', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
+		
+		add_action( 'pmpro_checkout_after_form', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
+
 		add_filter( 'pmpro_manage_memberslist_custom_column', array( $this, 'ets_pmpro_discord_pmpro_extra_cols_body' ), 10, 2 );
 
 		add_filter( 'pmpro_manage_memberslist_columns', array( $this, 'ets_pmpro_discord_manage_memberslist_columns' ) );
@@ -156,6 +160,19 @@ class Ets_Pmpro_Admin_Setting {
 				as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $level_id ), ETS_DISCORD_AS_GROUP_NAME );
 			}
 		}
+	}
+
+	/**
+	 * Method to queue all members into cancel job when pmpro level is deleted.
+	 *
+	 * @param NONE
+	 * @return NONE
+	 */
+	public function ets_pmpro_discord_checkout_after_email() {
+		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
+		wp_enqueue_script( 'ets_fab_icon_script' );
+
+		echo '<a href="?action=discord-login" class="pmpro-btn-connect ets-btn" >'. esc_html__( 'Login with Discord', 'pmpro-discord-add-on' ) .'<i class="fab fa-discord"></i></a>';
 	}
 
 	/**
@@ -522,9 +539,9 @@ class Ets_Pmpro_Admin_Setting {
 				}
 
 				if ( isset( $_POST['member_discord_login'] ) ) {
-					update_option( 'ets_pmpro_member_discord_login', true );
+					update_option( 'ets_pmpro_discord_login_with_discord', true );
 				} else {
-					update_option( 'ets_pmpro_member_discord_login', false );
+					update_option( 'ets_pmpro_discord_login_with_discord', false );
 				}
 				
 

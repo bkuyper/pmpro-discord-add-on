@@ -580,6 +580,19 @@ class PMPro_Discord_API {
 					}
 				}
 			}
+		}else{
+			if ( isset( $_GET['action'] ) && $_GET['action'] == 'discord-login' ) {
+				$params                    = array(
+					'client_id'     => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_client_id' ) ) ),
+					'redirect_uri'  => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_redirect_url' ) ) ),
+					'response_type' => 'code',
+					'scope'         => 'identify email connections guilds guilds.join messages.read',
+				);
+				$discord_authorise_api_url = ETS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
+
+				wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
+				exit;
+			}
 		}
 	}
 

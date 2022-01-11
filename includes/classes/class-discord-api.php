@@ -252,10 +252,31 @@ class PMPro_Discord_API {
 	 * @return OBJECT API response
 	 */
 	public function create_discord_auth_token( $code, $user_id ) {
+		$discord_token_api_url = ETS_DISCORD_API_URL . 'oauth2/token';
 		if ( ! is_user_logged_in() ) {
-			wp_send_json_error( 'Unauthorized user', 401 );
-			exit();
+			if( !empty($code) && $user_id == "new_created"){
+				//create token for logged in user by discord 
+				$args     = array(
+					'method'  => 'POST',
+					'headers' => array(
+						'Content-Type' => 'application/x-www-form-urlencoded',
+					),
+					'body'    => array(
+						'client_id'     => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_client_id' ) ) ),
+						'client_secret' => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_client_secret' ) ) ),
+						'grant_type'    => 'authorization_code',
+						'code'          => $code,
+						'redirect_uri'  => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_redirect_url' ) ) )
+					),
+				);
+				$response = wp_remote_post( $discord_token_api_url, $args );
+				return $response;
+			}else{
+				wp_send_json_error( 'Unauthorized user', 401 );
+				exit();
+			}
 		}
+
 		// stop users who having the direct URL of discord Oauth.
 		// We must check IF NONE members is set to NO and user having no active membership.
 		$allow_none_member = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_none_member' ) ) );
@@ -267,7 +288,6 @@ class PMPro_Discord_API {
 		$refresh_token         = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_refresh_token', true ) ) );
 		$pre_token         = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 		$token_expiry_time     = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_expires_in', true ) ) );
-		$discord_token_api_url = ETS_DISCORD_API_URL . 'oauth2/token';
 		if ( $refresh_token && $pre_token ) {
 			$date              = new DateTime();
 			$current_timestamp = $date->getTimestamp();
@@ -325,6 +345,18 @@ class PMPro_Discord_API {
 	 */
 	public function get_discord_current_user( $access_token ) {
 		if ( ! is_user_logged_in() ) {
+			if($access_token){
+				$discord_cuser_api_url = ETS_DISCORD_API_URL . 'users/@me';
+				$param                 = array(
+					'headers' => array(
+						'Content-Type'  => 'application/x-www-form-urlencoded',
+						'Authorization' => 'Bearer ' . $access_token,
+					),
+				);
+				$user_response         = wp_remote_get( $discord_cuser_api_url, $param );
+				$user_body = json_decode( wp_remote_retrieve_body( $user_response ), true );
+				return $user_body;
+			}
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
@@ -592,6 +624,31 @@ class PMPro_Discord_API {
 
 				wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
 				exit;
+			}
+			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) ) {
+				$code     = sanitize_text_field( trim( $_GET['code'] ) );
+				$response = $this->create_discord_auth_token( $code, "new_created" );
+				if ( ! empty( $response ) && ! is_wp_error( $response ) ) {
+					$res_body              = json_decode( wp_remote_retrieve_body( $response ), true );
+				}
+				if ( is_array( $res_body ) ) {
+					if ( array_key_exists( 'access_token', $res_body ) ) {
+						
+						$access_token = sanitize_text_field( trim( $res_body['access_token'] ) );
+						$user_body = $this->get_discord_current_user( $access_token );
+						$discord_user_name  = $user_body['username'];
+						$discord_user_email  = $user_body['email'];
+						$password = wp_generate_password(12, true, flase );
+						$user_id = wp_create_user( $discord_user_name, $password, $discord_user_email );
+
+						$credentials = array(
+							'user_login' => $discord_user_name,
+							'user_password' => $password
+						);
+						wp_new_user_notification($user_id, $password);
+						wp_signon($credentials, '');
+					}
+				}
 			}
 		}
 	}

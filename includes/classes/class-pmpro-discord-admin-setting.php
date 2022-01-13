@@ -34,9 +34,9 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_action( 'pmpro_delete_membership_level', array( $this, 'ets_pmpro_discord_as_schedule_job_pmpro_level_deleted' ), 10, 1 );
 
-		add_action( 'pmpro_checkout_before_form', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
+		add_action( 'pmpro_checkout_after_pricing_fields', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
 		
-		add_action( 'pmpro_checkout_after_form', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
+		add_action( 'pmpro_checkout_after_user_fields', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
 
 		add_filter( 'pmpro_manage_memberslist_custom_column', array( $this, 'ets_pmpro_discord_pmpro_extra_cols_body' ), 10, 2 );
 

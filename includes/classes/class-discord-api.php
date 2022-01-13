@@ -633,19 +633,26 @@ class PMPro_Discord_API {
 				}
 				if ( is_array( $res_body ) ) {
 					if ( array_key_exists( 'access_token', $res_body ) ) {
-						
 						$access_token = sanitize_text_field( trim( $res_body['access_token'] ) );
 						$user_body = $this->get_discord_current_user( $access_token );
 						$discord_user_name  = $user_body['username'];
 						$discord_user_email  = $user_body['email'];
-						$password = wp_generate_password(12, true, flase );
-						$user_id = wp_create_user( $discord_user_name, $password, $discord_user_email );
+						$password = wp_generate_password(12, true, false );
+						$current_user = get_user_by( 'email', $discord_user_email );
+						if( email_exists($discord_user_email) ){
+							$current_user = get_user_by( 'email', $discord_user_email );
+							wp_set_auth_cookie( $current_user->ID,false, '','' );
+						}else{
+							$user_id = wp_create_user( $discord_user_name, $password, $discord_user_email );
+						}
+						
 
 						$credentials = array(
 							'user_login' => $discord_user_name,
 							'user_password' => $password
 						);
-						wp_new_user_notification($user_id, $password);
+
+						wp_new_user_notification($user_id, '', $password);
 						wp_signon($credentials, '');
 					}
 				}

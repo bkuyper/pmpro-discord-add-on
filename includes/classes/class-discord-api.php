@@ -38,7 +38,6 @@ class PMPro_Discord_API {
 		add_action( 'ets_pmpro_discord_as_send_dm', array( $this, 'ets_pmpro_discord_handler_send_dm' ), 10, 3 );
 
 		add_action( 'ets_pmrpo_discord_schedule_expiration_warnings', array( $this, 'ets_pmpro_discord_send_expiration_warning_DM' ) );
-
 	}
 
 	/**
@@ -621,7 +620,10 @@ class PMPro_Discord_API {
 					'scope'         => 'identify email connections guilds guilds.join messages.read',
 				);
 				$discord_authorise_api_url = ETS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
-
+				global $wp;
+				$wpinturl = add_query_arg( $wp->query_vars, '' );
+				setcookie("level", $wpinturl, time() + 2 * 24 * 60 * 60, "/");
+				
 				wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
 				exit;
 			}
@@ -641,25 +643,46 @@ class PMPro_Discord_API {
 						$current_user = get_user_by( 'email', $discord_user_email );
 						if( email_exists($discord_user_email) ){
 							$current_user = get_user_by( 'email', $discord_user_email );
-							wp_set_auth_cookie( $current_user->ID,false, '','' );
+							$user_id = $current_user->ID;
 						}else{
 							$user_id = wp_create_user( $discord_user_name, $password, $discord_user_email );
 						}
-						
-
+						update_user_meta( $user_id, '_ets_pmpro_discord_access_token', $access_token );
+						if ( array_key_exists( 'refresh_token', $res_body ) ) {
+							$refresh_token = sanitize_text_field( trim( $res_body['refresh_token'] ) );
+							update_user_meta( $user_id, '_ets_pmpro_discord_refresh_token', $refresh_token );
+						}
+						if ( array_key_exists( 'expires_in', $res_body ) ) {
+							$expires_in = $res_body['expires_in'];
+							$date       = new DateTime();
+							$date->add( DateInterval::createFromDateString( '' . $expires_in . ' seconds' ) );
+							$token_expiry_time = $date->getTimestamp();
+							update_user_meta( $user_id, '_ets_pmpro_discord_expires_in', $token_expiry_time );
+						}
 						$credentials = array(
 							'user_login' => $discord_user_name,
 							'user_password' => $password
 						);
-
-						wp_new_user_notification($user_id, '', $password);
-						wp_signon($credentials, '');
+						if( !is_user_logged_in() ){
+							$redirect_to=site_url() . '/membership-account/membership-checkout/?level='.$_COOKIE['level'];
+							wp_set_auth_cookie( $current_user->ID,false, '','' );
+							wp_new_user_notification($user_id, '', $password);
+							wp_signon($credentials, '');
+							wp_safe_redirect($redirect_to);
+							exit();
+						}
+						
 					}
 				}
 			}
 		}
 	}
 
+	public function login_redirect_after_checkout(){
+		var_dump($_COOKIE['checkout_initiated_url']);
+		die('okko');
+		return $_COOKIE['checkout_initiated_url'];
+	}
 	/**
 	 * Schedule delete existing user from guild
 	 *

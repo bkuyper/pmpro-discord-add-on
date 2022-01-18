@@ -163,7 +163,7 @@ class Ets_Pmpro_Admin_Setting {
 	}
 
 	/**
-	 * Method to queue all members into cancel job when pmpro level is deleted.
+	 * Method for allow user to login with discord account.
 	 *
 	 * @param NONE
 	 * @return NONE
@@ -171,8 +171,9 @@ class Ets_Pmpro_Admin_Setting {
 	public function ets_pmpro_discord_checkout_after_email() {
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
 		wp_enqueue_script( 'ets_fab_icon_script' );
-
-		echo '<a href="?action=discord-login" class="pmpro-btn-connect ets-btn" >'. esc_html__( 'Login with Discord', 'pmpro-discord-add-on' ) .'<i class="fab fa-discord"></i></a>';
+		if ( ! is_user_logged_in() ) {
+			echo '<a href="?action=discord-login&level='.$_GET['level'].'" class="pmpro-btn-connect ets-btn" >'. esc_html__( 'Login with Discord', 'pmpro-discord-add-on' ) .'<i class="fab fa-discord"></i></a>';
+		}
 	}
 
 	/**

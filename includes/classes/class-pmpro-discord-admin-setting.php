@@ -172,7 +172,35 @@ class Ets_Pmpro_Admin_Setting {
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
 		wp_enqueue_script( 'ets_fab_icon_script' );
 		if ( ! is_user_logged_in() ) {
+			$default_role                   = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
+			$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
+			$all_roles                      = unserialize( get_option( 'ets_pmpro_discord_all_roles' ) );
+			$curr_level_id                  = $_GET['level'];
+			$mapped_role_name               = '';
+			$default_role_name = '';
+			if ( $default_role != 'none' && is_array( $all_roles ) && array_key_exists( $default_role, $all_roles ) ) {
+				$default_role_name = $all_roles[ $default_role ];
+			}
+			if ( $curr_level_id && is_array( $all_roles ) ) {
+				if ( is_array( $ets_pmpor_discord_role_mapping ) && array_key_exists( 'pmpro_level_id_' . $curr_level_id, $ets_pmpor_discord_role_mapping ) ) {
+					$mapped_role_id = $ets_pmpor_discord_role_mapping[ 'pmpro_level_id_' . $curr_level_id ];
+					if ( array_key_exists( $mapped_role_id, $all_roles ) ) {
+						$mapped_role_name = $all_roles[ $mapped_role_id ];
+					}
+				}
+			}
 			echo '<a href="?action=discord-login&level='.$_GET['level'].'" class="pmpro-btn-connect ets-btn" >'. esc_html__( 'Login with Discord', 'pmpro-discord-add-on' ) .'<i class="fab fa-discord"></i></a>';
+			$pmpro_connecttodiscord_btn = '';
+			if ( $mapped_role_name ) {
+				$pmpro_connecttodiscord_btn .= '<p class="ets_assigned_role">'. esc_html__( 'Following Roles will be assigned to you in Discord: ', 'pmpro-discord-add-on' );
+				$pmpro_connecttodiscord_btn .= esc_html( $mapped_role_name );
+				if ( $default_role_name ) {
+					$pmpro_connecttodiscord_btn .= ', ' . esc_html( $default_role_name ); 
+				}
+				$pmpro_connecttodiscord_btn .= '</p>';
+				
+				echo $pmpro_connecttodiscord_btn;
+			}
 		}
 	}
 

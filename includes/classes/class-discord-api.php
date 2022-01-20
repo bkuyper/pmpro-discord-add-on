@@ -387,7 +387,7 @@ class PMPro_Discord_API {
 	 * @return NONE
 	 */
 	public function add_discord_member_in_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token ) {
-		if ( ! is_user_logged_in() ) {
+		if ( ! is_user_logged_in() && !isset($_COOKIE['ets_discord_login_level_id']) ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
@@ -622,7 +622,7 @@ class PMPro_Discord_API {
 				$discord_authorise_api_url = ETS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
 				global $wp;
 				$wpinturl = add_query_arg( $wp->query_vars, '' );
-				setcookie("level", $wpinturl, time() + 2 * 24 * 60 * 60, "/");
+				setcookie("ets_discord_login_level_id", $wpinturl, time() + 2 * 24 * 60 * 60, "/");
 				
 				wp_redirect( $discord_authorise_api_url, 302, get_site_url() );
 				exit;
@@ -664,11 +664,16 @@ class PMPro_Discord_API {
 							'user_password' => $password
 						);
 						if( !is_user_logged_in() ){
-							$redirect_to=site_url() . '/membership-account/membership-checkout/?level='.$_COOKIE['level'];
+							$redirect_to=site_url() . '/membership-account/membership-checkout/?level='.$_COOKIE['ets_discord_login_level_id'];
 							wp_set_auth_cookie( $current_user->ID,false, '','' );
-							wp_new_user_notification($user_id, '', $password);
+							if( !email_exists($discord_user_email) ){
+							//wp_new_user_notification($user_id, '', $password);
+							}
 							wp_signon($credentials, '');
 							wp_safe_redirect($redirect_to);
+							$_ets_pmpro_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
+							update_user_meta( $user_id, '_ets_pmpro_discord_user_id', $_ets_pmpro_discord_user_id );
+							$this->add_discord_member_in_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token );
 							exit();
 						}
 						
@@ -678,11 +683,6 @@ class PMPro_Discord_API {
 		}
 	}
 
-	public function login_redirect_after_checkout(){
-		var_dump($_COOKIE['checkout_initiated_url']);
-		die('okko');
-		return $_COOKIE['checkout_initiated_url'];
-	}
 	/**
 	 * Schedule delete existing user from guild
 	 *

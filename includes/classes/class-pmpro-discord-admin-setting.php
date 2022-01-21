@@ -84,7 +84,6 @@ class Ets_Pmpro_Admin_Setting {
 			exit();
 		}
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
-		wp_enqueue_script( 'ets_fab_icon_script' );
 		wp_enqueue_script( 'ets_pmpro_add_discord_script' );
 		$user_id = sanitize_text_field( trim( get_current_user_id() ) );
 
@@ -170,7 +169,6 @@ class Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_pmpro_discord_checkout_after_email() {
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
-		wp_enqueue_script( 'ets_fab_icon_script' );
 		if ( ! is_user_logged_in() ) {
 			$default_role                   = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
 			$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
@@ -270,12 +268,6 @@ class Ets_Pmpro_Admin_Setting {
 			ETS_PMPRO_VERSION
 		);
 
-		wp_register_script(
-			'ets_fab_icon_script',
-			'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/js/all.min.js',
-			array( 'jquery' )
-		);
-
 		$script_params = array(
 			'admin_ajax'        => admin_url( 'admin-ajax.php' ),
 			'permissions_const' => ETS_DISCORD_BOT_PERMISSIONS,
@@ -346,7 +338,6 @@ class Ets_Pmpro_Admin_Setting {
 			exit();
 		}
 		wp_enqueue_style( 'ets_pmpro_add_discord_style' );
-		wp_enqueue_script( 'ets_fab_icon_script' );
 		wp_enqueue_script( 'ets_pmpro_add_skeletabs_script' );
 		wp_enqueue_script( 'ets_pmpro_add_discord_script' );
 		wp_enqueue_script( 'jquery-ui-draggable' );

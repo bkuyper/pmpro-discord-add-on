@@ -545,7 +545,7 @@ class PMPro_Discord_API {
 					'client_id'     => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_client_id' ) ) ),
 					'redirect_uri'  => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_redirect_url' ) ) ),
 					'response_type' => 'code',
-					'scope'         => 'identify email connections guilds guilds.join messages.read',
+					'scope'         => 'identify email connections guilds guilds.join',
 				);
 				$discord_authorise_api_url = ETS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
 
@@ -640,7 +640,6 @@ class PMPro_Discord_API {
 						$discord_user_name  = $user_body['username'];
 						$discord_user_email  = $user_body['email'];
 						$password = wp_generate_password(12, true, false );
-						$current_user = get_user_by( 'email', $discord_user_email );
 						if( email_exists($discord_user_email) ){
 							$current_user = get_user_by( 'email', $discord_user_email );
 							$user_id = $current_user->ID;
@@ -673,6 +672,7 @@ class PMPro_Discord_API {
 							wp_safe_redirect($redirect_to);
 							$_ets_pmpro_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
 							update_user_meta( $user_id, '_ets_pmpro_discord_user_id', $_ets_pmpro_discord_user_id );
+							update_user_meta( $user_id, '_ets_pmpro_discord_username', $discord_user_name );
 							$this->add_discord_member_in_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token );
 							exit();
 						}

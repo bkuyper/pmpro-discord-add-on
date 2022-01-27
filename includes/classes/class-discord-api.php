@@ -617,7 +617,7 @@ class PMPro_Discord_API {
 					'client_id'     => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_client_id' ) ) ),
 					'redirect_uri'  => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_redirect_url' ) ) ),
 					'response_type' => 'code',
-					'scope'         => 'identify email connections guilds guilds.join messages.read',
+					'scope'         => 'identify email connections guilds guilds.join',
 				);
 				$discord_authorise_api_url = ETS_DISCORD_API_URL . 'oauth2/authorize?' . http_build_query( $params );
 				global $wp;
@@ -638,13 +638,15 @@ class PMPro_Discord_API {
 						$access_token = sanitize_text_field( trim( $res_body['access_token'] ) );
 						$user_body = $this->get_discord_current_user( $access_token );
 						$discord_user_name  = $user_body['username'];
+						$discord_user_number = $user_body['discriminator'];
+						$discord_user_name_with_number = $discord_user_name . '#' . $discord_user_number;
 						$discord_user_email  = $user_body['email'];
 						$password = wp_generate_password(12, true, false );
 						if( email_exists($discord_user_email) ){
 							$current_user = get_user_by( 'email', $discord_user_email );
 							$user_id = $current_user->ID;
 						}else{
-							$user_id = wp_create_user( $discord_user_name, $password, $discord_user_email );
+							$user_id = wp_create_user( $discord_user_name_with_number, $password, $discord_user_email );
 						}
 						update_user_meta( $user_id, '_ets_pmpro_discord_access_token', $access_token );
 						if ( array_key_exists( 'refresh_token', $res_body ) ) {
@@ -659,7 +661,7 @@ class PMPro_Discord_API {
 							update_user_meta( $user_id, '_ets_pmpro_discord_expires_in', $token_expiry_time );
 						}
 						$credentials = array(
-							'user_login' => $discord_user_name,
+							'user_login' => $discord_user_name_with_number,
 							'user_password' => $password
 						);
 						if( !is_user_logged_in() ){
@@ -672,7 +674,7 @@ class PMPro_Discord_API {
 							wp_safe_redirect($redirect_to);
 							$_ets_pmpro_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
 							update_user_meta( $user_id, '_ets_pmpro_discord_user_id', $_ets_pmpro_discord_user_id );
-							update_user_meta( $user_id, '_ets_pmpro_discord_username', $discord_user_name );
+							update_user_meta( $user_id, '_ets_pmpro_discord_username', $discord_user_name_with_number );
 							$this->add_discord_member_in_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token );
 							exit();
 						}

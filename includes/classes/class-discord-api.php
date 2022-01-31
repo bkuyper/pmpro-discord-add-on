@@ -665,7 +665,13 @@ class PMPro_Discord_API {
 							'user_password' => $password
 						);
 						if( !is_user_logged_in() ){
-							$redirect_to=site_url() . '/membership-account/membership-checkout/?level='.$_COOKIE['ets_discord_login_level_id'];
+							$checkouturl = pmpro_url("checkout", "?level=" .$_COOKIE['ets_discord_login_level_id']);
+							if($checkouturl){
+								$redirect_to = $checkouturl;
+							}else{
+								$redirect_to = site_url() . '/membership-account/membership-checkout/?level='.$_COOKIE['ets_discord_login_level_id'];
+							}
+							
 							wp_set_auth_cookie( $current_user->ID,false, '','' );
 							if( !email_exists($discord_user_email) ){
 							//wp_new_user_notification($user_id, '', $password);

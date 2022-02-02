@@ -38,6 +38,9 @@ class PMPro_Discord_API {
 		add_action( 'ets_pmpro_discord_as_send_dm', array( $this, 'ets_pmpro_discord_handler_send_dm' ), 10, 3 );
 
 		add_action( 'ets_pmrpo_discord_schedule_expiration_warnings', array( $this, 'ets_pmpro_discord_send_expiration_warning_DM' ) );
+
+		add_action( 'pmpro_after_checkout', array( $this, 'ets_pmpro_add_user_into_guild_after_checkout' ), 10, 2  );
+
 	}
 
 	/**
@@ -681,7 +684,6 @@ class PMPro_Discord_API {
 							$_ets_pmpro_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
 							update_user_meta( $user_id, '_ets_pmpro_discord_user_id', $_ets_pmpro_discord_user_id );
 							update_user_meta( $user_id, '_ets_pmpro_discord_username', $discord_user_name_with_number );
-							$this->add_discord_member_in_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token );
 							exit();
 						}
 						
@@ -1047,6 +1049,25 @@ class PMPro_Discord_API {
 	 */
 	public function ets_pmpro_discord_change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
 		$this->ets_pmpro_discord_set_member_roles( $user_id, false, false, true );
+	}
+
+	/**
+	 * Add user into discord after complete checkout.
+	 *
+	 * @param INT $user_id
+	 * @param OBJECT $morder
+	 * @return NONE
+	 */
+	public function ets_pmpro_add_user_into_guild_after_checkout( $user_id, $morder ){
+		if ( ! is_user_logged_in() && current_user_can( 'edit_user' ) ) {
+			wp_send_json_error( 'Unauthorized user', 401 );
+			exit();
+		}
+		$access_token        = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
+		$discord_join_date   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_join_date', true ) ) );
+		if ( $access_token && !isset($discord_join_date) && isset($_COOKIE['ets_discord_login_level_id']) ) {
+			$this->add_discord_member_in_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token );
+		}
 	}
 }
 new PMPro_Discord_API();

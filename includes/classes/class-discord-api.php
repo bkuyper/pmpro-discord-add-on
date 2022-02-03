@@ -675,11 +675,12 @@ class PMPro_Discord_API {
 								$redirect_to = site_url() . '/membership-account/membership-checkout/?level='.$_COOKIE['ets_discord_login_level_id'];
 							}
 							
-							wp_set_auth_cookie( $current_user->ID,false, '','' );
+							wp_set_auth_cookie( $user_id,false, '','' );
+							wp_signon($credentials, '');
 							if( !email_exists($discord_user_email) ){
 							//wp_new_user_notification($user_id, '', $password);
 							}
-							wp_signon($credentials, '');
+
 							wp_safe_redirect($redirect_to);
 							$_ets_pmpro_discord_user_id = sanitize_text_field( trim( $user_body['id'] ) );
 							update_user_meta( $user_id, '_ets_pmpro_discord_user_id', $_ets_pmpro_discord_user_id );
@@ -833,7 +834,6 @@ class PMPro_Discord_API {
 	 * @return OBJECT API response
 	 */
 	public function ets_pmpro_discord_as_handler_delete_memberrole( $user_id, $ets_role_id, $is_schedule = true ) {
-
 			$guild_id                    = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_guild_id' ) ) );
 			$_ets_pmpro_discord_user_id  = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
 			$discord_bot_token           = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_bot_token' ) ) );
@@ -1065,7 +1065,7 @@ class PMPro_Discord_API {
 		}
 		$access_token        = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 		$discord_join_date   = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_join_date', true ) ) );
-		if ( $access_token && !isset($discord_join_date) && isset($_COOKIE['ets_discord_login_level_id']) ) {
+		if ( $access_token && empty($discord_join_date) && isset($_COOKIE['ets_discord_login_level_id']) ) {
 			$this->add_discord_member_in_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token );
 		}
 	}

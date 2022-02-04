@@ -187,7 +187,8 @@ class Ets_Pmpro_Admin_Setting {
 					}
 				}
 			}
-			echo '<a href="?action=discord-login&level='.$_GET['level'].'" class="pmpro-btn-connect ets-btn" >'. esc_html__( 'Login with Discord', 'pmpro-discord-add-on' ) .'<i class="fab fa-discord"></i></a>';
+      $current_url = ets_pmpro_discord_get_current_screen_url();
+			echo '<a href="?action=discord-login&url='.$current_url.'" class="pmpro-btn-connect ets-btn" >'. esc_html__( 'Login with Discord', 'pmpro-discord-add-on' ) .'<i class="fab fa-discord"></i></a>';
 			$pmpro_connecttodiscord_btn = '';
 			if ( $mapped_role_name ) {
 				$pmpro_connecttodiscord_btn .= '<p class="ets_assigned_role">'. esc_html__( 'Following Roles will be assigned to you in Discord: ', 'pmpro-discord-add-on' );

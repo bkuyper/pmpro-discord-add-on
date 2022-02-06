@@ -132,7 +132,9 @@ $ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_o
 			echo 'checked="checked"'; }
 		?>
 		 value="1">
-		</fieldset></td>
+		</fieldset>
+    <small>Members will be kicked out if this setting is checked.</small>
+  </td>
 	  </tr>
 	  <tr>
 		<th scope="row"><?php echo __( 'Login with Discord on checkout Page', 'pmpro-discord-add-on' ); ?></th>
@@ -143,7 +145,9 @@ $ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_o
 			echo 'checked="checked"'; }
 		?>
 		 value="1">
-		</fieldset></td>
+		</fieldset>
+    <small>A new account will be created if the discord account E-mail is not exist into the system (Make sure "Allow Anyone Register" settings is ON)</small>
+  </td>
 	  </tr>
 	  <tr>
 		<th scope="row"><?php echo __( 'How many times a failed API call should get re-try', 'pmpro-discord-add-on' ); ?></th>

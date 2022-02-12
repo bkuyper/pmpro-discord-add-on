@@ -591,7 +591,7 @@ class PMPro_Discord_API {
 					$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
 					if ( is_array( $res_body ) ) {
 						if ( array_key_exists( 'access_token', $res_body ) ) {
-							$access_token          = sanitize_text_field( trim( $res_body['access_token'] ) );
+							$access_token    = sanitize_text_field( trim( $res_body['access_token'] ) );
 							$discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
 							$this->catch_discord_auth_callback( $res_body, $user_id );
 							$this->add_discord_member_in_guild( $discord_user_id, $user_id, $access_token );
@@ -615,16 +615,8 @@ class PMPro_Discord_API {
 								$current_user = get_user_by( 'email', $discord_user_email );
 								$user_id      = $current_user->ID;
 							} else {
-								// Create user when WordPress settings allows for it.
-								// https://www.wpbeginner.com/beginners-guide/how-to-allow-user-registration-on-your-wordpress-site
-								$users_can_register = get_option( 'users_can_register' );
-								if ( $users_can_register ) {
-										  $user_id = wp_create_user( $discord_user_email, $password, $discord_user_email );
-											wp_new_user_notification( $user_id, null, $password );
-								} else {
-									wp_safe_redirect( site_url() );
-									return;
-								}
+								$user_id = wp_create_user( $discord_user_email, $password, $discord_user_email );
+								wp_new_user_notification( $user_id, null, $password );
 							}
 							$this->catch_discord_auth_callback( $res_body, $user_id );
 							$credentials = array(

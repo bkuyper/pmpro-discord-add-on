@@ -146,7 +146,7 @@ $ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_o
 		?>
 		 value="1">
 		</fieldset>
-    <small>A new account will be created if the discord account E-mail is not exist into the system (Make sure "Allow Anyone Register" settings is ON)</small>
+    <small>A new account will be created if the discord account E-mail is not exist into the system.</small>
   </td>
 	  </tr>
 	  <tr>

@@ -94,6 +94,7 @@ class Ets_Pmpro_Add_Discord {
 		update_option( 'ets_pmpro_discord_log_api_response', false );
 		update_option( 'ets_pmpro_retry_failed_api', true );
 		update_option( 'ets_pmpro_discord_job_queue_concurrency', 1 );
+    update_option( 'ets_pmpro_member_kick_out', 0 );
 		update_option( 'ets_pmpro_discord_job_queue_batch_size', 7 );
 		update_option( 'ets_pmpro_allow_none_member', 'yes' );
 		update_option( 'ets_pmpro_retry_api_count', '5' );

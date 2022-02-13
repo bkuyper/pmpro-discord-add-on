@@ -260,7 +260,6 @@ class PMPro_Discord_API {
 		$discord_token_api_url = ETS_DISCORD_API_URL . 'oauth2/token';
 		if ( ! is_user_logged_in() ) {
 			if ( ! empty( $code ) && $user_id == 'new_created' ) {
-				// create token for logged in user by discord
 				$args     = array(
 					'method'  => 'POST',
 					'headers' => array(
@@ -349,39 +348,27 @@ class PMPro_Discord_API {
 	 * @return OBJECT REST API response
 	 */
 	public function get_discord_current_user( $access_token ) {
-		if ( ! is_user_logged_in() ) {
-			if ( $access_token ) {
-				$discord_cuser_api_url = ETS_DISCORD_API_URL . 'users/@me';
-				$param                 = array(
-					'headers' => array(
-						'Content-Type'  => 'application/x-www-form-urlencoded',
-						'Authorization' => 'Bearer ' . $access_token,
-					),
-				);
-				$user_response         = wp_remote_get( $discord_cuser_api_url, $param );
-				$user_body             = json_decode( wp_remote_retrieve_body( $user_response ), true );
-				return $user_body;
+		if ( $access_token ) {
+			$discord_cuser_api_url = ETS_DISCORD_API_URL . 'users/@me';
+			$param                 = array(
+				'headers' => array(
+					'Content-Type'  => 'application/x-www-form-urlencoded',
+					'Authorization' => 'Bearer ' . $access_token,
+				),
+			);
+			$user_response         = wp_remote_get( $discord_cuser_api_url, $param );
+			$response_arr          = json_decode( wp_remote_retrieve_body( $user_response ), true );
+			$user_id               = get_current_user_id();
+			if ( $user_id ) {
+				ets_pmpro_discord_log_api_response( $user_id, $discord_cuser_api_url, $param, $user_response );
+				PMPro_Discord_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
 			}
-			wp_send_json_error( 'Unauthorized user', 401 );
-			exit();
+
+			$user_body = json_decode( wp_remote_retrieve_body( $user_response ), true );
+			return $user_body;
+		} else {
+			return '';
 		}
-		$user_id = get_current_user_id();
-
-		$discord_cuser_api_url = ETS_DISCORD_API_URL . 'users/@me';
-		$param                 = array(
-			'headers' => array(
-				'Content-Type'  => 'application/x-www-form-urlencoded',
-				'Authorization' => 'Bearer ' . $access_token,
-			),
-		);
-		$user_response         = wp_remote_get( $discord_cuser_api_url, $param );
-		ets_pmpro_discord_log_api_response( $user_id, $discord_cuser_api_url, $param, $user_response );
-
-		$response_arr = json_decode( wp_remote_retrieve_body( $user_response ), true );
-		PMPro_Discord_Logs::write_api_response_logs( $response_arr, $user_id, debug_backtrace()[0] );
-		$user_body = json_decode( wp_remote_retrieve_body( $user_response ), true );
-		return $user_body;
-
 	}
 
 	/**
@@ -392,11 +379,7 @@ class PMPro_Discord_API {
 	 * @param STRING $access_token
 	 * @return NONE
 	 */
-	public function add_discord_member_in_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token ) {
-		if ( ! is_user_logged_in() ) {
-			wp_send_json_error( 'Unauthorized user', 401 );
-			exit();
-		}
+	private function add_discord_member_in_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token ) {
 		$curr_level_id = sanitize_text_field( trim( ets_pmpro_discord_get_current_level_id( $user_id ) ) );
 		if ( $curr_level_id !== null ) {
 			// It is possible that we may exhaust API rate limit while adding members to guild, so handling off the job to queue.
@@ -625,6 +608,8 @@ class PMPro_Discord_API {
 							);
 							wp_set_auth_cookie( $user_id, false, '', '' );
 							wp_signon( $credentials, '' );
+							$discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
+							$this->add_discord_member_in_guild( $discord_user_id, $user_id, $access_token );
 							wp_safe_redirect( urldecode_deep( $_COOKIE['ets_discord_page'] ) );
 							exit();
 						}
@@ -1047,7 +1032,7 @@ class PMPro_Discord_API {
 		$access_token               = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 		$_ets_pmpro_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
 		if ( $access_token && isset( $_COOKIE['ets_discord_page'] ) ) {
-			$this->add_discord_member_in_guild( $_ets_pmpro_discord_user_id, $user_id, $access_token );
+			$this->ets_pmpro_discord_set_member_roles( $user_id );
 		}
 	}
 }

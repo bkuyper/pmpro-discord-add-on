@@ -29,7 +29,7 @@ define( 'ETS_DISCORD_API_URL', 'https://discord.com/api/v6/' );
 define( 'ETS_DISCORD_BOT_PERMISSIONS', 8 );
 
 // discord api call scopes.
-define( 'ETS_DISCORD_OAUTH_SCOPES', 'identify email connections guilds guilds.join gdm.join rpc rpc.notifications.read rpc.voice.read rpc.voice.write rpc.activities.write bot webhook.incoming messages.read applications.builds.upload applications.builds.read applications.commands applications.store.update applications.entitlements activities.read activities.write relationships.read' );
+define( 'ETS_DISCORD_OAUTH_SCOPES', 'identify email connections guilds guilds.join gdm.join rpc rpc.notifications.read rpc.voice.read rpc.voice.write rpc.activities.write bot webhook.incoming applications.builds.upload applications.builds.read applications.commands applications.store.update applications.entitlements activities.read activities.write relationships.read' );
 
 // define group name for action scheduler actions.
 define( 'ETS_DISCORD_AS_GROUP_NAME', 'ets-pmpro-discord' );
@@ -94,6 +94,7 @@ class Ets_Pmpro_Add_Discord {
 		update_option( 'ets_pmpro_discord_log_api_response', false );
 		update_option( 'ets_pmpro_retry_failed_api', true );
 		update_option( 'ets_pmpro_discord_job_queue_concurrency', 1 );
+    update_option( 'ets_pmpro_member_kick_out', 0 );
 		update_option( 'ets_pmpro_discord_job_queue_batch_size', 7 );
 		update_option( 'ets_pmpro_allow_none_member', 'yes' );
 		update_option( 'ets_pmpro_retry_api_count', '5' );

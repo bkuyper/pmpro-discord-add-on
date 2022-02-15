@@ -3,9 +3,11 @@
 	$uuid     = get_option( 'ets_pmpro_discord_uuid_file_name' );
 	$filename = $uuid . PMPro_Discord_Logs::$log_file_name;
 	$handle   = fopen( WP_CONTENT_DIR . '/' . $filename, 'a+' );
-while ( ! feof( $handle ) ) {
-	echo fgets( $handle ) . '<br />';
-}
+  if( $handle ){
+    while ( ! feof( $handle ) ) {
+      echo fgets( $handle ) . '<br />';
+    }
+  }
 	fclose( $handle );
 ?>
 </div>

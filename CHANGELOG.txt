@@ -1,3 +1,7 @@
+= 1.1.1 =
+* Fixed the issue of shortcode [discord_connect_button] is breaking the site because the member is not logged-in to the
+* Added a new feature, using the shortcode [discord_connect_button] on any page, anyone can join the website discord server.
+
 = 1.1.0 =
 * Fixed saving shortcode [discord_connect_button] error while saving inside gutenberg editor.
 * Feature one discord role can be mapped to many PMPRO Levels.

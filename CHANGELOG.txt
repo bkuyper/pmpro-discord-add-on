@@ -1,5 +1,8 @@
+= 1.1.2 =
+- In this version, we fixed a bug related to the advanced setting of a "Login with Discord"
+
 = 1.1.1 =
-* Fixed the issue of shortcode [discord_connect_button] is breaking the site because the member is not logged-in to the
+* Fixed the issue of shortcode [discord_connect_button] is breaking the site because the member is not logged-in
 * Added a new feature, using the shortcode [discord_connect_button] on any page, anyone can join the website discord server.
 
 = 1.1.0 =

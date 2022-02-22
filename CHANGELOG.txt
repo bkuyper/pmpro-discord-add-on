@@ -1,3 +1,6 @@
+= 1.1.3 =
+- Added button styling feature under the plugin settings.
+
 = 1.1.2 =
 - In this version, we fixed a bug related to the advanced setting of a "Login with Discord"
 

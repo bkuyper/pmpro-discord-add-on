@@ -301,6 +301,7 @@ jQuery(document).ready(function ($) {
 	});
 	if (etsPmproParams.is_admin) {  
         $('#ets_pmpro_btn_color').wpColorPicker();
+        $('#ets_pmpro_btn_disconnect_color').wpColorPicker();
     }
 });
 if (etsPmproParams.is_admin) {

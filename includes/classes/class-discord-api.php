@@ -13,6 +13,9 @@ class PMPro_Discord_API {
 		// front ajax function to disconnect from discord
 		add_action( 'wp_ajax_disconnect_from_discord', array( $this, 'ets_pmpro_discord_disconnect_from_discord' ) );
 
+		// disconnect from discord on user deletion
+		add_action( 'delete_user', array( $this, 'ets_pmpro_discord_disconnect_on_delete_user' ), 10, 3 );
+
 		// front ajax function to disconnect from discord
 		add_action( 'wp_ajax_ets_pmpro_discord_load_discord_roles', array( $this, 'ets_pmpro_discord_load_discord_roles' ) );
 
@@ -610,8 +613,10 @@ class PMPro_Discord_API {
 							wp_signon( $credentials, '' );
 							$discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
 							$this->add_discord_member_in_guild( $discord_user_id, $user_id, $access_token );
-							wp_safe_redirect( urldecode_deep( $_COOKIE['ets_discord_page'] ) );
-							exit();
+							if($_COOKIE['ets_discord_page']){
+								wp_safe_redirect( urldecode_deep( $_COOKIE['ets_discord_page'] ) );
+								exit();
+							}
 						}
 					}
 				}
@@ -860,6 +865,25 @@ class PMPro_Discord_API {
 		wp_send_json( $event_res );
 	}
 
+	/**
+	 * Disconnect user from discord on delete wp user
+	 *
+	 * @param NONE
+	 * @return OBJECT JSON response
+	 */
+	public function ets_pmpro_discord_disconnect_on_delete_user( $user_id, $reassign, $user ) {
+		if ( ! is_user_logged_in() ) {
+			wp_send_json_error( 'Unauthorized user', 401 );
+			exit();
+		}
+
+		if ( $user_id ) {
+			$this->delete_member_from_guild( $user_id, false );
+			delete_user_meta( $user_id, '_ets_pmpro_discord_access_token' );
+		}
+
+	}
+	
 	/**
 	 * Manage user roles api calls
 	 *

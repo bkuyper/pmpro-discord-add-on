@@ -299,6 +299,9 @@ jQuery(document).ready(function ($) {
 			}
 		});
 	});
+	if (etsPmproParams.is_admin) {  
+        $('#ets_pmpro_btn_color').wpColorPicker();
+    }
 });
 if (etsPmproParams.is_admin) {
 	/*Tab options*/

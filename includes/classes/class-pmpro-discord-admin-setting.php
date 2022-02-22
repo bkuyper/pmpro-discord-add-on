@@ -134,7 +134,7 @@ class Ets_Pmpro_Admin_Setting {
 				$loggedin_btn_text                  = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedin_btn_text' ) ) );
 				$current_url                 = ets_pmpro_discord_get_current_screen_url();
 				$pmpro_connecttodiscord_btn .= '<div><label class="ets-connection-lbl">' . esc_html__( 'Discord connection', 'pmpro-discord-add-on' ) . '</label>';
-				$pmpro_connecttodiscord_btn .= '<a href="?action=discord-login&url=' . $current_url . '" class="pmpro-btn-connect ets-btn" >' . $loggedin_btn_text . '<i class="fab fa-discord"></i></a>';
+				$pmpro_connecttodiscord_btn .= '<a href="?action=discord-login&url=' . $current_url . '" class="pmpro-btn-connect ets-btn" >' . esc_html($loggedin_btn_text) . '<i class="fab fa-discord"></i></a>';
 				$pmpro_connecttodiscord_btn .= '<p class="ets_assigned_role">';
 				if ( $mapped_role_name || $default_role_name ) {
 					$pmpro_connecttodiscord_btn .= esc_html__( 'Following Roles will be assigned to you in Discord: ', 'pmpro-discord-add-on' );
@@ -198,33 +198,36 @@ class Ets_Pmpro_Admin_Setting {
 			$default_role                   = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
 			$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
 			$all_roles                      = unserialize( get_option( 'ets_pmpro_discord_all_roles' ) );
+			$member_discord_login           = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_login_with_discord' ) ) );
 			$btn_text                       = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedout_btn_text' ) ) );
-			$curr_level_id                  = $_GET['level'];
-			$mapped_role_name               = '';
-			$default_role_name              = '';
-			if ( $default_role != 'none' && is_array( $all_roles ) && array_key_exists( $default_role, $all_roles ) ) {
-				$default_role_name = $all_roles[ $default_role ];
-			}
-			if ( $curr_level_id && is_array( $all_roles ) ) {
-				if ( is_array( $ets_pmpor_discord_role_mapping ) && array_key_exists( 'pmpro_level_id_' . $curr_level_id, $ets_pmpor_discord_role_mapping ) ) {
-					$mapped_role_id = $ets_pmpor_discord_role_mapping[ 'pmpro_level_id_' . $curr_level_id ];
-					if ( array_key_exists( $mapped_role_id, $all_roles ) ) {
-						$mapped_role_name = $all_roles[ $mapped_role_id ];
+			if ( $member_discord_login ) {
+				$curr_level_id     = $_GET['level'];
+				$mapped_role_name  = '';
+				$default_role_name = '';
+				if ( $default_role != 'none' && is_array( $all_roles ) && array_key_exists( $default_role, $all_roles ) ) {
+					$default_role_name = $all_roles[ $default_role ];
+				}
+				if ( $curr_level_id && is_array( $all_roles ) ) {
+					if ( is_array( $ets_pmpor_discord_role_mapping ) && array_key_exists( 'pmpro_level_id_' . $curr_level_id, $ets_pmpor_discord_role_mapping ) ) {
+						$mapped_role_id = $ets_pmpor_discord_role_mapping[ 'pmpro_level_id_' . $curr_level_id ];
+						if ( array_key_exists( $mapped_role_id, $all_roles ) ) {
+							$mapped_role_name = $all_roles[ $mapped_role_id ];
+						}
 					}
 				}
-			}
-			$current_url = ets_pmpro_discord_get_current_screen_url();
-			echo '<a href="?action=discord-login&fromcheckout=1&url=' . $current_url . '" class="pmpro-btn-connect ets-btn" >' . $btn_text . '<i class="fab fa-discord"></i></a>';
-			$pmpro_connecttodiscord_btn = '';
-			if ( $mapped_role_name ) {
-				$pmpro_connecttodiscord_btn .= '<p class="ets_assigned_role">' . esc_html__( 'Following Roles will be assigned to you in Discord: ', 'pmpro-discord-add-on' );
-				$pmpro_connecttodiscord_btn .= esc_html( $mapped_role_name );
-				if ( $default_role_name ) {
-					$pmpro_connecttodiscord_btn .= ', ' . esc_html( $default_role_name );
-				}
-				$pmpro_connecttodiscord_btn .= '</p>';
+				$current_url = ets_pmpro_discord_get_current_screen_url();
+				echo '<a href="?action=discord-login&fromcheckout=1&url=' . $current_url . '" class="pmpro-btn-connect ets-btn" >' . esc_html($btn_text) . '<i class="fab fa-discord"></i></a>';
+				$pmpro_connecttodiscord_btn = '';
+				if ( $mapped_role_name ) {
+					$pmpro_connecttodiscord_btn .= '<p class="ets_assigned_role">' . esc_html__( 'Following Roles will be assigned to you in Discord: ', 'pmpro-discord-add-on' );
+					$pmpro_connecttodiscord_btn .= esc_html( $mapped_role_name );
+					if ( $default_role_name ) {
+						$pmpro_connecttodiscord_btn .= ', ' . esc_html( $default_role_name );
+					}
+					$pmpro_connecttodiscord_btn .= '</p>';
 
-				echo $pmpro_connecttodiscord_btn;
+					echo $pmpro_connecttodiscord_btn;
+				}
 			}
 		}
 	}

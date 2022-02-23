@@ -386,6 +386,7 @@ class Ets_Pmpro_Admin_Setting {
 		wp_enqueue_script( 'jquery-ui-droppable' );
 		wp_enqueue_script( 'wp-color-picker' );
 		wp_enqueue_style( 'wp-color-picker' );
+    $log_api_res                                  = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_log_api_response' ) ) );
 		if ( isset( $_GET['save_settings_msg'] ) ) {
 			?>
 				<div class="notice notice-success is-dismissible support-success-msg">
@@ -393,8 +394,12 @@ class Ets_Pmpro_Admin_Setting {
 				</div>
 			<?php
 		}
+    if( $log_api_res ){
+      echo '<div class="notice notice-error is-dismissible"> <p>PMPRO - Discord logging is currently enabled. Since logs may contain sensitive information, please ensure that you only leave it enabled for as long as it is needed for troubleshooting. If you currently have a support ticket open, please do not disable logging until the Support Team has reviewed your logs.</p> </div>';
+    }
 		?>
 		<h1><?php echo __( 'PMPRO Discord Add On Settings', 'pmpro-discord-add-on' ); ?></h1>
+
 	  <div id="outer" class="skltbs-theme-light" data-skeletabs='{ "startIndex": 1 }'>
 		<ul class="skltbs-tab-group">
 			  <li class="skltbs-tab-item">

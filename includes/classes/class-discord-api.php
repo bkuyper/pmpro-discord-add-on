@@ -857,6 +857,7 @@ class PMPro_Discord_API {
 				$this->delete_member_from_guild( $user_id, false );
 			}
 			delete_user_meta( $user_id, '_ets_pmpro_discord_access_token' );
+      delete_user_meta( $user_id, '_ets_pmpro_discord_refresh_token' );
 		}
 		$event_res = array(
 			'status'  => 1,

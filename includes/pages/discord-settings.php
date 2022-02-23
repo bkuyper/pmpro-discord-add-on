@@ -25,7 +25,7 @@ $ets_pmpro_discord_guild_id     = sanitize_text_field( trim( get_option( 'ets_pm
 	</div>
 	<div class="ets-input-group">
 	  <label><?php echo __( 'Bot Token', 'pmpro-discord-add-on' ); ?> :</label>
-		<input type="text" class="ets-input" name="ets_pmpro_discord_bot_token" value="<?php if ( isset( $discord_bot_token ) ) { echo esc_attr( $discord_bot_token); } ?>" required placeholder="Discord Bot Token">
+		<input type="password" class="ets-input" name="ets_pmpro_discord_bot_token" value="<?php if ( isset( $discord_bot_token ) ) { echo esc_attr( $discord_bot_token); } ?>" required placeholder="Discord Bot Token">
 	</div>
 	<div class="ets-input-group">
 	  <label><?php echo __( 'Server ID', 'pmpro-discord-add-on' ); ?> :</label>

@@ -4,9 +4,11 @@ $ets_pmpro_btn_disconnect_color                          = sanitize_text_field( 
 $btn_text                        	= sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedout_btn_text' ) ) );
 $loggedin_btn_text                  = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedin_btn_text' ) ) );
 $ets_pmpro_disconnect_btn_text                  = sanitize_text_field( trim( get_option( 'ets_pmpro_disconnect_btn_text' ) ) );
+$current_screen = ets_pmpro_discord_get_current_screen_url();
 ?>
 <form method="post" action="<?php echo get_site_url().'/wp-admin/admin-post.php' ?>">
  <input type="hidden" name="action" value="pmpro_discord_save_appearance_settings">
+ <input type="hidden" name="referrer" value="<?php echo $current_screen; ?>" />
 <?php wp_nonce_field( 'save_discord_aprnc_settings', 'ets_discord_save_aprnc_settings' ); ?>
   <table class="form-table" role="presentation">
 	<tbody>

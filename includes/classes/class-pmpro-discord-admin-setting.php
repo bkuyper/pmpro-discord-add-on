@@ -509,7 +509,7 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_pmpro_discord_guild_id', $ets_pmpro_discord_guild_id );
 				}
 				$message      = 'Your settings are saved successfully.';
-				$pre_location = $_SERVER['HTTP_REFERER'] . '&save_settings_msg=' . $message . '#ets_pmpro_application_details';
+				$pre_location = $_POST['referrer'] . '&save_settings_msg=' . $message . '#ets_pmpro_application_details';
 				wp_safe_redirect( $pre_location );
 			}
 		}
@@ -551,7 +551,7 @@ class Ets_Pmpro_Admin_Setting {
 				delete_option( 'ets_pmpro_allow_none_member' );
 				$message = 'Your settings flushed successfully.';
 			}
-			$pre_location = $_SERVER['HTTP_REFERER'] . '&save_settings_msg=' . $message . '#ets_pmpro_role_mapping';
+			$pre_location = $_POST['referrer']  . '&save_settings_msg=' . $message . '#ets_pmpro_role_mapping';
 			wp_safe_redirect( $pre_location );
 		}
 	}
@@ -694,7 +694,7 @@ class Ets_Pmpro_Admin_Setting {
 					}
 				}
 				$message      = 'Your settings are saved successfully.';
-				$pre_location = $_SERVER['HTTP_REFERER'] . '&save_settings_msg=' . $message . '#ets_pmpro_advance_settings';
+				$pre_location = $_POST['referrer'] . '&save_settings_msg=' . $message . '#ets_pmpro_advance_settings';
 				wp_safe_redirect( $pre_location );
 			}
 		}
@@ -738,7 +738,7 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_pmpro_disconnect_btn_text', $ets_pmpro_disconnect_btn_text );
 				}
 				$message      = 'Your settings are saved successfully.';
-				$pre_location = $_SERVER['HTTP_REFERER'] . '&save_settings_msg=' . $message . '#ets_pmpro_appearance';
+				$pre_location = $_POST['referrer'] . '&save_settings_msg=' . $message . '#ets_pmpro_appearance';
 				wp_safe_redirect( $pre_location );
 			}
 		}

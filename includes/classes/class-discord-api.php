@@ -546,6 +546,10 @@ class PMPro_Discord_API {
 		}
 		// when admin initiated bot connection
 		if ( isset( $_GET['action'] ) && $_GET['action'] == 'discord-connectToBot' ) {
+			if ( ! current_user_can( 'administrator' ) ) {
+				wp_send_json_error( 'You do not have sufficient rights', 403 );
+				exit();
+			}
 			$params                    = array(
 				'client_id'   => sanitize_text_field( trim( get_option( 'ets_pmpro_discord_client_id' ) ) ),
 				'permissions' => ETS_DISCORD_BOT_PERMISSIONS,
@@ -613,7 +617,7 @@ class PMPro_Discord_API {
 							wp_signon( $credentials, '' );
 							$discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
 							$this->add_discord_member_in_guild( $discord_user_id, $user_id, $access_token );
-							if($_COOKIE['ets_discord_page']){
+							if ( $_COOKIE['ets_discord_page'] ) {
 								wp_safe_redirect( urldecode_deep( $_COOKIE['ets_discord_page'] ) );
 								exit();
 							}
@@ -857,7 +861,7 @@ class PMPro_Discord_API {
 				$this->delete_member_from_guild( $user_id, false );
 			}
 			delete_user_meta( $user_id, '_ets_pmpro_discord_access_token' );
-      delete_user_meta( $user_id, '_ets_pmpro_discord_refresh_token' );
+			delete_user_meta( $user_id, '_ets_pmpro_discord_refresh_token' );
 		}
 		$event_res = array(
 			'status'  => 1,
@@ -884,7 +888,7 @@ class PMPro_Discord_API {
 		}
 
 	}
-	
+
 	/**
 	 * Manage user roles api calls
 	 *

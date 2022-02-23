@@ -19,7 +19,10 @@
 	<div class="form-group">
 		<input type="button" class="ets-submit ets-bg-green" value="Refresh" onClick="window.location.reload()">
 	</div>
-	<div class="form-group">
+  <div class="form-group">
 		<a href="<?php echo esc_attr( content_url('/') . $filename ); ?>" class="ets-submit ets-pmpro-bg-download" download><?php echo __( 'Download', 'pmpro-discord-add-on'  ); ?></a>
+	</div>
+	<div class="form-group">
+		<a href="<?php echo get_site_url();?>/wp-admin/tools.php?page=action-scheduler&status=pending&s=pmpro" class="ets-submit ets-bg-green"><?php echo __( 'API Queue', 'pmpro-discord-add-on'  ); ?></a>
 	</div>
 </div>

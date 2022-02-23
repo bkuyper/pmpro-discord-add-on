@@ -114,11 +114,11 @@
   /*background-color:#FF0000;*/
 }
 .pmpro-clrbtndiv{
-    max-width: 230px;
     display: flex;
 }
 .pmpro-clrbtndiv .form-group{
   display: flex;
+  align-items: center;
 }
 .pmpro-clrbtndiv .form-group .spinner{
   margin: 10px 10px 0;

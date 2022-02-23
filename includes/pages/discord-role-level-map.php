@@ -6,6 +6,9 @@ $default_role        = sanitize_text_field( trim( get_option( '_ets_pmpro_discor
 $allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_none_member' ) ) );
 $current_screen = ets_pmpro_discord_get_current_screen_url();
 ?>
+<div class="notice notice-info ets-notice">
+  <p><i class='fas fa-info'></i> <?php echo __( 'Make sure the BOT role has high priority in the discord.com server than the roles it is supposed to manage.', 'pmpro-discord-add-on' ); ?></p>
+</div>
 <div class="notice notice-warning ets-notice">
   <p><i class='fas fa-info'></i> <?php echo __( 'Drag and Drop the Discord Roles over to the PMPRO Levels', 'pmpro-discord-add-on' ); ?></p>
 </div>

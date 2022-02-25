@@ -1,3 +1,6 @@
+= 1.1.5 =
+- Fixed a BUG which caused Connect and Disconnect buttons to disappear.
+
 = 1.1.4 =
 - Fixed a security issue, where anyone can trigger connect to bot.
 

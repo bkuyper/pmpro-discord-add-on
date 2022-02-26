@@ -880,7 +880,7 @@ class PMPro_Discord_API {
 							$this->delete_discord_role( $user_id, $previous_default_role, $is_schedule );
 					}
 					delete_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', true );
-					$this->put_discord_role_api( $user_id, $default_role, $is_schedule );
+					$this->put_discord_role_api( $user_id, $default_role, true );
 					update_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', $default_role );
 				} elseif ( $default_role == 'none' ) {
 					if ( isset( $previous_default_role ) && $previous_default_role != '' && $previous_default_role != 'none' ) {
@@ -888,6 +888,7 @@ class PMPro_Discord_API {
 					}
 					update_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', $default_role );
 				}
+        delete_user_meta( $user_id, '_ets_pmpro_discord_access_token' );
 			}
 		}
 		$event_res = array(

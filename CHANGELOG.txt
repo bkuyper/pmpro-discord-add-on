@@ -1,3 +1,6 @@
+= 1.1.6 =
+- Fixed a BUG, where member do disconnect and can have role for infinite time
+
 = 1.1.5 =
 - Fixed a BUG which caused Connect and Disconnect buttons to disappear.
 

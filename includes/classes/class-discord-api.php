@@ -860,8 +860,35 @@ class PMPro_Discord_API {
 			if ( $member_kick_out == true ) {
 				$this->delete_member_from_guild( $user_id, false );
 			}
-			delete_user_meta( $user_id, '_ets_pmpro_discord_access_token' );
 			delete_user_meta( $user_id, '_ets_pmpro_discord_refresh_token' );
+			// GH#279
+			$default_role                   = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
+			$_ets_pmpro_discord_role_id     = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_role_id', true ) ) );
+			$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
+			$curr_level_id                  = sanitize_text_field( trim( ets_pmpro_discord_get_current_level_id( $user_id ) ) );
+			$previous_default_role          = get_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', true );
+			$access_token                   = get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true );
+			if ( ! empty( $access_token ) ) {
+				// delete already assigned role.
+				if ( isset( $_ets_pmpro_discord_role_id ) && $_ets_pmpro_discord_role_id != '' && $_ets_pmpro_discord_role_id != 'none' ) {
+					$this->delete_discord_role( $user_id, $_ets_pmpro_discord_role_id, true );
+					delete_user_meta( $user_id, '_ets_pmpro_discord_role_id', true );
+				}
+				// Assign role which is saved as default.
+				if ( $default_role != 'none' ) {
+					if ( isset( $previous_default_role ) && $previous_default_role != '' && $previous_default_role != 'none' ) {
+							$this->delete_discord_role( $user_id, $previous_default_role, $is_schedule );
+					}
+					delete_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', true );
+					$this->put_discord_role_api( $user_id, $default_role, $is_schedule );
+					update_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', $default_role );
+				} elseif ( $default_role == 'none' ) {
+					if ( isset( $previous_default_role ) && $previous_default_role != '' && $previous_default_role != 'none' ) {
+						$this->delete_discord_role( $user_id, $previous_default_role, $is_schedule );
+					}
+					update_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', $default_role );
+				}
+			}
 		}
 		$event_res = array(
 			'status'  => 1,

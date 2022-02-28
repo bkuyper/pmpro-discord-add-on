@@ -877,14 +877,14 @@ class PMPro_Discord_API {
 				// Assign role which is saved as default.
 				if ( $default_role != 'none' ) {
 					if ( isset( $previous_default_role ) && $previous_default_role != '' && $previous_default_role != 'none' ) {
-							$this->delete_discord_role( $user_id, $previous_default_role, $is_schedule );
+							$this->delete_discord_role( $user_id, $previous_default_role, true );
 					}
 					delete_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', true );
 					$this->put_discord_role_api( $user_id, $default_role, true );
 					update_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', $default_role );
 				} elseif ( $default_role == 'none' ) {
 					if ( isset( $previous_default_role ) && $previous_default_role != '' && $previous_default_role != 'none' ) {
-						$this->delete_discord_role( $user_id, $previous_default_role, $is_schedule );
+						$this->delete_discord_role( $user_id, $previous_default_role, true );
 					}
 					update_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', $default_role );
 				}

@@ -45,7 +45,7 @@ class PMPro_Discord_API {
 
 		add_action( 'ets_pmrpo_discord_schedule_expiration_warnings', array( $this, 'ets_pmpro_discord_send_expiration_warning_DM' ) );
 
-		add_action( 'pmpro_after_checkout', array( $this, 'ets_pmpro_add_user_into_guild_after_checkout' ), 10, 2 );
+		add_action( 'pmpro_after_checkout', array( $this, 'ets_pmpro_adjust_discord_roles' ), 10, 2 );
 
 	}
 
@@ -573,7 +573,7 @@ class PMPro_Discord_API {
 		if ( is_user_logged_in() ) {
 			$user_id = get_current_user_id();
 
-			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) ) {
+			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via']=='discord' ) {
 				$code     = sanitize_text_field( trim( $_GET['code'] ) );
 				$response = $this->create_discord_auth_token( $code, $user_id );
 
@@ -582,15 +582,16 @@ class PMPro_Discord_API {
 					if ( is_array( $res_body ) ) {
 						if ( array_key_exists( 'access_token', $res_body ) ) {
 							$access_token    = sanitize_text_field( trim( $res_body['access_token'] ) );
-							$discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
 							$this->catch_discord_auth_callback( $res_body, $user_id );
+              # Method `catch_discord_auth_callback` set the usermeta key _ets_pmpro_discord_user_id, accessed in below line
+              $discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
 							$this->add_discord_member_in_guild( $discord_user_id, $user_id, $access_token );
 						}
 					}
 				}
 			}
 		} else {
-			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) ) {
+			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via']=='discord' ) {
 				$code     = sanitize_text_field( trim( $_GET['code'] ) );
 				$response = $this->create_discord_auth_token( $code, 'new_created' );
 				if ( ! empty( $response ) && ! is_wp_error( $response ) ) {
@@ -848,7 +849,6 @@ class PMPro_Discord_API {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
-
 		// Check for nonce security
 		if ( ! wp_verify_nonce( $_POST['ets_discord_nonce'], 'ets-discord-ajax-nonce' ) ) {
 				wp_send_json_error( 'You do not have sufficient rights', 403 );
@@ -1081,13 +1081,12 @@ class PMPro_Discord_API {
 	 * @param OBJECT $morder
 	 * @return NONE
 	 */
-	public function ets_pmpro_add_user_into_guild_after_checkout( $user_id, $morder ) {
+	public function ets_pmpro_adjust_discord_roles( $user_id, $morder ) {
 		if ( ! is_user_logged_in() && current_user_can( 'edit_user' ) ) {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
 		$access_token               = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
-		$_ets_pmpro_discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
 		if ( $access_token && isset( $_COOKIE['ets_discord_page'] ) ) {
 			$this->ets_pmpro_discord_set_member_roles( $user_id );
 		}

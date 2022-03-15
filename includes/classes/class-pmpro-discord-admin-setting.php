@@ -270,6 +270,9 @@ class Ets_Pmpro_Admin_Setting {
 	public function ets_pmpro_discord_as_schdule_job_pmpro_cancel( $level_id, $user_id, $cancel_level ) {
 		$membership_status = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
 		$access_token      = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
+		$cancel_on_next_payment = is_plugin_active( 'pmpro-cancel-on-next-payment-date/pmpro-cancel-on-next-payment-date.php' );
+		$next_payment = pmpro_next_payment( $user_id );
+		global $pmpro_next_payment_timestamp;
 		if ( ! empty( $cancel_level ) || $membership_status == 'admin_cancelled' ) {
 
 			$args = array(
@@ -281,7 +284,10 @@ class Ets_Pmpro_Admin_Setting {
 
 			// check if member is already added to job queue.
 			$cancl_arr_already_added = as_get_scheduled_actions( $args, ARRAY_A );
-			if ( count( $cancl_arr_already_added ) === 0 && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ) {
+
+			if ( count( $cancl_arr_already_added ) === 0 && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) && $pmpro_next_payment_timestamp && $cancel_on_next_payment ) {
+				as_schedule_single_action( $pmpro_next_payment_timestamp, 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $cancel_level ), ETS_DISCORD_AS_GROUP_NAME );
+			}elseif ( count( $cancl_arr_already_added ) === 0 && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ) {
 				as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $cancel_level ), ETS_DISCORD_AS_GROUP_NAME );
 			}
 		}
@@ -727,7 +733,7 @@ class Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
-
+		
 		$ets_pmpro_btn_color            = isset( $_POST['ets_pmpro_btn_color'] ) && $_POST['ets_pmpro_btn_color'] !== '' ? sanitize_text_field( trim( $_POST['ets_pmpro_btn_color'] ) ) : '#77a02e';
 		$ets_pmpro_btn_disconnect_color = isset( $_POST['ets_pmpro_btn_disconnect_color'] ) && $_POST['ets_pmpro_btn_disconnect_color'] != '' ? sanitize_text_field( trim( $_POST['ets_pmpro_btn_disconnect_color'] ) ) : '#ff0000';
 		$ets_pmpro_loggedin_btn_text    = isset( $_POST['ets_pmpro_loggedin_btn_text'] ) && $_POST['ets_pmpro_loggedin_btn_text'] != '' ? sanitize_text_field( trim( $_POST['ets_pmpro_loggedin_btn_text'] ) ) : 'Connect To Discord';

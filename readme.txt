@@ -1,6 +1,9 @@
 === Connect Paid Memberships Pro to Discord ===
 Contributors: expresstechsoftware, strangerstudios
 Tags: Discord, Talk, Video Chat, Hang Out, Friends, Meberships, discord role management
+Donate link: https://paypal.me/supportets
+Author URI: https://www.expresstechsoftwares.com
+Author: ExpressTech Software Solutions Pvt. Ltd.
 Requires at least: 4.7
 Tested up to: 5.9
 Requires PHP: 7.0

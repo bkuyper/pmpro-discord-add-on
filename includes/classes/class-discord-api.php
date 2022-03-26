@@ -92,7 +92,7 @@ class PMPro_Discord_API {
 				// check if the message is not already sent
 				$membership_level = pmpro_getMembershipLevelForUser( $user_obj->user_id );
 				$already_sent     = get_user_meta( $user_obj->user_id, '_ets_pmpro_discord_expitration_warning_dm_for_' . $membership_level->ID, true );
-				$access_token     = get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true );
+				$access_token     = get_user_meta( $user_obj->user_id, '_ets_pmpro_discord_access_token', true );
 				if ( ! empty( $access_token ) && $membership_level !== false && $already_sent != 1 ) {
 					as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_send_dm', array( $user_obj->user_id, $membership_level->ID ), 'ets-pmpro-discord' );
 				}

@@ -47,6 +47,8 @@ class Ets_Pmpro_Admin_Setting {
 		add_filter( 'action_scheduler_queue_runner_batch_size', array( $this, 'ets_pmpro_discord_queue_batch_size' ) );
 
 		add_filter( 'action_scheduler_queue_runner_concurrent_batches', array( $this, 'ets_pmpro_discord_concurrent_batches' ) );
+
+		add_filter( 'pmpro_change_level', array( $this, 'ets_pmpro_discord_handle_cancel_on_next_payment' ), 99, 4 );
 	}
 	/**
 	 * set action scheuduler concurrent batches number
@@ -94,24 +96,24 @@ class Ets_Pmpro_Admin_Setting {
 
 		$btn_color                      = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_btn_color' ) ) );
 		$ets_pmpro_btn_disconnect_color = sanitize_text_field( trim( get_option( 'ets_pmpro_btn_disconnect_color' ) ) );
-		$loggedout_btn_text                       = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedout_btn_text' ) ) );
+		$loggedout_btn_text             = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedout_btn_text' ) ) );
 		$loggedin_btn_text              = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedin_btn_text' ) ) );
 		$ets_pmpro_disconnect_btn_text  = sanitize_text_field( trim( get_option( 'ets_pmpro_disconnect_btn_text' ) ) );
-    if( $btn_color=='' || empty($btn_color) ){
-      $btn_color = '#77a02e';
-    }
-    if( $ets_pmpro_btn_disconnect_color=='' || empty($ets_pmpro_btn_disconnect_color) ){
-      $ets_pmpro_btn_disconnect_color = '#ff0000';
-    }
-    if( $loggedout_btn_text=='' || empty($loggedout_btn_text) ){
-      $loggedout_btn_text = 'Login With Discord';
-    }
-    if( $loggedin_btn_text=='' || empty($loggedin_btn_text) ){
-      $loggedin_btn_text = 'Connect To Discord';
-    }
-    if( $ets_pmpro_disconnect_btn_text=='' || empty($ets_pmpro_disconnect_btn_text) ){
-      $ets_pmpro_disconnect_btn_text = 'Disconnect From Discord';
-    }
+		if ( $btn_color == '' || empty( $btn_color ) ) {
+			$btn_color = '#77a02e';
+		}
+		if ( $ets_pmpro_btn_disconnect_color == '' || empty( $ets_pmpro_btn_disconnect_color ) ) {
+			$ets_pmpro_btn_disconnect_color = '#ff0000';
+		}
+		if ( $loggedout_btn_text == '' || empty( $loggedout_btn_text ) ) {
+			$loggedout_btn_text = 'Login With Discord';
+		}
+		if ( $loggedin_btn_text == '' || empty( $loggedin_btn_text ) ) {
+			$loggedin_btn_text = 'Connect To Discord';
+		}
+		if ( $ets_pmpro_disconnect_btn_text == '' || empty( $ets_pmpro_disconnect_btn_text ) ) {
+			$ets_pmpro_disconnect_btn_text = 'Disconnect From Discord';
+		}
 
 		if ( isset( $_GET['level'] ) && $_GET['level'] > 0 ) {
 			$curr_level_id = $_GET['level'];
@@ -135,7 +137,7 @@ class Ets_Pmpro_Admin_Setting {
 		$pmpro_connecttodiscord_btn = '';
 		if ( Check_saved_settings_status() ) {
 			if ( $access_token ) {
-				$discord_user_name = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_username', true ) ) );
+				$discord_user_name           = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_username', true ) ) );
 				$pmpro_connecttodiscord_btn .= '<div><label class="ets-connection-lbl">' . esc_html__( 'Discord connection', 'pmpro-discord-add-on' ) . '</label>';
 				$pmpro_connecttodiscord_btn .= '<style>.pmpro-btn-disconnect{background-color: ' . $ets_pmpro_btn_disconnect_color . ';}</style><a href="#" class="ets-btn pmpro-btn-disconnect" id="pmpro-disconnect-discord" data-user-id="' . esc_attr( $user_id ) . '">' . esc_html( $ets_pmpro_disconnect_btn_text ) . '<i class="fab fa-discord"></i></a>';
 				$pmpro_connecttodiscord_btn .= '<span class="ets-spinner"></span><p class="ets_assigned_role">';
@@ -152,10 +154,10 @@ class Ets_Pmpro_Admin_Setting {
 					$pmpro_connecttodiscord_btn .= esc_html( $default_role_name );
 				}
 				$pmpro_connecttodiscord_btn .= '</p><p class="ets_assigned_role">';
-				$pmpro_connecttodiscord_btn .= esc_html__( 'Connected account: '.$discord_user_name, 'memberpress-discord-add-on' );
+				$pmpro_connecttodiscord_btn .= esc_html__( 'Connected account: ' . $discord_user_name, 'memberpress-discord-add-on' );
 				$pmpro_connecttodiscord_btn .= '</p></div>';
 			} elseif ( pmpro_hasMembershipLevel() || $allow_none_member == 'yes' ) {
-				$btn_text = $user_id ? $loggedin_btn_text : $loggedout_btn_text ;
+				$btn_text = $user_id ? $loggedin_btn_text : $loggedout_btn_text;
 
 				$current_url                 = ets_pmpro_discord_get_current_screen_url();
 				$pmpro_connecttodiscord_btn .= '<style>.pmpro-btn-connect{background-color: ' . $btn_color . ';}</style><div><label class="ets-connection-lbl">' . esc_html__( 'Discord connection', 'pmpro-discord-add-on' ) . '</label>';
@@ -224,9 +226,9 @@ class Ets_Pmpro_Admin_Setting {
 			$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
 			$all_roles                      = unserialize( get_option( 'ets_pmpro_discord_all_roles' ) );
 			$member_discord_login           = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_login_with_discord' ) ) );
-			$btn_color                          = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_btn_color' ) ) );
-			$btn_text                        	= sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedout_btn_text' ) ) );
-			echo "<style>.pmpro-btn-connect{background-color: ".$btn_color.";}</style>";
+			$btn_color                      = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_btn_color' ) ) );
+			$btn_text                       = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedout_btn_text' ) ) );
+			echo '<style>.pmpro-btn-connect{background-color: ' . $btn_color . ';}</style>';
 			if ( $member_discord_login ) {
 				$curr_level_id     = $_GET['level'];
 				$mapped_role_name  = '';
@@ -270,11 +272,10 @@ class Ets_Pmpro_Admin_Setting {
 	public function ets_pmpro_discord_as_schdule_job_pmpro_cancel( $level_id, $user_id, $cancel_level ) {
 		$membership_status = sanitize_text_field( trim( $this->ets_check_current_membership_status( $user_id ) ) );
 		$access_token      = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
-		$cancel_on_next_payment = is_plugin_active( 'pmpro-cancel-on-next-payment-date/pmpro-cancel-on-next-payment-date.php' );
-		$next_payment = pmpro_next_payment( $user_id );
+		$next_payment      = pmpro_next_payment( $user_id );
 		global $pmpro_next_payment_timestamp;
-		if ( ! empty( $cancel_level ) || $membership_status == 'admin_cancelled' ) {
 
+		if ( ! empty( $cancel_level ) || $membership_status == 'admin_cancelled' ) {
 			$args = array(
 				'hook'    => 'ets_pmpro_discord_as_handle_pmpro_cancel',
 				'args'    => array( $level_id, $user_id, $cancel_level ),
@@ -285,12 +286,30 @@ class Ets_Pmpro_Admin_Setting {
 			// check if member is already added to job queue.
 			$cancl_arr_already_added = as_get_scheduled_actions( $args, ARRAY_A );
 
-			if ( count( $cancl_arr_already_added ) === 0 && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) && $pmpro_next_payment_timestamp && $cancel_on_next_payment ) {
-				as_schedule_single_action( $pmpro_next_payment_timestamp, 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $cancel_level ), ETS_DISCORD_AS_GROUP_NAME );
-			}elseif ( count( $cancl_arr_already_added ) === 0 && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ) {
+			if ( count( $cancl_arr_already_added ) === 0 && $access_token && ( $membership_status == 'cancelled' || $membership_status == 'admin_cancelled' ) ) {
 				as_schedule_single_action( ets_pmpro_discord_get_random_timestamp( ets_pmpro_discord_get_highest_last_attempt_timestamp() ), 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level_id, $cancel_level ), ETS_DISCORD_AS_GROUP_NAME );
 			}
 		}
+	}
+
+	/**
+	 * If the cancel on next payment is enabled.
+	 */
+	public function ets_pmpro_discord_handle_cancel_on_next_payment( $level, $user_id, $old_level_status, $cancel_level ) {
+		global $wpdb;
+		$cancel_on_next_payment = is_plugin_active( 'pmpro-cancel-on-next-payment-date/pmpro-cancel-on-next-payment-date.php' );
+		$access_token           = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
+
+		if ( $cancel_on_next_payment && $old_level_status == 'cancelled' && $cancel_level ) {
+			$end_date           = $wpdb->get_var( $wpdb->prepare( "SELECT enddate FROM $wpdb->pmpro_memberships_users WHERE status=%s AND membership_id=%d AND user_id=%d", 'active', $level, $user_id ) );
+			$end_date_timestamp = date_timestamp_get( date_create( $end_date ) );
+			if ( $end_date_timestamp !== false ) {
+				if ( $access_token ) {
+					as_schedule_single_action( $end_date_timestamp, 'ets_pmpro_discord_as_handle_pmpro_cancel', array( $user_id, $level, $cancel_level ), ETS_DISCORD_AS_GROUP_NAME );
+				}
+			}
+		}
+		return $level;
 	}
 
 	/*
@@ -407,7 +426,7 @@ class Ets_Pmpro_Admin_Setting {
 		wp_enqueue_script( 'jquery-ui-droppable' );
 		wp_enqueue_script( 'wp-color-picker' );
 		wp_enqueue_style( 'wp-color-picker' );
-    $log_api_res                                  = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_log_api_response' ) ) );
+		$log_api_res = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_log_api_response' ) ) );
 		if ( isset( $_GET['save_settings_msg'] ) ) {
 			?>
 				<div class="notice notice-success is-dismissible support-success-msg">
@@ -415,9 +434,9 @@ class Ets_Pmpro_Admin_Setting {
 				</div>
 			<?php
 		}
-    if( $log_api_res ){
-      echo '<div class="notice notice-error is-dismissible"> <p>PMPRO - Discord logging is currently enabled. Since logs may contain sensitive information, please ensure that you only leave it enabled for as long as it is needed for troubleshooting. If you currently have a support ticket open, please do not disable logging until the Support Team has reviewed your logs.</p> </div>';
-    }
+		if ( $log_api_res ) {
+			echo '<div class="notice notice-error is-dismissible"> <p>PMPRO - Discord logging is currently enabled. Since logs may contain sensitive information, please ensure that you only leave it enabled for as long as it is needed for troubleshooting. If you currently have a support ticket open, please do not disable logging until the Support Team has reviewed your logs.</p> </div>';
+		}
 		?>
 		<h1><?php echo __( 'PMPRO Discord Add On Settings', 'pmpro-discord-add-on' ); ?></h1>
 
@@ -572,7 +591,7 @@ class Ets_Pmpro_Admin_Setting {
 				delete_option( 'ets_pmpro_allow_none_member' );
 				$message = 'Your settings flushed successfully.';
 			}
-			$pre_location = $_POST['referrer']  . '&save_settings_msg=' . $message . '#ets_pmpro_role_mapping';
+			$pre_location = $_POST['referrer'] . '&save_settings_msg=' . $message . '#ets_pmpro_role_mapping';
 			wp_safe_redirect( $pre_location );
 		}
 	}
@@ -733,7 +752,7 @@ class Ets_Pmpro_Admin_Setting {
 			wp_send_json_error( 'You do not have sufficient rights', 403 );
 			exit();
 		}
-		
+
 		$ets_pmpro_btn_color            = isset( $_POST['ets_pmpro_btn_color'] ) && $_POST['ets_pmpro_btn_color'] !== '' ? sanitize_text_field( trim( $_POST['ets_pmpro_btn_color'] ) ) : '#77a02e';
 		$ets_pmpro_btn_disconnect_color = isset( $_POST['ets_pmpro_btn_disconnect_color'] ) && $_POST['ets_pmpro_btn_disconnect_color'] != '' ? sanitize_text_field( trim( $_POST['ets_pmpro_btn_disconnect_color'] ) ) : '#ff0000';
 		$ets_pmpro_loggedin_btn_text    = isset( $_POST['ets_pmpro_loggedin_btn_text'] ) && $_POST['ets_pmpro_loggedin_btn_text'] != '' ? sanitize_text_field( trim( $_POST['ets_pmpro_loggedin_btn_text'] ) ) : 'Connect To Discord';

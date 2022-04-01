@@ -38,7 +38,7 @@ This plugin provides the following features:
 13) Short code [discord_connect_button] can be used on any page to display connect/disconnect button.
 14) Using the shortcode [discord_connect_button] on any page, anyone can join the website discord server by authentication via member discord account. New members will get `default` role if selected in the setting.
 15) Button styling feature under the plugin settings.
-
+16) Support of Paid Memberships Pro - Cancel on Next Payment Date. So the member role wont get removed immediately upon cancel.
 [View all Screenshots](https://www.expresstechsoftwares.com/pmpro-official-discord-add-on/)
 
 == Installation ==

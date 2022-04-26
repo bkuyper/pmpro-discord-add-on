@@ -13,53 +13,28 @@ $current_screen                 = ets_pmpro_discord_get_current_screen_url();
 	<?php wp_nonce_field( 'save_discord_settings', 'ets_discord_save_settings' ); ?>
 	<div class="ets-input-group">
 	  <label><?php echo __( 'Client ID', 'pmpro-discord-add-on' ); ?> :</label>
-		<input type="text" class="ets-input" name="ets_pmpro_discord_client_id" value="
-		<?php
-		if ( isset( $ets_pmpro_discord_client_id ) ) {
-			echo esc_attr( $ets_pmpro_discord_client_id ); }
-		?>
-		" required placeholder="Discord Client ID">
+		<input type="text" class="ets-input" name="ets_pmpro_discord_client_id" value=" <?php if ( isset( $ets_pmpro_discord_client_id ) ) { echo esc_attr( $ets_pmpro_discord_client_id ); } ?> " required placeholder="Discord Client ID">
 	</div>
 	<div class="ets-input-group">
 	  <label><?php echo __( 'Client Secret', 'pmpro-discord-add-on' ); ?> :</label>
-		<input type="text" class="ets-input" name="ets_pmpro_discord_client_secret" value="
-		<?php
-		if ( isset( $discord_client_secret ) ) {
-			echo esc_attr( $discord_client_secret ); }
-		?>
-		" required placeholder="Discord Client Secret">
+		<input type="text" class="ets-input" name="ets_pmpro_discord_client_secret" value=" <?php if ( isset( $discord_client_secret ) ) { echo esc_attr( $discord_client_secret ); } ?> " required placeholder="Discord Client Secret">
 	</div>
 	<div class="ets-input-group">
 	  <label><?php echo __( 'Redirect URL', 'pmpro-discord-add-on' ); ?> :</label>
-		<input type="text" class="ets-input" name="ets_pmpro_discord_redirect_url"
-		placeholder="Discord Redirect Url" value="
-		<?php
-		if ( isset( $ets_pmpro_discord_redirect_url ) ) {
-			echo esc_attr( $ets_pmpro_discord_redirect_url ); }
-		?>
-		" required>
+		<input type="text" class="ets-input" name="ets_pmpro_discord_redirect_url" placeholder="Discord Redirect Url" value=" <?php if ( isset( $ets_pmpro_discord_redirect_url ) ) { echo esc_attr( $ets_pmpro_discord_redirect_url ); } ?> " required>
 		<p class="description"><?php echo __( 'Registered Discord APP URL', 'pmpro-discord-add-on' ); ?>
+    <?php if($ets_pmpro_discord_client_id) {  ?>
 	  <a href="<?php echo sprintf( 'https://discord.com/applications/%d/oauth2/general', $ets_pmpro_discord_client_id ); ?>">Open Discord.com/application</a>
+    <?php } ?>
   </p>
 	</div>
 	<div class="ets-input-group">
 	  <label><?php echo __( 'Bot Token', 'pmpro-discord-add-on' ); ?> :</label>
-		<input type="password" class="ets-input" name="ets_pmpro_discord_bot_token" value="
-		<?php
-		if ( isset( $discord_bot_token ) ) {
-			echo esc_attr( $discord_bot_token ); }
-		?>
-		" required placeholder="Discord Bot Token">
+		<input type="password" class="ets-input" name="ets_pmpro_discord_bot_token" value=" <?php if ( isset( $discord_bot_token ) ) { echo esc_attr( $discord_bot_token ); } ?> " required placeholder="Discord Bot Token">
 	</div>
 	<div class="ets-input-group">
 	  <label><?php echo __( 'Server ID', 'pmpro-discord-add-on' ); ?> :</label>
-		<input type="text" class="ets-input" name="ets_pmpro_discord_guild_id"
-		placeholder="Discord Server Id" value="
-		<?php
-		if ( isset( $ets_pmpro_discord_guild_id ) ) {
-			echo esc_attr( $ets_pmpro_discord_guild_id ); }
-		?>
-		" required>
+		<input type="text" class="ets-input" name="ets_pmpro_discord_guild_id" placeholder="Discord Server Id" value=" <?php if ( isset( $ets_pmpro_discord_guild_id ) ) { echo esc_attr( $ets_pmpro_discord_guild_id ); } ?> " required>
 	</div>
 	<?php if ( empty( $ets_pmpro_discord_client_id ) || empty( $discord_client_secret ) || empty( $discord_bot_token ) || empty( $ets_pmpro_discord_redirect_url ) || empty( $ets_pmpro_discord_guild_id ) ) { ?>
 	  <p class="ets-danger-text description">

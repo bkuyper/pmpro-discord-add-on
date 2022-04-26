@@ -24,7 +24,7 @@ $current_screen                 = ets_pmpro_discord_get_current_screen_url();
 		<input type="text" class="ets-input" name="ets_pmpro_discord_redirect_url" placeholder="Discord Redirect Url" value="<?php if ( isset( $ets_pmpro_discord_redirect_url ) ) { echo esc_attr( $ets_pmpro_discord_redirect_url ); } ?>" required>
 		<p class="description"><?php echo __( 'Registered Discord APP URL', 'pmpro-discord-add-on' ); ?>
     <?php if($ets_pmpro_discord_client_id) {  ?>
-	  <a href="<?php echo sprintf( 'https://discord.com/applications/%d/oauth2/general', $ets_pmpro_discord_client_id ); ?>">Open Discord.com/application</a>
+	  <a target="_blank" href="<?php echo sprintf( 'https://discord.com/developers/applications/%d/oauth2/general', $ets_pmpro_discord_client_id ); ?>">Open Discord.com/developers/applications</a>
     <?php } ?>
   </p>
 	</div>

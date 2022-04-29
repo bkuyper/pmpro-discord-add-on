@@ -1,3 +1,6 @@
+= 1.1.9 =
+- Added support for Discord API v10.
+
 = 1.1.8 =
 - Added support for Paid Memberships Pro - Cancel on Next Payment Date
 

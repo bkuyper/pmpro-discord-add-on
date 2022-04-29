@@ -3,7 +3,7 @@
  * Plugin Name: Connect Paid Memberships Pro to Discord
  * Plugin URI:  https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon
  * Description: Connect your PaidMebershipPro site to your discord server, enable your members to be part of your community.
- * Version: 1.1.8
+ * Version: 1.1.9
  * Author: ExpressTech Software Solutions Pvt. Ltd., Strangers Studios
  * Author URI: https://www.expresstechsoftwares.com
  * Text Domain: pmpro-discord-add-on
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // create plugin version constant.
-define( 'ETS_PMPRO_VERSION', '1.1.8' );
+define( 'ETS_PMPRO_VERSION', '1.1.9' );
 
 // create plugin url constant.
 define( 'ETS_PMPRO_DISCORD_URL', plugin_dir_url( __FILE__ ) );
@@ -23,7 +23,7 @@ define( 'ETS_PMPRO_DISCORD_URL', plugin_dir_url( __FILE__ ) );
 define( 'ETS_PMPRO_DISCORD_PATH', plugin_dir_path( __FILE__ ) );
 
 // discord API url.
-define( 'ETS_DISCORD_API_URL', 'https://discord.com/api/v6/' );
+define( 'ETS_DISCORD_API_URL', 'https://discord.com/api/v10/' );
 
 // discord Bot Permissions.
 define( 'ETS_DISCORD_BOT_PERMISSIONS', 8 );
@@ -96,10 +96,10 @@ class Ets_Pmpro_Add_Discord {
 		update_option( 'ets_pmpro_discord_job_queue_concurrency', 1 );
 		update_option( 'ets_pmpro_member_kick_out', 0 );
 		update_option( 'ets_pmpro_discord_btn_color', '#77a02e' );
-    update_option( 'ets_pmpro_btn_disconnect_color', '#ff0000' );
+		update_option( 'ets_pmpro_btn_disconnect_color', '#ff0000' );
 		update_option( 'ets_pmpro_discord_loggedout_btn_text', 'Connect To Discord' );
 		update_option( 'ets_pmpro_discord_loggedin_btn_text', 'Connect To Discord' );
-    update_option( 'ets_pmpro_disconnect_btn_text', 'Disconnect From Discord' );
+		update_option( 'ets_pmpro_disconnect_btn_text', 'Disconnect From Discord' );
 		update_option( 'ets_pmpro_discord_job_queue_batch_size', 7 );
 		update_option( 'ets_pmpro_allow_none_member', 'yes' );
 		update_option( 'ets_pmpro_retry_api_count', '5' );

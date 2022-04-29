@@ -17,7 +17,7 @@ $current_screen                 = ets_pmpro_discord_get_current_screen_url();
 	</div>
 	<div class="ets-input-group">
 	  <label><?php echo __( 'Client Secret', 'pmpro-discord-add-on' ); ?> :</label>
-		<input type="text" class="ets-input" name="ets_pmpro_discord_client_secret" value="<?php if ( isset( $discord_client_secret ) ) { echo esc_attr( $discord_client_secret ); } ?>" required placeholder="Discord Client Secret">
+		<input type="password" class="ets-input" name="ets_pmpro_discord_client_secret" value="<?php if ( isset( $discord_client_secret ) ) { echo esc_attr( $discord_client_secret ); } ?>" required placeholder="Discord Client Secret">
 	</div>
 	<div class="ets-input-group">
 	  <label><?php echo __( 'Redirect URL', 'pmpro-discord-add-on' ); ?> :</label>

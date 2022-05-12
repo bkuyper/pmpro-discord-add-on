@@ -111,6 +111,7 @@ class Ets_Pmpro_Add_Discord {
 		update_option( 'ets_pmpro_discord_expiration_expired_message', 'Hi [MEMBER_USERNAME] ([MEMBER_EMAIL]), Your membership [MEMBERSHIP_LEVEL] is expired at [MEMBERSHIP_ENDDATE] at [SITE_URL] Thanks, Kind Regards, [BLOG_NAME]' );
 		update_option( 'ets_pmpro_discord_send_membership_cancel_dm', true );
 		update_option( 'ets_pmpro_discord_cancel_message', 'Hi [MEMBER_USERNAME], ([MEMBER_EMAIL]), Your membership [MEMBERSHIP_LEVEL] at [BLOG_NAME] is cancelled, Regards, [SITE_URL]' );
+		update_option( 'ets_pmpro_discord_embed_messaging_feature', false );
 	}
 
 }

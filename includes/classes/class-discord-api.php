@@ -114,6 +114,7 @@ class PMPro_Discord_API {
 		$ets_pmpro_discord_expiration_expired_message = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_expiration_expired_message' ) ) );
 		$ets_pmpro_discord_welcome_message            = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_welcome_message' ) ) );
 		$ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_cancel_message' ) ) );
+		$embed_messaging_feature                      = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_embed_messaging_feature' ) ) );                                
 		// Check if DM channel is already created for the user.
 		$user_dm = get_user_meta( $user_id, '_ets_pmpro_discord_dm_channel', true );
 
@@ -144,16 +145,30 @@ class PMPro_Discord_API {
 		}
 
 		$creat_dm_url = ETS_DISCORD_API_URL . '/channels/' . $dm_channel_id . '/messages';
-		$dm_args      = array(
-			'method'  => 'POST',
-			'headers' => array(
-				'Content-Type'  => 'application/json',
-				'Authorization' => 'Bot ' . $discord_bot_token,
-			),
+		if( $embed_messaging_feature ) {
+			$dm_args      = array(
+				'method'  => 'POST',
+				'headers' => array(
+					'Content-Type'  => 'application/json',
+					'Authorization' => 'Bot ' . $discord_bot_token,
+				),
 			'body'    =>  ets_pmpro_disocrd_get_rich_embed_message( trim( $message ) ) ,
-				
-			
-		);
+
+			); 
+		} else {
+			$dm_args      = array(
+				'method'  => 'POST',
+				'headers' => array(
+					'Content-Type'  => 'application/json',
+					'Authorization' => 'Bot ' . $discord_bot_token,
+				),
+				'body'    => json_encode(
+					array(
+						'content' => sanitize_text_field( trim( wp_unslash( $message ) ) ),
+					)
+				),
+			);                    
+		}
 		$dm_response  = wp_remote_post( $creat_dm_url, $dm_args );
 		ets_pmpro_discord_log_api_response( $user_id, $creat_dm_url, $dm_args, $dm_response );
 		$dm_response_body = json_decode( wp_remote_retrieve_body( $dm_response ), true );

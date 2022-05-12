@@ -263,19 +263,26 @@ function ets_pmpro_disocrd_get_rich_embed_message ( $message ){
 	$blog_logo_thumbnail =  esc_url( wp_get_attachment_image_src( get_theme_mod( 'custom_logo' ), 'thumbnail' )[0] ); 
 	$SITE_URL  = get_bloginfo( 'url' );
 	$BLOG_NAME = get_bloginfo( 'name' );
+	$BLOG_DESCRIPTION = get_bloginfo( 'description' );
     
 	$timestamp = date( "c", strtotime( "now" ) );
-
+	$convert_lines = preg_split( "/\[LINEBREAK\]/", $message );
+	$fields = [];
+	if ( is_array ( $convert_lines ) ){
+		for ( $i = 0; $i< count( $convert_lines ); $i++ ){
+			array_push( $fields, ["name" => ".", "value" => $convert_lines[$i], "inline" => false ] );
+		}
+	}
 	$rich_embed_message = json_encode( [
-		"content" => '',
+		"content" => "",
 		"username" =>  $BLOG_NAME,
 		"avatar_url" => $blog_logo_thumbnail,
 		"tts" => false,
 		"embeds" => [
 			[
-				"title" => $message,
+				"title" => "",
 				"type" => "rich",
-				"description" => "",
+				"description" => $BLOG_DESCRIPTION,
 				"url" => $SITE_URL,
 				"timestamp" => $timestamp,
 				"color" => hexdec( "3366ff" ),
@@ -293,6 +300,7 @@ function ets_pmpro_disocrd_get_rich_embed_message ( $message ){
 					"name" => $BLOG_NAME,
 					"url" => $SITE_URL
 				],
+				"fields" => $fields                            
 			]
 		]
 

@@ -297,6 +297,9 @@ class Ets_Pmpro_Admin_Setting {
 	 */
 	public function ets_pmpro_discord_handle_cancel_on_next_payment( $level, $user_id, $old_level_status, $cancel_level ) {
 		global $wpdb;
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+		}
 		$cancel_on_next_payment = is_plugin_active( 'pmpro-cancel-on-next-payment-date/pmpro-cancel-on-next-payment-date.php' );
 		$access_token           = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 

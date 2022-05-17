@@ -40,7 +40,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_action( 'pmpro_checkout_after_pricing_fields', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
 
-		add_action( 'pmpro_checkout_after_user_fields', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
+//		add_action( 'pmpro_checkout_after_user_fields', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
 
 		add_filter( 'pmpro_manage_memberslist_custom_column', array( $this, 'ets_pmpro_discord_pmpro_extra_cols_body' ), 10, 2 );
 

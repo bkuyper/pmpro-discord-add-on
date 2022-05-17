@@ -887,7 +887,11 @@ class Ets_Pmpro_Admin_Setting {
 	*/
 	public function ets_pmpro_discord_add_inline_css_checkout (){
 		if ( in_array( 'pmpro-checkout', get_body_class() ) ){
-			$custom_css = "body.pmpro-checkout div#pmpro_user_fields,body.pmpro-checkout div#pmpro_billing_address_fields,body.pmpro-checkout div#pmpro_payment_information_fields,body.pmpro-checkout div.pmpro_submit{display: none!important;}";
+			if ( ! is_user_logged_in() ){
+				$custom_css = "body.pmpro-checkout div#pmpro_user_fields,body.pmpro-checkout div#pmpro_billing_address_fields,body.pmpro-checkout div#pmpro_payment_information_fields,body.pmpro-checkout div.pmpro_submit{display: none!important;}";                        
+			} else {
+				$custom_css = "";                        
+			}                        
 			wp_add_inline_style ( 'ets_pmpro_add_discord_style' , $custom_css );                
 		}            
 	}

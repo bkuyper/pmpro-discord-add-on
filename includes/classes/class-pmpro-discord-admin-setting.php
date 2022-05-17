@@ -20,6 +20,8 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_action( 'pmpro_show_user_profile', array( $this, 'ets_pmpro_show_discord_button' ) );
 
+		add_action( 'wp_body_open', array( $this, 'ets_pmpro_discord_add_inline_css_checkout') );
+
 		// change hook call on cancel and change
 		add_action( 'pmpro_after_change_membership_level', array( $this, 'ets_pmpro_discord_as_schdule_job_pmpro_cancel' ), 10, 3 );
 
@@ -876,6 +878,18 @@ class Ets_Pmpro_Admin_Setting {
 		$columns['discord']     = __( 'Discord', 'pmpro-discord-add-on' );
 		$columns['joined_date'] = __( 'Joined Date', 'pmpro-discord-add-on' );
 		return $columns;
+	}
+
+	/*
+	* Add extra css
+	* @param NONE
+	* @return NONE
+	*/
+	public function ets_pmpro_discord_add_inline_css_checkout (){
+		if ( in_array( 'pmpro-checkout', get_body_class() ) ){
+			$custom_css = "body.pmpro-checkout div#pmpro_user_fields,body.pmpro-checkout div#pmpro_billing_address_fields,body.pmpro-checkout div#pmpro_payment_information_fields,body.pmpro-checkout div.pmpro_submit{display: none!important;}";
+			wp_add_inline_style ( 'ets_pmpro_add_discord_style' , $custom_css );                
+		}            
 	}
 }
 new Ets_Pmpro_Admin_Setting();

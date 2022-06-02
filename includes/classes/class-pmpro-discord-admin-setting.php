@@ -95,7 +95,7 @@ class Ets_Pmpro_Admin_Setting {
 		$default_role                   = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
 		$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
 		$all_roles                      = unserialize( get_option( 'ets_pmpro_discord_all_roles' ) );
-
+		$roles_color = unserialize( get_option( 'ets_pmpro_discord_roles_color' ) );
 		$btn_color                      = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_btn_color' ) ) );
 		$ets_pmpro_btn_disconnect_color = sanitize_text_field( trim( get_option( 'ets_pmpro_btn_disconnect_color' ) ) );
 		$loggedout_btn_text             = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedout_btn_text' ) ) );
@@ -128,13 +128,13 @@ class Ets_Pmpro_Admin_Setting {
 			if ( is_array( $ets_pmpor_discord_role_mapping ) && array_key_exists( 'pmpro_level_id_' . $curr_level_id, $ets_pmpor_discord_role_mapping ) ) {
 				$mapped_role_id = $ets_pmpor_discord_role_mapping[ 'pmpro_level_id_' . $curr_level_id ];
 				if ( array_key_exists( $mapped_role_id, $all_roles ) ) {
-					$mapped_role_name = $all_roles[ $mapped_role_id ];
+					$mapped_role_name = '<span> <i style="background-color:#' . dechex( $roles_color[ $mapped_role_id ] ) . '"></i>' . $all_roles[ $mapped_role_id ] . '</span>';                                        
 				}
 			}
 		}
 		$default_role_name = '';
 		if ( $default_role != 'none' && is_array( $all_roles ) && array_key_exists( $default_role, $all_roles ) ) {
-			$default_role_name = $all_roles[ $default_role ];
+                        $default_role_name = '<span> <i style="background-color:#' . dechex( $roles_color[ $default_role ] ) . '"></i>' . $all_roles[ $default_role ] . '</span>';                                        
 		}
 		$pmpro_connecttodiscord_btn = '';
 		if ( Check_saved_settings_status() ) {
@@ -147,13 +147,13 @@ class Ets_Pmpro_Admin_Setting {
 					$pmpro_connecttodiscord_btn .= esc_html__( 'Following Roles was assigned to you in Discord: ', 'pmpro-discord-add-on' );
 				}
 				if ( $mapped_role_name ) {
-					$pmpro_connecttodiscord_btn .= esc_html( $mapped_role_name );
+					$pmpro_connecttodiscord_btn .= ets_pmpro_discord_allowed_html( $mapped_role_name );
 				}
 				if ( $default_role_name && $mapped_role_name ) {
-					$pmpro_connecttodiscord_btn .= ' , ';
+					//$pmpro_connecttodiscord_btn .= ' , ';
 				}
 				if ( $default_role_name ) {
-					$pmpro_connecttodiscord_btn .= esc_html( $default_role_name );
+					$pmpro_connecttodiscord_btn .= ets_pmpro_discord_allowed_html( $default_role_name );
 				}
 				$pmpro_connecttodiscord_btn .= '</p><p class="ets_assigned_role">';
 				$pmpro_connecttodiscord_btn .= esc_html__( 'Connected account: ' . $discord_user_name, 'memberpress-discord-add-on' );
@@ -169,13 +169,13 @@ class Ets_Pmpro_Admin_Setting {
 					$pmpro_connecttodiscord_btn .= esc_html__( 'Following Roles will be assigned to you in Discord: ', 'pmpro-discord-add-on' );
 				}
 				if ( $mapped_role_name ) {
-					$pmpro_connecttodiscord_btn .= esc_html( $mapped_role_name );
+					$pmpro_connecttodiscord_btn .= ets_pmpro_discord_allowed_html( $mapped_role_name );
 				}
 				if ( $default_role_name && $mapped_role_name ) {
-					$pmpro_connecttodiscord_btn .= ' , ';
+					//$pmpro_connecttodiscord_btn .= ' , ';
 				}
 				if ( $default_role_name ) {
-					$pmpro_connecttodiscord_btn .= esc_html( $default_role_name );
+					$pmpro_connecttodiscord_btn .= ets_pmpro_discord_allowed_html( $default_role_name );
 				}
 				$pmpro_connecttodiscord_btn .= '</p></div>';
 

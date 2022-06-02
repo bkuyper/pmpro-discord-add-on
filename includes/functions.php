@@ -309,3 +309,14 @@ function ets_pmpro_disocrd_get_rich_embed_message ( $message ){
 	return $rich_embed_message ; 
 }
 
+function ets_pmpro_discord_allowed_html( $html_message ) {
+	$allowed_html = array(
+		'span' => array(),
+		'i' => array(
+			'style' => array()
+		)
+	);
+
+	return wp_kses( $html_message, $allowed_html );
+}
+

@@ -527,9 +527,11 @@ class PMPro_Discord_API {
 						}
 						if ( $key != 'previous_mapping' && $isbot == false && isset( $value['name'] ) && $value['name'] != '@everyone' ) {
 							$discord_roles[ $value['id'] ] = $value['name'];
+							$discord_roles_color[ $value['id'] ] = $value['color'];
 						}
 					}
 					update_option( 'ets_pmpro_discord_all_roles', serialize( $discord_roles ) );
+					update_option( 'ets_pmpro_discord_roles_color', serialize( $discord_roles_color ) );                                                                                
 				}
 			}
 				return wp_send_json( $response_arr );

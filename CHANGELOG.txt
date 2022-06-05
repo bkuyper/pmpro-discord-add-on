@@ -1,3 +1,7 @@
+= 1.2.1 =
+- Add linebreak feature in DM messages.
+- Added color on roles under connect and disconnect button.
+
 = 1.2.0 =
 - Fixed the BUG GH#294, Fatal error Call to undefined function is_plugin_active()
 

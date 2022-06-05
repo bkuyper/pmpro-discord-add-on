@@ -487,9 +487,9 @@ select#defaultRole{
     margin-right: 5px;
 }
 .ets_assigned_role > span > i{
-    width: 14px;
+    width: 100%;
     height: 14px;
     display: inline-block;
-    border-radius: 50%;
+    border-radius: 20%;
     margin-right: 6px;     
 }

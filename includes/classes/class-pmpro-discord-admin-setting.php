@@ -227,7 +227,6 @@ class Ets_Pmpro_Admin_Setting {
 			$default_role                   = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
 			$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
 			$all_roles                      = unserialize( get_option( 'ets_pmpro_discord_all_roles' ) );
-			$member_force_discord_login     = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_force_login_with_discord' ) ) );                        
 			$member_discord_login           = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_login_with_discord' ) ) );
 			$btn_color                      = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_btn_color' ) ) );
 			$btn_text                       = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedout_btn_text' ) ) );
@@ -666,6 +665,7 @@ class Ets_Pmpro_Admin_Setting {
 
 				if ( isset( $_POST['member_force_discord_login'] ) ) {
 					update_option( 'ets_pmpro_discord_force_login_with_discord', true );
+					update_option( 'ets_pmpro_discord_login_with_discord', true );                                        
 				} else {
 					update_option( 'ets_pmpro_discord_force_login_with_discord', false );
 				}

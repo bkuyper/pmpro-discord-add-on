@@ -7,7 +7,7 @@ Author: ExpressTech Software Solutions Pvt. Ltd.
 Requires at least: 4.7
 Tested up to: 6.0
 Requires PHP: 7.0
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,8 @@ This plugin provides the following features:
 14) Using the shortcode [discord_connect_button] on any page, anyone can join the website discord server by authentication via member discord account. New members will get `default` role if selected in the setting.
 15) Button styling feature under the plugin settings.
 16) Support of Paid Memberships Pro - Cancel on Next Payment Date. So the member role wont get removed immediately upon cancel.
+17) Support for forced discord authentication before checkout.
+
 [View all Screenshots](https://www.expresstechsoftwares.com/pmpro-official-discord-add-on/)
 
 == Installation ==

@@ -1,3 +1,6 @@
+= 1.2.2 =
+- Fixed a BUG GH#298
+
 = 1.2.1 =
 - Add linebreak feature in DM messages.
 - Added color on roles under connect and disconnect button.

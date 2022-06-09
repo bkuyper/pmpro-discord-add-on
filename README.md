@@ -56,6 +56,7 @@ This add-on enables connecting your PMPRO enabled website to your discord server
 - Using the shortcode [discord_connect_button] on any page, anyone can join the website discord server by authentication via member discord account. New members will get `default` role if selected in the setting.
 - Button styling feature under the plugin settings.
 - Support of Paid Memberships Pro - Cancel on Next Payment Date. So the member role wont get removed immediately upon cancel.
+- Support for forced discord authentication before checkout.
 
 ## Solution of Missing Access Error
 - Inside the log tab you will see "50001:Missing Access", which is happening because the new BOT role need to the TOP priroty among the other roles.

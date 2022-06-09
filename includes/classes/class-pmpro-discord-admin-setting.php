@@ -672,9 +672,11 @@ class Ets_Pmpro_Admin_Setting {
 
 				if ( isset( $_POST['member_discord_login'] ) ) {
 					update_option( 'ets_pmpro_discord_login_with_discord', true );
+				} else if (  isset( $_POST['member_force_discord_login']) ) {
+					update_option( 'ets_pmpro_discord_login_with_discord', true );
 				} else {
-					update_option( 'ets_pmpro_discord_login_with_discord', false );
-				}
+					update_option( 'ets_pmpro_discord_login_with_discord', false );                                    
+                                }
 
 				if ( isset( $_POST['ets_pmpro_discord_send_welcome_dm'] ) ) {
 					update_option( 'ets_pmpro_discord_send_welcome_dm', true );

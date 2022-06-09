@@ -6,6 +6,7 @@ $set_job_cnrc                                 = sanitize_text_field( trim( get_o
 $set_job_q_batch_size                         = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_job_queue_batch_size' ) ) );
 $retry_api_count                              = sanitize_text_field( trim( get_option( 'ets_pmpro_retry_api_count' ) ) );
 $member_kick_out                              = sanitize_text_field( trim( get_option( 'ets_pmpro_member_kick_out' ) ) );
+$member_force_discord_login                   = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_force_login_with_discord' ) ) );
 $member_discord_login                         = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_login_with_discord' ) ) );
 $ets_pmpro_discord_send_expiration_warning_dm = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_send_expiration_warning_dm' ) ) );
 $ets_pmpro_discord_expiration_warning_message = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_expiration_warning_message' ) ) );
@@ -160,6 +161,18 @@ $current_screen = ets_pmpro_discord_get_current_screen_url();
     <small>Members will be kicked out if this setting is checked.</small>
   </td>
 	  </tr>
+	  <tr>
+		<th scope="row"><?php echo __( 'Force Discord Authentication before checkout', 'pmpro-discord-add-on' ); ?></th>
+		<td> <fieldset>
+		<input name="member_force_discord_login" type="checkbox" id="member_force_discord_login" 
+		<?php
+		if ( $member_force_discord_login == true ) {
+			echo 'checked="checked"'; }
+		?>
+		 value="1">
+		</fieldset>
+  </td>
+	  </tr>        
 	  <tr>
 		<th scope="row"><?php echo __( 'Login with Discord on checkout Page', 'pmpro-discord-add-on' ); ?></th>
 		<td> <fieldset>

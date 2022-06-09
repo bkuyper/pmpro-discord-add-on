@@ -227,6 +227,7 @@ class Ets_Pmpro_Admin_Setting {
 			$default_role                   = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
 			$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
 			$all_roles                      = unserialize( get_option( 'ets_pmpro_discord_all_roles' ) );
+			$member_force_discord_login     = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_force_login_with_discord' ) ) );                        
 			$member_discord_login           = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_login_with_discord' ) ) );
 			$btn_color                      = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_btn_color' ) ) );
 			$btn_text                       = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedout_btn_text' ) ) );
@@ -663,6 +664,12 @@ class Ets_Pmpro_Admin_Setting {
 					update_option( 'ets_pmpro_member_kick_out', false );
 				}
 
+				if ( isset( $_POST['member_force_discord_login'] ) ) {
+					update_option( 'ets_pmpro_discord_force_login_with_discord', true );
+				} else {
+					update_option( 'ets_pmpro_discord_force_login_with_discord', false );
+				}
+
 				if ( isset( $_POST['member_discord_login'] ) ) {
 					update_option( 'ets_pmpro_discord_login_with_discord', true );
 				} else {
@@ -886,7 +893,9 @@ class Ets_Pmpro_Admin_Setting {
 	* @return NONE
 	*/
 	public function ets_pmpro_discord_add_inline_css_checkout (){
-		if ( in_array( 'pmpro-checkout', get_body_class() ) ){
+		$member_force_discord_login   = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_force_login_with_discord' ) ) );
+		$member_discord_login         = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_login_with_discord' ) ) );                
+		if ( in_array( 'pmpro-checkout', get_body_class() ) && $member_force_discord_login && $member_discord_login ){
 			if ( ! is_user_logged_in() ){
 				$custom_css = "body.pmpro-checkout div#pmpro_user_fields,body.pmpro-checkout div#pmpro_billing_address_fields,body.pmpro-checkout div#pmpro_payment_information_fields,body.pmpro-checkout div.pmpro_submit{display: none!important;}";                        
 			} else {

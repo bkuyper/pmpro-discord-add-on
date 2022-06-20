@@ -1,6 +1,6 @@
 === Connect Paid Memberships Pro to Discord ===
-Contributors: expresstechsoftware, strangerstudios
-Tags: Discord, Talk, Video Chat, Hang Out, Friends, Meberships, discord role management
+Contributors: expresstechsoftware, strangerstudios, 
+Tags: Discord, Talk, Video Chat, Hang Out, Friends, Memberships, discord role management
 Donate link: https://paypal.me/supportets
 Author URI: https://www.expresstechsoftwares.com
 Author: ExpressTech Software Solutions Pvt. Ltd.

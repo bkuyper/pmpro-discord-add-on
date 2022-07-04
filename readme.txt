@@ -57,6 +57,10 @@ Go to Memberships > Discord Settings in the WordPress admin to begin setup. Our 
 * [Installation Video](https://youtu.be/v7lxB_Bvlv4)
 * [Installation Docs](https://www.expresstechsoftwares.com/step-by-step-documentation-guide-on-how-to-connect-pmpro-and-discord-server-using-discord-addon/)
 
+== Checkout Our Other Plugins ==
+1. [Connect MemberPress and Discord](https://wordpress.org/plugins/expresstechsoftwares-memberpress-discord-add-on/)
+2. [Connect LearnDash and Discord](https://wordpress.org/plugins/connect-learndash-and-discord/)
+
 
 == Frequently Asked Questions ==
 = I need help installing, configuring, or customizing the plugin. =

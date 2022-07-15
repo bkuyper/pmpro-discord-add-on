@@ -114,7 +114,7 @@ class PMPro_Discord_API {
 		$ets_pmpro_discord_expiration_expired_message = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_expiration_expired_message' ) ) );
 		$ets_pmpro_discord_welcome_message            = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_welcome_message' ) ) );
 		$ets_pmpro_discord_cancel_message             = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_cancel_message' ) ) );
-		$embed_messaging_feature                      = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_embed_messaging_feature' ) ) );                                
+		$embed_messaging_feature                      = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_embed_messaging_feature' ) ) );
 		// Check if DM channel is already created for the user.
 		$user_dm = get_user_meta( $user_id, '_ets_pmpro_discord_dm_channel', true );
 
@@ -145,18 +145,18 @@ class PMPro_Discord_API {
 		}
 
 		$creat_dm_url = ETS_DISCORD_API_URL . '/channels/' . $dm_channel_id . '/messages';
-		if( $embed_messaging_feature ) {
-			$dm_args      = array(
+		if ( $embed_messaging_feature ) {
+			$dm_args = array(
 				'method'  => 'POST',
 				'headers' => array(
 					'Content-Type'  => 'application/json',
 					'Authorization' => 'Bot ' . $discord_bot_token,
 				),
-			'body'    =>  ets_pmpro_disocrd_get_rich_embed_message( trim( $message ) ) ,
+				'body'    => ets_pmpro_disocrd_get_rich_embed_message( trim( $message ) ),
 
-			); 
+			);
 		} else {
-			$dm_args      = array(
+			$dm_args = array(
 				'method'  => 'POST',
 				'headers' => array(
 					'Content-Type'  => 'application/json',
@@ -167,9 +167,9 @@ class PMPro_Discord_API {
 						'content' => sanitize_text_field( trim( wp_unslash( $message ) ) ),
 					)
 				),
-			);                    
+			);
 		}
-		$dm_response  = wp_remote_post( $creat_dm_url, $dm_args );
+		$dm_response = wp_remote_post( $creat_dm_url, $dm_args );
 		ets_pmpro_discord_log_api_response( $user_id, $creat_dm_url, $dm_args, $dm_response );
 		$dm_response_body = json_decode( wp_remote_retrieve_body( $dm_response ), true );
 		if ( ets_pmpro_discord_check_api_errors( $dm_response ) ) {
@@ -526,12 +526,12 @@ class PMPro_Discord_API {
 							}
 						}
 						if ( $key != 'previous_mapping' && $isbot == false && isset( $value['name'] ) && $value['name'] != '@everyone' ) {
-							$discord_roles[ $value['id'] ] = $value['name'];
+							$discord_roles[ $value['id'] ]       = $value['name'];
 							$discord_roles_color[ $value['id'] ] = $value['color'];
 						}
 					}
 					update_option( 'ets_pmpro_discord_all_roles', serialize( $discord_roles ) );
-					update_option( 'ets_pmpro_discord_roles_color', serialize( $discord_roles_color ) );                                                                                
+					update_option( 'ets_pmpro_discord_roles_color', serialize( $discord_roles_color ) );
 				}
 			}
 				return wp_send_json( $response_arr );
@@ -588,7 +588,7 @@ class PMPro_Discord_API {
 		if ( is_user_logged_in() ) {
 			$user_id = get_current_user_id();
 
-			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via']=='discord' ) {
+			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via'] == 'discord' ) {
 				$code     = sanitize_text_field( trim( $_GET['code'] ) );
 				$response = $this->create_discord_auth_token( $code, $user_id );
 
@@ -596,17 +596,17 @@ class PMPro_Discord_API {
 					$res_body = json_decode( wp_remote_retrieve_body( $response ), true );
 					if ( is_array( $res_body ) ) {
 						if ( array_key_exists( 'access_token', $res_body ) ) {
-							$access_token    = sanitize_text_field( trim( $res_body['access_token'] ) );
+							$access_token = sanitize_text_field( trim( $res_body['access_token'] ) );
 							$this->catch_discord_auth_callback( $res_body, $user_id );
-              # Method `catch_discord_auth_callback` set the usermeta key _ets_pmpro_discord_user_id, accessed in below line
-              $discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
+							// Method `catch_discord_auth_callback` set the usermeta key _ets_pmpro_discord_user_id, accessed in below line
+							$discord_user_id = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_user_id', true ) ) );
 							$this->add_discord_member_in_guild( $discord_user_id, $user_id, $access_token );
 						}
 					}
 				}
 			}
 		} else {
-			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via']=='discord' ) {
+			if ( isset( $_GET['code'] ) && isset( $_GET['via'] ) && $_GET['via'] == 'discord' ) {
 				$code     = sanitize_text_field( trim( $_GET['code'] ) );
 				$response = $this->create_discord_auth_token( $code, 'new_created' );
 				if ( ! empty( $response ) && ! is_wp_error( $response ) ) {
@@ -903,7 +903,7 @@ class PMPro_Discord_API {
 					}
 					update_user_meta( $user_id, '_ets_pmpro_discord_default_role_id', $default_role );
 				}
-        delete_user_meta( $user_id, '_ets_pmpro_discord_access_token' );
+				delete_user_meta( $user_id, '_ets_pmpro_discord_access_token' );
 			}
 		}
 		$event_res = array(
@@ -1086,7 +1086,9 @@ class PMPro_Discord_API {
 	 * @return NONE
 	 */
 	public function ets_pmpro_discord_change_discord_role_from_pmpro( $level_id, $user_id, $cancel_level ) {
-		$this->ets_pmpro_discord_set_member_roles( $user_id, false, false, true );
+    $is_schedule = true;
+		$is_schedule = apply_filters( 'ets_pmpro_discord_schedule_change_renew_api_calls', $is_schedule );
+		$this->ets_pmpro_discord_set_member_roles( $user_id, false, false, $is_schedule );
 	}
 
 	/**
@@ -1101,7 +1103,7 @@ class PMPro_Discord_API {
 			wp_send_json_error( 'Unauthorized user', 401 );
 			exit();
 		}
-		$access_token               = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
+		$access_token = sanitize_text_field( trim( get_user_meta( $user_id, '_ets_pmpro_discord_access_token', true ) ) );
 		if ( $access_token && isset( $_COOKIE['ets_discord_page'] ) ) {
 			$this->ets_pmpro_discord_set_member_roles( $user_id );
 		}

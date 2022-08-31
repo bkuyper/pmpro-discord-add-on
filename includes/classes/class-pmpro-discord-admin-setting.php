@@ -52,7 +52,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_filter( 'pmpro_change_level', array( $this, 'ets_pmpro_discord_handle_cancel_on_next_payment' ), 99, 4 );
 
-		add_filter( 'ets_pmpro_show_connect_button_on_profile', array( $this, 'ets_pmpro_discord_show_connect_button_on_profile' ) );
+		add_filter( 'ets_pmpro_show_connect_button_on_profile', array( $this, 'ets_pmpro_discord_show_connect_button_on_profile' ), 10, 1 );
 	}
 	/**
 	 * set action scheuduler concurrent batches number

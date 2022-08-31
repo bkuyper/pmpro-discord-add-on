@@ -20,7 +20,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_action( 'pmpro_show_user_profile', array( $this, 'ets_pmpro_show_discord_button' ) );
 
-		add_action( 'wp_body_open', array( $this, 'ets_pmpro_discord_add_inline_css_checkout') );
+		add_action( 'wp_body_open', array( $this, 'ets_pmpro_discord_add_inline_css_checkout' ) );
 
 		// change hook call on cancel and change
 		add_action( 'pmpro_after_change_membership_level', array( $this, 'ets_pmpro_discord_as_schdule_job_pmpro_cancel' ), 10, 3 );
@@ -40,7 +40,7 @@ class Ets_Pmpro_Admin_Setting {
 
 		add_action( 'pmpro_checkout_after_pricing_fields', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
 
-//		add_action( 'pmpro_checkout_after_user_fields', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
+		// add_action( 'pmpro_checkout_after_user_fields', array( $this, 'ets_pmpro_discord_checkout_after_email' ) );
 
 		add_filter( 'pmpro_manage_memberslist_custom_column', array( $this, 'ets_pmpro_discord_pmpro_extra_cols_body' ), 10, 2 );
 
@@ -51,6 +51,8 @@ class Ets_Pmpro_Admin_Setting {
 		add_filter( 'action_scheduler_queue_runner_concurrent_batches', array( $this, 'ets_pmpro_discord_concurrent_batches' ) );
 
 		add_filter( 'pmpro_change_level', array( $this, 'ets_pmpro_discord_handle_cancel_on_next_payment' ), 99, 4 );
+
+		add_filter( 'ets_pmpro_show_connect_button_on_profile', array( $this, 'ets_pmpro_discord_show_connect_button_on_profile' ) );
 	}
 	/**
 	 * set action scheuduler concurrent batches number
@@ -95,7 +97,7 @@ class Ets_Pmpro_Admin_Setting {
 		$default_role                   = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
 		$ets_pmpor_discord_role_mapping = json_decode( get_option( 'ets_pmpor_discord_role_mapping' ), true );
 		$all_roles                      = unserialize( get_option( 'ets_pmpro_discord_all_roles' ) );
-		$roles_color = unserialize( get_option( 'ets_pmpro_discord_roles_color' ) );
+		$roles_color                    = unserialize( get_option( 'ets_pmpro_discord_roles_color' ) );
 		$btn_color                      = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_btn_color' ) ) );
 		$ets_pmpro_btn_disconnect_color = sanitize_text_field( trim( get_option( 'ets_pmpro_btn_disconnect_color' ) ) );
 		$loggedout_btn_text             = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_loggedout_btn_text' ) ) );
@@ -128,13 +130,13 @@ class Ets_Pmpro_Admin_Setting {
 			if ( is_array( $ets_pmpor_discord_role_mapping ) && array_key_exists( 'pmpro_level_id_' . $curr_level_id, $ets_pmpor_discord_role_mapping ) ) {
 				$mapped_role_id = $ets_pmpor_discord_role_mapping[ 'pmpro_level_id_' . $curr_level_id ];
 				if ( array_key_exists( $mapped_role_id, $all_roles ) ) {
-					$mapped_role_name = '<span> <i style="background-color:#' . dechex( $roles_color[ $mapped_role_id ] ) . '">' . $all_roles[ $mapped_role_id ] . '</i></span>';                                        
+					$mapped_role_name = '<span> <i style="background-color:#' . dechex( $roles_color[ $mapped_role_id ] ) . '">' . $all_roles[ $mapped_role_id ] . '</i></span>';
 				}
 			}
 		}
 		$default_role_name = '';
 		if ( $default_role != 'none' && is_array( $all_roles ) && array_key_exists( $default_role, $all_roles ) ) {
-                        $default_role_name = '<span> <i style="background-color:#' . dechex( $roles_color[ $default_role ] ) . '">' . $all_roles[ $default_role ] . '</i></span>';                                        
+						$default_role_name = '<span> <i style="background-color:#' . dechex( $roles_color[ $default_role ] ) . '">' . $all_roles[ $default_role ] . '</i></span>';
 		}
 		$pmpro_connecttodiscord_btn = '';
 		if ( Check_saved_settings_status() ) {
@@ -150,7 +152,7 @@ class Ets_Pmpro_Admin_Setting {
 					$pmpro_connecttodiscord_btn .= ets_pmpro_discord_allowed_html( $mapped_role_name );
 				}
 				if ( $default_role_name && $mapped_role_name ) {
-					//$pmpro_connecttodiscord_btn .= ' , ';
+					// $pmpro_connecttodiscord_btn .= ' , ';
 				}
 				if ( $default_role_name ) {
 					$pmpro_connecttodiscord_btn .= ets_pmpro_discord_allowed_html( $default_role_name );
@@ -172,7 +174,7 @@ class Ets_Pmpro_Admin_Setting {
 					$pmpro_connecttodiscord_btn .= ets_pmpro_discord_allowed_html( $mapped_role_name );
 				}
 				if ( $default_role_name && $mapped_role_name ) {
-					//$pmpro_connecttodiscord_btn .= ' , ';
+					// $pmpro_connecttodiscord_btn .= ' , ';
 				}
 				if ( $default_role_name ) {
 					$pmpro_connecttodiscord_btn .= ets_pmpro_discord_allowed_html( $default_role_name );
@@ -192,7 +194,10 @@ class Ets_Pmpro_Admin_Setting {
 	 * @return NONE
 	 */
 	public function ets_pmpro_show_discord_button() {
-		echo do_shortcode( '[discord_connect_button]' );
+		$show = apply_filters( 'ets_pmpro_show_connect_button_on_profile', true );
+		if ( $show ) {
+			echo do_shortcode( '[discord_connect_button]' );
+		}
 	}
 
 	/**
@@ -665,18 +670,18 @@ class Ets_Pmpro_Admin_Setting {
 
 				if ( isset( $_POST['member_force_discord_login'] ) ) {
 					update_option( 'ets_pmpro_discord_force_login_with_discord', true );
-					update_option( 'ets_pmpro_discord_login_with_discord', true );                                        
+					update_option( 'ets_pmpro_discord_login_with_discord', true );
 				} else {
 					update_option( 'ets_pmpro_discord_force_login_with_discord', false );
 				}
 
 				if ( isset( $_POST['member_discord_login'] ) ) {
 					update_option( 'ets_pmpro_discord_login_with_discord', true );
-				} else if (  isset( $_POST['member_force_discord_login']) ) {
+				} elseif ( isset( $_POST['member_force_discord_login'] ) ) {
 					update_option( 'ets_pmpro_discord_login_with_discord', true );
 				} else {
-					update_option( 'ets_pmpro_discord_login_with_discord', false );                                    
-                                }
+					update_option( 'ets_pmpro_discord_login_with_discord', false );
+				}
 
 				if ( isset( $_POST['ets_pmpro_discord_send_welcome_dm'] ) ) {
 					update_option( 'ets_pmpro_discord_send_welcome_dm', true );
@@ -894,17 +899,27 @@ class Ets_Pmpro_Admin_Setting {
 	* @param NONE
 	* @return NONE
 	*/
-	public function ets_pmpro_discord_add_inline_css_checkout (){
-		$member_force_discord_login   = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_force_login_with_discord' ) ) );
-		$member_discord_login         = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_login_with_discord' ) ) );                
-		if ( in_array( 'pmpro-checkout', get_body_class() ) && $member_force_discord_login && $member_discord_login ){
-			if ( ! is_user_logged_in() ){
-				$custom_css = "body.pmpro-checkout div#pmpro_user_fields,body.pmpro-checkout div#pmpro_billing_address_fields,body.pmpro-checkout div#pmpro_payment_information_fields,body.pmpro-checkout div.pmpro_submit{display: none!important;}";                        
+	public function ets_pmpro_discord_add_inline_css_checkout() {
+		$member_force_discord_login = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_force_login_with_discord' ) ) );
+		$member_discord_login       = sanitize_text_field( trim( get_option( 'ets_pmpro_discord_login_with_discord' ) ) );
+		if ( in_array( 'pmpro-checkout', get_body_class() ) && $member_force_discord_login && $member_discord_login ) {
+			if ( ! is_user_logged_in() ) {
+				$custom_css = 'body.pmpro-checkout div#pmpro_user_fields,body.pmpro-checkout div#pmpro_billing_address_fields,body.pmpro-checkout div#pmpro_payment_information_fields,body.pmpro-checkout div.pmpro_submit{display: none!important;}';
 			} else {
-				$custom_css = "";                        
-			}                        
-			wp_add_inline_style ( 'ets_pmpro_add_discord_style' , $custom_css );                
-		}            
+				$custom_css = '';
+			}
+			wp_add_inline_style( 'ets_pmpro_add_discord_style', $custom_css );
+		}
+	}
+
+	/**
+	 *  Filter call back to show or hide the Connect Discord button on profile page.
+	 *
+	 * @param bool $show By default True.
+	 */
+	public function ets_pmpro_discord_show_connect_button_on_profile( $show = true ) {
+
+		return $show;
 	}
 }
 new Ets_Pmpro_Admin_Setting();

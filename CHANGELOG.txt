@@ -1,3 +1,6 @@
+= 1.2.4 =
+- Hide the connect button using the simple filter: ets_pmpro_show_connect_button_on_profile
+
 = 1.2.3 =
 - Added filter #GH 304
 

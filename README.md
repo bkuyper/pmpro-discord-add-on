@@ -58,6 +58,10 @@ This add-on enables connecting your PMPRO enabled website to your discord server
 - Support of Paid Memberships Pro - Cancel on Next Payment Date. So the member role wont get removed immediately upon cancel.
 - Support for forced discord authentication before checkout.
 
+- Hide the connect button using the simple filter: ets_pmpro_show_connect_button_on_profile
+`add_filter('ets_pmpro_show_connect_button_on_profile', '__return_false' );`
+Adding above code line in functions.php of theme or using code snippet plugin.
+
 ## Solution of Missing Access Error
 - Inside the log tab you will see "50001:Missing Access", which is happening because the new BOT role need to the TOP priroty among the other roles.
 - - The new created BOT will add a ROLE with the same name as it is given to the BOT itself.

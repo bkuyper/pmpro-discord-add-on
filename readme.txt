@@ -5,9 +5,9 @@ Donate link: https://paypal.me/supportets
 Author URI: https://www.expresstechsoftwares.com
 Author: ExpressTech Software Solutions Pvt. Ltd.
 Requires at least: 4.7
-Tested up to: 6.0
+Tested up to: 6.2
 Requires PHP: 7.0
-Stable tag: 1.2.3
+Stable tag: 1.2.4
 License: GPLv2
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,9 @@ This plugin provides the following features:
 15) Button styling feature under the plugin settings.
 16) Support of Paid Memberships Pro - Cancel on Next Payment Date. So the member role wont get removed immediately upon cancel.
 17) Support for forced discord authentication before checkout.
+18) Hide the connect button using the simple filter: ets_pmpro_show_connect_button_on_profile
+`add_filter('ets_pmpro_show_connect_button_on_profile', '__return_false' );`
+Adding above code line in functions.php of theme or using code snippet plugin.
 
 [View all Screenshots](https://www.expresstechsoftwares.com/pmpro-official-discord-add-on/)
 

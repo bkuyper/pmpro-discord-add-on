@@ -184,12 +184,11 @@ function ets_pmpro_discord_count_of_hooks_failures( $hook ) {
  * Get pmpro current level id
  *
  * @param INT $user_id
- * @return INT|NULL $curr_level_id
  */
 function ets_pmpro_discord_get_current_level_id( $user_id ) {
-	$membership_level = pmpro_getMembershipLevelForUser( $user_id );
+	$membership_level = pmpro_getMembershipLevelsForUser( $user_id );
 	if ( $membership_level ) {
-		$curr_level_id = sanitize_text_field( trim( $membership_level->ID ) );
+		$curr_level_id = $membership_level;
 		return $curr_level_id;
 	} else {
 		return null;

@@ -1,7 +1,7 @@
 <?php
 $user_id             = sanitize_text_field( trim( get_current_user_id() ) );
 $pmpro_levels        = pmpro_getAllLevels( true, true );
-$membership_level    = pmpro_getMembershipLevelsForUser( $user_id );
+$membership_level    = pmpro_getMembershipLevelForUser( $user_id );
 $default_role        = sanitize_text_field( trim( get_option( '_ets_pmpro_discord_default_role_id' ) ) );
 $allow_none_member_s = sanitize_text_field( trim( get_option( 'ets_pmpro_allow_none_member' ) ) );
 $current_screen = ets_pmpro_discord_get_current_screen_url();
